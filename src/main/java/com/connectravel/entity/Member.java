@@ -1,6 +1,7 @@
 package com.connectravel.entity;
 
 import com.connectravel.constant.Role;
+import com.connectravel.dto.MemberFormDTO;
 import lombok.*;
 // import org.connectravel.dto.MemberFormDto;
 import org.hibernate.annotations.GenericGenerator;
@@ -40,7 +41,7 @@ public class Member {
 
     private String authProvider; // 인증 제공자 (카카오톡, 깃허브)
 
-    /*public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
+    public static Member createMember(MemberFormDTO memberFormDto, PasswordEncoder passwordEncoder){
 
         Member member = new Member();
         member.setName(memberFormDto.getName());
@@ -51,6 +52,6 @@ public class Member {
         member.setPassword(password);
         member.setRole(Role.USER); // 회원가입은 기본 유저
         return member;
-    }*/
+    }
 
 }

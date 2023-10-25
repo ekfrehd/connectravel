@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 
-@Entity(name = "Accomodation")
+@Entity(name = "accommodation")
 @Getter
 @Builder
 @AllArgsConstructor
@@ -19,8 +19,7 @@ public class AccommodationEntity {
     private Long ano;
     @Column(nullable = false)
     private String name; // 숙소이름
-    @Column(scale = 4)
-    private double grade; // 숙소 평점
+
     @Column(nullable = false)
     private int postal; // 우편번호
     @Column(nullable = false)
@@ -48,15 +47,16 @@ public class AccommodationEntity {
     @JoinColumn(name = "id",nullable = false)
     private Member member;
 
-    private int reviewcount; // 리뷰수
 
+    /*@Column(scale = 4)
+    private double grade; // 숙소 평점
+    private int reviewcount; // 리뷰수
     public void setGrade(double grade) { // 평점 변경
         this.grade = grade;
     }
-
     public void setReviewCount(int reviewcount) { // 리뷰 수 변경
         this.reviewcount = reviewcount;
-    }
+    }*/
 
 
 }
