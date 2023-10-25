@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragments/layout1}">
+
+<!-- CSRF 토큰 관련 메타 태그 -->
+<meta name="csrf-header-name" th:content="${_csrf.headerName}">
+<meta name="csrf-token" th:content="${_csrf.token}">
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="login-wrapper-flex">
+            <div class="login-wrapper-contents login-padding">
+                <p id="message" class="text-danger"></p>
+                <form class="login-wrapper-contents-form custom-form" id="loginBtn" method="post">
+                    <div class="single-input mt-4">
+                        <label class="label-title mb-3" th:for="email"> Email </label>
+                        <input class="form-control" type="email" id="email" placeholder="이메일을 입력해주세요">
+                        <p id="message_email" class="text-danger"></p>
+                    </div>
+                    <div class="single-input mt-4">
+                        <label class="label-title mb-3" th:for="password"> Password </label>
+                        <input class="form-control" type="password" id="password" placeholder="패스워드를 입력해주세요">
+                        <p id="message_password" class="text-danger"></p>
+<!--                        <div class="icon toggle-password">-->
+<!--                            <div class="show-icon"><i class="las la-eye-slash"></i></div>-->
+<!--                            <span class="hide-icon"> <i class="las la-eye"></i> </span>-->
+<!--                        </div>-->
+                    </div>
+                    <button id="login" class="submit-btn w-100 mt-4" type="button"> 로그인 </button>
+                    <span class="account color-light mt-3"> 계정이 없으신가요? <a class="color-one"
+                                                                          href="/member/join"> 회원가입 </a> </span>
+                </form>
+                <div class="single-checkbox mt-3">
+                    <div class="forgot-password">
+                        <a href="forgot_password.html" class="forgot-btn color-one"> 비밀번호 찾기</a>
+                    </div>
+                </div>
+                <div class="login-bottom-contents">
+                    <div class="or-contents mb-3">
+                        <span class="or-contents-para"> 소셜로그인 </span>
+                    </div>
+                    <div class="login-others">
+                        <div class="login-others-single">
+                            <a href="/oauth2/authorization/kakao" class="login-others-single-btn w-100">
+                                <img th:src="@{/assets/img/single-page/kakaologo.jpg}" width="22px" height="22px" alt="">
+                                <span class="login-para"> 카카오 로그인 </span>
+                            </a>
+                        </div>
+                        <div class="login-others-single">
+                            <a href="/oauth2/authorization/google" class="login-others-single-btn w-100">
+                                <img th:src="@{/assets/img/single-page/google.png}" alt="">
+                                <span class="login-para">구글 로그인 </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#login').click(function () {
+                var email = $('#email').val();
+                var password = $('#password').val();
+                var formData = {
+                    email: email,
+                    password: password
+                };
+
+                if (!email) {
+                    $('#message_email').text('이메일을 입력해주세요');
+                    return;
+                } else {
+                    $('#message_email').text('');
+                }
+
+                if (!password) {
+                    $('#message_password').text('비밀번호를 입력해주세요');
+                    return;
+                } else {
+                    $('#message_password').text('');
+                }
+
+                var headers = {}; // headers 변수를 정의합니다.
+                headers[$('meta[name=csrf-header-name]').attr('content')] = $('meta[name=csrf-token]').attr('content');
+                $.ajax({
+                    type: 'POST',
+                    url: '/member/login',
+                    data: JSON.stringify(formData),
+                    contentType: 'application/json;charset=UTF-8',
+                    headers: headers,
+                    success: function (data) {
+                        var token = data.token; // 서버에서 반환한 토큰 값
+                        localStorage.setItem('token', token); // 토큰을 localStorage에 저장
+
+                        var prevPage = localStorage.getItem('prevPage'); // 이전 페이지의 URL을 가져옵니다.
+                        if (prevPage) {
+                            localStorage.removeItem('prevPage'); // 이전 페이지 URL을 제거합니다.
+                            window.location.href = prevPage; // 이전 페이지로 이동합니다.
+                        } else {
+                            window.location.href = "/"; // 이전 페이지가 없는 경우 메인 페이지로 이동합니다.
+                        }
+                    },
+                    error: function (xhr) {
+                        var responseDTO = JSON.parse(xhr.responseText);
+                        $('#message').text(responseDTO.error);
+                    }
+                });
+            });
+
+            $('form#loginBtn').on('keypress', function (e) {
+                if (e.which === 13) { // Enter 키를 감지
+                    e.preventDefault(); // 기본 이벤트 (폼 제출)를 중단
+                    $('#login').trigger('click'); // 로그인 버튼 클릭 이벤트를 트리거
+                }
+            });
+        });
+    </script>
+
+</div>
+
+</html>
