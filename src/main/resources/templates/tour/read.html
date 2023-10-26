@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{fragments/layout1}">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
+          integrity="sha512-F2E+YYE1gkt0T5TVajAslgDfTEUQKtlu4ralVq78ViNxhKXQLrgQLLie8u1tVdG2vWnB3ute4hcdbiBtvJQh0g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"
+            integrity="sha512-dSI4QnNeaXiNEjX2N8bkb16B7aMu/8SI5/rE6NIa3Hr/HnWUO+EAZpizN2JQJrXuvU7z0HTgpBVk/sfGd0oW+w=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+
+        .badge-info, .badge-secondary {
+            color: #000;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+
+    <style>
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            justify-content: space-around;
+            padding: 0 0.2em;
+            text-align: center;
+            width: 5em;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+            -webkit-text-stroke-width: 2.3px;
+            -webkit-text-stroke-color: #2b2a29;
+            cursor: pointer;
+        }
+
+        .star-rating :checked ~ label {
+            -webkit-text-fill-color: gold;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            -webkit-text-fill-color: #fff58c;
+        }
+    </style>
+
+    <!-- Blog Details starts -->
+    <section class="blog-details-area pat-100 pab-100">
+        <div class="container">
+            <div class="row gy-5">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="blog-details-wrapper">
+                        <div class="single-blog-details">
+                            <div class="single-blog-details-content pt-0">
+                                <h2 class="single-blog-details-content-title fw-500"> [[${tourboard.title}]] </h2>
+                                <div class="single-blog-details-content-tags mt-3">
+                                    <span class="single-blog-details-content-tags-item">[[${tourboard.category}]]</span>
+                                    <span class="single-blog-details-content-tags-item"
+                                          th:if="${tourboard.modDate} == null">
+                                            최근 업데이트 : [[${#temporals.format(tourboard.regDate, 'yyyy/MM/dd')}]]
+                                        </span>
+                                    <span class="single-blog-details-content-tags-item"
+                                          th:if="${tourboard.modDate} != null">
+                                            최근 업데이트 : [[${#temporals.format(tourboard.modDate, 'yyyy/MM/dd')}]]
+                                        </span>
+                                </div>
+                                <div id="lightgallery" th:each="img, iterStat : ${tourBoardImgDTOS}">
+                                    <div class="mt-5">
+                                        <div th:if="${iterStat.index == 0}">
+                                            <div class="row g-4">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 grid-item">
+                                                    <a th:href="|/imgtest/${img.imgFile}|" class="gallery-popup-two">
+                                                        <center><img th:src="|/imgtest/${img.imgFile}|"
+                                                                     class="img-fluid"
+                                                                     style="width: 60%; height: auto;"/></center>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:if="${iterStat.index > 0}">
+                                            <a href="#" th:href="|/imgtest/${img.imgFile}|" class="gallery-popup-two"
+                                               style="display: none;"></a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 class="h3">위치</h3>
+                                <span class="hotel-view-contents-location-icon"> <i
+                                        class="las la-map-marker-alt"></i> </span>
+                                <span class="hotel-view-contents-location-para"> [[${tourboard.address}]]  </span>
+                                <div id="map" style="max-width:1000px;height:400px;"></div>
+                                <script type="text/javascript"
+                                        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=76e0a0ed573b5f155b851a3e45899e94&libraries=services,clusterer"></script>
+                                <script th:inline="javascript">
+                                    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                                        mapOption = {
+                                            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                                            level: 3 // 지도의 확대 레벨
+                                        };
+
+                                    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+                                    // 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+                                    var mapTypeControl = new kakao.maps.MapTypeControl();
+
+                                    // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+                                    // kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+                                    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+                                    // 지도 확대 축소를 제어할 수 있는 줌 컨트롤을 생성합니다
+                                    var zoomControl = new kakao.maps.ZoomControl();
+                                    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+                                    var accommodationAddress = /*[[${tourboard.address}]]*/ "";
+                                    var accommodationName = /*[[${tourboard.title}]]*/ "";
+
+                                    var geocoder = new kakao.maps.services.Geocoder();
+
+                                    geocoder.addressSearch(accommodationAddress, function (result, status) {
+
+                                        // 정상적으로 검색이 완료됐으면
+                                        if (status === kakao.maps.services.Status.OK) {
+
+                                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                                            // 결과값으로 받은 위치를 마커로 표시합니다
+                                            var marker = new kakao.maps.Marker({
+                                                map: map,
+                                                position: coords
+                                            });
+
+                                            // 인포윈도우로 장소에 대한 설명을 표시합니다
+                                            var infowindow = new kakao.maps.InfoWindow({
+                                                content: '<div style="width:150px;text-align:center;padding:6px 0;">' + accommodationName + '</div>'
+                                            });
+                                            infowindow.open(map, marker);
+
+                                            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                                            map.setCenter(coords);
+                                        }
+                                    });
+                                </script>
+                                <div class="mat-30">
+                                    <h3>핵심 포인트</h3>
+                                    <p th:utext="${tourboard.content}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Details Tag area starts -->
+                        <div class="details-tag-area color-two pat-25 pab-50">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mt-4">
+                                    <div class="blog-details-share-content">
+                                        <h4 class="blog-details-share-content-title"> Share: </h4>
+                                        <ul class="blog-details-share-social list-style-none">
+                                            <li class="blog-details-share-social-list">
+                                                <a class="blog-details-share-social-list-icon"
+                                                   href="javascript:void(0)"> <i class="lab la-facebook-f"></i> </a>
+                                            </li>
+                                            <li class="blog-details-share-social-list">
+                                                <a class="blog-details-share-social-list-icon"
+                                                   href="javascript:void(0)"> <i class="lab la-twitter"></i> </a>
+                                            </li>
+                                            <li class="blog-details-share-social-list">
+                                                <a class="blog-details-share-social-list-icon"
+                                                   href="javascript:void(0)"> <i class="lab la-pinterest-p"></i>
+                                                </a>
+                                            </li>
+                                            <li class="blog-details-share-social-list">
+                                                <a class="blog-details-share-social-list-icon"
+                                                   href="javascript:void(0)"> <i class="lab la-youtube"></i> </a>
+                                            </li>
+                                            <li class="blog-details-share-social-list">
+                                                <a class="blog-details-share-social-list-icon"
+                                                   href="javascript:void(0)"> <i class="lab la-instagram"></i> </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mt-4">
+                                    <div class="blog-details-share-content right-align">
+                                        <a th:href="@{/tour/list(page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
+                                            <button type="button" class="btn btn-primary">목록으로
+                                            </button>
+                                        </a>
+                                        <a th:href="@{/tour/modify(tbno = ${tourboard.tbno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
+                                            <button type="button" class="btn btn-primary"
+                                                    sec:authorize="hasAnyAuthority('ROLE_ADMIN')">수정하기
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Details Tag area end -->
+                        <!-- Comment area Starts -->
+                        <div class="comment-area color-two pat-50 pab-50" id="review-section">
+                            <h3 class="details-section-title"> [[${grade}]]/5 </h3> [[${tourboard.reviewCount}]]건의
+                            리뷰
+                            <div class="row">
+                                <div class="col-lg-12 mt-2">
+                                    <div class="comment-show-contents">
+                                        <ul class="comment-list list-style-none wow fadeInLeft" data-wow-delay=".1s"
+                                            th:each="dto : ${pageResultDTO.dtoList}" th:if="dto != null">
+                                            <li>
+                                                <div class="blog-details-flex-content">
+                                                    <div class="blog-details-thumb radius-10">
+                                                        <img th:src="@{/assets/img/blog/basic_profile.png}" alt=""
+                                                             width="100px" height="100px">
+                                                    </div>
+                                                    <div class="blog-details-content">
+                                                        <div class="blog-details-content-flex">
+                                                            <div class="blog-details-content-item">
+                                                                <h5 class="blog-details-content-title"><a
+                                                                        href="javascript:void(0)">
+                                                                    [[${dto.writerName}]] </a></h5>
+                                                                <span class="blog-details-content-date"> 작성일 : [[${#temporals.format(dto.modDate, 'yyyy/MM/dd')}]] </span>
+                                                            </div>
+                                                        </div>
+                                                        <h4 class="h5 text-primary">[[${dto.grade}]]/5 </h4>
+                                                        <div th:each="imgEntry : ${tourBoardReviewImgDTOsImgMap.entrySet()}"
+                                                             th:if="${imgEntry.key == dto.tbrno}">
+                                                            <div th:each="img, iterStat : ${imgEntry.value}"
+                                                                 th:if="${img != null and img.imgfile != null}">
+                                                                <div th:if="${iterStat.index == 0}">
+                                                                    <div th:id="'gallery-' + ${dto.tbrno}">
+                                                                        <a th:href="|/imgtest/${img.imgfile}|">
+                                                                            <img th:src="|/imgtest/${img.imgfile}|"
+                                                                                 class="img-fluid"
+                                                                                 style="width:150px; height: auto;"/>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div th:if="${iterStat.index > 0}">
+                                                                    <a href="#" th:href="|/imgtest/${img.imgfile}|"
+                                                                       th:attr="data-gallery-id='gallery-' + ${dto.tbrno}"
+                                                                       style="display: none;"></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <p th:utext="${dto.content}"></p>
+                                                        <div class="mat-20">
+                                                            <form th:if="${dto.memberState}" action="/tourreview/remove"
+                                                                  method="post">
+                                                                <input hidden="hidden" name="tbrno"
+                                                                       th:value="${dto.tbrno}">
+                                                                <input hidden="hidden" name="tbno"
+                                                                       th:value="${tourboard.tbno}">
+                                                                <button class="btn btn-danger removeBtn">Remove</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <div class="row mt-5">
+                                            <div class="col">
+                                                <div class="pagination-wrapper">
+                                                    <ul class="pagination-list list-style-none">
+                                                        <!-- 'Previous' 버튼 수정 -->
+                                                        <li th:class="${pageResultDTO.prev} ? 'pagination-list-item-prev' : 'pagination-list-item-prev disabled'">
+                                                            <a th:href="@{/tour/read(tbno=${tourboard.tbno}, review=${pageResultDTO.page - 1})}"
+                                                               class="pagination-list-item-button"> Prev </a>
+                                                        </li>
+
+                                                        <!-- 페이지네이션 시작 페이지 및 끝 페이지 계산 -->
+                                                        <th:block
+                                                                th:with="startPage=${pageResultDTO.page - 5}, endPage=${pageResultDTO.page + 5}">
+
+                                                            <!-- 시작 페이지부터 끝 페이지까지 페이지 목록 생성 -->
+                                                            <li th:each="page: ${#numbers.sequence(1, pageResultDTO.totalPage)}"
+                                                                th:if="${page >= startPage and page <= endPage}"
+                                                                th:class="${pageResultDTO.page == page} ? 'pagination-list-item active' : 'pagination-list-item'">
+                                                                <a th:href="@{/tour/read(tbno=${tourboard.tbno}, review=${page})}"
+                                                                   th:onclick="'changePage(' + ${page} + ')'"
+                                                                   class="pagination-list-item-link">
+                                                                    [[${page}]] </a>
+                                                            </li>
+
+                                                        </th:block>
+
+                                                        <!-- 'Next' 버튼 수정 -->
+                                                        <li th:class="${pageResultDTO.next} ? 'pagination-list-item-next' : 'pagination-list-item-next disabled'">
+                                                            <a th:href="@{/tour/read(tbno=${tourboard.tbno}, review=${pageResultDTO.page + 1})}"
+                                                               class="pagination-list-item-button disabled">
+                                                                Next </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <script th:inline="javascript">
+                                            function changePage(page) {
+                                                localStorage.setItem('currentPage', page);
+                                            }
+
+                                            document.addEventListener('DOMContentLoaded', function () {
+                                                const currentPage = localStorage.getItem('currentPage');
+                                                if (currentPage) {
+                                                    const element = document.querySelector('#review-section');
+                                                    if (element) {
+                                                        const elementOffsetTop = element.offsetTop;
+                                                        window.scroll({top: elementOffsetTop, behavior: 'smooth'});
+                                                    }
+                                                    localStorage.removeItem('currentPage');
+                                                }
+                                            });
+                                        </script>
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                const galleryElements = document.querySelectorAll("[id^='gallery-']");
+
+                                                galleryElements.forEach(function (element) {
+                                                    const galleryId = element.id;
+                                                    const hiddenLinks = document.querySelectorAll(`[data-gallery-id='${galleryId}']`);
+
+                                                    hiddenLinks.forEach(function (link) {
+                                                        element.appendChild(link.cloneNode(true));
+                                                    });
+
+                                                    lightGallery(element, {
+                                                        selector: "a"
+                                                    });
+                                                });
+                                            });
+                                        </script>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Comment area ends -->
+                        <!-- Post Comment area Starts -->
+                        <!--<div class="comment-area color-two pat-50" sec:authorize="isAuthenticated()">-->
+                            <form th:action="@{/tourreview/register}" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="tbno" th:value="${tourboard.tbno}">
+                                <h3 class="details-section-title"> 리뷰 쓰기 </h3>
+                                <div class="row">
+                                    <div class="col-lg-12 pat-20">
+                                        <div class="details-comment-content">
+                                            <div class="star-rating mab-25">
+                                                <input type="radio" id="5-stars" name="grade" value="5"
+                                                       v-model="ratings"/>
+                                                <label for="5-stars" class="star pr-4">★</label>
+                                                <input type="radio" id="4-stars" name="grade" value="4"
+                                                       v-model="ratings"/>
+                                                <label for="4-stars" class="star">★</label>
+                                                <input type="radio" id="3-stars" name="grade" value="3"
+                                                       v-model="ratings"/>
+                                                <label for="3-stars" class="star">★</label>
+                                                <input type="radio" id="2-stars" name="grade" value="2"
+                                                       v-model="ratings"/>
+                                                <label for="2-stars" class="star">★</label>
+                                                <input type="radio" id="1-star" name="grade" value="1"
+                                                       v-model="ratings"/>
+                                                <label for="1-star" class="star">★</label>
+                                            </div>
+                                            <div class="single-commetns">
+                                                <label class="comment-label"> 내용 </label>
+                                                <textarea name="content"
+                                                          class="form--control radius-5 form--message"
+                                                          placeholder="Post Comments"></textarea>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label">이미지</label>
+                                                <input class="form-control" type="file" name="images">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label">이미지</label>
+                                                <input class="form-control" type="file" name="images">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label">이미지</label>
+                                                <input class="form-control" type="file" name="images">
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label">이미지</label>
+                                                <input class="form-control" type="file" name="images">
+                                            </div>
+                                            <button type="submit" class="submit-btn radius-5 mt-4"> 리뷰 쓰기
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Details area end -->
+
+</div>
+
+</html>
+
+
+
