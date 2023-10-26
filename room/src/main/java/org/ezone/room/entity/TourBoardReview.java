@@ -25,11 +25,9 @@ public class TourBoardReview extends BaseEntity{
     private int recommend;
 
     @ManyToOne(fetch = FetchType.LAZY) //지연로딩 설정
-    @JoinColumn(name = "tbno")
     @OnDelete(action = OnDeleteAction.CASCADE) // 글을 지우면 댓글도 같이 사라짐
     private TourBoard tourBoard; //연관관계 지정
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id") // 조인할 필드
-    Member member; // id
+    private Member member; // id
 }

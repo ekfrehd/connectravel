@@ -8,12 +8,12 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "ReviewBoard")
+@Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "writer") //FK지정(One쪽의 테이블에서는 외래키 연결시킬 자신의 엔티티의 컬럼명을 exclude 지정)
+@ToString(exclude = "member") //FK지정(One쪽의 테이블에서는 외래키 연결시킬 자신의 엔티티의 컬럼명을 exclude 지정)
 public class ReviewBoard extends BaseEntity{
 
     @Id
@@ -29,23 +29,19 @@ public class ReviewBoard extends BaseEntity{
     private List<ReviewReply> replies = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "rvno")
-    private ReservationEntity reservation;
+    private Reservation reservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accommodation")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private AccommodationEntity accommodation;
+    private Accommodation accommodation;
 
     @ManyToOne
-    @JoinColumn(name = "rno")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private RoomEntity room;
+    private Room room;
 
     public void changeContent(String content){
         this.content = content;

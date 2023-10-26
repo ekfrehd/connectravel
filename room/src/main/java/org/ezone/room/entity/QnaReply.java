@@ -9,7 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = "QnaBoard") //FK지정 - 외래키로 설정될 엔티티 테이블 이름을 exclude 속성 지정해줌
+@ToString(exclude = {"member","qnaBoard"}) //FK지정 - 외래키로 설정될 엔티티 테이블 이름을 exclude 속성 지정해줌
 public class QnaReply extends BaseEntity{
 
     @Id
@@ -25,5 +25,5 @@ public class QnaReply extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id") // 조인할 필드
-    Member member; // id
+    private Member member; // id
 }

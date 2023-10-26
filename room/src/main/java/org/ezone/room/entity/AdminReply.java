@@ -9,7 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = "AdminBoard") //FK지정 - 외래키로 설정될 엔티티 테이블 이름을 exclude 속성 지정해줌
+@ToString(exclude = "adminBoard") //FK지정 - 외래키로 설정될 엔티티 테이블 이름을 exclude 속성 지정해줌
 public class AdminReply extends BaseEntity{
 
     @Id
@@ -24,6 +24,6 @@ public class AdminReply extends BaseEntity{
     private AdminBoard adminBoard; //연관관계 지정
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id") // 조인할 필드
+    @JoinColumn // 조인할 필드
     Member member; // id
 }
