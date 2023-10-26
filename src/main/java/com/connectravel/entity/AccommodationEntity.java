@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 
-@Entity(name = "accommodation")
+@Entity
+@Table(name = "accommodation")
 @Getter
 @Builder
 @AllArgsConstructor
@@ -23,7 +24,7 @@ public class AccommodationEntity {
     @Column(nullable = false)
     private int postal; // 우편번호
     @Column(nullable = false)
-    private String adminname; // 숙소 운영자 이름
+    private String adminName; // 숙소 운영자 이름
     @Column(nullable = false)
     private String address; // 주소
     @Column(scale = 0)

@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-//예약 엔티티
 public class ReservationEntity extends BaseTimeEntity {
 
     @Id
@@ -25,20 +24,21 @@ public class ReservationEntity extends BaseTimeEntity {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "rno",nullable = true)
-    private RoomEntity room_id; //방 번호
+    @JoinColumn(name = "rno",nullable = false)
+    private RoomEntity room;
 
     @Column(length = 200)
     private String message; //요청사항
 
-    private LocalDate StartDate; //예약 시작
-    private LocalDate EndDate; //예약 종료
+    private LocalDate startDate; //예약 시작
+    private LocalDate endDate; //예약 종료
 
     private int money;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Member member_id; //맴버 이름
+    @JoinColumn(name = "id",nullable = false)
+    private Member member;
 
     @Builder.Default
     private boolean state = true;

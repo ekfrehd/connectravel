@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +20,7 @@ public class AccommodationDTO {
 
     private String address; // 주소
 
-    private String adminname; // 숙소 운영자 이름
+    private String adminName; // 숙소 운영자 이름
 
     private String intro;
 

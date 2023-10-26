@@ -4,8 +4,12 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Table(name = "accommodation_option")
 @Entity
+@Table(name = "accommodation_option")
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString(exclude = {"accommodationEntity", "option"})
 public class AccommodationOptionEntity {
 

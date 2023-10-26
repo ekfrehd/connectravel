@@ -10,10 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "id")}, name = "member")
 @Getter
 @Setter
 @ToString
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "id")}, name = "member")
 public class Member {
 
     @Id
@@ -24,7 +24,7 @@ public class Member {
 
     private String name;
 
-    @Column(unique = true, name="email")
+    @Column(unique = true)
     private String email;
 
     @Column(scale = 0)

@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReservationDTO implements Comparable<ReservationDTO> {
     private Long rvno; //예약 번호
-    private RoomDTO room_id; //방 번호
+    private RoomDTO room; //방 번호
     private String message; //요청사항
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate StartDate; //예약 시작
+    private LocalDate startDate; //예약 시작
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate EndDate; //예약 종료
-    private MemberFormDTO member_id;
+    private LocalDate endDate; //예약 종료
+    private MemberFormDTO member;
     private AccommodationDTO acc;
 
     private LocalDateTime regTime;
@@ -33,7 +33,7 @@ public class ReservationDTO implements Comparable<ReservationDTO> {
 
     @Override
     public int compareTo(ReservationDTO o) {
-        return this.StartDate.compareTo(o.StartDate);
+        return this.startDate.compareTo(o.startDate);
     }
 
     private boolean existReview; // 리뷰등록 여부
