@@ -1,6 +1,6 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.MemberFormDto;
+import com.connectravel.dto.MemberFormDTO;
 import com.connectravel.entity.Member;
 import com.connectravel.repository.MemberRepository;
 import lombok.extern.log4j.Log4j2;
@@ -28,7 +28,7 @@ public class MemberService {
         return  memberRepository.save(member);
     }
 
-    public Member editMember(MemberFormDto memberFormDto){
+    public Member editMember(MemberFormDTO memberFormDto){
         Member member = memberRepository.findByEmail(memberFormDto.getEmail());
         member.setTel(memberFormDto.getTel());
         member.setName(memberFormDto.getName());
@@ -38,7 +38,7 @@ public class MemberService {
     }
 
 
-    public Member changeSeller(MemberFormDto memberFormDto){
+    public Member changeSeller(MemberFormDTO memberFormDto){
         Member member = memberRepository.findByEmail(memberFormDto.getEmail());
         member.setRole(memberFormDto.getRole());
         member.setName(memberFormDto.getName());

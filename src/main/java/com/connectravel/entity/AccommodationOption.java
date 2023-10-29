@@ -6,7 +6,8 @@ import javax.persistence.*;
 
 
 @Entity
-@ToString(exclude = {"accommodation", "option"})
+@Getter @Setter
+@ToString(exclude = "accommodation")
 public class AccommodationOption {
 
     @Id

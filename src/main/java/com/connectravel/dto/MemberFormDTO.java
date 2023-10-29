@@ -3,15 +3,13 @@ package com.connectravel.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.ezone.room.constant.Role;
-import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-public class MemberFormDto {
+public class MemberFormDTO {
 
     @NotBlank(message = "이름은 필수 입력 값입니다.")
     private String name;
