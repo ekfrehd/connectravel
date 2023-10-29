@@ -7,10 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
 @ToString(exclude = "accommodation")
 public class AccommodationImg {
     @Id

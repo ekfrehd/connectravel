@@ -3,13 +3,14 @@ package com.connectravel.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @ToString(exclude = "member") //FK지정(One쪽의 테이블에서는 외래키 연결시킬 자신의 엔티티의 컬럼명을 exclude 지정)
 public class Accommodation {
 
@@ -46,18 +47,33 @@ public class Accommodation {
     @JoinColumn
     private Member member;
 
-    /*@Column(scale = 4)
-    private double grade; // 숙소 평점
+    @Builder.Default
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AccommodationImg> images = new ArrayList<>();
 
-    private int reviewCount; // 리뷰수
+    @Builder.Default
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AccommodationOption> accommodationOptions = new ArrayList<>();
 
-    public void setGrade(double grade) { // 평점 변경
-        this.grade = grade;
+    public void addImage(AccommodationImg img) {
+        images.add(img);
+        img.setAccommodation(this);
     }
 
-    public void setReviewCount(int reviewcount) { // 리뷰 수 변경
-        this.reviewCount = reviewcount;
-    }*/
+    public void removeImage(AccommodationImg img) {
+        images.remove(img);
+        img.setAccommodation(null);
+    }
+
+    public void addAccommodationOption(AccommodationOption accommodationOption) {
+        accommodationOptions.add(accommodationOption);
+        accommodationOption.setAccommodation(this);
+    }
+
+    public void removeAccommodationOption(AccommodationOption accommodationOption) {
+        accommodationOptions.remove(accommodationOption);
+        accommodationOption.setAccommodation(null);
+    }
 
 
 }
