@@ -1,4 +1,4 @@
-package org.ezone.room.entity;
+package com.connectravel.entity;
 
 import lombok.*;
 import org.ezone.room.constant.Role;
@@ -37,7 +37,6 @@ public class Member {
     private Role role;
 
     // private String authProvider; // 인증 제공자 (카카오톡, 깃허브)
-
 
 
 }
