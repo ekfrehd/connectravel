@@ -10,14 +10,13 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners (AuditingEntityListener.class)
 @MappedSuperclass
-@Getter
-@Setter
+@Getter @Setter
 public class BaseEntity extends BaseTimeEntity {
 
     @CreatedBy // 생성자 저장
-    @Column(updatable = false) //DB 수정 불가
+    @Column (updatable = false) //DB 수정 불가
     private String createdBy; // 생성자
 
     @LastModifiedBy // 최종 수정자 저장

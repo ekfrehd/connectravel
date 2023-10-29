@@ -2,6 +2,7 @@ package com.connectravel.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
@@ -10,9 +11,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QnaBoardDTO {
-    
+
+    //validation.NotBlank를 이용해 유효성 검증
+
     private Long bno; //게시글 일련번호
+    @NotBlank(message = "제목을 입력해주세요.")
     private String title; //게시글 제목
+    @NotBlank(message = "내용을 입력해주세요.")
     private String content; //게시글 내용
     private String writerEmail; //작성자 이메일
     private String writerName; //작성자 이름

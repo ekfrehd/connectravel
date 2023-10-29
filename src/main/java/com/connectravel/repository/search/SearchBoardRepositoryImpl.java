@@ -1,5 +1,6 @@
 package com.connectravel.repository.search;
 
+import com.connectravel.entity.*;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
@@ -7,42 +8,37 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
 import lombok.extern.log4j.Log4j2;
-import com.connectravel.entity.*;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Log4j2
 public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport implements SearchBoardRepository {
 
     public SearchBoardRepositoryImpl() {
-        super(QnaBoardEntity.class);
+        super(QnaBoard.class);
     }
 
     // 검색 조건이 없는 게시판
     @Override
-    public QnaBoardEntity search1() {
+    public QnaBoard search1() {
         log.info("search1.....");
 
-        QQnaBoardEntity qnaBoard = QQnaBoardEntity.qnaBoardEntity;
-//        QQnaReply reply = QQnaReply.qnaReply;
+        QQnaBoard qnaBoard = QQnaBoard.qnaBoard;
+        QQnaReply reply = QQnaReply.qnaReply;
         QMember member = QMember.member;
-
-//        JPQLQuery<Tuple> tuple = from(qnaBoard)
-//                .leftJoin(member).on(qnaBoard.member.eq(member))
-//                .leftJoin(reply).on(reply.qnaBoard.eq(qnaBoard))
-//                .select(qnaBoard, member.email, reply.count())
-//                .groupBy(qnaBoard);
 
         JPQLQuery<Tuple> tuple = from(qnaBoard)
                 .leftJoin(member).on(qnaBoard.member.eq(member))
-                .select(qnaBoard, member.email)
+                .leftJoin(reply).on(reply.qnaBoard.eq(qnaBoard))
+                .select(qnaBoard, member.email, reply.count())
                 .groupBy(qnaBoard);
 
         List<Tuple> result = tuple.fetch();
@@ -50,7 +46,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         return null;
     }
 
-    /*// 흔한 전체 게시판 출력 방식
+    // 흔한 전체 게시판 출력 방식
     // searchPage 메서드는 흔한 전체 게시판 출력 방식을 사용하여 게시물을 검색하고 페이지 처리를 수행
     // type: 검색 조건 (제목, 작성자, 내용)
     // keyword: 검색어
@@ -274,26 +270,26 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
     public Page<Object[]> searchPageAccommodation(String[] type, String keyword, String category, String region,
                                                   LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice,
                                                   Pageable pageable) {
-        QAccommodationEntity accommodation = QAccommodationEntity.accommodationEntity;
-        QRoomEntity roomEntity = QRoomEntity.roomEntity;
-        QReservationEntity reservationEntity = QReservationEntity.reservationEntity;
+        QAccommodation accommodation = QAccommodation.accommodation;
+        QRoom room = QRoom.room;
+        QReservation reservationEntity = QReservation.reservation;
 
 
         JPQLQuery<Tuple> query = from(accommodation)
-                .select(accommodation, roomEntity, roomEntity.price.min())
-                .join(roomEntity).on(accommodation.eq(roomEntity.accommodationEntity))
+                .select(accommodation, room, room.price.min())
+                .join(room).on(accommodation.eq(room.accommodation))
                 .leftJoin(reservationEntity)
-                .on(roomEntity.eq(reservationEntity.room_id)
-                        .and(reservationEntity.StartDate.lt(endDate))
-                        .and(reservationEntity.EndDate.gt(startDate))
+                .on(room.eq(reservationEntity.room)
+                        .and(reservationEntity.startDate.lt(endDate))
+                        .and(reservationEntity.endDate.gt(startDate))
                         .and(reservationEntity.state.isTrue()))
-                .where(reservationEntity.rvno.isNull().or(reservationEntity.room_id.isNull()))
+                .where(reservationEntity.rvno.isNull().or(reservationEntity.room.isNull()))
                 .groupBy(accommodation);
 
 
         // 키워드 검색 하는 곳 (검색 파라미터 삽입하는 곳)
         if (type != null || region != null || category != null || keyword != null
-        || inputedMinPrice != null || inputedMaxPrice != null ) {
+                || inputedMinPrice != null || inputedMaxPrice != null ) {
             BooleanBuilder conditionBuilder = new BooleanBuilder();
 
             if (type != null) {
@@ -325,7 +321,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
             if (inputedMinPrice != null && inputedMaxPrice != null) {
                 //BolleanExpress 조건을 찾는 클래스 (가격 조건용)
-                BooleanExpression priceCondition = roomEntity.price.between(inputedMinPrice, inputedMaxPrice);
+                BooleanExpression priceCondition = room.price.between(inputedMinPrice, inputedMaxPrice);
                 // 조건을 먼저 세팅한다음에 --> 검색 조건에 추가
                 conditionBuilder.and(priceCondition);
             }
@@ -352,8 +348,8 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         List<Object[]> result = tuples.stream()
                 .map(tuple -> new Object[]{
                         tuple.get(accommodation),
-                        tuple.get(roomEntity),
-                        tuple.get(roomEntity.price.min()),
+                        tuple.get(room),
+                        tuple.get(room.price.min()),
                         tuple.get(reservationEntity.rvno)
                 })
                 .collect(Collectors.toList());
@@ -433,5 +429,5 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
                 pageable,
                 count
         );
-    }*/
+    }
 }

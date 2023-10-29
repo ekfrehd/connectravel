@@ -6,7 +6,7 @@ public enum Role {
     ADMIN("ROLE_ADMIN"), // 관리자
     SELLER("ROLE_SELLER"); // 판매자
 
-    private String role;
+    private final String role;
     Role(String role) {
         this.role = role;
     }

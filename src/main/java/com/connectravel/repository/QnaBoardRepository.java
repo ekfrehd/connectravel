@@ -1,13 +1,13 @@
 package com.connectravel.repository;
 
-import com.connectravel.entity.QnaBoardEntity;
+import com.connectravel.entity.QnaBoard;
 import com.connectravel.repository.search.SearchBoardRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
-public interface QnaBoardRepository extends JpaRepository<QnaBoardEntity, Long>, QuerydslPredicateExecutor<QnaBoardEntity>, SearchBoardRepository {
+public interface QnaBoardRepository extends JpaRepository<QnaBoard, Long>, QuerydslPredicateExecutor<QnaBoard>, SearchBoardRepository {
 
     // bno 값에 해당하는 QnaBoard 게시물, 해당 게시물을 작성한 회원(Member) 객체, 그리고 해당 게시물에 달린 QnaReply 댓글의 개수를 가져옴
     // select b, w, count(r) - QnaBoard 객체(b), 회원 객체(w), 그리고 댓글 개수(count(r))를 선택함.

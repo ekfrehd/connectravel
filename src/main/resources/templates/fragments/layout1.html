@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>TODAYTONIGHT</title>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" th:href="@{/assets/css/line-awesome.min.css}">
+    <!-- Animate Css -->
+    <link rel="stylesheet" th:href="@{/assets/css/animate.css}">
+    <!-- Slick Slider Css -->
+    <link rel="stylesheet" th:href="@{/assets/css/slick.css}">
+    <!-- Magnific Popup Css -->
+    <link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+    <!-- Flat Picker Css -->
+    <link rel="stylesheet" th:href="@{/assets/css/flatpicker.css}">
+    <!-- TellInput Css -->
+    <link rel="stylesheet" th:href="@{/assets/css/intlTelInput.css}">
+    <!-- Nice Select Css -->
+    <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+
+    <!-- back to top area start -->
+    <div class="back-to-top">
+        <span class="back-top"> <i class="las la-angle-up"></i> </span>
+    </div>
+    <!-- back to top area end -->
+
+    <!-- Mouse Cursor start -->
+    <div class="mouse-move mouse-outer"></div>
+    <div class="mouse-move mouse-inner"></div>
+    <!-- Mouse Cursor Ends -->
+
+    <!-- jquery -->
+    <script th:src="@{/assets/js/jquery-3.6.0.min.js}"></script>
+    <!-- jquery Migrate -->
+    <script th:src="@{/assets/js/jquery-migrate.min.js}"></script>
+    <!-- bootstrap -->
+    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+    <!-- Wow Js -->
+    <script th:src="@{/assets/js/wow.js}"></script>
+    <!-- Slick Js -->
+    <script th:src="@{/assets/js/slick.js}"></script>
+    <!-- ImageLoaded Js -->
+    <script th:src="@{/assets/js/imagesloaded.pkgd.min.js}"></script>
+    <!-- Isotope Js -->
+    <script th:src="@{/assets/js/isotope.pkgd.min.js}"></script>
+    <!-- Magnific Popup Js -->
+    <script th:src="@{/assets/js/jquery.magnific-popup.js}"></script>
+    <!-- Nice Select Js -->
+    <script th:src="@{/assets/js/jquery.nice-select.js}"></script>
+    <!-- Flat Picker Js -->
+    <script th:src="@{/assets/js/flatpicker.js}"></script>
+    <!-- Range Slider Js -->
+    <script th:src="@{/assets/js/nouislider-8.5.1.min.js}"></script>
+    <!-- TellInput Js -->
+    <script th:src="@{/assets/js/intlTelInput.js}"></script>
+    <!-- main js -->
+    <script th:src="@{/assets/js/main.js}"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+</head>
+<body>
+
+<div th:replace="fragments/header::header"></div>
+
+<div layout:fragment="content" class="content"></div>
+
+<div th:replace="fragments/footer::footer"></div>
+
+</body>
+</html>

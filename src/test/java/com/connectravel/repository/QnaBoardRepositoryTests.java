@@ -2,15 +2,14 @@ package com.connectravel.repository;
 
 import com.connectravel.dto.MemberFormDTO;
 import com.connectravel.entity.Member;
-import com.connectravel.entity.QnaBoardEntity;
+import com.connectravel.entity.QnaBoard;
 import com.connectravel.service.QnaBoardService;
-import com.sun.istack.logging.Logger;
 import groovy.util.logging.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -24,42 +23,43 @@ public class QnaBoardRepositoryTests {
     private MemberRepository memberRepository;
     @Autowired
     private QnaBoardService qnaBoardService;
+    @Autowired
+    private QnaReplyRepository qnaReplyRepository;
 
-    @Test//게시글만 추가 테스트
+    @Test // 게시글만 추가 테스트
     public void testInsert () {
         IntStream.rangeClosed (1, 10).forEach (i -> {//1부터 10까지 생성
-            QnaBoardEntity qnaBoard = QnaBoardEntity.builder ()
-                    .title ("title..." + i)
-                    .content ("content..." + i)
+            QnaBoard qnaBoard = QnaBoard.builder ()
+                    .title ("QnA 게시글 더미데이터" + i)
+                    .content ("QnA 게시글 내용 더미데이터" + i)
             .build ();
-            QnaBoardEntity result = qnaBoardRepository.save (qnaBoard);
+            QnaBoard result = qnaBoardRepository.save (qnaBoard);
             System.out.println("BNO: " + result.getBno ());
         });
     }
 
-    //특정 회원의 게시글 추가 테스트
     private Member createMember () {
         MemberFormDTO memberFormDTO = new MemberFormDTO ();
-        memberFormDTO.setName ("22");
-        memberFormDTO.setEmail ("sample@example.com");
-        memberFormDTO.setNickName("22");
-        memberFormDTO.setTel("22-22");
+        memberFormDTO.setName ("더미봇");
+        memberFormDTO.setEmail ("sample@sample.com");
+        memberFormDTO.setNickName("더미봇");
+        memberFormDTO.setTel("010-0000-0000");
         memberFormDTO.setPassword("1234");
         return Member.createMember (memberFormDTO);
     }
 
-    @Test
+    @Test //특정 회원의 게시글 추가 테스트
     public void testInsertAddMember () {
         Member member = createMember ();
         memberRepository.save (member);
 
         IntStream.rangeClosed (1, 10).forEach (i -> {//1부터 10까지 생성
-            QnaBoardEntity qnaBoard = QnaBoardEntity.builder ()
-                    .title ("title..." + i)
-                    .content ("content..." + i)
+            QnaBoard qnaBoard = QnaBoard.builder ()
+                    .title ("QnA 게시글 더미데이터" + i)
+                    .content ("QnA 게시글 내용 더미데이터" + i)
                     .member(member)
                     .build ();
-            QnaBoardEntity result = qnaBoardRepository.save (qnaBoard);
+            QnaBoard result = qnaBoardRepository.save (qnaBoard);
             System.out.println("BNO: " + result.getBno ());
         });
     }
@@ -71,19 +71,30 @@ public class QnaBoardRepositoryTests {
         System.out.println(qnaBoardService.get(bno));
     }
 
-    @Test//게시글 수정 테스트
+    @Test // 게시글 수정 테스트
     public void testUpdate () {
-        Long bno = 22L;//n번째 게시글, 존재하는 게시글 입력
-        //boardRepository을 사용하여 n번째 게시글을 찾는다.
+        Long bno = 150L;//n번째 게시글, 존재하는 게시글 입력
         //Optional 객체는 null 에러 방지
-        Optional<QnaBoardEntity> result = qnaBoardRepository.findById (bno);
+        Optional<QnaBoard> result = qnaBoardRepository.findById (bno);
         //result가 null일 경우 board에 담는다.
-        QnaBoardEntity qnaBoard = result.orElseThrow ();
+        QnaBoard qnaBoard = result.orElseThrow (() -> new NoSuchElementException ("게시글이 존재하지 않습니다."));
         //board 클래스의 change 메서드 실행
-        qnaBoard.changeTitle("게시글 제목 수정22");
-        qnaBoard.changeContent("게시글 내용 수정22");
+        qnaBoard.changeTitle("게시글 제목 수정");
+        qnaBoard.changeContent("게시글 내용 수정");
         //업데이트 내용 DB 저장
         qnaBoardRepository.save (qnaBoard);
+    }
+
+    @Test // 게시글 삭제 테스트, 댓글이 있으면 안지워짐
+    public void testDelete () {
+        Long bno = 10L;
+        qnaBoardRepository.deleteById (bno);
+    }
+
+    @Test // 게시글 삭제 테스트
+    public void testDeleteAddReply () {
+        Long bno = 10L;
+        //qnaBoardRepository.deleteById (bno);
     }
 }
 
