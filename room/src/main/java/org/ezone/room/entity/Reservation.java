@@ -22,7 +22,6 @@ public class Reservation extends BaseTimeEntity {
     private Long rvno; //예약 번호
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Room room; //방 번호
 
     @Column(length = 200)
@@ -34,7 +33,6 @@ public class Reservation extends BaseTimeEntity {
     private int money;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member; //맴버 이름
 
     @Builder.Default

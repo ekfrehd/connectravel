@@ -11,7 +11,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-public class Member {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Member extends BaseEntity{
 
     @Id
     @GeneratedValue(generator = "system_uuid")

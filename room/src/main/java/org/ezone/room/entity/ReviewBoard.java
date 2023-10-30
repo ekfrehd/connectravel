@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "member") //FK지정(One쪽의 테이블에서는 외래키 연결시킬 자신의 엔티티의 컬럼명을 exclude 지정)
+@ToString //FK지정(One쪽의 테이블에서는 외래키 연결시킬 자신의 엔티티의 컬럼명을 exclude 지정)
 public class ReviewBoard extends BaseEntity{
 
     @Id
@@ -32,16 +32,13 @@ public class ReviewBoard extends BaseEntity{
     private Reservation reservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Accommodation accommodation;
-
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Room room;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Accommodation accommodation;
+//
+//    @ManyToOne
+//    private Room room;
 
     public void changeContent(String content){
         this.content = content;
