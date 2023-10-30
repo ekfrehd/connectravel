@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .pagination-dark .page-link {
+            color: #fff;
+            background-color: #343a40;
+            border-color: #343a40;
+        }
+
+        .pagination-dark .page-item.active .page-link {
+            z-index: 1;
+            color: #343a40;
+            background-color: #fff;
+            border-color: #343a40;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+    <div class="dashboard-area section-bg-2 pat-100 pab-100">
+        <div class="container">
+            <div class="dashboard-contents-wrapper">
+                <div class="dashboard-icon">
+                    <div class="sidebar-icon">
+                        <i class="las la-bars"></i>
+                    </div>
+                </div>
+                <div class="dashboard-left-content">
+                    <div class="dashboard-close-main">
+                        <div class="close-bars"><i class="las la-times"></i></div>
+                        <div class="dashboard-bottom">
+                            <ul class="dashboard-list list-style-none">
+                                <li class="list active">
+                                    <a href="/qna/list"> <i class="las la-briefcase"></i> 1:1문의 </a>
+                                </li>
+                                <li class="list">
+                                    <a href="/adminboard/notice"> <i class="las la-briefcase"></i> 공지사항 </a>
+                                </li>
+                                <li class="list">
+                                    <a href="/adminboard/event"> <i class="las la-briefcase"></i> 이벤트 </a>
+                                </li>
+                                <li class="list">
+                                    <a href="/adminboard/faq"> <i class="las la-briefcase"></i> 자주 묻는 질문 </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-right-contents mt-4 mt-lg-0">
+                    <div class="dashboard-reservation">
+                        <div class="single-reservation bg-white base-padding">
+                            <div class="row justify-content-between">
+                                <div class="col-md-2">
+                                    <a th:href="@{/qna/register}">
+                                        <button type="button" class="btn btn-primary">REGISTER</button>
+                                    </a>
+                                </div>
+                                <div class="col-md-10">
+                                    <form action="/qna/list" method="get" id="searchForm">
+                                        <div class="input-group">
+                                            <input type="hidden" name="page" value="1">
+                                            <div class="input-group-prepend">
+                                                <select class="form-select" id="exampleSelect1" name="type">
+                                                    <option th:selected="${pageRequestDTO.type == null}">-------
+                                                    </option>
+                                                    <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목
+                                                    </option>
+                                                    <option value="c" th:selected="${pageRequestDTO.type =='c'}">내용
+                                                    </option>
+                                                    <option value="w" th:selected="${pageRequestDTO.type =='w'}">작성자
+                                                    </option>
+                                                    <option value="tc" th:selected="${pageRequestDTO.type =='tc'}">제목 +
+                                                        내용
+                                                    </option>
+                                                    <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}">제목
+                                                        + 내용 + 작성자
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <input class="form-control" name="keyword"
+                                                   th:value="${pageRequestDTO.keyword}"/>&nbsp;
+                                            <div class="input-group-append" id="button-addon4">
+                                                <button class="btn btn-primary" type="button">Search</button>
+                                                <button class="btn btn-outline-primary" type="button">Clear
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive" style="margin-top: 10px;">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr class="table-primary">
+                                        <th scope="col" class="col-md-1">#</th>
+                                        <th scope="col" class="col-md-4">Title</th>
+                                        <th scope="col" class="col-md-4">Writer</th>
+                                        <th scope="col" class="col-md-3">Regdate</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="dto : ${result.dtoList}" class="table-light">
+                                        <td th:text="${dto.bno}"></td>
+                                        <td>
+                                            <a class="text-dark" th:href="@{/qna/read(bno = ${dto.bno},
+                    page= ${result.page},
+                    type=${pageRequestDTO.type} ,
+                    keyword = ${pageRequestDTO.keyword})}" th:text="${dto.title}">[[${dto.title}]]</a>
+                                        </td>
+                                        <td>
+                                            <span th:text="${dto.writerName}"></span>
+                                            <small class="text-muted" th:text="${dto.writerEmail}"></small>
+                                        </td>
+                                        <td th:text="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!--페이징 처리-->
+                            <nav>
+                                <ul class="pagination pagination-dark justify-content-center">
+                                    <!-- 'Previous' 버튼 수정 -->
+                                    <li th:class="${result.prev} ? 'page-item' : 'page-item disabled'">
+                                        <a class="page-link"
+                                           th:href="@{/qna/list(page=${result.page - 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">
+                                            Previous
+                                        </a>
+                                    </li>
+
+                                    <!-- 페이지네이션 시작 페이지 및 끝 페이지 계산 -->
+                                    <th:block th:with="startPage=${result.page - 5}, endPage=${result.page + 5}">
+
+                                        <!-- 시작 페이지부터 끝 페이지까지 페이지 목록 생성 -->
+                                        <li th:each="page: ${#numbers.sequence(1, result.totalPage)}"
+                                            th:if="${page >= startPage and page <= endPage}"
+                                            th:class="${result.page == page} ? 'page-item active' : 'page-item'">
+                                            <a class="page-link"
+                                               th:href="@{/qna/list(page=${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">
+                                                [[${page}]]
+                                            </a>
+                                        </li>
+
+                                    </th:block>
+
+                                    <!-- 'Next' 버튼 수정 -->
+                                    <li th:class="${result.next} ? 'page-item' : 'page-item disabled'">
+                                        <a class="page-link"
+                                           th:href="@{/qna/list(page=${result.page + 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">
+                                            Next
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dashboard area end -->
+
+    <script th:inline="javascript">
+
+        var msg = [[${msg}]];
+
+        console.log(msg);
+
+        if (msg) {
+            $(".modal").modal();
+        }
+        var searchForm = $("#searchForm");
+
+        $('.btn-primary').click(function (e) {
+
+            searchForm.submit();
+
+        });
+
+        $('.btn-outline-primary').click(function (e) {
+
+            searchForm.empty().submit();
+
+        });
+
+
+    </script>
+
+</div>
+</html>

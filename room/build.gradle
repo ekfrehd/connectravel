@@ -1,0 +1,86 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.10'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10' //쿼리 dsl추가 플러그인
+}
+
+group = 'org.ezone'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	annotationProcessor 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	//jjwt
+	implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+	implementation 'org.slf4j:slf4j-api:2.0.0-alpha1'
+	implementation 'ch.qos.logback:logback-classic:1.2.6'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
+	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-java8time 날짜관련 라이브러리
+	implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time', version: '3.0.4.RELEASE'
+	implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.1.0'
+
+
+	//쿼리 dsl 의존성 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// modelmapper
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+//쿼리 dsl 관련 설정 추가
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl{
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+sourceSets{
+	main.java.srcDir querydslDir
+}
+
+configurations{
+	querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+

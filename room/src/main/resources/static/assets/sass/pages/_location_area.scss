@@ -1,0 +1,93 @@
+/* Location area Css */
+
+.location-area {
+    margin-top: -61px;
+    z-index: 9;
+    position: relative;
+}
+
+.banner-location {
+    @include box-shadow(0, 0, 10px, rgba($steam-color, .5));
+    padding: 20px;
+    &-one {
+        width: 1140px;
+        position: relative;
+        z-index: 990;
+        @include responsive(lg) {
+            width: 900px;
+        }
+        @include responsive(allPhone) {
+            width: 100%;
+        }
+    }
+    &-flex {
+        @include flexBetween;
+        align-items: flex-end;
+        gap: 10px;
+        @include responsive(lg) {
+            flex-wrap: wrap;
+        }
+        @include responsive(allPhone) {
+            flex-wrap: wrap;
+        }
+    }
+    &-single {
+        flex: 1;
+        @include responsive(lg) {
+            flex-basis: 28%
+        }
+        @include responsive(allPhone) {
+            flex-basis: 28%
+        }
+        @include responsive(sm) {
+            flex-basis: 45%
+        }
+        @include responsive(xs) {
+            flex-basis: 100%
+        }
+        &:nth-last-of-type(1),
+        &:nth-last-of-type(2) {
+            @include responsive(xs) {
+                flex-basis: 45%
+            }
+        }
+        &-search {
+            &-icon {
+                @include flexCenter;
+                height: 50px;
+                width: 50px;
+                font-size: 28px;
+                background-color: var(--main-color-one);
+                color: $white;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+        }
+        &-flex {
+            @include flexCenter;
+            gap: 10px;
+        }
+        &-icon {
+            font-size: 28px;
+        }
+        &-contents {
+            flex: 1;
+            &-dropdown {
+                font-family: var(--heading-font);
+                font-weight: 500;
+                .js-select {
+                    font-weight: 500;
+                }
+            }
+            &-subtitle {
+                display: block;
+                font-size: 15px;
+                font-weight: 500;
+                line-height: 22px;
+                margin: -4px 0 0;
+                margin-bottom: 10px;
+                font-family: var(--heading-font);
+            }
+        }
+    }
+}
