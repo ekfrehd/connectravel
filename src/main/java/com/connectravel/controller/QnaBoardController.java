@@ -8,7 +8,6 @@ import com.connectravel.repository.MemberRepository;
 import com.connectravel.service.QnaBoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,9 +27,7 @@ import javax.validation.Valid;
 public class QnaBoardController {
 
     private final QnaBoardService qnaBoardService;
-
-    @Autowired
-    private MemberRepository memberRepository; // 멤버 조회가 필요하므로 추가
+    private final MemberRepository memberRepository; // 멤버 조회가 필요하므로 추가
 
     @GetMapping("/list")
     public String list(PageRequestDTO pageRequestDTO, Model model){

@@ -25,8 +25,6 @@ public class AdminBoardController {
 
     private final AdminBoardService adminBoardService;
 
-    private final ImgService imgService;
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -114,6 +112,5 @@ public class AdminBoardController {
         redirectAttributes.addAttribute("category", dto.getCategory());
 
         return "redirect:/adminboard/read";
-
     }
 } //class

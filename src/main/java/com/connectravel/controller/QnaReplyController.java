@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ public class QnaReplyController {
 
     private final QnaReplyService qnaReplyService; //의존성 자동주입
 
-    @GetMapping(value = "qnareply/{bno}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "qnareply/{bno}")
     public ResponseEntity<List<QnaReplyDTO>> getListByBoard(@PathVariable("bno") Long bno){
 
         return new ResponseEntity<>(qnaReplyService.getList(bno), HttpStatus.OK);
@@ -69,5 +68,4 @@ public class QnaReplyController {
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
-
 }

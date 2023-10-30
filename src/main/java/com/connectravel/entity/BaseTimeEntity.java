@@ -11,13 +11,14 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners (AuditingEntityListener.class)
 @MappedSuperclass
-@Getter @Setter
+@Getter
+@Setter
 public abstract class BaseTimeEntity {
 
     @CreatedDate // 생성일시 저장
-    @Column(updatable = false) // DB 수정 불가
+    @Column (updatable = false) // DB 수정 불가
     private LocalDateTime regTime; // 등록일
 
     @LastModifiedDate // 최종 수정일시 저장

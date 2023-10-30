@@ -21,23 +21,21 @@ public class QnaReplyServiceImpl implements QnaReplyService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Long register(QnaReplyDTO qnaReplyDTO) {
-        QnaReply qnaReply = dtoToEntity(qnaReplyDTO, memberRepository);
+    public Long register (QnaReplyDTO qnaReplyDTO) {
+        QnaReply qnaReply = dtoToEntity (qnaReplyDTO, memberRepository);
 
-        qnaReplyRepository.save(qnaReply);
+        qnaReplyRepository.save (qnaReply);
 
-        return qnaReply.getRno();
+        return qnaReply.getRno ();
     }
 
-    public List<QnaReplyDTO> getList(Long bno) {
-        List<QnaReply> result = qnaReplyRepository.getRepliesByQnaBoardOrderByRno(QnaBoard.builder().bno(bno).build());
-        return result.stream()
-                .flatMap(this::entityToDTO)
-                .collect(Collectors.toList());
+    public List<QnaReplyDTO> getList (Long bno) {
+        List<QnaReply> result = qnaReplyRepository.getRepliesByQnaBoardOrderByRno (QnaBoard.builder ().bno (bno).build ());
+        return result.stream ().flatMap (this::entityToDTO).collect (Collectors.toList ());
     }
 
     @Override
-    public void modify(QnaReplyDTO qnaReplyDTO) {
+    public void modify (QnaReplyDTO qnaReplyDTO) {
 
         Optional<QnaReply> qnaReplyOptional = qnaReplyRepository.findById (qnaReplyDTO.getRno ());//rno와 같은 댓글을 DB에서 찾는다.
         QnaReply qnaReply = qnaReplyOptional.orElseThrow ();//댓글이 존재하지 않는 경우 예외처리 전달
@@ -48,7 +46,7 @@ public class QnaReplyServiceImpl implements QnaReplyService {
     }
 
     @Override
-    public void remove(Long rno) {
-        qnaReplyRepository.deleteById(rno);
+    public void remove (Long rno) {
+        qnaReplyRepository.deleteById (rno);
     }
 }

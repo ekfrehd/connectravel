@@ -1,6 +1,5 @@
 package com.connectravel.controller;
 
-import com.connectravel.manager.FileManager;
 import com.connectravel.service.ImgService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,9 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("img")
 @RequiredArgsConstructor
 public class ImgController {
+
     final ImgService imgService;
 
-    FileManager fileManager;
     @GetMapping("remove")
     public void delete(Long ino){
         imgService.remove(ino);
@@ -23,8 +22,8 @@ public class ImgController {
 
     @GetMapping("update")
     public void update(){
-
     }
+
     @PostMapping("update")
     public void update(Long ino, MultipartFile file){
 
@@ -35,6 +34,5 @@ public class ImgController {
         //생성된 파일이름,파일넘버로 엔티티로 구성해서
         //repository에서 save를 통해 update를 하면됨
         imgService.update(ino,file);
-
     }
 }

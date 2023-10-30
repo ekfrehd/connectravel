@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface TourBaordImgRepository extends JpaRepository<TourBoardImg, Long> {
 
-    @Query("SELECT i from TourBoardImg i where i.tourBoard = :tbno")
-    List<TourBoardImg> GetImgbyTourBoardId(@Param("tbno") TourBoard tbno);
+    @Query ("SELECT i from TourBoardImg i where i.tourBoard = :tbno")
+    List<TourBoardImg> GetImgbyTourBoardId (@Param ("tbno") TourBoard tbno);
 }

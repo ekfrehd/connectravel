@@ -20,6 +20,4 @@ public class AdminBoardDTO {
     private LocalDateTime modDate;
     private int replyCount; //해당 게시글 댓글 수
     private String category; //카테고리
-
-
 }
