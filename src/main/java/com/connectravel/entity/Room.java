@@ -27,11 +27,35 @@ public class Room {
 
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Accommodation accommodation; //어디 소속 숙소의 방인지 알아야되니까 중계어플에서는 필수.
+
+    @Builder.Default
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomImg> images = new ArrayList<>();
+
     @Builder.Default
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Accommodation accommodation; //어디 소속 숙소의 방인지 알아야되니까 중계어플에서는 필수.
+    public void addImage(RoomImg img) {
+        images.add(img);
+        img.setRoom(this);
+    }
+
+    public void removeImage(RoomImg img) {
+        images.remove(img);
+        img.setRoom(null);
+    }
+
+    public void addReservation(Reservation reservation) {
+        reservations.add(reservation);
+        reservation.setRoom(this);
+    }
+
+    public void removeReservation(Reservation reservation) {
+        reservations.remove(reservation);
+        reservation.setRoom(null);
+    }
 
 }

@@ -15,14 +15,20 @@ public class RoomImgTest {
 
     private static final Logger log = LoggerFactory.getLogger(RoomImgTest.class);
 
+    private Room room;
     private List<RoomImg> roomImgList;
 
     @BeforeEach
     public void setUp() {
+        room = new Room();
+        room.setRoomName("Deluxe Suite");
+        room.setPrice(1000);
+
         roomImgList = new ArrayList<>();
 
         RoomImg roomImg1 = new RoomImg();
         roomImg1.setImgFile("sample-image.jpg");
+
         roomImgList.add(roomImg1);
 
         RoomImg roomImg2 = new RoomImg();

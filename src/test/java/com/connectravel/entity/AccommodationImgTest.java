@@ -32,14 +32,15 @@ public class AccommodationImgTest {
 
         AccommodationImg img1 = new AccommodationImg();
         img1.setImgFile("image1.jpg");
-        accommodation.addImage(img1); // Assuming you have this method in Accommodation
+        accommodation.addImage(img1);
+        accommodationImgList.add(img1);
 
         AccommodationImg img2 = new AccommodationImg();
         img2.setImgFile("image2.jpg");
-        accommodation.addImage(img2); // Assuming you have this method in Accommodation
+        accommodation.addImage(img2);
+        accommodationImgList.add(img2);
 
     }
-
 
     @Test
     public void testImageAssociation() {
@@ -48,4 +49,18 @@ public class AccommodationImgTest {
         assertEquals("image2.jpg", accommodationImgList.get(1).getImgFile());
         accommodationImgList.forEach(accommodationImg -> log.debug("AccommodationImg created: {}", accommodationImg));
     }
+
+    @Test
+    public void testImageRemove() {
+        // 먼저 이미지를 제거합니다.
+        accommodation.removeImage(accommodationImgList.get(0));
+        accommodationImgList.remove(0); // accommodationImgList에서도 삭제합니다.
+
+        // 제거 후 이미지 리스트의 크기가 1인지 확인합니다.
+        assertEquals(1, accommodationImgList.size());
+
+        // 제거 후 남아있는 이미지가 "image2.jpg"인지 확인합니다.
+        assertEquals("image2.jpg", accommodationImgList.get(0).getImgFile());
+    }
+
 }

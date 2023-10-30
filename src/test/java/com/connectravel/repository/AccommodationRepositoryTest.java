@@ -88,7 +88,7 @@ public class AccommodationRepositoryTest {
     }
 
 
-    @Test // 등록 테스트
+    @Test // Accommodation 등록 테스트
     public void saveAccommodationWithImagesAndOptions() {
         // Accommodation 정보를 불러옵니다.
         Accommodation savedAccommodation = accommodationRepository.findByName("Test Accommodation")
@@ -106,7 +106,7 @@ public class AccommodationRepositoryTest {
     }
 
 
-    @Test // 추가 테스트
+    @Test // Accommodation 추가 테스트
     public void updateAccommodationWithImagesAndOptions() {
         // 1. 기존의 숙박시설을 불러옵니다.
         Accommodation loadedAccommodation = accommodationRepository.findById(1L).orElse(null);
@@ -147,7 +147,7 @@ public class AccommodationRepositoryTest {
         updatedAccommodation.getAccommodationOptions().forEach(opt -> log.debug("Option: {}", opt.getOption().getOptionCategory()));
     }
 
-    @Test // 수정 테스트
+    @Test // Accommodation 수정 테스트
     public void modifyExistingAccommodationWithImagesAndOptions() {
         // 1. 기존의 숙박시설을 불러옵니다.
         Accommodation loadedAccommodation = accommodationRepository.findByName("Test Accommodation").orElse(null);
@@ -187,7 +187,7 @@ public class AccommodationRepositoryTest {
         updatedAccommodation.getAccommodationOptions().forEach(opt -> log.debug("Option: {}", opt.getOption().getOptionName()));
     }
 
-    @Test // 삭제 테스트
+    @Test // Accommodation 삭제 테스트
     public void deleteAccommodationWithImagesAndOptions() {
         // 1. 삭제할 숙박시설 정보를 불러옵니다.
         Accommodation loadedAccommodation = accommodationRepository.findByName("Test Accommodation").orElse(null);
@@ -210,5 +210,44 @@ public class AccommodationRepositoryTest {
 
     }
 
+    @Test // Accommodation 특정 이미지를 삭제하는 테스트
+    public void removeImageFromAccommodation() {
+        // 1. 숙박시설을 불러옵니다.
+        Accommodation loadedAccommodation = accommodationRepository.findByName("Test Accommodation").orElse(null);
+        assertNotNull(loadedAccommodation, "Accommodation must exist to perform remove image test.");
+
+        // 2. 첫 번째 이미지를 삭제합니다.
+        if (!loadedAccommodation.getImages().isEmpty()) {
+            AccommodationImg imageToRemove = loadedAccommodation.getImages().get(0);
+            loadedAccommodation.removeImage(imageToRemove);
+            accommodationImgRepository.delete(imageToRemove);  // 데이터베이스에서 이미지 삭제
+        }
+
+        // 3. 변경사항을 저장합니다.
+        Accommodation updatedAccommodation = accommodationRepository.save(loadedAccommodation);
+
+        // 4. 이미지가 제대로 삭제되었는지 확인합니다.
+        assertEquals(1, updatedAccommodation.getImages().size());
+    }
+
+    @Test // Accommodation 특정 옵션을 삭제하는 테스트
+    public void removeAccommodationOptionFromAccommodation() {
+        // 1. 숙박시설을 불러옵니다.
+        Accommodation loadedAccommodation = accommodationRepository.findByName("Test Accommodation").orElse(null);
+        assertNotNull(loadedAccommodation, "Accommodation must exist to perform remove option test.");
+
+        // 2. 첫 번째 옵션을 삭제합니다.
+        if (!loadedAccommodation.getAccommodationOptions().isEmpty()) {
+            AccommodationOption optionToRemove = loadedAccommodation.getAccommodationOptions().get(0);
+            loadedAccommodation.removeAccommodationOption(optionToRemove);
+            accommodationOptionRepository.delete(optionToRemove);  // 데이터베이스에서 옵션 삭제
+        }
+
+        // 3. 변경사항을 저장합니다.
+        Accommodation updatedAccommodation = accommodationRepository.save(loadedAccommodation);
+
+        // 4. 옵션이 제대로 삭제되었는지 확인합니다.
+        assertEquals(1, updatedAccommodation.getAccommodationOptions().size());
+    }
 
 }
