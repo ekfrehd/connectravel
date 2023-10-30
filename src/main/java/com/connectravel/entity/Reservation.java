@@ -20,20 +20,17 @@ public class Reservation extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rvno; //예약 번호
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Room room; //방 번호
-
     @Column(length = 200)
     private String message; //요청사항
 
     private LocalDate startDate; //예약 시작
     private LocalDate endDate; //예약 종료
-
     private int money;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Room room; //방 번호
+
+    @ManyToOne
     private Member member; //맴버 이름
 
     @Builder.Default
