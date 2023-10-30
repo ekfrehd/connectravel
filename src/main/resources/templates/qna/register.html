@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <script>
-            var alertMessage = "${alertMessage}";
-            if (alertMessage) {
-                alert("게시글 제목, 내용을 입력해주세요.");
-            }
+        var alertMessage = "${alertMessage}";
+        if (alertMessage) {
+            alert("게시글 제목, 내용을 입력해주세요.");
+        }
     </script>
 </head>
 
@@ -57,21 +57,21 @@
                             <form th:action="@{/qna/register}" th:method="post">
                                 <table class="table table-bordered">
                                     <tr>
-                                        <th>Title</th>
+                                        <th>제목</th>
                                         <td>
-                                            <input type="text" class="form-control" name="title"
-                                                   placeholder="Enter Title">
+                                            <input class="form-control" name="title" placeholder="제목을 입력하세요."
+                                                   type="text">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Content</th>
+                                        <th>내용</th>
                                         <td>
-                                            <textarea class="form-control" rows="5" name="content"></textarea>
+                                            <textarea class="form-control" name="content" rows="5"></textarea>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="text-center">
-                                            <button type="submit" class="btn btn-dark">Submit</button>
+                                        <td class="text-center" colspan="2">
+                                            <button class="btn btn-dark" type="submit">Submit</button>
                                         </td>
                                     </tr>
                                 </table>

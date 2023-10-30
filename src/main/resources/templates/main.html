@@ -7,9 +7,9 @@
 
     <div class="container" style="margin: 30px auto">
         <div class="section-title center-text" style="max-width: 800px">
-            <a href="http://naver.me/GZjS4xew" target="_blank"><img th:src="@{/maintitle.jpg}"></a>
+            <a href="https://drive.google.com/drive/folders/1cjB01NFT33dvsMiUhAk-Y4xqfVGBiV5f" target="_blank"><img th:src="@{/assets/img/메인배너.jpg}"></a>
         </div>
-        <div class="row center-text" style="max-width: 800px; margin:10px auto">
+        <div class="row center-text" style="max-width: 800px; margin:50px auto">
             <div class="col">
                 <a href="/product/list?category=motel"> <img th:src="@{/icon/ico_category_01.png}" alt="img">
                     <p>모텔</p></a>
@@ -47,10 +47,15 @@
                          data-responsive='[{"breakpoint": 1400,"settings": {"slidesToShow": 4}},{"breakpoint": 1200,"settings": {"slidesToShow": 3}},{"breakpoint": 992,"settings": {"slidesToShow": 2}},{"breakpoint": 480, "settings": {"slidesToShow": 1} }]'>
                         <div class="attraction-item" th:each="dto : ${tourBoard.dtoList}">
                             <div class="single-attraction radius-20">
-                                <div class="single-attraction-thumb" th:if="${not #lists.isEmpty(dto.imgDTOList)}">
+                                <div class="single-attraction-thumb" th:if="${not #lists.isEmpty(dto.imgFiles)}">
                                     <a th:href="@{/tour/read(tbno=${dto.tbno})}">
-                                        <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}"
+                                        <img class="mainTourList" th:src="'/imgtest/' + ${dto.imgFiles[0].imgFile}"
                                              th:alt="${dto.title}">
+                                    </a>
+                                </div>
+                                <div th:unless="${not #lists.isEmpty(dto.imgFiles)}" class="alternative-content">
+                                    <a th:href="@{/tour/read(tbno=${dto.tbno})}">
+                                        <div class="mainTourList"></div>
                                     </a>
                                 </div>
                                 <div class="single-attraction-contents">

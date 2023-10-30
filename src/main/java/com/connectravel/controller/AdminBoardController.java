@@ -1,20 +1,21 @@
 package com.connectravel.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import com.connectravel.dto.*;
-import com.connectravel.entity.Member;
-import com.connectravel.repository.MemberRepository;
+import com.connectravel.domain.dto.*;
+import com.connectravel.domain.entity.Member;
 import com.connectravel.service.AdminBoardService;
 import com.connectravel.service.ImgService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.connectravel.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -24,16 +25,16 @@ import java.util.List;
 public class AdminBoardController {
 
     private final AdminBoardService adminBoardService;
-
-    @Autowired
-    private MemberRepository memberRepository;
+    private final ImgService imgService;
+    private final MemberService memberService;
 
     @GetMapping("{category}")
-    public String list(@PathVariable("category") String category,
-            PageRequestDTO pageRequestDTO, Model model){
+    public String list(@PathVariable("category") String category, PageRequestDTO pageRequestDTO, Model model) {
 
-        PageResultDTO<AdminBoardDTO, Object[]> pageResultDTO = adminBoardService.getList(pageRequestDTO, category);
-        if(pageResultDTO.getTotalPage()==0){ pageResultDTO.setTotalPage(1);} // 글이 하나도 없을 땐 0으로 인식하므로
+        PageResultDTO<AdminBoardDTO, Object[]> pageResultDTO = adminBoardService.getPaginatedAdminBoardList(pageRequestDTO, category);
+        if (pageResultDTO.getTotalPage() == 0) {
+            pageResultDTO.setTotalPage(1);
+        } // 글이 하나도 없을 땐 0으로 인식하므로
 
         model.addAttribute("result", pageResultDTO);
         model.addAttribute("category", category);
@@ -41,43 +42,40 @@ public class AdminBoardController {
     }
 
     @GetMapping("{category}/register")
-    public String register(@PathVariable("category") String category, Model model){
-        model.addAttribute("category", category );
+    public String register(@PathVariable("category") String category, Model model) {
+        model.addAttribute("category", category);
 
         return "adminboard/register";
     }
 
     @PostMapping("register")
-    public String registerPost(AdminBoardDTO dto, RedirectAttributes redirectAttributes, Authentication authentication,
-                               @RequestParam("images") List<MultipartFile> images){
+    public String registerPost(@AuthenticationPrincipal Member member, Principal principal, AdminBoardDTO dto, RedirectAttributes redirectAttributes, Authentication authentication, @RequestParam("images") List<MultipartFile> images) {
 
-        //Member member = memberRepository.findByEmail(authentication.getName());
-
-        String email = "1111@naver.com";
-        Member member = memberRepository.findByEmail(email);
+        String username = principal.getName();
+        MemberDTO memberDTO = memberService.getMember(member.getId());
 
         dto.setWriterEmail(member.getEmail());
 
-        Long bno = adminBoardService.register(dto); //새로 추가된 엔티티의 번호(dto)
+        Long abno = adminBoardService.registerAdminBoard(dto); //새로 추가된 엔티티의 번호(dto)
 
-        /*images.forEach(i -> {
-            imgService.AdminBoardRegister(i, bno);
-        });*/
+        images.forEach(i -> {
+            imgService.addAdminBoardImg(i, abno);
+        });
 
-        redirectAttributes.addFlashAttribute("msg", bno);
+        redirectAttributes.addFlashAttribute("msg", abno);
 
-        return "redirect:/adminboard/"+dto.getCategory();
+        return "redirect:/adminboard/" + dto.getCategory();
     }
 
     @GetMapping({"read", "modify"})
-    public void read(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long bno, Model model){
-        log.info("bno : " + bno);
+    public void read(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long abno, Model model) {
+        log.info("abno : " + abno);
 
-        AdminBoardDTO adminBoardDTO = adminBoardService.get(bno);
+        AdminBoardDTO adminBoardDTO = adminBoardService.getAdminBoard(abno);
 
         log.info(adminBoardDTO);
 
-        List<ImgDTO> adminBoardImgDTOS = adminBoardService.getImgList(bno);
+        List<ImgDTO> adminBoardImgDTOS = adminBoardService.getAdminBoardImgList(abno);
 
         System.out.println("image : " + adminBoardImgDTOS);
         String category = adminBoardDTO.getCategory();
@@ -87,30 +85,29 @@ public class AdminBoardController {
         model.addAttribute("category", category);
     }
 
-    @PostMapping("remove")
-    public String remove(long bno, RedirectAttributes redirectAttributes){
-        log.info("bno : " + bno);
-
-        adminBoardService.removeWithReplies(bno);
-
-        redirectAttributes.addFlashAttribute("msg",bno);
-
-        return "redirect:/adminboard/list";
-    }
-
     @PostMapping("modify")
-    public String modify(AdminBoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes){
+    public String modify(AdminBoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
         log.info("post modify.....");
         log.info("dto : " + dto);
 
-        adminBoardService.modify(dto);
+        adminBoardService.updateAdminBoard(dto);
 
         redirectAttributes.addAttribute("page", requestDTO.getPage());
         redirectAttributes.addAttribute("type", requestDTO.getType());
         redirectAttributes.addAttribute("keyword", requestDTO.getKeyword());
-        redirectAttributes.addAttribute("bno", dto.getBno());
+        redirectAttributes.addAttribute("abno", dto.getAbno());
         redirectAttributes.addAttribute("category", dto.getCategory());
 
         return "redirect:/adminboard/read";
+    }
+
+    @PostMapping("remove")
+    public String remove(long abno, RedirectAttributes redirectAttributes) {
+
+        adminBoardService.deleteAdminBoard(abno);
+
+        redirectAttributes.addFlashAttribute("msg", abno);
+
+        return "redirect:/adminboard/notice";
     }
 } //class

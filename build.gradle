@@ -8,10 +8,10 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.10'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10' //쿼리 dsl추가 플러그인
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10' // Querydsl
 }
 
-group = 'org.ezone'
+group = 'com.connectravel'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
@@ -26,41 +26,39 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-    annotationProcessor 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-    //jjwt
-    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}" // Querydsl
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}" // Querydsl
 
-    // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-java8time 날짜관련 라이브러리
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0' // ModelMapper
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1' // JWT
     implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time', version: '3.0.4.RELEASE'
     implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.1.0'
 
-    //쿼리 dsl 의존성 추가
-    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    // modelmapper
-    implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0'
+    compileOnly 'org.projectlombok:lombok'
+
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
 
-//쿼리 dsl 관련 설정 추가
+// Querydsl
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl{
@@ -79,4 +77,3 @@ configurations{
 compileQuerydsl{
     options.annotationProcessorPath = configurations.querydsl
 }
-

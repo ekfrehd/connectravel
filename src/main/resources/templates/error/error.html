@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout1}">
+
+<body>
+<div layout:fragment="content" style="display: flex;
+    flex-direction: column;
+    align-items: center;">
+    <h1>알 수 없는 에러가 발생했습니다.</h1>
+    <h3>관리자에게 문의 바랍니다. 031-0000-0000</h3>
+    <div>
+        CODE: <span th:text="${code}"></span><br>
+        MSG: <span th:text="${msg}"></span><br>
+        TIMESTAMP: <span th:text="${timestamp}"></span><br>
+    </div>
+</div>
+</body>
+</html>

@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <!-- 사용자 CSS 추가 -->
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c7a803e4f5e6440b0235c7fa6922d495&libraries=services,clusterer"></script>
+    <script th:inline="javascript">
+
+        var msg = [[${msg}]];
+
+        console.log(msg);
+
+        if (msg) {
+            $(".modal").modal();
+        }
+        var searchForm = $("#searchForm");
+
+        $('#search').click(function (e) {
+            searchForm.submit();
+        });
+
+        $('#clear').click(function (e) {
+            searchForm.empty().submit();
+        });
+    </script>
+</head>
 <th:block layout:fragment="css">
     <style>
         .pagination-dark .page-link {
@@ -23,87 +48,143 @@
 </th:block>
 
 <div layout:fragment="content">
-
+    <script>
+        // 페이지 이동
+        function navigateToSeoul() { window.location.href = "/tour/list?page=1&type=r&keyword=서울"; }
+        function navigateToBusan() { window.location.href = "/tour/list?page=1&type=r&keyword=부산"; }
+        function navigateToJeju() { window.location.href = "/tour/list?page=1&type=r&keyword=제주"; }
+        function navigateToGangwon() { window.location.href = "/tour/list?page=1&type=r&keyword=강원"; }
+        function navigateToGyeonggi() { window.location.href = "/tour/list?page=1&type=r&keyword=경기"; }
+        function navigateToIncheon() { window.location.href = "/tour/list?page=1&type=r&keyword=인천"; }
+        function navigateToGyeongsang() { window.location.href = "/tour/list?page=1&type=r&keyword=경상"; }
+        function navigateToJeolla() { window.location.href = "/tour/list?page=1&type=r&keyword=전라"; }
+        function navigateToChungcheong() { window.location.href = "/tour/list?page=1&type=r&keyword=충청"; }
+    </script>
     <!-- Shop area starts -->
     <section class="blog-area section-bg-1 pat-100 pab-100">
         <div class="container">
             <div class="row justify-content-between">
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <a href="/tour/list">
-                        <button type="button" class="btn btn-outline-primary">전체</button>
+                        <button class="btn btn-outline-primary" type="button">전체</button>
                     </a>
                     <a href="/tour/list?category=attraction">
-                        <button type="button" class="btn btn-outline-primary">명소</button>
+                        <button class="btn btn-outline-primary" type="button">명소</button>
                     </a>
                     <a href="/tour/list?category=activity">
-                        <button type="button" class="btn btn-outline-primary">액티비티</button>
+                        <button class="btn btn-outline-primary" type="button">활동</button>
                     </a>
                     <a href="/tour/list?category=food">
-                        <button type="button" class="btn btn-outline-primary">음식</button>
+                        <button class="btn btn-outline-primary" type="button">음식</button>
                     </a>
                     <a href="/tour/list?category=shopping">
-                        <button type="button" class="btn btn-outline-primary">쇼핑</button>
+                        <button class="btn btn-outline-primary" type="button">쇼핑</button>
                     </a>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        지역
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" onclick="navigateToSeoul()">서울</a>
+                        <a class="dropdown-item" href="#" onclick="navigateToBusan()">부산</a>
+                        <a class="dropdown-item" href="#" onclick="navigateToJeju()">제주</a>
+                        <a class="dropdown-item" href="#" onclick="navigateToGangwon()">강원</a>
+                        <a class="dropdown-item" href="#" onclick="navigateToGyeonggi()">경기</a>
+                        <a class="dropdown-item" href="#" onclick="navigateToIncheon()">인천</a>
+                        <a class="dropdown-item" href="#" onclick="navigateToGyeongsang()">경상</a>
+                        <a class="dropdown-item" href="#" onclick="navigateToJeolla()">전라</a>
+                        <a class="dropdown-item" href="#" onclick="navigateToChungcheong()">충청</a>
+                        <!-- Add more regions as needed -->
+                    </div>
                     <a th:href="@{/tour/register}">
-                        <!--<button type="button" class="btn btn-primary"
-                                sec:authorize="hasAnyAuthority('ROLE_ADMIN')">REGISTER</button>-->
-                        <button type="button" class="btn btn-primary">REGISTER</button>
-                    </a>
+                        <button class="btn btn-primary" type="button" id="regButton" style="position: absolute; margin-left: 790px; width: 58px; height: 38px;" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">등록</button>                    </a>
+                    <button class="btn btn-outline-primary" id="mapButton" style="position: absolute; margin-left: 728px; width: 58px; height: 38px;">지도</button>
                 </div>
-                <div class="col-md-7">
-                    <form action="/tour/list" method="get" id="searchForm">
+                <div class="col-md-6">
+                    <form action="/tour/list" id="searchForm" method="get">
                         <div class="input-group">
-                            <input type="hidden" name="page" value="1">
+                            <input name="page" type="hidden" value="1">
                             <div class="input-group-prepend">
                                 <select class="form-select" id="exampleSelect1" name="type">
-                                    <option th:selected="${pageRequestDTO.type == null}">-------
+                                    <option th:selected="${pageRequestDTO.type =='t'}" value="t">제목
                                     </option>
-                                    <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목
+                                    <option th:selected="${pageRequestDTO.type =='c'}" value="c">내용
                                     </option>
-                                    <option value="c" th:selected="${pageRequestDTO.type =='c'}">내용
-                                    </option>
-                                    <option value="tc" th:selected="${pageRequestDTO.type =='tc'}">제목 +
+                                    <option th:selected="${pageRequestDTO.type =='tc'}" value="tc">제목 +
                                         내용
+                                    </option>
+                                    <option th:selected="${pageRequestDTO.type =='a'}" value="a">주소
                                     </option>
                                 </select>
                             </div>
                             <input class="form-control" name="keyword"
                                    th:value="${pageRequestDTO.keyword}"/>&nbsp;
                             <div class="input-group-append" id="button-addon4">
-                                <button class="btn btn-primary" type="button" id="search">Search</button>
-                                <button class="btn btn-outline-primary" type="button" id="clear">Clear
-                                </button>
+                                <button class="btn btn-primary" id="search" type="button">검색</button>
+                                <!--<button class="btn btn-outline-primary" id="clear" type="button">Clear</button>-->
                             </div>
+                            <script th:inline="javascript">
+
+                                var msg = [[${msg}]];
+
+                                console.log(msg);
+
+                                if (msg) {
+                                    $(".modal").modal();
+                                }
+                                var searchForm = $("#searchForm");
+
+                                $('#search').click(function (e) {
+
+                                    searchForm.submit();
+
+                                });
+
+                                $('#clear').click(function (e) {
+
+                                    searchForm.empty().submit();
+
+                                });
+                            </script>
                         </div>
                     </form>
                 </div>
             </div>
 
             <div class="row gy-5 mat-25">
-                <th:block th:each="dto : ${result.dtoList}">
-                <div class="col-xxl-4 col-lg-4 col-md-6">
-                    <div class="single-blog">
-                        <div class="single-blog-thumbs">
-                            <a  th:href="@{/tour/read(tbno = ${dto.tbno}, page= ${result.page}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
-                                <div th:if="${not #lists.isEmpty(dto.imgDTOList)}">
-                                    <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgFile}" th:alt="${dto.title}" />
-                                </div>
-                            </a>
-                        </div>
-                        <div class="single-blog-contents mt-3">
-                            <div class="single-blog-contents-tags mt-3">
-                                <span class="single-blog-contents-tags-item">
-                                    <i class="las la-tag"></i> [[${dto.category}]]
-                                </span>
-                                <span class="single-blog-contents-tags-item">  [[${dto.reviewCount}]]건의 리뷰 </span>
+                <th:block th:each="dto, iterStat : ${result.dtoList}">
+                    <div class="col-xxl-4 col-lg-4 col-md-6">
+                        <div class="single-blog">
+                            <div class="single-blog-thumbs">
+                                <a th:href="@{/tour/read(tbno = ${dto.tbno}, page= ${result.page}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
+                                    <div th:if="${not #lists.isEmpty(dto.imgFiles)}">
+                                        <img th:alt="${dto.title}" th:src="'/imgtest/' + ${dto.imgFiles[0].imgFile}" style="max-width: 100%; height: 15vh; display: flex; margin: 0 auto;"/>
+                                    </div>
+                                    <div th:if="${ #lists.isEmpty(dto.imgFiles)}">
+                                       <div style="max-width: 100%; height: 15vh; display: flex; margin: 0 auto;">이미지 없음</div>
+                                    </div>
+                                </a>
                             </div>
-                            <h4 class="single-blog-contents-title mt-3"><a class="text-dark" th:href="@{/tour/read(tbno = ${dto.tbno},
+                            <div class="single-blog-contents mt-3">
+                                <div class="single-blog-contents-tags mt-3">
+                                <span class="single-blog-contents-tags-item">
+                                    <i class="las la-tag"></i>
+                                        <span th:if="${dto.category == 'attraction'}">명소</span>
+                                        <span th:if="${dto.category == 'activity'}">활동</span>
+                                        <span th:if="${dto.category == 'food'}">음식</span>
+                                        <span th:if="${dto.category == 'shopping'}">쇼핑</span>
+                                </span>
+                                    <span class="single-blog-contents-tags-item">  [[${dto.reviewCount}]]건의 리뷰 </span>
+                                </div>
+                                <h4 class="single-blog-contents-title mt-3"><a class="text-dark" th:href="@{/tour/read(tbno = ${dto.tbno},
                     page= ${result.page},
                     type=${pageRequestDTO.type} ,
                     keyword = ${pageRequestDTO.keyword})}">[[${dto.title}]]</a></h4>
+                            </div>
+
+                            </span>
+                            <span class="single-blog-contents-tags-item" th:data-dto-address="${dto.address}"> [[${dto.address}]]</span>
                         </div>
                     </div>
-                </div>
                 </th:block>
             </div>
             <div class="row mt-5">
@@ -113,19 +194,19 @@
                             <!-- 'Previous' 버튼 수정 -->
                             <li class="pagination-list-item-prev"
                                 th:class="${result.prev} ? 'page-item' : 'page-item disabled'">
-                                <a th:href="@{/tour/list(page=${result.page - 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"
-                                   class="pagination-list-item-button"> Prev </a>
+                                <a class="pagination-list-item-button"
+                                   th:href="@{/tour/list(page=${result.page - 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"> 이전 </a>
                             </li>
 
                             <!-- 페이지네이션 시작 페이지 및 끝 페이지 계산 -->
                             <th:block th:with="startPage=${result.page - 5}, endPage=${result.page + 5}">
 
                                 <!-- 시작 페이지부터 끝 페이지까지 페이지 목록 생성 -->
-                                <li class="pagination-list-item" th:each="page: ${#numbers.sequence(1, result.totalPage)}"
-                                    th:if="${page >= startPage and page <= endPage}"
-                                    th:class="${result.page == page} ? 'page-item active' : 'page-item'">
-                                    <a th:href="@{/tour/list(page=${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"
-                                       class="pagination-list-item-link"> [[${page}]] </a>
+                                <li class="pagination-list-item" th:class="${result.page == page} ? 'page-item active' : 'page-item'"
+                                    th:each="page: ${#numbers.sequence(1, result.totalPage)}"
+                                    th:if="${page >= startPage and page <= endPage}">
+                                    <a class="pagination-list-item-link"
+                                       th:href="@{/tour/list(page=${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"> [[${page}]] </a>
                                 </li>
 
                             </th:block>
@@ -133,8 +214,8 @@
                             <!-- 'Next' 버튼 수정 -->
                             <li class="pagination-list-item-next"
                                 th:class="${result.next} ? 'page-item' : 'page-item disabled'">
-                                <a th:href="@{/tour/list(page=${result.page + 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"
-                                   class="pagination-list-item-button"> Next </a>
+                                <a class="pagination-list-item-button"
+                                   th:href="@{/tour/list(page=${result.page + 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"> 다음 </a>
                             </li>
                         </ul>
                     </div>
@@ -144,31 +225,105 @@
     </section>
     <!-- Blog area end -->
 
-    <script th:inline="javascript">
+    <!--모달-->
+    <div id="mapModal" class="modal">
+        <div class="modal-content">
+            <div id="map" style="width:100%;height:50VH;"></div>
 
-        var msg = [[${msg}]];
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                document.getElementById("mapButton").addEventListener("click", function () { // 모달 요소 및 닫기 버튼 이벤트 핸들러 설정
 
-        console.log(msg);
+                    var modal = document.getElementById("mapModal"); // 지도 버튼 모달
+                    var closeBtn = document.getElementsByClassName("close")[0]; // 닫기 버튼
+                    modal.style.display = "block"; // 블록 형태 출력
 
-        if (msg) {
-            $(".modal").modal();
-        }
-        var searchForm = $("#searchForm");
+                    closeBtn.addEventListener("click", function () { modal.style.display = "none"; // 닫기 버튼 클릭 시 출력 없음
+                    });
 
-        $('#search').click(function (e) {
+                    relayout(); // 지도 짤림 방지
+                });
 
-            searchForm.submit();
+                    var dtoAddresses = /*[[${result.dtoList.![address]}]]*/ []; // dto 주소
+                    var titles = /*[[${result.dtoList.![title]}]]*/ []; // dto 제목
+                    var categorys = /*[[${result.dtoList.![category]}]]*/ []; // dto 카테고리
+                    var links = /*[[${result.dtoList.![tbno]}]]*/ []; // dto 카테고리
+                    var categoryMap = { /*카테고리 명을 한글로 바꿔준다.*/
+                        'attraction': '명소',
+                        'activity': '활동',
+                        'food': '음식',
+                        'shopping': '쇼핑'
+                    };
+                    var displayCategorys = categorys.map(function(category) { // 카테고리 값 매핑
+                        return categoryMap[category] || category;
+                    });
 
-        });
+                    // 카카오맵 지오코더 및 맵 관련 설정
+                    var geocoder = new kakao.maps.services.Geocoder(); // 지오코더 서비스 생성
+                    var mapContainer = document.getElementById('map'); // 지도 생성
+                    var mapOption = { // 지도 옵션 설정
+                        center: new kakao.maps.LatLng(38, 118.5),
+                        level: 13
+                    };
 
-        $('#clear').click(function (e) {
+                    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성, 지도 옵션
 
-            searchForm.empty().submit();
+                    // 각 주소에 대한 좌표를 가져와서 지도에 마커 표시
+                    dtoAddresses.forEach(function (address, index) { // index 매개변수 추가
+                        // 주소를 좌표로 변환하는 지오코더 함수
+                        geocoder.addressSearch(address, function (result, status) {
+                            if (status === kakao.maps.services.Status.OK) {
+                                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-        });
+                                // 주소별로 마커 생성하여 지도에 추가
+                                var marker = new kakao.maps.Marker({
+                                    map: map,
+                                    position: coords,
+                                    title: "여기에 제목을 입력하세요", // 원하는 제목 입력
+                                });
 
+                                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                                var infowindow = new kakao.maps.InfoWindow({
+                                    content: '<div style="width:150px;text-align:center;">' + titles[index] + '<br>' + displayCategorys[index] + '<br><a href="http://localhost/tour/read?tbno=' + links[index] + '" target="_blank">이동</a></div>',
+                                });
 
-    </script>
+                                var markerClicked = false; // 마커 클릭 상태를 나타내는 변수
 
+                                // 마커에 클릭 이벤트를 등록합니다
+                                kakao.maps.event.addListener(marker, 'click', function() {
+                                    if (markerClicked) {
+                                        infowindow.close(); // 이미 클릭된 상태이면 인포윈도우를 닫습니다
+                                    } else {
+                                        infowindow.open(map, marker); // 클릭되지 않은 상태이면 인포윈도우를 엽니다
+                                    }
+                                    markerClicked = !markerClicked; // 마커 클릭 상태를 토글합니다
+                                });
+                            }
+                        });
+                    });
+                /*]]>*/
+                function relayout() {
+                    map.relayout();
+                }
+            </script>
+
+            <button onclick="relayout()">relayout 호출하기</button>
+            <span class="close">&times;</span>
+            <div id="kakaoMap"></div>
+        </div>
+    </div>
 </div>
 </html>
+<!--
+별도 마커 이미지를 사용하고 싶을 경우
+ // 마커 이미지 URL 및 크기 설정
+                    var imageSrc = '마커_이미지_URL';
+                    var imageSize = new kakao.maps.Size(24, 35);
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+  var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords,
+                        title: "여기에 제목을 입력하세요", // 원하는 제목 입력
+                        image: markerImage
+-->

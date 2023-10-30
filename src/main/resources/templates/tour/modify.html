@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -14,14 +14,14 @@
 <div layout:fragment="content">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script referrerpolicy="origin" src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@2/dist/tinymce-jquery.min.js"></script>
 
     <!-- iOS에서는 position:fixed 버그가 있음, 적용하는 사이트에 맞게 position:absolute 등을 이용하여 top,left값 조정 필요 -->
     <div id="layer" style="display:none;position:fixed;overflow:hidden;z-index:1;-webkit-overflow-scrolling:touch;">
-        <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnCloseLayer"
-             style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1" onclick="closeDaumPostcode()"
-             alt="닫기 버튼">
+        <img alt="닫기 버튼" id="btnCloseLayer"
+             onclick="closeDaumPostcode()" src="//t1.daumcdn.net/postcode/resource/images/close.png"
+             style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1">
     </div>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
@@ -98,37 +98,37 @@
 
                         <form action="/tour/modify" method="post">
                             <!--페이지 번호  -->
-                            <input type="hidden" name="page" th:value="${requestDTO.page}">
-                            <input type="hidden" name="type" th:value="${requestDTO.type}">
-                            <input type="hidden" name="keyword" th:value="${requestDTO.keyword}">
+                            <input name="page" th:value="${requestDTO.page}" type="hidden">
+                            <input name="type" th:value="${requestDTO.type}" type="hidden">
+                            <input name="keyword" th:value="${requestDTO.keyword}" type="hidden">
 
                             <div class="form-group">
-                                <label>Tbno</label>
-                                <input type="text" class="form--control" name="tbno" th:value="${tourboard.tbno}"
-                                       readonly>
+                                <label hidden="hidden">Tbno</label>
+                                <input class="form--control" name="tbno" readonly th:value="${tourboard.tbno}"
+                                       type="text" hidden="hidden">
                             </div>
 
                             <div class="form-group">
                                 <label>제목</label>
-                                <input type="text" class="form--control" name="title" th:value="${tourboard.title}">
+                                <input class="form--control" name="title" th:value="${tourboard.title}" type="text">
                             </div>
                             <div class="form-group">
                                 <label>카테고리</label>
-                                    <select class="form-select" name="category" th:value="${tourboard.category}">
-                                        <option value="attraction">명소</option>
-                                        <option value="activity">액티비티</option>
-                                        <option value="food">음식</option>
-                                        <option value="shopping">쇼핑</option>
-                                    </select>
+                                <select class="form-select" name="category" th:value="${tourboard.category}">
+                                    <option value="attraction">명소</option>
+                                    <option value="activity">액티비티</option>
+                                    <option value="food">음식</option>
+                                    <option value="shopping">쇼핑</option>
+                                </select>
                             </div>
                             <div>
                                 <label>우편번호</label>
-                                    <input type="button" onclick="sample2_execDaumPostcode()" value="우편번호 찾기" >
-                                    <input type="number" class="form-control" name="postal" placeholder="우편번호를 입력하세요." th:size="5"  id="sample2_postcode" th:value="${tourboard.postal}" readonly>
+                                <input onclick="sample2_execDaumPostcode()" type="button" value="우편번호 찾기">
+                                <input class="form-control" id="sample2_postcode" name="postal" placeholder="우편번호를 입력하세요." readonly th:size="5" th:value="${tourboard.postal}" type="number">
                             </div>
                             <div>
                                 <lable>주소</lable>
-                                <input type="text" class="form-control" name="address" placeholder="주소를 입력하세요" id="sample2_address" th:value="${tourboard.address}" readonly>
+                                <input class="form-control" id="sample2_address" name="address" placeholder="주소를 입력하세요" readonly th:value="${tourboard.address}" type="text">
                             </div>
                             <div class="form-group">
                                 <label>내용</label>
@@ -151,25 +151,25 @@
                                 </script>
                             </div>
                             <div class="form-group">
-                                <label>RegDate</label>
-                                <input type="text" class="form--control"
+                                <label hidden="hidden">RegDate</label>
+                                <input class="form--control" readonly
                                        th:value="${#temporals.format(tourboard.regDate, 'yyyy/MM/dd HH:mm:ss')}"
-                                       readonly>
+                                       type="text" hidden="hidden">
                             </div>
                             <div class="form-group">
-                                <label>ModDate</label>
-                                <input type="text" class="form--control"
+                                <label hidden="hidden">ModDate</label>
+                                <input class="form--control" readonly
                                        th:value="${#temporals.format(tourboard.modDate, 'yyyy/MM/dd HH:mm:ss')}"
-                                       readonly>
+                                       type="text" hidden="hidden">
                             </div>
 
                         </form>
 
-                        <button type="button" class="btn btn-primary modifyBtn">Modify</button>
+                        <button class="btn btn-primary modifyBtn" type="button">수정</button>
 
-                        <button type="button" class="btn btn-info listBtn">List</button>
+                        <button class="btn btn-info listBtn" type="button">목록</button>
 
-                        <button type="button" class="btn btn-danger removeBtn">Remove</button>
+                        <button class="btn btn-danger removeBtn" type="button">삭제</button>
 
                         <script th:inline="javascript">
 

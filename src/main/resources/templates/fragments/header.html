@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 
 <div th:fragment="header">
-
     <script type="text/javascript">
         function goToLoginPage() {
             localStorage.setItem('prevPage', window.location.href);
@@ -40,7 +39,7 @@
         // 로그아웃 시 토큰을 제거
         function logout() {
             localStorage.removeItem('token');
-            location.href = "/member/logout";
+            location.href = "/logout";
         }
     </script>
 
@@ -49,16 +48,14 @@
         <nav class="navbar navbar-area navbar-border navbar-padding navbar-expand-lg">
             <div class="container custom-container-one nav-container">
                 <div class="logo-wrapper">
-                    <a href="/" class="logo">
-                        <h3><b>CONNECTRAVEL</b></h3>
-                    </a>
+                        <div id="logo" style="background: url(/assets/img/로고.png); width: 150px; height: 25px; background-size: contain; background-position: center; background-repeat: no-repeat;" onclick="location.href='http://localhost/';"></div>
                 </div>
                 <div class="responsive-mobile-menu d-lg-none">
-                    <a href="javascript:void(0)" class="click-nav-right-icon">
+                    <a class="click-nav-right-icon" href="javascript:void(0)">
                         <i class="las la-ellipsis-v"></i>
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#hotel_booking_menu">
+                    <button class="navbar-toggler" data-bs-target="#hotel_booking_menu" data-bs-toggle="collapse"
+                            type="button">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                 </div>
@@ -86,8 +83,8 @@
                     <div class="search-show-inner">
                         <form action="/search" method="get">
                             <div class="search-show-form">
-                                <input autocomplete="off" class="form--control" id="search_form_input" type="text"
-                                       name="keyword" placeholder="검색어를 입력하세요">
+                                <input autocomplete="off" class="form--control" id="search_form_input" name="keyword"
+                                       placeholder="검색어를 입력하세요" type="text">
                                 <button type="submit"><i class="las la-search"></i></button>
                                 <span class="suggestions-icon-close"> <i class="las la-times"></i> </span>
                             </div>
@@ -104,10 +101,13 @@
                                         <a class="nav-link" onclick="goToLoginPage()">로그인</a>
                                     </li>
                                     <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_SELLER')">
-                                        <a class="nav-link" href="/seller/dashboard">숙소관리</a>
+                                        <a class="nav-link" href="/seller/list">숙소관리</a>
+                                    </li>
+                                    <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                                        <a class="nav-link" href="/admin/">회원관리</a>
                                     </li>
                                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                                        <a class="nav-link" href="/member/memberinfo">회원정보</a>
+                                        <a class="nav-link" href="/member/mypage">회원정보</a>
                                     </li>
                                     <li class="nav-item" sec:authorize="isAuthenticated()">
                                         <a class="nav-link" onclick="logout()">로그아웃</a>
