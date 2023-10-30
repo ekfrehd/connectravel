@@ -12,18 +12,12 @@ import org.springframework.data.domain.Sort;
 @Data
 public class PageRequestDTO {
 
-    //1 페이지
-    private int page;
-    // 검색 개수
-    private int size;
-    // 검색의 종류 t, c, tc, tw, twc
-    private String type;
-    // 검색어
-    private String keyword;
-    // 숙소종류
-    private String category;
-    // 지역
-    private String region;
+    private int page; // 1 페이지
+    private int size; // 검색 개수
+    private String type; // 검색의 종류 t, c, tc, tw, twc
+    private String keyword; // 검색어
+    private String category; // 숙소종류
+    private String region; // 지역
 
     public PageRequestDTO () {
         this.page = 1;

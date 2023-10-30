@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImgController {
     final ImgService imgService;
 
-    FileManager fileManager;
     @GetMapping("remove")
     public void delete(Long ino){
         imgService.remove(ino);
@@ -35,6 +34,5 @@ public class ImgController {
         //생성된 파일이름,파일넘버로 엔티티로 구성해서
         //repository에서 save를 통해 update를 하면됨
         imgService.update(ino,file);
-
     }
 }

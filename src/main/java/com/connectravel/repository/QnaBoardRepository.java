@@ -20,6 +20,6 @@ public interface QnaBoardRepository extends JpaRepository<QnaBoard, Long>, Query
     /*@Query("select b, w, count(r) from QnaBoard b left join b.member w left outer join QnaReply r on r.qnaBoard = b where b.bno = :bno")
     Object getBoardByBno(@Param("bno") Long bno);*/
 
-    @Query("select b, w from QnaBoard b left join b.member w where b.bno = :bno")
-    Object getBoardByBno(@Param("bno") Long bno);
+    @Query ("select b, w from QnaBoard b left join b.member w where b.bno = :bno")
+    Object getBoardByBno (@Param ("bno") Long bno);
 }

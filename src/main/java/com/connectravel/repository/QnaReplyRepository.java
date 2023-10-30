@@ -14,5 +14,5 @@ public interface QnaReplyRepository extends JpaRepository<QnaReply, Long> {
     void deleteByBno(Long bno);*/
 
     //게시물로 댓글 목록 가져오기
-    List<QnaReply> getRepliesByQnaBoardOrderByRno(QnaBoard qnaBoard);
+    List<QnaReply> getRepliesByQnaBoardOrderByRno (QnaBoard qnaBoard);
 }

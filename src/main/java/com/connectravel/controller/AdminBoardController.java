@@ -25,8 +25,6 @@ public class AdminBoardController {
 
     private final AdminBoardService adminBoardService;
 
-    private final ImgService imgService;
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -53,7 +51,10 @@ public class AdminBoardController {
     public String registerPost(AdminBoardDTO dto, RedirectAttributes redirectAttributes, Authentication authentication,
                                @RequestParam("images") List<MultipartFile> images){
 
-        Member member = memberRepository.findByEmail(authentication.getName());
+        //Member member = memberRepository.findByEmail(authentication.getName());
+
+        String email = "1111@naver.com";
+        Member member = memberRepository.findByEmail(email);
 
         dto.setWriterEmail(member.getEmail());
 
@@ -111,6 +112,5 @@ public class AdminBoardController {
         redirectAttributes.addAttribute("category", dto.getCategory());
 
         return "redirect:/adminboard/read";
-
     }
 } //class

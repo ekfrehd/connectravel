@@ -45,8 +45,9 @@
                         <button type="button" class="btn btn-outline-primary">쇼핑</button>
                     </a>
                     <a th:href="@{/tour/register}">
-                        <button type="button" class="btn btn-primary"
-                                sec:authorize="hasAnyAuthority('ROLE_ADMIN')">REGISTER</button>
+                        <!--<button type="button" class="btn btn-primary"
+                                sec:authorize="hasAnyAuthority('ROLE_ADMIN')">REGISTER</button>-->
+                        <button type="button" class="btn btn-primary">REGISTER</button>
                     </a>
                 </div>
                 <div class="col-md-7">
@@ -83,8 +84,7 @@
                 <div class="col-xxl-4 col-lg-4 col-md-6">
                     <div class="single-blog">
                         <div class="single-blog-thumbs">
-                            <a  th:href="@{/tour/read(tbno = ${dto.tbno}, page= ${result.page},
-                             type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
+                            <a  th:href="@{/tour/read(tbno = ${dto.tbno}, page= ${result.page}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
                                 <div th:if="${not #lists.isEmpty(dto.imgDTOList)}">
                                     <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgFile}" th:alt="${dto.title}" />
                                 </div>

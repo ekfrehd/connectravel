@@ -69,5 +69,4 @@ public class QnaReplyController {
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
-
 }

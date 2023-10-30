@@ -349,7 +349,7 @@
                         </div>
                         <!-- Comment area ends -->
                         <!-- Post Comment area Starts -->
-                        <div class="comment-area color-two pat-50" sec:authorize="isAuthenticated()">
+                        <!--<div class="comment-area color-two pat-50" sec:authorize="isAuthenticated()">-->
                             <form th:action="@{/tourreview/register}" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="tbno" th:value="${tourboard.tbno}">
                                 <h3 class="details-section-title"> 리뷰 쓰기 </h3>
@@ -401,7 +401,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        <!--</div>-->
                     </div>
                 </div>
             </div>
