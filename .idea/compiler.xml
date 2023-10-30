@@ -2,19 +2,16 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.26/8f8cf0372abf564913e9796623aac4c8ea44025a/lombok-1.18.26.jar" />
         </processorPath>
-        <module name="room.room.test~1" />
-        <module name="room.room.main~1" />
+        <module name="room.main" />
+        <module name="room.test" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="room.room.main" target="11" />
-      <module name="room.room.querydsl" target="11" />
-      <module name="room.room.test" target="11" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="11" />
   </component>
 </project>
