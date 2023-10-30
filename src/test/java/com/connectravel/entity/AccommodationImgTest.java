@@ -43,7 +43,7 @@ public class AccommodationImgTest {
     }
 
     @Test
-    public void testImageAssociation() {
+    public void testAccImgDetails() {
         assertEquals(2, accommodationImgList.size());
         assertEquals("image1.jpg", accommodationImgList.get(0).getImgFile());
         assertEquals("image2.jpg", accommodationImgList.get(1).getImgFile());
@@ -51,7 +51,7 @@ public class AccommodationImgTest {
     }
 
     @Test
-    public void testImageRemove() {
+    public void testAccImgRemove() {
         // 먼저 이미지를 제거합니다.
         accommodation.removeImage(accommodationImgList.get(0));
         accommodationImgList.remove(0); // accommodationImgList에서도 삭제합니다.
