@@ -55,6 +55,10 @@ public class Accommodation {
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccommodationOption> accommodationOptions = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY)
+    private List<Room> rooms = new ArrayList<>();
+
     public void addImage(AccommodationImg img) {
         images.add(img);
         img.setAccommodation(this);
