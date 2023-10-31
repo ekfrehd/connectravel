@@ -16,19 +16,19 @@ import java.util.List;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rno;  //방번호
+    private Long rno;
 
     @Column(length = 30,nullable = false)
-    private String roomName; //방 이름
+    private String roomName;
     @Column(nullable = false)
-    private int price; //방 갸격
+    private int price;
 
     private boolean operating;
 
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Accommodation accommodation; //어디 소속 숙소의 방인지 알아야되니까 중계어플에서는 필수.
+    private Accommodation accommodation;
 
     @Builder.Default
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)

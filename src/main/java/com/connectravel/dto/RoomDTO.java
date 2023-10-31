@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomDTO {
-    private Long rno;  //방번호
-    private String roomName; //방 이름
-    private int price; //방 갸격
+    private Long rno;
+    private String roomName;
+    private int price;
     private boolean operating;
     private String content;
 

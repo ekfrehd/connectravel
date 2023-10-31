@@ -20,14 +20,13 @@ public class MemberFormDTO {
     private String password;
 
     @NotEmpty(message = "닉네임은 필수 입력 값입니다.")
-    private String nickName; // 닉네임
+    private String nickName;
 
-    private String tel; // 전화번호
-    private String tel1, tel2, tel3; // 전화번호 sprit
+    private String tel;
+    private String tel1, tel2, tel3;
 
-    private String id; // 아이디
-    // private String token; // 토큰
-    private int point; // 포인트
-    private Role role; // 역할
-    // private String authProvider; // 인증 제공자 (카카오톡, 깃허브)
+    private String id;
+    private int point;
+    private Role role;
+
 }

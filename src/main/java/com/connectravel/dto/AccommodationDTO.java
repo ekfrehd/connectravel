@@ -14,32 +14,32 @@ public class AccommodationDTO {
 
     private Long ano;
 
-    private String name; // 숙소이름
+    private String name;
 
-    private int postal; // 우편번호
+    private int postal;
 
-    private String address; // 주소
+    private String address;
 
-    private String adminName; // 숙소 운영자 이름
+    private String adminName;
 
-    private String intro;
+    private int count;
 
-    private int count; // 숙소 예약 횟수
+    private String accommodationType;
 
-    private String accommodationType; // 숙소 종류
+    private String region;
 
-    private String region; // 지역
-
-    private String tel; // 전화번호
+    private String tel;
 
     private String email;
 
-    private String content; // 숙박업소 소개
+    private String intro; // "사장님 한마디" 같은 짧은 숙소 소개글
 
-    private Integer minPrice; // A숙소의 방의 최저가 나타내기
+    private String content; // 기본 정보, 편의시설 및 서비스, 판매자 정보
 
-    private List<RoomDTO> roomDTOList;
-    private List<ImgDTO> imgDTOList;
-    private List<OptionDTO> optionDTOList;
+    private Integer minPrice; // A 숙소의 방의 최저가 나타내기
+
+    private List<RoomDTO> roomDTO;
+    private List<ImgDTO> imgDTO;
+    private List<OptionDTO> optionDTO;
 
 }
