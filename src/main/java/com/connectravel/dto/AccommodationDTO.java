@@ -16,8 +16,6 @@ public class AccommodationDTO {
 
     private String name; // 숙소이름
 
-    // private double grade; // 평점
-
     private int postal; // 우편번호
 
     private String address; // 주소
@@ -37,8 +35,6 @@ public class AccommodationDTO {
     private String email;
 
     private String content; // 숙박업소 소개
-
-    // private int reviewcount; // 리뷰수
 
     private Integer minPrice; // A숙소의 방의 최저가 나타내기
 
