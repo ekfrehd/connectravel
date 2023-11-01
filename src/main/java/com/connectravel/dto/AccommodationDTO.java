@@ -39,7 +39,7 @@ public class AccommodationDTO {
     private Integer minPrice; // A 숙소의 방의 최저가 나타내기
 
     private List<RoomDTO> roomDTO;
-    private List<ImgDTO> imgDTO;
+    private List<String> imgFiles;
     private List<OptionDTO> optionDTO;
 
 }

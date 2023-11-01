@@ -1,6 +1,8 @@
 package com.connectravel.service;
 
 import com.connectravel.dto.AccommodationDTO;
+import com.connectravel.dto.ImgDTO;
+import com.connectravel.dto.OptionDTO;
 import com.connectravel.entity.*;
 import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.repository.OptionRepository;
@@ -113,7 +115,7 @@ class AccommodationServiceTest {
         log.info("Updated Accommodation: " + updatedDto.getName() + ", Tel: " + updatedDto.getTel());
     }
 
-    @Test // 숙소의 상세 정보 가져오기
+    @Test
     @Transactional
     void getAccommodationDetails() {
         AccommodationDTO foundDto = accommodationService.getAccommodationDetails(1L);
@@ -130,9 +132,21 @@ class AccommodationServiceTest {
         log.info("Intro: " + foundDto.getIntro());
         log.info("Content: " + foundDto.getContent());
         log.info("Postal: " + foundDto.getPostal());
-        // 이미지와 옵션 정보는 DTO에서 바로 가져올 수 없을 수 있으므로 추가적인 메서드나 로직이 필요할 수 있습니다.
-        // 예를 들어, 이미지나 옵션 리스트를 가져오기 위한 메서드를 DTO에 추가할 경우 해당 메서드를 호출하여 로그에 출력할 수 있습니다.
+        log.info("Min Price: " + foundDto.getMinPrice());
+
+        // 이미지 정보 출력
+        log.info("Images:");
+        for (String imgFile : foundDto.getImgFiles()) {  // 변경된 부분
+            log.info("- Image File: " + imgFile);
+        }
+
+        // 옵션 정보 출력
+        log.info("Options:");
+        for (OptionDTO option : foundDto.getOptionDTO()) {
+            log.info("- Option Category: " + option.getOptionCategory() + ", Option Name: " + option.getOptionName());
+        }
     }
+
 
 
    /* @Test
