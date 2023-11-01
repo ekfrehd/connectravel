@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,36 +18,34 @@ import java.util.stream.Collectors;
 public class QnaReplyServiceImpl implements QnaReplyService {
 
     private final QnaReplyRepository qnaReplyRepository;
-
     private final MemberRepository memberRepository;
 
     @Override
-    public Long register (QnaReplyDTO qnaReplyDTO) {
-        QnaReply qnaReply = dtoToEntity (qnaReplyDTO, memberRepository);
+    public Long register(QnaReplyDTO qnaReplyDTO) {
+        QnaReply qnaReply = dtoToEntity(qnaReplyDTO, memberRepository);
 
-        qnaReplyRepository.save (qnaReply);
+        qnaReplyRepository.save(qnaReply);
 
-        return qnaReply.getRno ();
+        return qnaReply.getRno();
     }
 
-    public List<QnaReplyDTO> getList (Long bno) {
-        List<QnaReply> result = qnaReplyRepository.getRepliesByQnaBoardOrderByRno (QnaBoard.builder ().bno (bno).build ());
-        return result.stream ().flatMap (this::entityToDTO).collect (Collectors.toList ());
-    }
-
-    @Override
-    public void modify (QnaReplyDTO qnaReplyDTO) {
-
-        Optional<QnaReply> qnaReplyOptional = qnaReplyRepository.findById (qnaReplyDTO.getRno ());//rno와 같은 댓글을 DB에서 찾는다.
-        QnaReply qnaReply = qnaReplyOptional.orElseThrow ();//댓글이 존재하지 않는 경우 예외처리 전달
-        qnaReply.changeText (qnaReplyDTO.getText ());//댓글 내용을 주어진 replyDTO 내용으로 변경
-        qnaReplyRepository.save (qnaReply);//변경한 댓글을 DB에 저장
-        /*QnaReply qnaReply = dtoToEntity(qnaReplyDTO, memberRepository);
-        qnaReplyRepository.save(qnaReply);*/
+    public List<QnaReplyDTO> getList(Long bno) {
+        List<QnaReply> result = qnaReplyRepository.getRepliesByQnaBoardOrderByRno(QnaBoard.builder().bno(bno).build());
+        return result.stream().flatMap(this::entityToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public void remove (Long rno) {
-        qnaReplyRepository.deleteById (rno);
+    public void modify(QnaReplyDTO qnaReplyDTO) {
+
+        Optional<QnaReply> OptionalQnaReply = qnaReplyRepository.findById(qnaReplyDTO.getRno());
+        QnaReply qnaReply = OptionalQnaReply.orElseThrow(() -> new NoSuchElementException("게시글이 존재하지 않습니다."));
+
+        qnaReply.changeText(qnaReplyDTO.getText());
+        qnaReplyRepository.save(qnaReply); //수정된 객체를 repository에 저장
+    }
+
+    @Override
+    public void remove(Long rno) {
+        qnaReplyRepository.deleteById(rno);
     }
 }

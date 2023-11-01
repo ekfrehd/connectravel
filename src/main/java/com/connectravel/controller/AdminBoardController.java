@@ -1,12 +1,14 @@
 package com.connectravel.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import com.connectravel.dto.*;
+import com.connectravel.dto.AdminBoardDTO;
+import com.connectravel.dto.ImgDTO;
+import com.connectravel.dto.PageRequestDTO;
+import com.connectravel.dto.PageResultDTO;
 import com.connectravel.entity.Member;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.service.AdminBoardService;
-import com.connectravel.service.ImgService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,16 +26,15 @@ import java.util.List;
 public class AdminBoardController {
 
     private final AdminBoardService adminBoardService;
-
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @GetMapping("{category}")
-    public String list(@PathVariable("category") String category,
-            PageRequestDTO pageRequestDTO, Model model){
+    public String list(@PathVariable("category") String category, PageRequestDTO pageRequestDTO, Model model) {
 
         PageResultDTO<AdminBoardDTO, Object[]> pageResultDTO = adminBoardService.getList(pageRequestDTO, category);
-        if(pageResultDTO.getTotalPage()==0){ pageResultDTO.setTotalPage(1);} // 글이 하나도 없을 땐 0으로 인식하므로
+        if (pageResultDTO.getTotalPage() == 0) {
+            pageResultDTO.setTotalPage(1);
+        } // 글이 하나도 없을 땐 0으로 인식하므로
 
         model.addAttribute("result", pageResultDTO);
         model.addAttribute("category", category);
@@ -41,19 +42,18 @@ public class AdminBoardController {
     }
 
     @GetMapping("{category}/register")
-    public String register(@PathVariable("category") String category, Model model){
-        model.addAttribute("category", category );
+    public String register(@PathVariable("category") String category, Model model) {
+        model.addAttribute("category", category);
 
         return "adminboard/register";
     }
 
     @PostMapping("register")
-    public String registerPost(AdminBoardDTO dto, RedirectAttributes redirectAttributes, Authentication authentication,
-                               @RequestParam("images") List<MultipartFile> images){
+    public String registerPost(AdminBoardDTO dto, RedirectAttributes redirectAttributes, Authentication authentication, @RequestParam("images") List<MultipartFile> images) {
 
         //Member member = memberRepository.findByEmail(authentication.getName());
 
-        String email = "1111@naver.com";
+        String email = "sample@sample.com";
         Member member = memberRepository.findByEmail(email);
 
         dto.setWriterEmail(member.getEmail());
@@ -66,11 +66,11 @@ public class AdminBoardController {
 
         redirectAttributes.addFlashAttribute("msg", bno);
 
-        return "redirect:/adminboard/"+dto.getCategory();
+        return "redirect:/adminboard/" + dto.getCategory();
     }
 
     @GetMapping({"read", "modify"})
-    public void read(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long bno, Model model){
+    public void read(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long bno, Model model) {
         log.info("bno : " + bno);
 
         AdminBoardDTO adminBoardDTO = adminBoardService.get(bno);
@@ -87,19 +87,8 @@ public class AdminBoardController {
         model.addAttribute("category", category);
     }
 
-    @PostMapping("remove")
-    public String remove(long bno, RedirectAttributes redirectAttributes){
-        log.info("bno : " + bno);
-
-        adminBoardService.removeWithReplies(bno);
-
-        redirectAttributes.addFlashAttribute("msg",bno);
-
-        return "redirect:/adminboard/list";
-    }
-
     @PostMapping("modify")
-    public String modify(AdminBoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes){
+    public String modify(AdminBoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
         log.info("post modify.....");
         log.info("dto : " + dto);
 

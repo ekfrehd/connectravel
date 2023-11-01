@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org"
-      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate = "~{fragments/layout1}">
+<html layout:decorate="~{fragments/layout1}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- CSRF 토큰 관련 메타 태그 -->
 <meta name="csrf-header-name" th:content="${_csrf.headerName}">
@@ -11,29 +11,29 @@
     <div class="container">
         <div class="login-wrapper-flex">
             <div class="login-wrapper-contents login-padding">
-                <p id="message" class="text-danger"></p>
+                <p class="text-danger" id="message"></p>
                 <form class="login-wrapper-contents-form custom-form" id="loginBtn" method="post">
                     <div class="single-input mt-4">
                         <label class="label-title mb-3" th:for="email"> Email </label>
-                        <input class="form-control" type="email" id="email" placeholder="이메일을 입력해주세요">
-                        <p id="message_email" class="text-danger"></p>
+                        <input class="form-control" id="email" placeholder="이메일을 입력해주세요" type="email">
+                        <p class="text-danger" id="message_email"></p>
                     </div>
                     <div class="single-input mt-4">
                         <label class="label-title mb-3" th:for="password"> Password </label>
-                        <input class="form-control" type="password" id="password" placeholder="패스워드를 입력해주세요">
-                        <p id="message_password" class="text-danger"></p>
-<!--                        <div class="icon toggle-password">-->
-<!--                            <div class="show-icon"><i class="las la-eye-slash"></i></div>-->
-<!--                            <span class="hide-icon"> <i class="las la-eye"></i> </span>-->
-<!--                        </div>-->
+                        <input class="form-control" id="password" placeholder="패스워드를 입력해주세요" type="password">
+                        <p class="text-danger" id="message_password"></p>
+                        <!--                        <div class="icon toggle-password">-->
+                        <!--                            <div class="show-icon"><i class="las la-eye-slash"></i></div>-->
+                        <!--                            <span class="hide-icon"> <i class="las la-eye"></i> </span>-->
+                        <!--                        </div>-->
                     </div>
-                    <button id="login" class="submit-btn w-100 mt-4" type="button"> 로그인 </button>
+                    <button class="submit-btn w-100 mt-4" id="login" type="button"> 로그인</button>
                     <span class="account color-light mt-3"> 계정이 없으신가요? <a class="color-one"
                                                                           href="/member/join"> 회원가입 </a> </span>
                 </form>
                 <div class="single-checkbox mt-3">
                     <div class="forgot-password">
-                        <a href="forgot_password.html" class="forgot-btn color-one"> 비밀번호 찾기</a>
+                        <a class="forgot-btn color-one" href="forgot_password.html"> 비밀번호 찾기</a>
                     </div>
                 </div>
                 <div class="login-bottom-contents">
@@ -42,14 +42,14 @@
                     </div>
                     <div class="login-others">
                         <div class="login-others-single">
-                            <a href="/oauth2/authorization/kakao" class="login-others-single-btn w-100">
-                                <img th:src="@{/assets/img/single-page/kakaologo.jpg}" width="22px" height="22px" alt="">
+                            <a class="login-others-single-btn w-100" href="/oauth2/authorization/kakao">
+                                <img alt="" height="22px" th:src="@{/assets/img/single-page/kakaologo.jpg}" width="22px">
                                 <span class="login-para"> 카카오 로그인 </span>
                             </a>
                         </div>
                         <div class="login-others-single">
-                            <a href="/oauth2/authorization/google" class="login-others-single-btn w-100">
-                                <img th:src="@{/assets/img/single-page/google.png}" alt="">
+                            <a class="login-others-single-btn w-100" href="/oauth2/authorization/google">
+                                <img alt="" th:src="@{/assets/img/single-page/google.png}">
                                 <span class="login-para">구글 로그인 </span>
                             </a>
                         </div>

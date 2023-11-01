@@ -1,193 +1,211 @@
 /* Sign In Sign Up */
 
-.login-area {}
+.login-area {
+}
 
 .login-padding {
-    padding: 30px;
-    @include responsive(xxs) {
-        padding: 20px;
-    }
-    @include responsive(vxxs) {
-        padding: 20px 10px;
-    }
+  padding: 30px;
+  @include responsive(xxs) {
+    padding: 20px;
+  }
+  @include responsive(vxxs) {
+    padding: 20px 10px;
+  }
 }
 
 .single-title {
-    font-size: 28px;
-    line-height: 36px;
-    margin: -6px 0 0;
+  font-size: 28px;
+  line-height: 36px;
+  margin: -6px 0 0;
 }
 
 .single-para {
-    font-size: 16px;
-    line-height: 24px;
-    margin: 5px 0 0;
-    color: var(--paragraph-color);
+  font-size: 16px;
+  line-height: 24px;
+  margin: 5px 0 0;
+  color: var(--paragraph-color);
 }
 
 .login-shadow {
-    @include box-shadow(0, 0, 10px, var(--input-color));
+  @include box-shadow(0, 0, 10px, var(--input-color));
 }
 
 .login-wrapper {
-    &-flex {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 25px 50px;
-        @include responsive(xl) {
-            gap: 25px;
-            align-items: flex-start;
-        }
-        @include responsive(lg) {
-            gap: 25px;
-            align-items: flex-start;
-        }
+  &-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px 50px;
+    @include responsive(xl) {
+      gap: 25px;
+      align-items: flex-start;
     }
-    &-thumb {
-        flex: 1;
-        @include responsive(allPhone) {
-            flex: auto;
-        }
-        img {}
+    @include responsive(lg) {
+      gap: 25px;
+      align-items: flex-start;
     }
-    &-contents {
-        flex: 1;
-        max-width: 550px;
-        @include responsive(xl) {
-            max-width: 480px;
-        }
-        @include responsive(lg) {
-            max-width: 480px;
-        }
-        &-form {}
+  }
+
+  &-thumb {
+    flex: 1;
+    @include responsive(allPhone) {
+      flex: auto;
     }
+
+    img {
+    }
+  }
+
+  &-contents {
+    flex: 1;
+    max-width: 550px;
+    @include responsive(xl) {
+      max-width: 480px;
+    }
+    @include responsive(lg) {
+      max-width: 480px;
+    }
+
+    &-form {
+    }
+  }
 }
 
 .input-flex-item {
-    display: flex;
-    align-items: center;
-    @include responsive(xxs) {
-        display: block;
+  display: flex;
+  align-items: center;
+  @include responsive(xxs) {
+    display: block;
+  }
+
+  .single-input {
+    width: 100%;
+
+    &:not(:first-child) {
+      margin-left: 24px;
+      @include responsive(xxs) {
+        margin-left: 0;
+      }
     }
-    .single-input {
-        width: 100%;
-        &:not(:first-child) {
-            margin-left: 24px;
-            @include responsive(xxs) {
-                margin-left: 0;
-            }
-        }
-        .form--control {
-            border: 1px solid rgba($steam-color, .4);
-        }
+
+    .form--control {
+      border: 1px solid rgba($steam-color, .4);
     }
+  }
 }
 
 .single-input {
-    display: inline-block;
-    width: 100%;
-    .form--control {
-        border: 1px solid rgba($steam-color, .4);
-        transition: all .3s;
-        box-shadow: 0 0 10px transparent;
-        &:focus {
-            border-color: rgba(var(--main-color-one-rgb), .3);
-            box-shadow: 0 0 10px rgba(var(--main-color-one-rgb), .1);
-        }
+  display: inline-block;
+  width: 100%;
+
+  .form--control {
+    border: 1px solid rgba($steam-color, .4);
+    transition: all .3s;
+    box-shadow: 0 0 10px transparent;
+
+    &:focus {
+      border-color: rgba(var(--main-color-one-rgb), .3);
+      box-shadow: 0 0 10px rgba(var(--main-color-one-rgb), .1);
     }
-    .form--message {
-        padding: 15px 0 0 15px;
-    }
+  }
+
+  .form--message {
+    padding: 15px 0 0 15px;
+  }
 }
 
 .label-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--heading-color);
-    @include responsive(xxs) {
-        font-size: 15px;
-    }
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--heading-color);
+  @include responsive(xxs) {
+    font-size: 15px;
+  }
 }
 
 .single-checkbox {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .or-contents {
-    text-align: center;
-    position: relative;
-    z-index: 2;
-    &::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        background: rgba($steam-color, .4);
-        width: 100%;
-        height: 1px;
-        z-index: -1;
-        transform: translateY(-50%);
-    }
-    &-para {
-        background: $white;
-        padding: 10px 30px;
-        color: var(--light-color);
-    }
+  text-align: center;
+  position: relative;
+  z-index: 2;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    background: rgba($steam-color, .4);
+    width: 100%;
+    height: 1px;
+    z-index: -1;
+    transform: translateY(-50%);
+  }
+
+  &-para {
+    background: $white;
+    padding: 10px 30px;
+    color: var(--light-color);
+  }
 }
 
 .login-others {
-    &-single {
-        &:not(:last-child) {
-            margin-bottom: 20px;
-        }
-        &-btn {
-            padding: 13px 10px;
-            display: inline-block;
-            border: 1px solid rgba($steam-color, .4);
-            color: var(--heading-color);
-            font-weight: 500;
-            text-align: center;
-            transition: all .3s;
-            &:hover {
-                border-color: var(--main-color-one);
-                color: var(--heading-color);
-                background-color: rgba(var(--main-color-one-rgb), .1);
-            }
-            img {
-                margin-right: 5px;
-            }
-        }
+  &-single {
+    &:not(:last-child) {
+      margin-bottom: 20px;
     }
+
+    &-btn {
+      padding: 13px 10px;
+      display: inline-block;
+      border: 1px solid rgba($steam-color, .4);
+      color: var(--heading-color);
+      font-weight: 500;
+      text-align: center;
+      transition: all .3s;
+
+      &:hover {
+        border-color: var(--main-color-one);
+        color: var(--heading-color);
+        background-color: rgba(var(--main-color-one-rgb), .1);
+      }
+
+      img {
+        margin-right: 5px;
+      }
+    }
+  }
 }
 
 
 /* Toggle Password hide Show */
 
 .single-input {
-    position: relative;
+  position: relative;
 }
 
 .toggle-password {
-    position: absolute;
-    bottom: 13px;
-    right: 20px;
-    cursor: pointer;
+  position: absolute;
+  bottom: 13px;
+  right: 20px;
+  cursor: pointer;
 }
 
 .hide-icon {
-    display: none;
+  display: none;
 }
 
 .toggle-password.show-pass .hide-icon {
-    display: block;
+  display: block;
 }
 
 .toggle-password.show-pass .show-icon {
-    display: none;
+  display: none;
 }

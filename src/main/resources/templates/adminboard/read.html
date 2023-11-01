@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -49,26 +49,26 @@
                 <div class="dashboard-right-contents mt-4 mt-lg-0">
                     <div class="dashboard-reservation">
                         <div class="single-reservation bg-white base-padding">
-                            <h4 class="card-title" th:text="${dto.title}" style="left: 0;"></h4>
-                            <p class="card-text" th:text="${dto.writerName}" style="text-align: right"></p>
+                            <h4 class="card-title" style="left: 0;" th:text="${dto.title}"></h4>
+                            <p class="card-text" style="text-align: right" th:text="${dto.writerName}"></p>
                             <div style="width: 100%; border-bottom: #000000 solid 1px;"></div>
                             <p class="card-text" style="margin-top: 20px;" th:utext="${dto.content}"></p>
                             <div th:each="img : ${adminBoardImgs}">
                                 <br/>
-                                <img th:src="'/imgtest/' + ${img.imgfile}" th:alt="${img.imgfile}"/>
+                                <img th:alt="${img.imgfile}" th:src="'/imgtest/' + ${img.imgfile}"/>
                                 <br/>
                             </div>
                             <p style="margin-top: 20px; text-align: right;">작성일 : [[${#temporals.format(dto.regDate,
                                 'yyyy/MM/dd HH:mm:ss')}]]<br/>
                                 수정일 : [[${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}]]</p>
                             <a th:href="@{/adminboard/modify(bno = ${dto.bno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
-                                <button type="button" class="btn btn-primary"
-                                        sec:authorize="hasAnyAuthority('ROLE_ADMIN')">Modify
+                                <button class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')"
+                                        type="button">Modify
                                 </button>
                             </a>
 
                             <a th:href="@{/adminboard/{category}(category=${dto.category}, page=${requestDTO.page} , type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
-                                <button type="button" class="btn btn-info">List</button>
+                                <button class="btn btn-info" type="button">List</button>
                             </a>
                         </div>
                     </div>
@@ -241,6 +241,6 @@
     </script>
 </div>
 </div>
-
+</html>
 
 

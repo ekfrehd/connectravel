@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface RoomImgRepository extends JpaRepository<RoomImg ,Long> {
+public interface RoomImgRepository extends JpaRepository<RoomImg, Long> {
 
     @Query("SELECT i from RoomImg i where i.room = :room")
     List<RoomImg> GetImgbyRoomId(@Param("room") Room room);

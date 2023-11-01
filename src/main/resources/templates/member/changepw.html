@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -67,20 +67,20 @@
                                 <form action="/member/changepw" id="changepw" method="post">
                                     <div class="dashboard-input mt-4">
                                         <label class="label-title" th:for="password"> 현재 패밀번호 </label>
-                                        <input type="password" id="currentPassword" name="currentPassword" class="form--control" placeholder="현재 비밀번호" required>
+                                        <input class="form--control" id="currentPassword" name="currentPassword" placeholder="현재 비밀번호" required type="password">
                                         <div class="toggle-password"><span class="eye-icon"> </span></div>
-                                        <p class="text-danger" th:text="${errorMessage}" th:if="${errorMessage}"></p>
+                                        <p class="text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></p>
                                     </div>
                                     <div class="dashboard-input mt-4">
                                         <label class="label-title" th> 새 비밀번호 </label>
-                                        <input type="password" id="password" name="password" class="form--control" placeholder="새 비밀번호" required>
+                                        <input class="form--control" id="password" name="password" placeholder="새 비밀번호" required type="password">
                                         <div class="toggle-password"><span class="eye-icon"> </span></div>
                                     </div>
                                     <div class="dashboard-input mt-4">
                                         <label class="label-title"> 비밀번호 확인 </label>
-                                        <input type="password" id="passwordConfirm" class="form--control" placeholder="새 비밀번호 확인" required>
+                                        <input class="form--control" id="passwordConfirm" placeholder="새 비밀번호 확인" required type="password">
                                         <div class="toggle-password"><span class="eye-icon"> </span></div>
-                                        <p id="passwordError" class="text-danger"></p>
+                                        <p class="text-danger" id="passwordError"></p>
                                     </div>
                                     <div class="btn-wrapper mt-4">
                                         <button class="submit-btn w-100 mt-4" type="submit">비밀번호 변경</button>

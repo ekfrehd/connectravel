@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org"
-      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate = "~{fragments/layout1}">
+<html layout:decorate="~{fragments/layout1}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -14,7 +14,7 @@
 
 <div layout:fragment="content">
 
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script referrerpolicy="origin" src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@2/dist/tinymce-jquery.min.js"></script>
 
     <div class="dashboard-area section-bg-2 pat-100 pab-100">
@@ -52,19 +52,19 @@
                             <form action="/adminboard/modify" method="post">
 
                                 <!--페이지 번호  -->
-                                <input type="hidden" name="page" th:value="${requestDTO.page}">
-                                <input type="hidden" name="type" th:value="${requestDTO.type}">
-                                <input type="hidden" name="keyword" th:value="${requestDTO.keyword}">
+                                <input name="page" th:value="${requestDTO.page}" type="hidden">
+                                <input name="type" th:value="${requestDTO.type}" type="hidden">
+                                <input name="keyword" th:value="${requestDTO.keyword}" type="hidden">
 
 
                                 <div class="form-group">
                                     <label>Bno</label>
-                                    <input type="text" class="form-control" name="bno" th:value="${dto.bno}" readonly>
+                                    <input class="form-control" name="bno" readonly th:value="${dto.bno}" type="text">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Title</label>
-                                    <input type="text" class="form-control" name="title" th:value="${dto.title}">
+                                    <input class="form-control" name="title" th:value="${dto.title}" type="text">
                                 </div>
                                 <div class="form-group">
                                     <label>Content</label>
@@ -72,28 +72,28 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Writer</label>
-                                    <input type="text" class="form-control" name="writer" th:value="${dto.writerEmail}"
-                                           readonly>
+                                    <input class="form-control" name="writer" readonly th:value="${dto.writerEmail}"
+                                           type="text">
                                 </div>
                                 <div class="form-group">
                                     <label>RegDate</label>
-                                    <input type="text" class="form-control"
-                                           th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                    <input class="form-control" readonly
+                                           th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" type="text">
                                 </div>
                                 <div class="form-group">
                                     <label>ModDate</label>
-                                    <input type="text" class="form-control"
-                                           th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                    <input class="form-control" readonly
+                                           th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" type="text">
                                 </div>
 
                             </form>
 
                             <div class="mat-25">
-                                <button type="button" class="btn btn-primary modifyBtn">Modify</button>
+                                <button class="btn btn-primary modifyBtn" type="button">Modify</button>
 
-                                <button type="button" class="btn btn-info listBtn">List</button>
+                                <button class="btn btn-info listBtn" type="button">List</button>
 
-                                <button type="button" class="btn btn-danger removeBtn">Remove</button>
+                                <button class="btn btn-danger removeBtn" type="button">Remove</button>
                             </div>
                         </div>
                     </div>

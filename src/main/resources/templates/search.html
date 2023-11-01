@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org"
-      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns = "http://www.w3.org/1999/html"
-      layout:decorate = "~{fragments/layout1}">
+<html layout:decorate="~{fragments/layout1}"
+      xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
           integrity="sha512-F2E+YYE1gkt0T5TVajAslgDfTEUQKtlu4ralVq78ViNxhKXQLrgQLLie8u1tVdG2vWnB3ute4hcdbiBtvJQh0g=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"
+          referrerpolicy="no-referrer" rel="stylesheet"/>
+    <script crossorigin="anonymous"
             integrity="sha512-dSI4QnNeaXiNEjX2N8bkb16B7aMu/8SI5/rE6NIa3Hr/HnWUO+EAZpizN2JQJrXuvU7z0HTgpBVk/sfGd0oW+w=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
 </head>
 
 <!-- 사용자 CSS 추가 -->
@@ -70,18 +70,18 @@
             <div class="row mt-5">
                 <div class="col-12" th:if="${!#lists.isEmpty(tourBoard.dtoList)}">
                     <div class="global-slick-init attraction-slider nav-style-one slider-inner-margin"
-                         data-appendArrows=".append-attraction" data-infinite="true" data-arrows="true"
-                         data-dots="false" data-slidesToShow="4" data-swipeToSlide="true" data-autoplay="true"
-                         data-autoplaySpeed="2500"
+                         data-appendArrows=".append-attraction" data-arrows="true" data-autoplay="true"
+                         data-autoplaySpeed="2500" data-dots="false" data-infinite="true" data-nextArrow='<div class="next-icon"><i class="las la-angle-right"></i></div>'
                          data-prevArrow='<div class="prev-icon"><i class="las la-angle-left"></i></div>'
-                         data-nextArrow='<div class="next-icon"><i class="las la-angle-right"></i></div>'
-                         data-responsive='[{"breakpoint": 1400,"settings": {"slidesToShow": 4}},{"breakpoint": 1200,"settings": {"slidesToShow": 3}},{"breakpoint": 992,"settings": {"slidesToShow": 2}},{"breakpoint": 480, "settings": {"slidesToShow": 1} }]'>
+                         data-responsive='[{"breakpoint": 1400,"settings": {"slidesToShow": 4}},{"breakpoint": 1200,"settings": {"slidesToShow": 3}},{"breakpoint": 992,"settings": {"slidesToShow": 2}},{"breakpoint": 480, "settings": {"slidesToShow": 1} }]'
+                         data-slidesToShow="4"
+                         data-swipeToSlide="true">
                         <div class="attraction-item" th:each="dto : ${tourBoard.dtoList}">
                             <div class="single-attraction radius-20">
                                 <div class="single-attraction-thumb" th:if="${not #lists.isEmpty(dto.imgDTOList)}">
                                     <a th:href="@{/tour/read(tbno=${dto.tbno})}">
-                                        <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}"
-                                             th:alt="${dto.title}">
+                                        <img th:alt="${dto.title}"
+                                             th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}">
                                     </a>
                                 </div>
                                 <div class="single-attraction-contents">
@@ -105,19 +105,19 @@
                 <div class="row mt-5">
                     <div class="col-12" th:if="${!#lists.isEmpty(accommodation.dtoList)}">
                         <div class="global-slick-init attraction-slider nav-style-one slider-inner-margin"
-                             data-appendArrows=".append-attraction" data-infinite="true" data-arrows="true"
-                             data-dots="false" data-slidesToShow="4" data-swipeToSlide="true" data-autoplay="true"
-                             data-autoplaySpeed="2500"
+                             data-appendArrows=".append-attraction" data-arrows="true" data-autoplay="true"
+                             data-autoplaySpeed="2500" data-dots="false" data-infinite="true" data-nextArrow='<div class="next-icon"><i class="las la-angle-right"></i></div>'
                              data-prevArrow='<div class="prev-icon"><i class="las la-angle-left"></i></div>'
-                             data-nextArrow='<div class="next-icon"><i class="las la-angle-right"></i></div>'
-                             data-responsive='[{"breakpoint": 1400,"settings": {"slidesToShow": 4}},{"breakpoint": 1200,"settings": {"slidesToShow": 3}},{"breakpoint": 992,"settings": {"slidesToShow": 2}},{"breakpoint": 480, "settings": {"slidesToShow": 1} }]'>
+                             data-responsive='[{"breakpoint": 1400,"settings": {"slidesToShow": 4}},{"breakpoint": 1200,"settings": {"slidesToShow": 3}},{"breakpoint": 992,"settings": {"slidesToShow": 2}},{"breakpoint": 480, "settings": {"slidesToShow": 1} }]'
+                             data-slidesToShow="4"
+                             data-swipeToSlide="true">
                             <div class="attraction-item" th:each="dto : ${accommodation.dtoList}">
                                 <div class="single-attraction radius-20">
                                     <div class="single-attraction-thumb"
                                          th:if="${not #lists.isEmpty(dto.imgDTOList)}">
                                         <a th:href="@{/product/{ano}(ano=${dto.ano})}">
-                                            <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}"
-                                                 th:alt="${dto.name}"/>
+                                            <img th:alt="${dto.name}"
+                                                 th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}"/>
                                         </a>
                                     </div>
                                     <div class="single-attraction-contents">
