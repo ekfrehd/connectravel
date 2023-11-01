@@ -1,7 +1,7 @@
-! function($) {
+!function ($) {
     'use strict'
 
-    var Class = function(el, cb) {
+    var Class = function (el, cb) {
         this.$el = $(el);
         this.cb = cb;
         this.watch();
@@ -28,11 +28,11 @@
         /**
          * Launch a callback indicating when the element is in and when is out.
          */
-        watch: function() {
+        watch: function () {
             var _self = this;
             var _isIn = false;
 
-            $(window).on('resize scroll', function() {
+            $(window).on('resize scroll', function () {
 
                 if (_self.isIn() && _isIn === false) {
                     _self.cb.call(_self.$el, 'entered');
@@ -52,8 +52,8 @@
 
     // jQuery plugin.
     //-----------------------------------------------------------
-    $.fn.isInViewport = function(cb) {
-        return this.each(function() {
+    $.fn.isInViewport = function (cb) {
+        return this.each(function () {
             var $element = $(this);
             var data = $element.data('isInViewport');
             if (!data) {

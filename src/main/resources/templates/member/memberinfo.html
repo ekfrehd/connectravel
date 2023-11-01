@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -65,7 +65,7 @@
                 </div>
                 <div class="dashboard-left-content">
                     <div class="dashboard-close-main">
-                        <div class="close-bars"> <i class="las la-times"></i> </div>
+                        <div class="close-bars"><i class="las la-times"></i></div>
                         <div class="dashboard-bottom">
                             <ul class="dashboard-list list-style-none">
                                 <li class="list">
@@ -77,9 +77,9 @@
                                 <li class="list has-children active open show">
                                     <a href="javascript:void(0)"> <i class="las la-user-circle"></i> 프로필 </a>
                                     <ul class="submenu list-style-none">
-                                        <li class="list selected"> <a href="/member/memberinfo"> 프로필 </a> </li>
-                                        <li class="list"> <a href="/member/update"> 프로필 수정  </a> </li>
-                                        <li class="list"> <a href="/member/changepw"> 비밀번호 변경  </a> </li>
+                                        <li class="list selected"><a href="/member/memberinfo"> 프로필 </a></li>
+                                        <li class="list"><a href="/member/update"> 프로필 수정 </a></li>
+                                        <li class="list"><a href="/member/changepw"> 비밀번호 변경 </a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -99,7 +99,7 @@
                                     </div>
                                 </div>
                                 <div class="btn-wrapper">
-                                    <a href="/member/update" class="cmn-btn btn-border"> 프로필 수정 </a>
+                                    <a class="cmn-btn btn-border" href="/member/update"> 프로필 수정 </a>
                                 </div>
                             </div>
                             <div class="single-reservation-item">
@@ -108,7 +108,7 @@
                                         <span class="single-reservation-contact-list"> <span> <i class="las la-phone-alt"></i> </span> [[${memberInfo.tel}]] </span>
                                     </div>
                                     <div class="single-reservation-contact-item">
-                                        <a th:href="'mailto:' + ${memberInfo.email}" class="single-reservation-contact-list"><span> <i class="las la-envelope"></i> </span> [[${memberInfo.email}]] </a>
+                                        <a class="single-reservation-contact-list" th:href="'mailto:' + ${memberInfo.email}"><span> <i class="las la-envelope"></i> </span> [[${memberInfo.email}]] </a>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
                                     </div>
                                 </div>
                                 <div class="btn-wrapper">
-                                    <a href="/member/changepw" class="cmn-btn btn-border"> 비밀번호 변경 </a>
+                                    <a class="cmn-btn btn-border" href="/member/changepw"> 비밀번호 변경 </a>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
                                     </div>
                                 </div>
                                 <div class="btn-wrapper">
-                                    <a href="/member/seller" class="cmn-btn btn-border"> 판매자 등록 </a>
+                                    <a class="cmn-btn btn-border" href="/member/seller"> 판매자 등록 </a>
                                 </div>
                             </div>
                         </div>

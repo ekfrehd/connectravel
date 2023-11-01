@@ -1,11 +1,8 @@
 package com.connectravel.entity;
 
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -16,13 +13,13 @@ import java.util.Set;
 public class TourBoard extends BaseEntity {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tbno; // 번호
 
-    @Column (length = 100, nullable = false)
+    @Column(length = 100, nullable = false)
     private String title; // 제목
 
-    @Column (length = 2000, nullable = false)
+    @Column(length = 2000, nullable = false)
     private String content; // 내용
 
     private String region; // 지역
@@ -33,10 +30,10 @@ public class TourBoard extends BaseEntity {
 
     private int reviewCount; // 리뷰수
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private int postal; // 우편번호
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String address; // 주소
 
     /*@OneToMany (mappedBy = "TourBoard",//BoardImage의 Board 변수
@@ -47,18 +44,25 @@ public class TourBoard extends BaseEntity {
     //Board 엔티티와 연관된 BoardImage 엔티티의 집합
     private Set<TourBoardImg> imageSet = new HashSet<>();*/
 
-    public void changeTitle (String title) {
+    public void changeTitle(String title) {
         this.title = title;
     }
-    public void changeContent (String content) { this.content = content;}
-    public void changeRegion (String region) { this.region = region;}
-    public void changeCategory (String category) { this.category = category;}
-    public void changeAddress (String address) { this.address = address;}
-    public void changePostal (Integer postal) { this.postal = postal;}
-    public void setGrade (double grade) { // 평점 변경
+
+    public void changeContent(String content) {this.content = content;}
+
+    public void changeRegion(String region) {this.region = region;}
+
+    public void changeCategory(String category) {this.category = category;}
+
+    public void changeAddress(String address) {this.address = address;}
+
+    public void changePostal(Integer postal) {this.postal = postal;}
+
+    public void setGrade(double grade) { // 평점 변경
         this.grade = grade;
     }
-    public void setReviewCount (int reviewCount) { // 리뷰 수 변경
+
+    public void setReviewCount(int reviewCount) { // 리뷰 수 변경
         this.reviewCount = reviewCount;
     }
 

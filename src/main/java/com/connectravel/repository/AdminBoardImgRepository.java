@@ -1,6 +1,7 @@
 package com.connectravel.repository;
 
-import com.connectravel.entity.*;
+import com.connectravel.entity.AdminBoard;
+import com.connectravel.entity.AdminBoardImg;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

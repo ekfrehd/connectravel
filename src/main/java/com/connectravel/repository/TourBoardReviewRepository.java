@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TourBoardReviewRepository extends JpaRepository<TourBoardReview, Long> {
 
-    Page<TourBoardReview> findByTourBoard_Tbno (Long tbno, Pageable pageable);
+    Page<TourBoardReview> findByTourBoard_Tbno(Long tbno, Pageable pageable);
 }

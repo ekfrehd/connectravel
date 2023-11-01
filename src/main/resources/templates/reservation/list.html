@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org"
-      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate = "~{fragments/layout1}">
+<html layout:decorate="~{fragments/layout1}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -96,7 +96,7 @@
                             </ul>
                         </div>
 
-                        <div id="prev" class="tab-content-item active">
+                        <div class="tab-content-item active" id="prev">
                             <th:block th:each="rv : ${list}">
                                 <th:block th:with="acc=${accommodation[__${list.indexOf(rv)}__]}">
                                     <th:block th:if="${rv.StartDate} > ${Today} and ${rv.state} == true">
@@ -121,9 +121,9 @@
                                                                     <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
                                                                     <div th:each="img : ${accommodationImgDTOS}">
                                                             <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
+                                                                <img style="width: 200px; height: auto; margin-bottom: 10px;"
                                                                      th:alt="${acc.name}"
-                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
+                                                                     th:src="'/imgtest/' + ${img.img.imgfile}"/>
                                                              </span>
                                                                     </div>
                                                                 </div>
@@ -179,12 +179,12 @@
                                                                 <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
                                                             </div>
                                                             <div class="single-reservation-btn">
-                                                                <form style="display: inline"
-                                                                      th:action="@{/reservation/cancel}"
-                                                                      method="get" onsubmit="return showConfirmation()">
-                                                                    <input type="hidden" name="rvno"
-                                                                           th:value="${rv.rvno}">
-                                                                    <button type="submit" class="btn btn-danger">
+                                                                <form method="get"
+                                                                      onsubmit="return showConfirmation()"
+                                                                      style="display: inline" th:action="@{/reservation/cancel}">
+                                                                    <input name="rvno" th:value="${rv.rvno}"
+                                                                           type="hidden">
+                                                                    <button class="btn btn-danger" type="submit">
                                                                         <i class="las la-exclamation-circle"></i>취소하기
                                                                     </button>
                                                                 </form>
@@ -208,7 +208,7 @@
                             </th:block>
                         </div>
 
-                        <div id="end" class="tab-content-item">
+                        <div class="tab-content-item" id="end">
                             <th:block th:each="rv : ${list}">
                                 <th:block th:with="acc=${accommodation[__${list.indexOf(rv)}__]}">
                                     <th:block th:if="${rv.StartDate} <= ${Today} and ${rv.state} == true">
@@ -233,9 +233,9 @@
                                                                     <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
                                                                     <div th:each="img : ${accommodationImgDTOS}">
                                                             <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
+                                                                <img style="width: 200px; height: auto; margin-bottom: 10px;"
                                                                      th:alt="${acc.name}"
-                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
+                                                                     th:src="'/imgtest/' + ${img.img.imgfile}"/>
                                                              </span>
                                                                     </div>
                                                                 </div>
@@ -291,10 +291,10 @@
                                                                 <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
                                                             </div>
                                                             <div class="single-reservation-btn" th:if="${rv.existReview}==false">
-                                                                <form style="display: inline"
-                                                                      th:action="@{/review/register/{rvno}(rvno=${rv.rvno})}"
-                                                                      method="get">
-                                                                    <button type="submit" class="btn btn-outline-primary">리뷰쓰기</button>
+                                                                <form method="get"
+                                                                      style="display: inline"
+                                                                      th:action="@{/review/register/{rvno}(rvno=${rv.rvno})}">
+                                                                    <button class="btn btn-outline-primary" type="submit">리뷰쓰기</button>
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -307,7 +307,7 @@
                             </th:block>
                         </div>
 
-                        <div id="cancel" class="tab-content-item">
+                        <div class="tab-content-item" id="cancel">
                             <th:block th:each="rv : ${list}">
                                 <th:block th:with="acc=${accommodation[__${list.indexOf(rv)}__]}">
                                     <th:block th:if="${rv.state} == false">
@@ -332,9 +332,9 @@
                                                                     <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
                                                                     <div th:each="img : ${accommodationImgDTOS}">
                                                             <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
+                                                                <img style="width: 200px; height: auto; margin-bottom: 10px;"
                                                                      th:alt="${acc.name}"
-                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
+                                                                     th:src="'/imgtest/' + ${img.img.imgfile}"/>
                                                              </span>
                                                                     </div>
                                                                 </div>

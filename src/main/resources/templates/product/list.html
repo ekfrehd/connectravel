@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -25,30 +25,30 @@
                 <div class="shop-sidebar-content">
                     <div class="shop-close-content">
                         <div class="single-shop-left bg-white radius-10 mt-4">
-                            <form th:action="@{/product/list}" method="get" id="searchForm"
-                                  onsubmit="disableDaterangeInput()" class="single-shop-left-inner mt-4">
+                            <form class="single-shop-left-inner mt-4" id="searchForm" method="get"
+                                  onsubmit="disableDaterangeInput()" th:action="@{/product/list}">
                                 <div class="row-cols-auto mab-20">
-                                    <button id="submitBtn" type="submit" class="btn btn-primary">적용하기</button>
-                                    <button type="button" class="btn btn-outline-primary" id="clear">초기화</button>
+                                    <button class="btn btn-primary" id="submitBtn" type="submit">적용하기</button>
+                                    <button class="btn btn-outline-primary" id="clear" type="button">초기화</button>
                                 </div>
                                 <div class="single-shop-left-title open">
                                     <h5 class="title"> 숙박기간 </h5>
-                                    <input th:if="${param.category != null}" type="hidden" name="category"
-                                           th:value="${param.category}">
-                                    <input th:if="${param.region != null}" type="hidden" name="region"
-                                           th:value="${param.region}"/>
-                                    <input type="hidden" name="StartDate" th:value="${date.StartDate}"/>
-                                    <input type="hidden" name="EndDate" th:value="${date.EndDate}"/>
+                                    <input name="category" th:if="${param.category != null}" th:value="${param.category}"
+                                           type="hidden">
+                                    <input name="region" th:if="${param.region != null}" th:value="${param.region}"
+                                           type="hidden"/>
+                                    <input name="StartDate" th:value="${date.StartDate}" type="hidden"/>
+                                    <input name="EndDate" th:value="${date.EndDate}" type="hidden"/>
                                     <ul class="single-shop-left-list active-list list-style-none">
                                         <li class="item-search">
-                                            <input type="text" class="form--control" name="daterange"/>
+                                            <input class="form--control" name="daterange" type="text"/>
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="single-shop-left-title open">
                                     <h5 class="title"> 가격 </h5>
                                     <div class="single-shop-left-inner mt-4">
-                                        <div class="price-range-slider" data-min="0" data-max="1000000"
+                                        <div class="price-range-slider" data-max="1000000" data-min="0"
                                              data-step="1000">
                                             <div class="ui-range-slider"></div>
                                             <div class="ui-range-slider-footer">
@@ -57,17 +57,17 @@
                                                     <div class="ui-range-value-min">
                                                         <span class="min_price"
                                                               th:text="${param.inputedMinprice != null ? param.inputedMinprice : 0}"/>원
-                                                        <input type="hidden" name="inputedMinprice"
-                                                               class="min_price_input"
-                                                               th:value="${param.inputedMinprice}">
+                                                        <input class="min_price_input" name="inputedMinprice"
+                                                               th:value="${param.inputedMinprice}"
+                                                               type="hidden">
                                                     </div>
                                                     -
                                                     <div class="ui-range-value-max">
                                                         <span class="max_price"
                                                               th:text="${param.inputedMaxprice != null ? param.inputedMaxprice : 1000000}"/>원
-                                                        <input type="hidden" name="inputedMaxprice"
-                                                               class="max_price_input"
-                                                               th:value="${param.inputedMaxprice}">
+                                                        <input class="max_price_input" name="inputedMaxprice"
+                                                               th:value="${param.inputedMaxprice}"
+                                                               type="hidden">
                                                     </div>
                                                 </div>
                                             </div>
@@ -79,17 +79,17 @@
                     </div>
                 </div>
                 <div class="shop-grid-contents">
-                    <div id="tab-list" class="tab-content-item mt-4 active">
+                    <div class="tab-content-item mt-4 active" id="tab-list">
                         <div class="row gy-4">
                             <th:block th:each="dto : ${pageResult.dtoList}">
                                 <div class="col-12">
                                     <div class="hotel-view bg-white radius-20">
                                         <div class="hotel-view-flex" th:if="${not #lists.isEmpty(dto.imgDTOList)}">
                                             <a th:href="@{/product/{ano}(ano=${dto.ano},StartDate=${date.StartDate},EndDate=${date.EndDate})}">
-                                                <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}"
+                                                <img class="hotel-view-thumb hotel-view-list-thumb bg-image"
+                                                     height="326px"
                                                      th:alt="${dto.name}"
-                                                     class="hotel-view-thumb hotel-view-list-thumb bg-image"
-                                                     width="300px" height="326px"/>
+                                                     th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}" width="300px"/>
                                             </a>
                                             <div class="hotel-view-contents">
                                                 <div class="hotel-view-contents-header">
@@ -98,8 +98,8 @@
                                                             class="las la-star"></i> [[${dto.grade}]] <span
                                                             class="hotel-view-contents-review-count"> ([[${dto.reviewcount}]]) </span> </span>
                                                         <div class="btn-wrapper">
-                                                            <a th:href="@{/product/{ano}(ano=${dto.ano},StartDate=${date.StartDate},EndDate=${date.EndDate})}"
-                                                               class="cmn-btn btn-bg-1 btn-small">
+                                                            <a class="cmn-btn btn-bg-1 btn-small"
+                                                               th:href="@{/product/{ano}(ano=${dto.ano},StartDate=${date.StartDate},EndDate=${date.EndDate})}">
                                                                 예약하기 </a>
                                                         </div>
                                                     </div>
@@ -133,10 +133,10 @@
                                     <ul class="pagination-list list-style-none">
                                         <!-- 'Previous' 버튼 수정 -->
                                         <li th:class="${pageResult.prev} ? 'pagination-list-item-prev' : 'pagination-list-item-prev disabled'">
-                                            <a th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${pageResult.page - 1},
+                                            <a class="pagination-list-item-button"
+                                               th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${pageResult.page - 1},
                                             inputedMinprice=${param.inputedMinprice}? ${param.inputedMinprice} : 0,
-                                                inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000)}"
-                                               class="pagination-list-item-button"> Prev </a>
+                                                inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000)}"> Prev </a>
                                         </li>
 
                                         <!-- 페이지네이션 시작 페이지 및 끝 페이지 계산 -->
@@ -144,23 +144,23 @@
                                                 th:with="startPage=${pageResult.page - 5}, endPage=${pageResult.page + 5}">
 
                                             <!-- 시작 페이지부터 끝 페이지까지 페이지 목록 생성 -->
-                                            <li th:each="page: ${#numbers.sequence(1, pageResult.totalPage)}"
-                                                th:if="${page >= startPage and page <= endPage}"
-                                                th:class="${pageResult.page == page} ? 'pagination-list-item active' : 'pagination-list-item'">
-                                                <a th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${page},
+                                            <li th:class="${pageResult.page == page} ? 'pagination-list-item active' : 'pagination-list-item'"
+                                                th:each="page: ${#numbers.sequence(1, pageResult.totalPage)}"
+                                                th:if="${page >= startPage and page <= endPage}">
+                                                <a class="pagination-list-item-link"
+                                                   th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${page},
                                                 inputedMinprice=${param.inputedMinprice}? ${param.inputedMinprice} : 0,
-                                                inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000 )}"
-                                                   class="pagination-list-item-link"> [[${page}]] </a>
+                                                inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000 )}"> [[${page}]] </a>
                                             </li>
 
                                         </th:block>
 
                                         <!-- 'Next' 버튼 수정 -->
                                         <li th:class="${pageResult.next} ? 'pagination-list-item-next' : 'pagination-list-item-next disabled'">
-                                            <a th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${pageResult.page + 1},
+                                            <a class="pagination-list-item-button"
+                                               th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${pageResult.page + 1},
                                             inputedMinprice=${param.inputedMinprice}? ${param.inputedMinprice} : 0,
-                                            inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000)}"
-                                               class="pagination-list-item-button"> Next </a>
+                                            inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000)}"> Next </a>
                                         </li>
                                     </ul>
                                 </div>

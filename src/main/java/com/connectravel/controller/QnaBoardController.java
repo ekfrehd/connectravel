@@ -30,8 +30,8 @@ public class QnaBoardController {
     private final MemberRepository memberRepository; // 멤버 조회가 필요하므로 추가
 
     @GetMapping("/list")
-    public String list(PageRequestDTO pageRequestDTO, Model model){
-        log.info ("■■■■■■■■■■ QnA 게시글 리스트 출력");
+    public String list(PageRequestDTO pageRequestDTO, Model model) {
+        log.info("■■■■■■■■■■ QnA 게시글 리스트 출력");
 
         /*Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = null;
@@ -44,20 +44,22 @@ public class QnaBoardController {
         }*/
 
         PageResultDTO<QnaBoardDTO, Object[]> pageResultDTO = qnaBoardService.getList(pageRequestDTO);
-        if(pageResultDTO.getTotalPage()==0){ pageResultDTO.setTotalPage(1);} // 글이 하나도 없을 땐 0으로 인식하므로
+        if (pageResultDTO.getTotalPage() == 0) {
+            pageResultDTO.setTotalPage(1);
+        } // 글이 하나도 없을 땐 0으로 인식하므로
 
         model.addAttribute("result", pageResultDTO);
         return "qna/list";
     }
 
     @GetMapping("register")
-    public void register(){
-        log.info ("■■■■■■■■■■ QnA 게시글 등록 출력");
+    public void register() {
+        log.info("■■■■■■■■■■ QnA 게시글 등록 출력");
     }
 
-    @PostMapping ("register")
-    public String registerPost(@Valid QnaBoardDTO dto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Authentication authentication){
-        log.info ("■■■■■■■■■■ QnA 게시글 등록 실행");
+    @PostMapping("register")
+    public String registerPost(@Valid QnaBoardDTO dto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Authentication authentication) {
+        log.info("■■■■■■■■■■ QnA 게시글 등록 실행");
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("alertMessage");
@@ -65,14 +67,13 @@ public class QnaBoardController {
         }
 
         //Member member = memberRepository.findByEmail(authentication.getName());
-        String email = "1111@naver.com";
+        String email = "sample@sample.com"; // 존재하는 유저 이메일 입력 - 회원 정보 입력 후 위 코드 사용
 
         Member member = memberRepository.findByEmail(email);
-
         dto.setWriterEmail(member.getEmail());
+        dto.setWriterName(member.getName());
 
-        Long bno = qnaBoardService.register(dto); //새로 추가된 엔티티의 번호(dto)
-
+        Long bno = qnaBoardService.register(dto); //새로 추가된 엔티티의 번호(dto) // 게시글 등록
         redirectAttributes.addFlashAttribute("msg", bno);
 
         return "redirect:/qna/list";
@@ -80,16 +81,16 @@ public class QnaBoardController {
 
 
     @GetMapping({"read", "modify"})
-    public void read(@ModelAttribute ("requestDTO") PageRequestDTO pageRequestDTO, Long bno, Model model){
-        log.info ("■■■■■■■■■■ QnA 게시글 조회 or 수정 출력");
+    public void read(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long bno, Model model) {
+        log.info("■■■■■■■■■■ QnA 게시글 조회 or 수정 출력");
         QnaBoardDTO qnaBoardDTO = qnaBoardService.get(bno);
 
         model.addAttribute("dto", qnaBoardDTO);
     }
 
     @PostMapping("modify")
-    public String modify(QnaBoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes){
-        log.info ("■■■■■■■■■■ QnA 게시글 수정 실행");
+    public String modify(QnaBoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
+        log.info("■■■■■■■■■■ QnA 게시글 수정 실행");
         qnaBoardService.modify(dto);
 
         redirectAttributes.addAttribute("page", requestDTO.getPage());
@@ -101,11 +102,11 @@ public class QnaBoardController {
     }
 
     @PostMapping("remove")
-    public String remove(long bno, RedirectAttributes redirectAttributes){
-        log.info ("■■■■■■■■■■ QnA 게시글 삭제 실행");
+    public String remove(long bno, RedirectAttributes redirectAttributes) {
+        log.info("■■■■■■■■■■ QnA 게시글 삭제 실행");
         qnaBoardService.removeWithReplies(bno);
 
-        redirectAttributes.addFlashAttribute("msg",bno);
+        redirectAttributes.addFlashAttribute("msg", bno);
 
         return "redirect:/qna/list";
     }

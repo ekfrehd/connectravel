@@ -15,5 +15,5 @@ public interface QnaReplyRepository extends JpaRepository<QnaReply, Long> {
 
     // 게시물로 댓글 목록 가져오기
     // QnaBoard에 속하는 댓글들이 rno 기준으로 정렬된 목록으로 반환
-    List<QnaReply> getRepliesByQnaBoardOrderByRno (QnaBoard qnaBoard);
+    List<QnaReply> getRepliesByQnaBoardOrderByRno(QnaBoard qnaBoard);
 }

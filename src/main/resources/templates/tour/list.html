@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -30,39 +29,39 @@
             <div class="row justify-content-between">
                 <div class="col-md-5">
                     <a href="/tour/list">
-                        <button type="button" class="btn btn-outline-primary">전체</button>
+                        <button class="btn btn-outline-primary" type="button">전체</button>
                     </a>
                     <a href="/tour/list?category=attraction">
-                        <button type="button" class="btn btn-outline-primary">명소</button>
+                        <button class="btn btn-outline-primary" type="button">명소</button>
                     </a>
                     <a href="/tour/list?category=activity">
-                        <button type="button" class="btn btn-outline-primary">액티비티</button>
+                        <button class="btn btn-outline-primary" type="button">액티비티</button>
                     </a>
                     <a href="/tour/list?category=food">
-                        <button type="button" class="btn btn-outline-primary">음식</button>
+                        <button class="btn btn-outline-primary" type="button">음식</button>
                     </a>
                     <a href="/tour/list?category=shopping">
-                        <button type="button" class="btn btn-outline-primary">쇼핑</button>
+                        <button class="btn btn-outline-primary" type="button">쇼핑</button>
                     </a>
                     <a th:href="@{/tour/register}">
                         <!--<button type="button" class="btn btn-primary"
                                 sec:authorize="hasAnyAuthority('ROLE_ADMIN')">REGISTER</button>-->
-                        <button type="button" class="btn btn-primary">REGISTER</button>
+                        <button class="btn btn-primary" type="button">REGISTER</button>
                     </a>
                 </div>
                 <div class="col-md-7">
-                    <form action="/tour/list" method="get" id="searchForm">
+                    <form action="/tour/list" id="searchForm" method="get">
                         <div class="input-group">
-                            <input type="hidden" name="page" value="1">
+                            <input name="page" type="hidden" value="1">
                             <div class="input-group-prepend">
                                 <select class="form-select" id="exampleSelect1" name="type">
                                     <option th:selected="${pageRequestDTO.type == null}">-------
                                     </option>
-                                    <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목
+                                    <option th:selected="${pageRequestDTO.type =='t'}" value="t">제목
                                     </option>
-                                    <option value="c" th:selected="${pageRequestDTO.type =='c'}">내용
+                                    <option th:selected="${pageRequestDTO.type =='c'}" value="c">내용
                                     </option>
-                                    <option value="tc" th:selected="${pageRequestDTO.type =='tc'}">제목 +
+                                    <option th:selected="${pageRequestDTO.type =='tc'}" value="tc">제목 +
                                         내용
                                     </option>
                                 </select>
@@ -70,8 +69,8 @@
                             <input class="form-control" name="keyword"
                                    th:value="${pageRequestDTO.keyword}"/>&nbsp;
                             <div class="input-group-append" id="button-addon4">
-                                <button class="btn btn-primary" type="button" id="search">Search</button>
-                                <button class="btn btn-outline-primary" type="button" id="clear">Clear
+                                <button class="btn btn-primary" id="search" type="button">Search</button>
+                                <button class="btn btn-outline-primary" id="clear" type="button">Clear
                                 </button>
                             </div>
                         </div>
@@ -81,29 +80,29 @@
 
             <div class="row gy-5 mat-25">
                 <th:block th:each="dto : ${result.dtoList}">
-                <div class="col-xxl-4 col-lg-4 col-md-6">
-                    <div class="single-blog">
-                        <div class="single-blog-thumbs">
-                            <a  th:href="@{/tour/read(tbno = ${dto.tbno}, page= ${result.page}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
-                                <div th:if="${not #lists.isEmpty(dto.imgDTOList)}">
-                                    <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgFile}" th:alt="${dto.title}" />
-                                </div>
-                            </a>
-                        </div>
-                        <div class="single-blog-contents mt-3">
-                            <div class="single-blog-contents-tags mt-3">
+                    <div class="col-xxl-4 col-lg-4 col-md-6">
+                        <div class="single-blog">
+                            <div class="single-blog-thumbs">
+                                <a th:href="@{/tour/read(tbno = ${dto.tbno}, page= ${result.page}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
+                                    <div th:if="${not #lists.isEmpty(dto.imgDTOList)}">
+                                        <img th:alt="${dto.title}" th:src="'/imgtest/' + ${dto.imgDTOList[0].imgFile}"/>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="single-blog-contents mt-3">
+                                <div class="single-blog-contents-tags mt-3">
                                 <span class="single-blog-contents-tags-item">
                                     <i class="las la-tag"></i> [[${dto.category}]]
                                 </span>
-                                <span class="single-blog-contents-tags-item">  [[${dto.reviewCount}]]건의 리뷰 </span>
-                            </div>
-                            <h4 class="single-blog-contents-title mt-3"><a class="text-dark" th:href="@{/tour/read(tbno = ${dto.tbno},
+                                    <span class="single-blog-contents-tags-item">  [[${dto.reviewCount}]]건의 리뷰 </span>
+                                </div>
+                                <h4 class="single-blog-contents-title mt-3"><a class="text-dark" th:href="@{/tour/read(tbno = ${dto.tbno},
                     page= ${result.page},
                     type=${pageRequestDTO.type} ,
                     keyword = ${pageRequestDTO.keyword})}">[[${dto.title}]]</a></h4>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </th:block>
             </div>
             <div class="row mt-5">
@@ -113,19 +112,19 @@
                             <!-- 'Previous' 버튼 수정 -->
                             <li class="pagination-list-item-prev"
                                 th:class="${result.prev} ? 'page-item' : 'page-item disabled'">
-                                <a th:href="@{/tour/list(page=${result.page - 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"
-                                   class="pagination-list-item-button"> Prev </a>
+                                <a class="pagination-list-item-button"
+                                   th:href="@{/tour/list(page=${result.page - 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"> Prev </a>
                             </li>
 
                             <!-- 페이지네이션 시작 페이지 및 끝 페이지 계산 -->
                             <th:block th:with="startPage=${result.page - 5}, endPage=${result.page + 5}">
 
                                 <!-- 시작 페이지부터 끝 페이지까지 페이지 목록 생성 -->
-                                <li class="pagination-list-item" th:each="page: ${#numbers.sequence(1, result.totalPage)}"
-                                    th:if="${page >= startPage and page <= endPage}"
-                                    th:class="${result.page == page} ? 'page-item active' : 'page-item'">
-                                    <a th:href="@{/tour/list(page=${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"
-                                       class="pagination-list-item-link"> [[${page}]] </a>
+                                <li class="pagination-list-item" th:class="${result.page == page} ? 'page-item active' : 'page-item'"
+                                    th:each="page: ${#numbers.sequence(1, result.totalPage)}"
+                                    th:if="${page >= startPage and page <= endPage}">
+                                    <a class="pagination-list-item-link"
+                                       th:href="@{/tour/list(page=${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"> [[${page}]] </a>
                                 </li>
 
                             </th:block>
@@ -133,8 +132,8 @@
                             <!-- 'Next' 버튼 수정 -->
                             <li class="pagination-list-item-next"
                                 th:class="${result.next} ? 'page-item' : 'page-item disabled'">
-                                <a th:href="@{/tour/list(page=${result.page + 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"
-                                   class="pagination-list-item-button"> Next </a>
+                                <a class="pagination-list-item-button"
+                                   th:href="@{/tour/list(page=${result.page + 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"> Next </a>
                             </li>
                         </ul>
                     </div>

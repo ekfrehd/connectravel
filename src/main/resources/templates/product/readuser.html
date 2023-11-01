@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{layouts/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>방 목록 보기</title>
@@ -14,7 +14,7 @@
     <th:block>
         <th:block th:each="img : ${imgs}">
             <br>
-            <img th:src=" '/imgtest/' + ${img.Imgfile}" th:width="300" th:height="200">
+            <img th:height="200" th:src=" '/imgtest/' + ${img.Imgfile}" th:width="300">
             <br>
         </th:block>
 
@@ -27,7 +27,6 @@
             <a th:href="@{/room/delete(rno=${dto.rno})}">삭제하기</a>
             <br>
         </th:block>
-
 
 
     </th:block>
