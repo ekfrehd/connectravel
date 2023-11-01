@@ -6,7 +6,7 @@ import com.connectravel.dto.PageResultDTO;
 import com.connectravel.dto.TourBoardDTO;
 import com.connectravel.entity.TourBoard;
 import com.connectravel.repository.TourBaordImgRepository;
-import com.connectravel.repository.TourRepository;
+import com.connectravel.repository.TourBoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -26,16 +26,14 @@ import java.util.function.Function;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class TourBoardServiceImpl implements TourBoardService{
-
-    @Autowired
-    private TourRepository tourRepository;
-
-    @Autowired
-    private TourBaordImgRepository tourBaordImgRepository;
+public class TourBoardServiceImpl implements TourBoardService {
 
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    private TourBoardRepository tourBoardRepository;
+    @Autowired
+    private TourBaordImgRepository tourBaordImgRepository;
 
     @Override
     @Transactional
@@ -48,7 +46,7 @@ public class TourBoardServiceImpl implements TourBoardService{
 
         log.info(entity);
 
-        tourRepository.save(entity);
+        tourBoardRepository.save(entity);
 
         return entity.getTbno();
     }
@@ -56,7 +54,7 @@ public class TourBoardServiceImpl implements TourBoardService{
     @Override
     public TourBoardDTO read(Long gno) {
 
-        Optional<TourBoard> result = tourRepository.findById(gno);
+        Optional<TourBoard> result = tourBoardRepository.findById(gno);
 
         return result.isPresent() ? entityToDto(result.get()) : null;
     }
@@ -64,14 +62,14 @@ public class TourBoardServiceImpl implements TourBoardService{
     @Override
     public void remove(Long gno) {
 
-        tourRepository.deleteById(gno);
+        tourBoardRepository.deleteById(gno);
     }
 
     @Override
     public void modify(TourBoardDTO dto) {
 
         //업데이트 하는 항목은 제목, 내용
-        Optional<TourBoard> result = tourRepository.findById(dto.getTbno());
+        Optional<TourBoard> result = tourBoardRepository.findById(dto.getTbno());
 
         if (result.isPresent()) {
 
@@ -80,21 +78,21 @@ public class TourBoardServiceImpl implements TourBoardService{
             entity.changeTitle(dto.getTitle());
             entity.changeContent(dto.getContent());
 
-            tourRepository.save(entity);
+            tourBoardRepository.save(entity);
         }
     }
 
     @Override
-    public PageResultDTO<TourBoardDTO, Object[]> getList
-            (PageRequestDTO pageRequestDTO, String[] type, String keyword, String category, String region) {
+    public PageResultDTO<TourBoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO, String[] type, String keyword, String category, String region) {
         Sort sort = Sort.by(Sort.Direction.DESC, "tbno");
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), sort);
 
         Page<Object[]> result;
         if (pageRequestDTO.getKeyword() != null) {
-            result = tourRepository.searchTourBoard(type, pageRequestDTO.getKeyword(), category, region, pageable);
-        } else {
-            result = tourRepository.searchTourBoard(type, keyword, category, region, pageable);
+            result = tourBoardRepository.searchTourBoard(type, pageRequestDTO.getKeyword(), category, region, pageable);
+        }
+        else {
+            result = tourBoardRepository.searchTourBoard(type, keyword, category, region, pageable);
         }
 
         Function<Object[], TourBoardDTO> fn = (objectArr -> {
@@ -112,9 +110,9 @@ public class TourBoardServiceImpl implements TourBoardService{
     @Override
     public List<ImgDTO> getImgList(Long tbno) {
         List<ImgDTO> list = new ArrayList<>();
-        TourBoard entity = tourRepository.findById(tbno).get();
+        TourBoard entity = tourBoardRepository.findById(tbno).get();
         tourBaordImgRepository.GetImgbyTourBoardId(entity).forEach(i -> { //이미지는 룸을 참조하고 있다 그러니 이미지가 참조하는 룸에 해당하는 모든 이미지를 불러온다
-            ImgDTO imgDTO = modelMapper.map(i,ImgDTO.class); //dto변환
+            ImgDTO imgDTO = modelMapper.map(i, ImgDTO.class); //dto변환
             list.add(imgDTO); // list화
         });
         return list;

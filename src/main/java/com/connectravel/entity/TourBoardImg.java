@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString(exclude = "tourBoard")
 
-public class TourBoardImg {
+public class TourBoardImg { //implements Comparable<TourBoardImg>
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ino;
@@ -24,5 +24,15 @@ public class TourBoardImg {
 
     @Column(length = 200)
     private String imgFile;
+
+
+    private int ord;
+
+   /* @Override
+    public int compareTo (TourBoardImg other) {
+        return this.ord - other.ord;
+    }//BoardImage의 board 필드를 변경하는 메서드
+
+    public void changeBoard (TourBoard tourBoard) { this.tourBoard = tourBoard; }//이미지들을 정렬하는 메서드*/
 
 }

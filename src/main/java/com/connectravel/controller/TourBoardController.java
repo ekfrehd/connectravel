@@ -1,4 +1,3 @@
-
 package com.connectravel.controller;
 
 import com.connectravel.dto.*;
@@ -31,29 +30,25 @@ public class TourBoardController {
     private final ImgService imgService;
 
     @GetMapping("list")
-    public String list(PageRequestDTO pageRequestDTO, Model model){
+    public String list(PageRequestDTO pageRequestDTO, Model model) {
 
         pageRequestDTO.setSize(9); // 한 페이지 9개 리뷰 출력
-        PageResultDTO<TourBoardDTO, Object[]> tourBoard = tourBoardService.getList(
-                pageRequestDTO,
-                pageRequestDTO.getType(),
-                pageRequestDTO.getCategory(),
-                pageRequestDTO.getKeyword(),
-                pageRequestDTO.getRegion());
-        if(tourBoard.getTotalPage()==0){ tourBoard.setTotalPage(1);} // 글이 하나도 없을 땐 0으로 인식하므로
+        PageResultDTO<TourBoardDTO, Object[]> tourBoard = tourBoardService.getList(pageRequestDTO, pageRequestDTO.getType(), pageRequestDTO.getCategory(), pageRequestDTO.getKeyword(), pageRequestDTO.getRegion());
+        if (tourBoard.getTotalPage() == 0) {
+            tourBoard.setTotalPage(1);
+        } // 글이 하나도 없을 땐 0으로 인식하므로
 
         model.addAttribute("result", tourBoard);
         return "tour/list";
     }
 
     @GetMapping("register")
-    public void register(){
+    public void register() {
         log.info("register get...");
     }
 
-    @PostMapping ("register")
-    public String registerPost(@RequestParam ("images") List<MultipartFile> images,
-                               TourBoardDTO dto, RedirectAttributes redirectAttributes){
+    @PostMapping("register")
+    public String registerPost(@RequestParam("images") List<MultipartFile> images, TourBoardDTO dto, RedirectAttributes redirectAttributes) {
 
         int firstSpaceIndex = dto.getAddress().indexOf(" ");
         int secondSpaceIndex = dto.getAddress().indexOf(" ", firstSpaceIndex + 1);
@@ -65,7 +60,7 @@ public class TourBoardController {
         redirectAttributes.addFlashAttribute("msg", tbno);
 
         images.forEach(i -> {
-            imgService.TourBoardRegister(i,tbno);
+            imgService.TourBoardRegister(i, tbno);
         });
 
         return "redirect:/tour/list";
@@ -73,8 +68,7 @@ public class TourBoardController {
     }
 
     @GetMapping({"read", "modify"})
-    public void read(@RequestParam(value = "review", required = false, defaultValue = "1") int page,
-                     long tbno, @ModelAttribute ("requestDTO")PageRequestDTO requestDTO, Model model){
+    public void read(@RequestParam(value = "review", required = false, defaultValue = "1") int page, long tbno, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model) {
 
         int pageSize = 5;
 
@@ -88,10 +82,12 @@ public class TourBoardController {
         // ReviewBoard data 추출
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, pageSize);
         PageResultDTO<TourBoardReivewDTO, TourBoardReview> pageResultDTO = tourBoardReviewService.getTourReviewBoardsAndPageInfoByTourBoardId(tbno, pageRequestDTO);
-        if(pageResultDTO.getTotalPage()==0){ pageResultDTO.setTotalPage(1);} // 글이 하나도 없을 땐 0으로 인식하므로
+        if (pageResultDTO.getTotalPage() == 0) {
+            pageResultDTO.setTotalPage(1);
+        } // 글이 하나도 없을 땐 0으로 인식하므로
 
         // PaeeRueslt를 통한 trbno추출 -> 이미지 리스트화
-        Map<Long, List<ImgDTO>> tourBoardReviewImgDTOsImgMap = new HashMap<> ();
+        Map<Long, List<ImgDTO>> tourBoardReviewImgDTOsImgMap = new HashMap<>();
         for (TourBoardReivewDTO tourBoardReivewDTO : pageResultDTO.getDtoList()) {
             log.info(tourBoardReivewDTO.getTbrno());
             List<ImgDTO> tourBoardReviewImgDTOS = tourBoardReviewService.getImgList(tourBoardReivewDTO.getTbrno());
@@ -107,8 +103,7 @@ public class TourBoardController {
     }
 
     @PostMapping("modify")
-    public String modify(TourBoardDTO dto, @ModelAttribute("requesetDTO")PageRequestDTO requestDTO,
-                         RedirectAttributes redirectAttributes){
+    public String modify(TourBoardDTO dto, @ModelAttribute("requesetDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
 
         int firstSpaceIndex = dto.getAddress().indexOf(" ");
         int secondSpaceIndex = dto.getAddress().indexOf(" ", firstSpaceIndex + 1);
@@ -126,7 +121,7 @@ public class TourBoardController {
     }
 
     @PostMapping("remove")
-    public String remove(long tbno, RedirectAttributes redirectAttributes){
+    public String remove(long tbno, RedirectAttributes redirectAttributes) {
 
         tourBoardService.remove(tbno);
 

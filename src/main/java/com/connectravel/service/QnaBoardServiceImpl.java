@@ -7,6 +7,7 @@ import com.connectravel.entity.Member;
 import com.connectravel.entity.QnaBoard;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.QnaBoardRepository;
+import com.connectravel.repository.QnaReplyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -22,10 +23,10 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Log4j2
 public class QnaBoardServiceImpl implements QnaBoardService {
-    
+
     //의존성 자동 주입
     private final QnaBoardRepository qnaBoardRepository;
-    //private final QnaReplyRepository qnaReplyRepository;
+    private final QnaReplyRepository qnaReplyRepository;
     private final MemberRepository memberRepository; // Member 객체를 불러오기 위해 필요
 
     @Override // 게시글 등록
@@ -33,22 +34,16 @@ public class QnaBoardServiceImpl implements QnaBoardService {
     public Long register(QnaBoardDTO dto) {
 
         log.info("테스트 : " + dto);
-
-        // memberRepository를 넣으면 불러오기 끝!
-        // 보통 dto로 불러올 수 있는 내용이면 dto를 넣고, dto로 불가하면 repository를 실행하면 됨!
         QnaBoard qnaBoard = dtoToEntity(dto, memberRepository);
-
         qnaBoardRepository.save(qnaBoard);
-
         return qnaBoard.getBno();
     }
 
     @Override // 게시글 조회
     public QnaBoardDTO get(Long bno) {
+
         Object result = qnaBoardRepository.getBoardByBno(bno); // 게시글 번호를 기반으로 데이터를 가져와 result에 저장
-
-        Object[] arr=  (Object[])result; // result를 배열 형태로 arr에 저장
-
+        Object[] arr = (Object[]) result; // result를 배열 형태로 arr에 저장
         return entityToDTO((QnaBoard) arr[0], (Member) arr[1]);
     }
 
@@ -75,7 +70,7 @@ public class QnaBoardServiceImpl implements QnaBoardService {
 
         log.info(pageRequestDTO);
 
-        Function<Object[], QnaBoardDTO> fn = (en -> entityToDTO((QnaBoard)en[0], (Member)en[1]));
+        Function<Object[], QnaBoardDTO> fn = (en -> entityToDTO((QnaBoard) en[0], (Member) en[1]));
 
         // SearchBoardRepository에서 정의한 내용으로 세팅
         Page<Object[]> result; // object의 결과는 Page객체에 담고

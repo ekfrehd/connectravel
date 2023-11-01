@@ -12,10 +12,14 @@ import java.util.stream.Stream;
 public interface QnaReplyService {
 
     Long register(QnaReplyDTO qnaReplyDTO); //등록
+
     List<QnaReplyDTO> getList(Long bno); //특정 게시물의 댓글 목록(조회)
+
     void modify(QnaReplyDTO qnaReplyDTO); //수정
+
     void remove(Long rno); //삭제
-    default QnaReply dtoToEntity(QnaReplyDTO qnaReplyDTO, MemberRepository memberRepository){
+
+    default QnaReply dtoToEntity(QnaReplyDTO qnaReplyDTO, MemberRepository memberRepository) {
 
         // QnaReply 객체와 QnaBoard 객체 사이의 외래키 관계를 설정하기 위해
         // QnaBoard 객체를 먼저 생성
@@ -27,10 +31,7 @@ public interface QnaReplyService {
         // MemberRepository를 사용하여 Member 객체를 조회
         Member member = memberRepository.findByEmail(qnaReplyDTO.getReplyer());
 
-        QnaReply qnaReply = QnaReply.builder()
-                .rno(qnaReplyDTO.getRno())
-                .text(qnaReplyDTO.getText())
-                .member(member) // QnaReply 객체와 Member 객체 사이의 외래키 값을 설정
+        QnaReply qnaReply = QnaReply.builder().rno(qnaReplyDTO.getRno()).text(qnaReplyDTO.getText()).member(member) // QnaReply 객체와 Member 객체 사이의 외래키 값을 설정
                 .qnaBoard(qnaBoard) // QnaReply 객체와 QnaBoard 객체 사이의 외래키 값을 설정
                 .build();
 
@@ -55,12 +56,7 @@ public interface QnaReplyService {
                 .modDate(qnaReply.getModTime())
                 .build();*/
 
-        QnaReplyDTO dto = QnaReplyDTO.builder()
-                .rno(qnaReply.getRno())
-                .text(qnaReply.getText())
-                .regDate(qnaReply.getRegTime())
-                .modDate(qnaReply.getModTime())
-                .build();
+        QnaReplyDTO dto = QnaReplyDTO.builder().rno(qnaReply.getRno()).text(qnaReply.getText()).regDate(qnaReply.getRegTime()).modDate(qnaReply.getModTime()).build();
 
         // 생성된 QnaReplyDTO 객체를 Stream으로 감싸서 반환
         // 결과상 QnyReplyDTO가 여러개 일 수 있으니까, 한줄 형태인 stream 사용

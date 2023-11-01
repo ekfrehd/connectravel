@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @ToString(exclude = "tourBoard") //FK지정 - 외래키로 설정될 엔티티 테이블 이름을 exclude 속성 지정해줌
-public class TourBoardReview extends BaseEntity{
+public class TourBoardReview extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +30,8 @@ public class TourBoardReview extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member; // id
+
+    public void changeContent(String content) {this.content = content;}
+
+    public void changeGrade(Double grade) {this.grade = grade;}
 }

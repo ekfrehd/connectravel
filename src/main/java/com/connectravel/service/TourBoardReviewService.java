@@ -25,30 +25,16 @@ public interface TourBoardReviewService {
     PageResultDTO<TourBoardReivewDTO, TourBoardReview> getTourReviewBoardsAndPageInfoByTourBoardId(Long trbno, PageRequestDTO pageRequestDTO); // 리스트 출력
 
     List<ImgDTO> getImgList(Long tbrno);
-    
+
     // DTO 객체를 Entity 객체로 변환하는 메소드
     default TourBoardReview dtoToEntity(TourBoardReivewDTO dto, TourBoard tourBoard, Member member) {
 
-        return TourBoardReview.builder()
-                .tbrno(dto.getTbrno())
-                .content(dto.getContent())
-                .grade(dto.getGrade())
-                .member(member)
-                .tourBoard(tourBoard)
-                .build();
+        return TourBoardReview.builder().tbrno(dto.getTbrno()).content(dto.getContent()).grade(dto.getGrade()).member(member).tourBoard(tourBoard).build();
     }
 
     // Entity 객체를 DTO 객체로 변환하는 메소드
     default TourBoardReivewDTO entityToDTO(TourBoardReview tourBoardReview, Member member) {
 
-        return TourBoardReivewDTO.builder()
-                .tbrno(tourBoardReview.getTbrno())
-                .content(tourBoardReview.getContent())
-                .grade(tourBoardReview.getGrade())
-                .writerEmail(member.getEmail())
-                .writerName(member.getNickName())
-                .regDate(tourBoardReview.getRegTime())
-                .modDate(tourBoardReview.getModTime())
-                .build();
+        return TourBoardReivewDTO.builder().tbrno(tourBoardReview.getTbrno()).content(tourBoardReview.getContent()).grade(tourBoardReview.getGrade()).writerEmail(member.getEmail()).writerName(member.getNickName()).regDate(tourBoardReview.getRegTime()).modDate(tourBoardReview.getModTime()).build();
     }
 }

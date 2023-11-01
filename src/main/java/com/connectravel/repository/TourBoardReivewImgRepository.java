@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface TourBoardReivewImgRepository extends JpaRepository<TourBoardReviewImg, Long> {
+
     @Query("SELECT t from TourBoardReviewImg t where t.tourBoardReview = :tbrno")
     List<TourBoardReviewImg> GetImgbyTourBoardReviewId(@Param("tbrno") TourBoardReview tbrno);
 }

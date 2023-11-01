@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
+      xmlns="http://www.w3.org/1999/html"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns="http://www.w3.org/1999/html"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
           integrity="sha512-F2E+YYE1gkt0T5TVajAslgDfTEUQKtlu4ralVq78ViNxhKXQLrgQLLie8u1tVdG2vWnB3ute4hcdbiBtvJQh0g=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"
+          referrerpolicy="no-referrer" rel="stylesheet"/>
+    <script crossorigin="anonymous"
             integrity="sha512-dSI4QnNeaXiNEjX2N8bkb16B7aMu/8SI5/rE6NIa3Hr/HnWUO+EAZpizN2JQJrXuvU7z0HTgpBVk/sfGd0oW+w=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
 </head>
 
 <!-- 사용자 CSS 추가 -->
@@ -86,17 +86,17 @@
                                         <div th:if="${iterStat.index == 0}">
                                             <div class="row g-4">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 grid-item">
-                                                    <a th:href="|/imgtest/${img.imgFile}|" class="gallery-popup-two">
-                                                        <center><img th:src="|/imgtest/${img.imgFile}|"
-                                                                     class="img-fluid"
-                                                                     style="width: 60%; height: auto;"/></center>
+                                                    <a class="gallery-popup-two" th:href="|/imgtest/${img.imgFile}|">
+                                                        <center><img class="img-fluid"
+                                                                     style="width: 60%; height: auto;"
+                                                                     th:src="|/imgtest/${img.imgFile}|"/></center>
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div th:if="${iterStat.index > 0}">
-                                            <a href="#" th:href="|/imgtest/${img.imgFile}|" class="gallery-popup-two"
-                                               style="display: none;"></a>
+                                            <a class="gallery-popup-two" href="#" style="display: none;"
+                                               th:href="|/imgtest/${img.imgFile}|"></a>
                                         </div>
                                     </div>
                                 </div>
@@ -106,8 +106,8 @@
                                         class="las la-map-marker-alt"></i> </span>
                                 <span class="hotel-view-contents-location-para"> [[${tourboard.address}]]  </span>
                                 <div id="map" style="max-width:1000px;height:400px;"></div>
-                                <script type="text/javascript"
-                                        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=76e0a0ed573b5f155b851a3e45899e94&libraries=services,clusterer"></script>
+                                <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=76e0a0ed573b5f155b851a3e45899e94&libraries=services,clusterer"
+                                        type="text/javascript"></script>
                                 <script th:inline="javascript">
                                     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                                         mapOption = {
@@ -197,12 +197,12 @@
                                 <div class="col-lg-6 mt-4">
                                     <div class="blog-details-share-content right-align">
                                         <a th:href="@{/tour/list(page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
-                                            <button type="button" class="btn btn-primary">목록으로
+                                            <button class="btn btn-primary" type="button">목록으로
                                             </button>
                                         </a>
                                         <a th:href="@{/tour/modify(tbno = ${tourboard.tbno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
-                                            <button type="button" class="btn btn-primary"
-                                                    sec:authorize="hasAnyAuthority('ROLE_ADMIN')">수정하기
+                                            <button class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')"
+                                                    type="button">수정하기
                                             </button>
                                         </a>
                                     </div>
@@ -222,8 +222,8 @@
                                             <li>
                                                 <div class="blog-details-flex-content">
                                                     <div class="blog-details-thumb radius-10">
-                                                        <img th:src="@{/assets/img/blog/basic_profile.png}" alt=""
-                                                             width="100px" height="100px">
+                                                        <img alt="" height="100px"
+                                                             th:src="@{/assets/img/blog/basic_profile.png}" width="100px">
                                                     </div>
                                                     <div class="blog-details-content">
                                                         <div class="blog-details-content-flex">
@@ -242,23 +242,23 @@
                                                                 <div th:if="${iterStat.index == 0}">
                                                                     <div th:id="'gallery-' + ${dto.tbrno}">
                                                                         <a th:href="|/imgtest/${img.imgfile}|">
-                                                                            <img th:src="|/imgtest/${img.imgfile}|"
-                                                                                 class="img-fluid"
-                                                                                 style="width:150px; height: auto;"/>
+                                                                            <img class="img-fluid"
+                                                                                 style="width:150px; height: auto;"
+                                                                                 th:src="|/imgtest/${img.imgfile}|"/>
                                                                         </a>
                                                                     </div>
                                                                 </div>
                                                                 <div th:if="${iterStat.index > 0}">
-                                                                    <a href="#" th:href="|/imgtest/${img.imgfile}|"
+                                                                    <a href="#" style="display: none;"
                                                                        th:attr="data-gallery-id='gallery-' + ${dto.tbrno}"
-                                                                       style="display: none;"></a>
+                                                                       th:href="|/imgtest/${img.imgfile}|"></a>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <p th:utext="${dto.content}"></p>
                                                         <div class="mat-20">
-                                                            <form th:if="${dto.memberState}" action="/tourreview/remove"
-                                                                  method="post">
+                                                            <form action="/tourreview/remove" method="post"
+                                                                  th:if="${dto.memberState}">
                                                                 <input hidden="hidden" name="tbrno"
                                                                        th:value="${dto.tbrno}">
                                                                 <input hidden="hidden" name="tbno"
@@ -276,8 +276,8 @@
                                                     <ul class="pagination-list list-style-none">
                                                         <!-- 'Previous' 버튼 수정 -->
                                                         <li th:class="${pageResultDTO.prev} ? 'pagination-list-item-prev' : 'pagination-list-item-prev disabled'">
-                                                            <a th:href="@{/tour/read(tbno=${tourboard.tbno}, review=${pageResultDTO.page - 1})}"
-                                                               class="pagination-list-item-button"> Prev </a>
+                                                            <a class="pagination-list-item-button"
+                                                               th:href="@{/tour/read(tbno=${tourboard.tbno}, review=${pageResultDTO.page - 1})}"> Prev </a>
                                                         </li>
 
                                                         <!-- 페이지네이션 시작 페이지 및 끝 페이지 계산 -->
@@ -285,12 +285,12 @@
                                                                 th:with="startPage=${pageResultDTO.page - 5}, endPage=${pageResultDTO.page + 5}">
 
                                                             <!-- 시작 페이지부터 끝 페이지까지 페이지 목록 생성 -->
-                                                            <li th:each="page: ${#numbers.sequence(1, pageResultDTO.totalPage)}"
-                                                                th:if="${page >= startPage and page <= endPage}"
-                                                                th:class="${pageResultDTO.page == page} ? 'pagination-list-item active' : 'pagination-list-item'">
-                                                                <a th:href="@{/tour/read(tbno=${tourboard.tbno}, review=${page})}"
-                                                                   th:onclick="'changePage(' + ${page} + ')'"
-                                                                   class="pagination-list-item-link">
+                                                            <li th:class="${pageResultDTO.page == page} ? 'pagination-list-item active' : 'pagination-list-item'"
+                                                                th:each="page: ${#numbers.sequence(1, pageResultDTO.totalPage)}"
+                                                                th:if="${page >= startPage and page <= endPage}">
+                                                                <a class="pagination-list-item-link"
+                                                                   th:href="@{/tour/read(tbno=${tourboard.tbno}, review=${page})}"
+                                                                   th:onclick="'changePage(' + ${page} + ')'">
                                                                     [[${page}]] </a>
                                                             </li>
 
@@ -298,8 +298,8 @@
 
                                                         <!-- 'Next' 버튼 수정 -->
                                                         <li th:class="${pageResultDTO.next} ? 'pagination-list-item-next' : 'pagination-list-item-next disabled'">
-                                                            <a th:href="@{/tour/read(tbno=${tourboard.tbno}, review=${pageResultDTO.page + 1})}"
-                                                               class="pagination-list-item-button disabled">
+                                                            <a class="pagination-list-item-button disabled"
+                                                               th:href="@{/tour/read(tbno=${tourboard.tbno}, review=${pageResultDTO.page + 1})}">
                                                                 Next </a>
                                                         </li>
                                                     </ul>
@@ -350,57 +350,57 @@
                         <!-- Comment area ends -->
                         <!-- Post Comment area Starts -->
                         <!--<div class="comment-area color-two pat-50" sec:authorize="isAuthenticated()">-->
-                            <form th:action="@{/tourreview/register}" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="tbno" th:value="${tourboard.tbno}">
-                                <h3 class="details-section-title"> 리뷰 쓰기 </h3>
-                                <div class="row">
-                                    <div class="col-lg-12 pat-20">
-                                        <div class="details-comment-content">
-                                            <div class="star-rating mab-25">
-                                                <input type="radio" id="5-stars" name="grade" value="5"
-                                                       v-model="ratings"/>
-                                                <label for="5-stars" class="star pr-4">★</label>
-                                                <input type="radio" id="4-stars" name="grade" value="4"
-                                                       v-model="ratings"/>
-                                                <label for="4-stars" class="star">★</label>
-                                                <input type="radio" id="3-stars" name="grade" value="3"
-                                                       v-model="ratings"/>
-                                                <label for="3-stars" class="star">★</label>
-                                                <input type="radio" id="2-stars" name="grade" value="2"
-                                                       v-model="ratings"/>
-                                                <label for="2-stars" class="star">★</label>
-                                                <input type="radio" id="1-star" name="grade" value="1"
-                                                       v-model="ratings"/>
-                                                <label for="1-star" class="star">★</label>
-                                            </div>
-                                            <div class="single-commetns">
-                                                <label class="comment-label"> 내용 </label>
-                                                <textarea name="content"
-                                                          class="form--control radius-5 form--message"
-                                                          placeholder="Post Comments"></textarea>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <label class="form-label">이미지</label>
-                                                <input class="form-control" type="file" name="images">
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <label class="form-label">이미지</label>
-                                                <input class="form-control" type="file" name="images">
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <label class="form-label">이미지</label>
-                                                <input class="form-control" type="file" name="images">
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <label class="form-label">이미지</label>
-                                                <input class="form-control" type="file" name="images">
-                                            </div>
-                                            <button type="submit" class="submit-btn radius-5 mt-4"> 리뷰 쓰기
-                                            </button>
+                        <form enctype="multipart/form-data" method="post" th:action="@{/tourreview/register}">
+                            <input name="tbno" th:value="${tourboard.tbno}" type="hidden">
+                            <h3 class="details-section-title"> 리뷰 쓰기 </h3>
+                            <div class="row">
+                                <div class="col-lg-12 pat-20">
+                                    <div class="details-comment-content">
+                                        <div class="star-rating mab-25">
+                                            <input id="5-stars" name="grade" type="radio" v-model="ratings"
+                                                   value="5"/>
+                                            <label class="star pr-4" for="5-stars">★</label>
+                                            <input id="4-stars" name="grade" type="radio" v-model="ratings"
+                                                   value="4"/>
+                                            <label class="star" for="4-stars">★</label>
+                                            <input id="3-stars" name="grade" type="radio" v-model="ratings"
+                                                   value="3"/>
+                                            <label class="star" for="3-stars">★</label>
+                                            <input id="2-stars" name="grade" type="radio" v-model="ratings"
+                                                   value="2"/>
+                                            <label class="star" for="2-stars">★</label>
+                                            <input id="1-star" name="grade" type="radio" v-model="ratings"
+                                                   value="1"/>
+                                            <label class="star" for="1-star">★</label>
                                         </div>
+                                        <div class="single-commetns">
+                                            <label class="comment-label"> 내용 </label>
+                                            <textarea class="form--control radius-5 form--message"
+                                                      name="content"
+                                                      placeholder="Post Comments"></textarea>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">이미지</label>
+                                            <input class="form-control" name="images" type="file">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">이미지</label>
+                                            <input class="form-control" name="images" type="file">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">이미지</label>
+                                            <input class="form-control" name="images" type="file">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">이미지</label>
+                                            <input class="form-control" name="images" type="file">
+                                        </div>
+                                        <button class="submit-btn radius-5 mt-4" type="submit"> 리뷰 쓰기
+                                        </button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                        </form>
                         <!--</div>-->
                     </div>
                 </div>

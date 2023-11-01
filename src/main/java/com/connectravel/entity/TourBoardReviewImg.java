@@ -23,5 +23,4 @@ public class TourBoardReviewImg {
 
     @Column(length = 200)
     private String imgFile;
-
 }

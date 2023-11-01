@@ -20,5 +20,5 @@ public interface ImgService {
 
     void TourBoardRegister(MultipartFile file, Long tbno);
 
-    public void TourBoardReviewRegister(MultipartFile file, Long tbrno);
+    void TourBoardReviewRegister(MultipartFile file, Long tbrno);
 }

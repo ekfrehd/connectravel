@@ -9,8 +9,8 @@ import com.connectravel.entity.TourBoard;
 import com.connectravel.entity.TourBoardReview;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.TourBoardReivewImgRepository;
+import com.connectravel.repository.TourBoardRepository;
 import com.connectravel.repository.TourBoardReviewRepository;
-import com.connectravel.repository.TourRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -36,7 +36,7 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
     @Autowired
     TourBoardReviewRepository tourBoardReviewRepository;
     @Autowired
-    TourRepository tourRepository;
+    TourBoardRepository tourBoardRepository;
     @Autowired
     MemberRepository memberRepository;
     @Autowired
@@ -81,7 +81,6 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
     }
 
 
-
     @Transactional
     @Override
     public Long register(TourBoardReivewDTO dto) throws NotFoundException {
@@ -91,7 +90,7 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
         }
         Member member = memberOptional.get();
 
-        Optional<TourBoard> tourBoardOptional = tourRepository.findById(dto.getTbno());
+        Optional<TourBoard> tourBoardOptional = tourBoardRepository.findById(dto.getTbno());
         if (!tourBoardOptional.isPresent()) {
             throw new NotFoundException("TourBoard not found");
         }
@@ -105,7 +104,7 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
 
         tourBoard.setReviewCount(currentCount + 1);
         tourBoard.setGrade(avarageGrade);
-        tourRepository.saveAndFlush(tourBoard);
+        tourBoardRepository.saveAndFlush(tourBoard);
 
         TourBoardReview tourBoardReview = dtoToEntity(dto, tourBoard, member);
         tourBoardReviewRepository.save(tourBoardReview);
@@ -126,7 +125,7 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
     @Transactional
     public void removeWithReplies(Long tbrno, Long tbno) throws NotFoundException {
 
-        Optional<TourBoard> tourBoardOptional = tourRepository.findById(tbno);
+        Optional<TourBoard> tourBoardOptional = tourBoardRepository.findById(tbno);
         if (!tourBoardOptional.isPresent()) {
             throw new NotFoundException("TourBoard not found");
         }
@@ -141,15 +140,16 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
             double avarageGrade = ((currentGrade * currentCount) - newGrade) / (currentCount - 1);
             tourBoard.setGrade(avarageGrade);
             tourBoard.setReviewCount(currentCount - 1);
-        } else {
+        }
+        else {
             tourBoardReviewRepository.deleteById(tbrno);
             tourBoard.setGrade(0);
             tourBoard.setReviewCount(0);
-            tourRepository.save(tourBoard);
+            tourBoardRepository.save(tourBoard);
             return;
         }
 
-        tourRepository.save(tourBoard);
+        tourBoardRepository.save(tourBoard);
         tourBoardReviewRepository.deleteById(tbrno);
 
     }
