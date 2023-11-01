@@ -2,6 +2,7 @@ package com.connectravel.repository.search;
 
 import com.connectravel.entity.*;
 import com.connectravel.repository.AccommodationRepository;
+import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.OptionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,13 +21,13 @@ public class SearchRepositoryTest {
     private static final Logger log = LoggerFactory.getLogger(SearchRepositoryTest.class);
 
     @Autowired
-    private SearchRepository searchRepository;
+    private AccommodationRepository accommodationRepository;
 
     @Autowired
     private OptionRepository optionRepository;
 
     @Autowired
-    private AccommodationRepository accommodationRepository;
+    private MemberRepository memberRepository;
 
     @BeforeEach
     public void setUp() {
@@ -35,6 +36,7 @@ public class SearchRepositoryTest {
                 .nickName("TestNickName")
                 .email("TestEmail")
                 .build();
+        memberRepository.save(member);
 
         // 옵션 2개 추가
         Option option1 = Option.builder()
@@ -58,6 +60,7 @@ public class SearchRepositoryTest {
                 .email(member.getEmail())
                 .address("123 Test Street, Test City")
                 .count(0)
+                .region("Seoul")
                 .tel("123-456-7890")
                 .accommodationType("Hotel")
                 .member(member)
@@ -99,7 +102,8 @@ public class SearchRepositoryTest {
         room.addImage(roomImg);
 
         // Room 저장 (RoomImg는 Room에 종속되므로 별도의 저장은 필요 없습니다)
-        accommodation.getRooms().add(room);
+        accommodation.addRoom(room);
+
         // 저장된 Accommodation 엔터티의 상태를 갱신
         accommodationRepository.save(accommodation);
     }
@@ -107,12 +111,57 @@ public class SearchRepositoryTest {
 
     @Test
     public void testSearchByLocation() {
-        List<Accommodation> results = searchRepository.findByLocation("Seoul");
+        List<Accommodation> results = accommodationRepository.findByRegion("Seoul");
         assertFalse(results.isEmpty());
 
-        results = searchRepository.findByLocation("InvalidLocation");
+        for(Accommodation accommodation : results) {
+            log.debug("Accommodation Name: {}", accommodation.getName());
+            log.debug("Address: {}", accommodation.getAddress());
+            log.debug("Tel: {}", accommodation.getTel());
+            log.debug("Content: {}", accommodation.getContent());
+            log.debug("Region: {}", accommodation.getRegion());
+
+            // 옵션 정보 출력
+            log.debug("Options:");
+            for(AccommodationOption option : accommodation.getAccommodationOptions()) {
+                log.debug(" - Option Name: {}", option.getOption());
+            }
+
+            // 이미지 정보 출력
+            log.debug("Images:");
+            for(AccommodationImg img : accommodation.getImages()) {
+                log.debug(" - Image : {}", img.getImgFile());
+            }
+
+            // 방 정보 출력
+            log.debug("Rooms:");
+            for(Room room : accommodation.getRooms()) {
+                log.debug(" - Room Name: {}", room.getRoomName());
+                log.debug(" - Price: {}", room.getPrice());
+                log.debug(" - Operating: {}", room.isOperating());
+                log.debug(" - Content: {}", room.getContent());
+
+                // 방의 이미지 정보 출력
+                log.debug("   Room Images:");
+                for(RoomImg roomImg : room.getImages()) {
+                    log.debug("     - Image : {}", roomImg.getImgFile());
+                }
+
+                // 방의 예약 정보 출력 (필요하다면)
+                /*log.debug("   Reservations:");
+                for(Reservation reservation : room.getReservations()) {
+                    log.debug("     - Reservation Date: {}", reservation.getDate());
+                }*/
+            }
+
+            log.debug("--------------------");
+        }
+
+        results = accommodationRepository.findByRegion("InvalidLocation");
         assertTrue(results.isEmpty());
     }
+
+
 
     /*@Test
     public void testSearchByOption() {
