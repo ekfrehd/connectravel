@@ -55,7 +55,7 @@ public class Accommodation {
     private List<AccommodationOption> accommodationOptions = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Room> rooms = new ArrayList<>();
 
     public void addImage(AccommodationImg img) {
@@ -76,6 +76,11 @@ public class Accommodation {
     public void removeAccommodationOption(AccommodationOption accommodationOption) {
         accommodationOptions.remove(accommodationOption);
         accommodationOption.setAccommodation(null);
+    }
+
+    public void addRoom(Room room) {
+        this.rooms.add(room);
+        room.setAccommodation(this);
     }
 
 
