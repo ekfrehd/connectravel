@@ -1,0 +1,385 @@
+/* Checkout */
+
+.checkout-area {}
+
+.checkout-wrapper {}
+
+.summery-title {
+    font-size: 36px;
+    line-height: 43px;
+    @include responsive(allPhone) {
+        font-size: 32px;
+    }
+    @include responsive(xs) {
+        font-size: 30px;
+        line-height: 36px;
+    }
+    @include responsive(vxxs) {
+        font-size: 28px;
+    }
+}
+
+.checkout-title {
+    i {
+        color: var(--main-color-one);
+    }
+}
+
+.checkout-single {
+    padding: 20px;
+    &:not(:last-child) {
+        margin-bottom: 24px;
+    }
+    .checkout-title {
+        font-size: 24px;
+        font-weight: 600;
+    }
+}
+
+.click-open-form {
+    &:hover {
+        color: var(--main-color-one);
+        font-weight: 500;
+    }
+}
+
+.checkout-form-open {
+    max-width: 500px;
+    background: $white;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: (all 500ms linear);
+    &.active {
+        height: auto;
+        visibility: visible;
+        opacity: 1;
+        margin-top: 30px;
+    }
+}
+
+.checkout-signup-form-wrapper {
+    max-width: 700px;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .5s linear;
+    &.active {
+        height: auto;
+        visibility: visible;
+        opacity: 1;
+        margin-top: 30px;
+        background: $white;
+    }
+}
+
+.checkout-address-form-wrapper {
+    max-width: 700px;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .5s linear;
+    &.active {
+        height: auto;
+        visibility: visible;
+        opacity: 1;
+        margin-top: 30px;
+        background: $white;
+    }
+}
+
+.create-accounts {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+    color: var(--heading-color) !important;
+    @include responsive(allPhone) {
+        font-size: 18px;
+    }
+    @include responsive(xs) {
+        font-size: 16px;
+    }
+    &:hover {
+        color: var(--heading-color);
+    }
+    &::before {
+        display: flex;
+        height: 20px;
+        width: 20px;
+        border: 1px solid $STEAM;
+        content: '';
+        transition: all .2s;
+    }
+    &.active {
+        &::before {
+            // content: "\f00c";
+            // @include linefont;
+            @include lineAwesome("\f00c");
+            background: var(--main-color-one);
+            color: $white;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border-color: var(--main-color-one);
+        }
+    }
+}
+
+.checkout-contents {}
+
+.checkout-form {
+    .input-flex-item {
+        .single-input {
+            .label-title {}
+            .form--control {}
+            .form--message {
+                height: 120px;
+            }
+        }
+    }
+    .checkbox-inlines {
+        .check-input {}
+        .checkbox-label {
+            color: var(--heading-color);
+            font-size: 18px;
+        }
+    }
+}
+
+.checkout-order-summery {
+    padding: 40px;
+    @include responsive(xxl) {
+        padding: 40px;
+    }
+    @include responsive(xl) {
+        padding: 30px;
+    }
+    @include responsive(lg) {
+        padding: 30px;
+    }
+    @include responsive(xxs) {
+        padding: 30px;
+    }
+    @include responsive(vxxs) {
+        padding: 20px 10px;
+    }
+}
+
+.checkout-cart-wrapper {
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.single-checkout-cart-items {
+    .single-check-carts {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .check-cart-flex-contents {
+            display: flex;
+            align-items: center;
+            .checkout-cart-thumb {
+                height: 100px;
+                width: 100px;
+                img {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
+            .checkout-cart-img-contents {
+                text-align: left;
+                margin-left: 10px;
+                .product-items {
+                    margin-top: 10px;
+                }
+            }
+        }
+        .checkout-cart-price {
+            font-size: 18px;
+        }
+    }
+}
+
+.coupon-form {
+    position: relative;
+    .single-input {
+        .form--control {
+            height: 60px;
+            background: $white;
+            border: 1px solid rgba($steam-color, .4);
+            transition: all .3s;
+            &:focus {
+                border-color: rgba(var(--main-color-one-rgb), .3);
+                box-shadow: 0 0 10px rgba(var(--main-color-one-rgb), .1);
+            }
+        }
+    }
+    .apply-coupon {
+        position: absolute;
+        right: 5px;
+        height: 50px;
+        border: 0;
+        outline: none;
+        padding: 5px 20px;
+        font-size: 16px;
+        font-weight: 500;
+        border: 1px solid transparent;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--main-color-one);
+        color: $white;
+        transition: all .3s;
+        &:hover {
+            background: none;
+            color: var(--main-color-one);
+            border-color: var(--main-color-one);
+        }
+    }
+}
+
+.btn-coupon {
+    outline: none;
+    border: 1px solid $steam-color;
+    background: $steam-color;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all .3s;
+    &.btn-bg-heading {
+        background: var(--heading-color);
+        color: $white;
+        border: 2px solid transparent;
+        &:hover {
+            background: none;
+            color: var(--heading-color);
+            border-color: var(--heading-color);
+        }
+    }
+}
+
+.lock-contents {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    &-icon {
+        font-size: 24px;
+        img {
+            max-width: 25px;
+        }
+    }
+    &-para {
+        font-size: 16px;
+        line-height: 32px;
+    }
+}
+
+.guaranty-cancellation {
+    background-color: rgba(var(--success-color-rgb), .05);
+    padding: 20px;
+    border: 1px solid var(--success-color);
+    @include responsive(vxxs) {
+        padding: 10px;
+    }
+    &-title {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 28px;
+        margin: -4px 0 0;
+        @include responsive(vxxs) {
+            font-size: 18px;
+        }
+    }
+    &-para {
+        font-size: 16px;
+        color: var(--paragraph-color);
+        margin-top: 10px;
+        @include responsive(vxxs) {
+            font-size: 14px;
+        }
+    }
+}
+
+
+/* Checkout Sidebar Css */
+
+.checkout-widget {
+    &-padding {
+        padding: 20px;
+    }
+    &:not(:last-child) {
+        margin-bottom: 24px;
+    }
+}
+
+.checkout-sidebar {
+    &-title {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 28px;
+        margin: -4px 0 0;
+    }
+}
+
+.checkout-border-top {
+    border-top: 1px solid var(--input-color);
+}
+
+.checkout-flex-list {
+    .list {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        color: var(--paragraph-color);
+        font-size: 16px;
+        &:not(:first-child) {
+            padding-top: 15px;
+        }
+        &:not(:last-child) {
+            padding-bottom: 15px;
+        }
+        .strong {
+            font-weight: 600;
+            color: var(--heading-color);
+        }
+        .color-one {
+            color: var(--main-color-one);
+        }
+    }
+}
+
+.checkout-car {
+    position: relative;
+    &-thumb {
+        img {}
+    }
+    &-contents {
+        &-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+        &-para {
+            font-size: 16px;
+            line-height: 28px;
+            color: var(--paragraph-color);
+        }
+    }
+    &-shape {
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        z-index: 0;
+        width: 100%;
+        img {
+            width: 100%;
+        }
+    }
+}

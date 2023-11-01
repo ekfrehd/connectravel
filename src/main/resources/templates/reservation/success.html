@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+    .fieldError {
+      color: #bd2130;
+    }
+
+    .badge-info, .badge-secondary {
+      color: #000;
+    }
+  </style>
+</th:block>
+<div layout:fragment="content">
+
+  <section class="confirmation-area section-bg-2 pat-100 pab-100">
+    <div class="container">
+      <div class="confirmation-contents center-text">
+        <div class="confirmation-contents-icon">
+          <i class="las la-check"></i>
+        </div>
+        <h4 class="confirmation-contents-title"> 예약이 완료 되었습니다. </h4>
+        <p class="confirmation-contents-para"> 예약번호는 <a href="javascript:void(0)"> #[[${rvno}]] </a> 입니다. 예약확인은 이메일 또는 예약현황 메뉴를 참고해주세요. 이용해 주셔서 감사합니다! </p>
+        <div class="btn-wrapper flex-btn mt-4 mt-lg-5">
+          <a href="/" class="cmn-btn btn-outline-1 color-one"> 메인으로</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</html>
