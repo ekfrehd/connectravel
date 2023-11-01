@@ -19,7 +19,7 @@ public class Member {
     @GeneratedValue(generator = "system_uuid")
     @GenericGenerator(name="system_uuid", strategy = "uuid")
     @Column(name = "id")
-    private String id; // 아이디
+    private String id;
 
     private String name;
 
@@ -27,18 +27,17 @@ public class Member {
     private String email;
 
     @Column(scale = 0)
-    private int point; // 포인트
+    private int point;
 
-    private String nickName; // 닉네임
+    private String nickName;
 
-    private String tel; // 전화번호
+    private String tel;
 
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    // private String authProvider; // 인증 제공자 (카카오톡, 깃허브)
 
 
 }

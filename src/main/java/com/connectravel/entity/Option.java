@@ -19,7 +19,7 @@ public class Option {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ono;
 
-    private String optionName;  // 옵션 이름
+    private String optionName;
 
     private String optionCategory;
 

@@ -18,7 +18,7 @@ public class Reservation extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rvno; //예약 번호
+    private Long rvno;
 
     @Column(length = 200)
     private String message; //요청사항
@@ -28,10 +28,10 @@ public class Reservation extends BaseTimeEntity {
     private int money;
 
     @ManyToOne
-    private Room room; //방 번호
+    private Room room;
 
     @ManyToOne
-    private Member member; //맴버 이름
+    private Member member;
 
     @Builder.Default
     private boolean state = true;

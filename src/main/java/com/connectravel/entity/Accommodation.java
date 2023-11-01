@@ -11,38 +11,37 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "member") //FK지정(One쪽의 테이블에서는 외래키 연결시킬 자신의 엔티티의 컬럼명을 exclude 지정)
+@ToString(exclude = "member")
 public class Accommodation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ano;
     @Column(nullable = false)
-    private String name; // 숙소이름
+    private String name;
 
     @Column(nullable = false)
-    private int postal; // 우편번호
+    private int postal;
     @Column(nullable = false)
-    private String adminName; // 숙소 운영자 이름
+    private String adminName;
     @Column(nullable = false)
-    private String address; // 주소
+    private String address;
     @Column(scale = 0)
     private int count; // 숙소 예약 횟수
 
     private String accommodationType; // 숙소 종류
 
-    private String region; // 지역
+    private String region;
 
     @Column(nullable = false)
-    private String tel; // 전화번호
+    private String tel;
 
     @Column(length = 5000)
-    private String content; // 숙박업소소개
+    private String content; // 기본 정보, 편의시설 및 서비스, 판매자 정보
 
-    private String email; // 이메일
-    private String intro; // 소개
+    private String email;
+    private String intro; // "사장님 한마디" 같은 짧은 숙소 소개글
 
-    //지연 로딩 지정
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Member member;

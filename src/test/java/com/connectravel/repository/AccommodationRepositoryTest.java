@@ -1,9 +1,6 @@
 package com.connectravel.repository;
 
-import com.connectravel.entity.Accommodation;
-import com.connectravel.entity.AccommodationImg;
-import com.connectravel.entity.AccommodationOption;
-import com.connectravel.entity.Option;
+import com.connectravel.entity.*;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +36,18 @@ public class AccommodationRepositoryTest {
 
     @BeforeEach
     public void setUp() {
+        Member member = Member.builder()
+                .name("TestName")
+                .nickName("TestNickName")
+                .email("TestEmail")
+                .build();
+
         // Accommodation 정보 생성
         Accommodation accommodation = Accommodation.builder()
                 .name("Test Accommodation")
                 .postal(12345)
-                .adminName("Admin Test")
+                .adminName(member.getName())
+                .email(member.getEmail())
                 .address("123 Test Street, Test City")
                 .count(0)
                 .tel("123-456-7890")
@@ -91,7 +95,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 등록 테스트
     public void saveAccommodationWithImagesAndOptions() {
         // Accommodation 정보를 불러옵니다.
-        Accommodation savedAccommodation = accommodationRepository.findByName("Test Accommodation")
+        Accommodation savedAccommodation = accommodationRepository.findByEmail("TestEmail")
                 .orElseThrow(() -> new RuntimeException("Failed to retrieve saved accommodation"));
 
         // 테스트 결과 확인
@@ -150,7 +154,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 수정 테스트
     public void modifyExistingAccommodationWithImagesAndOptions() {
         // 1. 기존의 숙박시설을 불러옵니다.
-        Accommodation loadedAccommodation = accommodationRepository.findByName("Test Accommodation").orElse(null);
+        Accommodation loadedAccommodation = accommodationRepository.findByEmail("TestEmail").orElse(null);
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform update test.");
 
         // 2. 숙박시설의 기본 정보 수정
@@ -190,7 +194,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 삭제 테스트
     public void deleteAccommodationWithImagesAndOptions() {
         // 1. 삭제할 숙박시설 정보를 불러옵니다.
-        Accommodation loadedAccommodation = accommodationRepository.findByName("Test Accommodation").orElse(null);
+        Accommodation loadedAccommodation = accommodationRepository.findByEmail("TestEmail").orElse(null);
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform delete test.");
 
         Long accommodationId = loadedAccommodation.getAno();
@@ -213,7 +217,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 특정 이미지를 삭제하는 테스트
     public void removeImageFromAccommodation() {
         // 1. 숙박시설을 불러옵니다.
-        Accommodation loadedAccommodation = accommodationRepository.findByName("Test Accommodation").orElse(null);
+        Accommodation loadedAccommodation = accommodationRepository.findByEmail("TestEmail").orElse(null);
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform remove image test.");
 
         // 2. 첫 번째 이미지를 삭제합니다.
@@ -233,7 +237,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 특정 옵션을 삭제하는 테스트
     public void removeAccommodationOptionFromAccommodation() {
         // 1. 숙박시설을 불러옵니다.
-        Accommodation loadedAccommodation = accommodationRepository.findByName("Test Accommodation").orElse(null);
+        Accommodation loadedAccommodation = accommodationRepository.findByEmail("TestEmail").orElse(null);
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform remove option test.");
 
         // 2. 첫 번째 옵션을 삭제합니다.

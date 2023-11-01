@@ -58,7 +58,6 @@ public class RoomRepositoryTest {
         room.addImage(roomImg);
 
         entityManager.persist(roomImg);
-
         entityManager.persist(room);
     }
 
