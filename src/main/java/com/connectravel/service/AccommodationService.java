@@ -5,9 +5,16 @@ import com.connectravel.dto.RoomDTO;
 import com.connectravel.entity.Accommodation;
 import com.connectravel.entity.Room;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface AccommodationService {
 
     AccommodationDTO modifyAccommodationDetails(AccommodationDTO accommodationDTO);
+    // 숙소의 상세 정보를 수정(현재는 이름, 주소만 수정 가능)
+
+    AccommodationDTO getAccommodationDetails(Long accommodationAno);
+    // 숙소의 상세 정보를 가져옴(옵션, 이미지 X)
 
     default AccommodationDTO entityToDto(Accommodation accommodation) {
 
@@ -31,6 +38,8 @@ public interface AccommodationService {
     default AccommodationDTO entityToDtoSearch(Accommodation accommodation, Room room, Integer minPrice) {
 
         RoomDTO roomDTO = RoomDTO.builder().roomName(room.getRoomName()).build();
+        List<RoomDTO> roomDTOList = new ArrayList<>();
+        roomDTOList.add(roomDTO);
 
         AccommodationDTO accommodationDTO = AccommodationDTO.builder()
                 .ano(accommodation.getAno())
@@ -46,9 +55,10 @@ public interface AccommodationService {
                 .count(accommodation.getCount())
                 .content(accommodation.getContent())
                 .minPrice(minPrice)
-                .roomDTO(roomDTO)
+                .roomDTO(roomDTOList)
                 .build();
         return accommodationDTO;
     }
+
 
 }
