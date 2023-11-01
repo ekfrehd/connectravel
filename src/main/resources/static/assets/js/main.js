@@ -1,14 +1,14 @@
-(function($) {
+(function ($) {
     "use strict";
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         /*
         ========================================
             input search open item
         ========================================
         */
-        $(document).on('keyup change', '#search_form_input', function(event) {
+        $(document).on('keyup change', '#search_form_input', function (event) {
 
             let input_values = $(this).val();
 
@@ -18,13 +18,13 @@
                 $('#search_suggestions_wrap, .search-suggestion-overlay').removeClass("show");
             }
         });
-        $(document).on('click', '.search-suggestion-overlay, .search-click-icon', function() {
+        $(document).on('click', '.search-suggestion-overlay, .search-click-icon', function () {
             $('#search_suggestions_wrap, .search-suggestion-overlay').removeClass('show')
         })
-        $(document).on('click', '.search-click-icon', function() {
+        $(document).on('click', '.search-click-icon', function () {
             $('.search-show').toggleClass('open')
         })
-        $(document).on('click', '.suggestions-icon-close, .search-suggestion-overlay', function() {
+        $(document).on('click', '.suggestions-icon-close, .search-suggestion-overlay', function () {
             $('.search-show').removeClass('open')
             $('#search_suggestions_wrap, .search-suggestion-overlay').removeClass('show')
         })
@@ -35,11 +35,11 @@
             Navbar Toggler
         ========================================
         */
-        $(document).on('click', '.navbar-toggler', function() {
+        $(document).on('click', '.navbar-toggler', function () {
             $(".navbar-toggler").toggleClass("active");
         });
 
-        $(document).on('click', '.click-nav-right-icon', function() {
+        $(document).on('click', '.click-nav-right-icon', function () {
             $(".show-nav-content").toggleClass("show");
         });
 
@@ -48,7 +48,7 @@
             Show nav right content
         ========================================
         */
-        $(document).on('click', '.click-content-show', function() {
+        $(document).on('click', '.click-content-show', function () {
             $(".right-contents-show").toggleClass("show");
         });
 
@@ -57,10 +57,10 @@
             Shop Responsive Sidebar
         ========================================
         */
-        $(document).on('click', '.shop-close-content-icon, .responsive-overlay', function() {
+        $(document).on('click', '.shop-close-content-icon, .responsive-overlay', function () {
             $('.shop-close-content, .responsive-overlay').removeClass('active');
         });
-        $(document).on('click', '.shop-icon-sidebar', function() {
+        $(document).on('click', '.shop-icon-sidebar', function () {
             $('.shop-close-content, .responsive-overlay').addClass('active');
         });
 
@@ -81,7 +81,7 @@
             Masonry js
         ========================================
         */
-        $('.imgLoaded').imagesLoaded(function() {
+        $('.imgLoaded').imagesLoaded(function () {
             $('.masonry-grid').isotope({
                 itemSelector: '.grid-item',
                 percentPosition: true,
@@ -97,7 +97,7 @@
             Tab
         ========================================
         */
-        $(document).on('click', 'ul.tabs li', function() {
+        $(document).on('click', 'ul.tabs li', function () {
             var tab_id = $(this).attr('data-tab');
 
             $('ul.tabs li').removeClass('active');
@@ -112,16 +112,16 @@
             Pagination On Click Js
         ========================================
         */
-        $(document).on('click', '.pagination-list-item', function() {
+        $(document).on('click', '.pagination-list-item', function () {
             $(this).siblings().removeClass('active');
             $(this).addClass('active');
         });
         /* Next Previous btn Click */
-        $(document).on('click', '.pagination-list-item-next', function() {
+        $(document).on('click', '.pagination-list-item-next', function () {
             $(this).parent().find('.pagination-list-item.active').next('.pagination-list-item').addClass('active');
             $(this).parent().find('.pagination-list-item.active').prev('.pagination-list-item').removeClass('active');
         });
-        $(document).on('click', '.pagination-list-item-prev', function() {
+        $(document).on('click', '.pagination-list-item-prev', function () {
             $(this).parent().find('.pagination-list-item.active').prev('.pagination-list-item').addClass('active');
             $(this).parent().find('.pagination-list-item.active').next('.pagination-list-item').removeClass('active');
         });
@@ -131,7 +131,7 @@
             Hover Slide Js
         ========================================
         */
-        $(document).on('mouseenter', '.custom-tab ul.tab-menu li', function(r) {
+        $(document).on('mouseenter', '.custom-tab ul.tab-menu li', function (r) {
             var tab = $(this).closest('.custom-tab'),
                 index = $(this).closest('li').index();
             tab.find('li').siblings('li').removeClass('active');
@@ -146,15 +146,15 @@
             Product Quantity js
         ========================================
         */
-        $(function() {
+        $(function () {
 
-            $(document).on('click', '.plus', function() {
+            $(document).on('click', '.plus', function () {
                 var selectedInput = $(this).prev('.quantity-input');
                 // if (selectedInput.val() < 50) {
                 selectedInput[0].stepUp(1);
                 // }
             });
-            $(document).on('click', '.minus', function() {
+            $(document).on('click', '.minus', function () {
                 var selectedInput = $(this).next('.quantity-input');
                 if (selectedInput.val() > 1) {
                     selectedInput[0].stepDown(1);
@@ -168,7 +168,7 @@
             Click Active Class
         ========================================
         */
-        $(document).on('click', '.active-list .item', function() {
+        $(document).on('click', '.active-list .item', function () {
             $(this).siblings().removeClass('active');
             $(this).toggleClass('active');
         });
@@ -176,7 +176,7 @@
         /*-------------------------------
             Click Slide Open Close
         ------------------------------*/
-        $(document).on('click', '.single-shop-left-title .title', function(e) {
+        $(document).on('click', '.single-shop-left-title .title', function (e) {
             var shopTitle = $(this).parent('.single-shop-left-title');
             if (shopTitle.hasClass('open')) {
                 shopTitle.removeClass('open');
@@ -193,7 +193,7 @@
         /*-------------------------------
             Dashboard ReservationIcon
         ------------------------------*/
-        $(document).on('click', '.single-reservation-expandIcon', function(e) {
+        $(document).on('click', '.single-reservation-expandIcon', function (e) {
             var shopTitle = $(this).parent('.single-reservation');
             if (shopTitle.hasClass('open')) {
                 shopTitle.removeClass('open');
@@ -219,10 +219,10 @@
             Click Active Class
         ========================================
         */
-        $(document).on('click', '.popup-overlay, .popup-close', function() {
+        $(document).on('click', '.popup-overlay, .popup-close', function () {
             $('.popup-fixed, .popup-overlay').removeClass('popup-active');
         });
-        $(document).on('click', '.popup-click', function() {
+        $(document).on('click', '.popup-click', function () {
             $('.popup-fixed, .popup-overlay').toggleClass('popup-active');
         });
 
@@ -231,7 +231,7 @@
            Faq accordion
         ========================================
         */
-        $('.faq-contents .faq-title').on('click', function(e) {
+        $('.faq-contents .faq-title').on('click', function (e) {
             var element = $(this).parent('.faq-item');
             if (element.hasClass('open')) {
                 element.removeClass('open');
@@ -253,7 +253,7 @@
         ========================================
         */
 
-        $(document).on('click', '.dashboard-list .has-children a', function(e) {
+        $(document).on('click', '.dashboard-list .has-children a', function (e) {
             var sh = $(this).parent('.has-children');
             if (sh.hasClass('open')) {
                 sh.removeClass('open');
@@ -275,13 +275,12 @@
             Dashboard Responsive Sidebar
         ========================================
         */
-        $(document).on('click', '.close-bars, .body-overlay', function() {
+        $(document).on('click', '.close-bars, .body-overlay', function () {
             $('.dashboard-close, .dashboard-left-content, .body-overlay').removeClass('active');
         });
-        $(document).on('click', '.sidebar-icon', function() {
+        $(document).on('click', '.sidebar-icon', function () {
             $('.dashboard-close, .dashboard-left-content, .body-overlay').toggleClass('active');
         });
-
 
 
         /*
@@ -290,7 +289,7 @@
         ========================================
         */
 
-        $(document).on('click', '.blog-details-side-title .title', function(e) {
+        $(document).on('click', '.blog-details-side-title .title', function (e) {
             var element = $(this).parent('.blog-details-side-title');
             if (element.hasClass('open')) {
                 element.removeClass('open');
@@ -309,7 +308,7 @@
         ========================================
         */
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
 
@@ -337,7 +336,7 @@
                     min: l,
                     max: m
                 }
-            }), i.noUiSlider.on("update", function(a, b) {
+            }), i.noUiSlider.on("update", function (a, b) {
                 var c = a[b];
                 b ? (p.innerHTML = Math.round(c), r.value = Math.round(c)) : (o.innerHTML = Math.round(c), q.value = Math.round(c))
             })
@@ -357,7 +356,7 @@
         ========================================
         */
 
-        $(document).on("click", ".toggle-password", function(e) {
+        $(document).on("click", ".toggle-password", function (e) {
             e.preventDefault();
             let inputPass = $(this).parent().find("input");
             $(this).toggleClass("show-pass");
@@ -387,7 +386,7 @@
             Radio box active Class Js
         ========================================
         */
-        $(document).on('click', '.custom-radio-single', function(e) {
+        $(document).on('click', '.custom-radio-single', function (e) {
             $(this).siblings().removeClass('active');
             $(this).addClass('active');
         });
@@ -411,13 +410,13 @@
             container
         ========================================
         */
-        $(".newsletter-area .container").length && $(window).on("scroll", function() {
-            ! function(t, a = 0) {
+        $(".newsletter-area .container").length && $(window).on("scroll", function () {
+            !function (t, a = 0) {
                 var i = $(window).scrollTop(),
                     o = i + $(window).height(),
                     s = $(t).offset().top;
                 return s + $(t).height() - parseInt(a) <= o && s >= i
-            }(".newsletter-area .container", 200) ? $(".newsletter-area .container").removeClass("container-fluid"): $(".newsletter-area .container").addClass("container-fluid")
+            }(".newsletter-area .container", 200) ? $(".newsletter-area .container").removeClass("container-fluid") : $(".newsletter-area .container").addClass("container-fluid")
         })
 
         /*
@@ -428,7 +427,7 @@
         var globalSlickInit = $('.global-slick-init');
         if (globalSlickInit.length > 0) {
             //todo have to check slider item 
-            $.each(globalSlickInit, function(index, value) {
+            $.each(globalSlickInit, function (index, value) {
                 if ($(this).children('div').length > 1) {
                     //todo configure slider settings object
                     var sliderSettings = {};
@@ -519,11 +518,11 @@
                     t = document.querySelector('.mouse-outer');
                 let n, i = 0,
                     o = !1;
-                window.onmousemove = function(s) {
+                window.onmousemove = function (s) {
                     o || (t.style.transform = "translate(" + s.clientX + "px, " + s.clientY + "px)"), e.style.transform = "translate(" + s.clientX + "px, " + s.clientY + "px)", n = s.clientY, i = s.clientX
-                }, $('body').on("mouseenter", "a, .cursor-pointer", function() {
+                }, $('body').on("mouseenter", "a, .cursor-pointer", function () {
                     e.classList.add('mouse-hover'), t.classList.add('mouse-hover')
-                }), $('body').on("mouseleave", "a, .cursor-pointer", function() {
+                }), $('body').on("mouseleave", "a, .cursor-pointer", function () {
                     $(this).is("a") && $(this).closest(".cursor-pointer").length || (e.classList.remove('mouse-hover'), t.classList.remove('mouse-hover'))
                 }), e.style.visibility = "visible", t.style.visibility = "visible"
             }
@@ -534,7 +533,7 @@
             back to top
         ========================================
         */
-        $(document).on('click', '.back-to-top', function() {
+        $(document).on('click', '.back-to-top', function () {
             $("html,body").animate({
                 scrollTop: 0
             }, 700);
@@ -546,7 +545,7 @@
         back to top
     ========================================
     */
-    $(window).on('scroll', function() {
+    $(window).on('scroll', function () {
         //back to top show/hide
         var ScrollTop = $('.back-to-top');
         if ($(window).scrollTop() > 200) {

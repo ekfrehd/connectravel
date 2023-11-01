@@ -11,7 +11,6 @@ public class WebConfig implements WebMvcConfigurer {
     // 14 ~ 15행 : "/imgtest/**"로 시작하는 요청 > "file:./imgtest/" 매핑
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/imgtest/**")
-                .addResourceLocations("file:./imgtest/");
+        registry.addResourceHandler("/imgtest/**").addResourceLocations("file:./imgtest/");
     }
 }

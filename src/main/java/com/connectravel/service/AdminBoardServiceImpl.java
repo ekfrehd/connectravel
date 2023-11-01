@@ -1,14 +1,17 @@
 package com.connectravel.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import com.connectravel.dto.*;
+import com.connectravel.dto.AdminBoardDTO;
+import com.connectravel.dto.ImgDTO;
+import com.connectravel.dto.PageRequestDTO;
+import com.connectravel.dto.PageResultDTO;
 import com.connectravel.entity.AdminBoard;
 import com.connectravel.entity.Member;
 import com.connectravel.repository.AdminBoardImgRepository;
 import com.connectravel.repository.AdminBoardRepository;
 import com.connectravel.repository.AdminReplyRepository;
 import com.connectravel.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +29,7 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class AdminBoardServiceImpl implements AdminBoardService{
+public class AdminBoardServiceImpl implements AdminBoardService {
 
     private final AdminBoardRepository repository;
     private final AdminReplyRepository adminReplyRepository;
@@ -54,9 +57,9 @@ public class AdminBoardServiceImpl implements AdminBoardService{
     public AdminBoardDTO get(Long bno) {
         Object result = repository.getBoardByBno(bno);
 
-        Object[] arr = (Object[])result;
+        Object[] arr = (Object[]) result;
 
-        return entityToDTO((AdminBoard) arr[0], (Member)arr[1], (Long)arr[2]);
+        return entityToDTO((AdminBoard) arr[0], (Member) arr[1], (Long) arr[2]);
         // { {bno, writer, contet, category... }, {id, email,...}, {1}}
         //AdminBoard, Member 엔티티와 댓글의 수(Long)를 가져오는 getBoardByBno메서드 이용 처리
     }
@@ -65,7 +68,7 @@ public class AdminBoardServiceImpl implements AdminBoardService{
     @Override
     public PageResultDTO<AdminBoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO, String category) {
 
-        Function<Object[], AdminBoardDTO> fn = (en -> entityToDTO((AdminBoard)en[0], (Member)en[1], (Long)en[2]));
+        Function<Object[], AdminBoardDTO> fn = (en -> entityToDTO((AdminBoard) en[0], (Member) en[1], (Long) en[2]));
 
         //SearchBoardRepository에서 정의한 내용으로 세팅
         Page<Object[]> result; //Object결과를 Page객체에 담고
@@ -76,7 +79,7 @@ public class AdminBoardServiceImpl implements AdminBoardService{
 
         //조회는 모든 사용자가 다 볼 수 있게 설정(Role에 상관없이)
         result = repository.searchPageAdminBaord(type, category, pageRequestDTO.getKeyword(), pageable);
-        
+
         log.info("실행결과 : " + result);
 
         return new PageResultDTO<>(result, fn);
@@ -85,22 +88,22 @@ public class AdminBoardServiceImpl implements AdminBoardService{
     @Transactional
     @Override
     public void modify(AdminBoardDTO adminBoardDTO) {
-        
+
         AdminBoard adminBoard = repository.getOne(adminBoardDTO.getBno()); //adminRepository에서 Board객체를 받아
         //필요한 순간까지 로딩을 지연하는 getOne메서드 이용
-        
+
         adminBoard.changeTitle(adminBoardDTO.getTitle()); //Board객체의 제목 수정
         adminBoard.changeContent(adminBoardDTO.getContent()); //Board객체의 내용 수정
 
         repository.save(adminBoard); //수정된 객체를 repository에 저장
     }
-    
+
     @Transactional
     @Override
     public void removeWithReplies(Long bno) {
 
         adminReplyRepository.deleteByBno(bno); //댓글부터 삭제
-        
+
         repository.deleteById(bno); //이후 본 글 삭제
     }
 
@@ -108,7 +111,7 @@ public class AdminBoardServiceImpl implements AdminBoardService{
         List<ImgDTO> list = new ArrayList<>();
         AdminBoard entity = repository.findById(bno).get();
         adminBoardImgRepository.GetImgbybno(entity).forEach(i -> { //이미지는 룸을 참조하고 있다 그러니 이미지가 참조하는 룸에 해당하는 모든 이미지를 불러온다
-            ImgDTO imgDTO = modelMapper.map(i,ImgDTO.class); //dto변환
+            ImgDTO imgDTO = modelMapper.map(i, ImgDTO.class); //dto변환
             list.add(imgDTO); // list화
         });
         return list;

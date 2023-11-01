@@ -20,17 +20,14 @@ public class TourBoardImgRepositoryTests {
     private TourBoardRepository tourBoardRepository;
 
     @Test
-    public void testTourBoardImgInsert () {
+    public void testTourBoardImgInsert() {
         Optional<TourBoard> optionalTbno = tourBoardRepository.findById(21L);
-        TourBoard tbno = optionalTbno.orElseThrow (() -> new NoSuchElementException("게시글이 존재하지 않습니다."));
+        TourBoard tbno = optionalTbno.orElseThrow(() -> new NoSuchElementException("게시글이 존재하지 않습니다."));
 
-        TourBoardImg tourBoardImg = TourBoardImg.builder()
-                .imgFile("sample.jpg")
-                .tourBoard(tbno)
-                .build();
+        TourBoardImg tourBoardImg = TourBoardImg.builder().imgFile("sample.jpg").tourBoard(tbno).build();
 
         tourBaordImgRepository.save(tourBoardImg);
-        System.out.println (tourBaordImgRepository.save(tourBoardImg));
+        System.out.println(tourBaordImgRepository.save(tourBoardImg));
     }
 
     /*@Test
@@ -55,9 +52,9 @@ public class TourBoardImgRepositoryTests {
     }*/
 
     @Test // 게시글 삭제 테스트, 댓글이 있으면 안지워짐
-    public void testTourBoardImgDelete () {
+    public void testTourBoardImgDelete() {
         Long ino = 3L;
-        tourBaordImgRepository.deleteById (ino);
+        tourBaordImgRepository.deleteById(ino);
     }
 }
 

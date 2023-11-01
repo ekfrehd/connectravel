@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org"
-      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate = "~{fragments/layout1}">
+<html layout:decorate="~{fragments/layout1}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -91,51 +91,51 @@
                             <h3 class="single-reservation-title"> 프로필 수정 </h3>
                             <div class="custom--form dashboard-form">
                                 <div class="form--message">
-                                    <p th:text="${errorMessage}" th:if="${errorMessage}"></p>
+                                    <p th:if="${errorMessage}" th:text="${errorMessage}"></p>
                                 </div>
-                                <form th:action="@{/member/update}" role="form" method="post" th:object="${memberFormDto}">
+                                <form method="post" role="form" th:action="@{/member/update}" th:object="${memberFormDto}">
                                     <div class="dashboard-flex-input">
                                         <div class="dashboard-input mt-4">
                                             <label class="label-title" th:for="email"> 이메일 </label>
-                                            <input type="text" class="form--control" placeholder="이메일을 입력하세요"
-                                                   name="email" th:value="*{email}" readonly>
-                                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                                               class="fieldError" required>Incorrect data</p>
+                                            <input class="form--control" name="email" placeholder="이메일을 입력하세요"
+                                                   readonly th:value="*{email}" type="text">
+                                            <p class="fieldError" required
+                                               th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Incorrect data</p>
                                         </div>
                                     </div>
                                     <div class="dashboard-flex-input">
                                         <div class="dashboard-input mt-4">
                                             <label class="label-title" th:for="name"> 이름 </label>
-                                            <input type="text" class="form--control" placeholder="이름을 입력하세요"
-                                                   name="name" th:value="*{name}">
-                                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-                                               class="fieldError" required>Incorrect data</p>
+                                            <input class="form--control" name="name" placeholder="이름을 입력하세요"
+                                                   th:value="*{name}" type="text">
+                                            <p class="fieldError" required
+                                               th:errors="*{name}" th:if="${#fields.hasErrors('name')}">Incorrect data</p>
                                         </div>
                                     </div>
                                     <div class="dashboard-flex-input">
                                         <div class="dashboard-input mt-4">
                                             <label class="label-title" th:for="nickName"> 닉네임 </label>
-                                            <input type="text" class="form--control" placeholder="닉네임을 입력하세요"
-                                                   name="nickName" th:value="*{nickName}">
-                                            <p th:if="${#fields.hasErrors('nickName')}" th:errors="*{nickName}"
-                                               class="fieldError" required>Incorrect data</p>
+                                            <input class="form--control" name="nickName" placeholder="닉네임을 입력하세요"
+                                                   th:value="*{nickName}" type="text">
+                                            <p class="fieldError" required
+                                               th:errors="*{nickName}" th:if="${#fields.hasErrors('nickName')}">Incorrect data</p>
                                         </div>
                                     </div>
                                     <div class="dashboard-flex-input">
                                         <div class="dashboard-input mt-4">
                                             <label class="label-title" th:for="tel"> 전화번호 </label>
                                             <div style="display: flex;">
-                                                <input type="tel" th:value="*{tel1}" name="tel1" class="form--control"
-                                                       maxlength="3" required style="flex: 1;">&nbsp;&nbsp;
-                                                <input type="tel" th:value="*{tel2}" name="tel2" class="form--control"
-                                                       maxlength="4" required style="flex: 1;">&nbsp;&nbsp;
-                                                <input type="tel" th:value="*{tel3}" name="tel3" class="form--control"
-                                                       maxlength="4" required style="flex: 1;">
+                                                <input class="form--control" maxlength="3" name="tel1" required
+                                                       style="flex: 1;" th:value="*{tel1}" type="tel">&nbsp;&nbsp;
+                                                <input class="form--control" maxlength="4" name="tel2" required
+                                                       style="flex: 1;" th:value="*{tel2}" type="tel">&nbsp;&nbsp;
+                                                <input class="form--control" maxlength="4" name="tel3" required
+                                                       style="flex: 1;" th:value="*{tel3}" type="tel">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="btn-wrapper mt-4">
-                                        <button type="submit" class="cmn-btn btn-bg-1">프로필 수정</button>
+                                        <button class="cmn-btn btn-bg-1" type="submit">프로필 수정</button>
                                     </div>
                                 </form>
                             </div>

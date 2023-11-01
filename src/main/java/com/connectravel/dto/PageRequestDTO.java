@@ -19,26 +19,26 @@ public class PageRequestDTO {
     private String category; // 숙소종류
     private String region; // 지역
 
-    public PageRequestDTO () {
+    public PageRequestDTO() {
         this.page = 1;
         this.size = 10;
     }
 
-    public PageRequestDTO (int page, int size) {
+    public PageRequestDTO(int page, int size) {
         this.page = page;
         this.size = size;
     }
 
     // 검색 조건 배열 반환
-    public String[] getType () {
-        if (type == null || type.isEmpty ()) {
+    public String[] getType() {
+        if (type == null || type.isEmpty()) {
             return null;
         }
-        return type.split ("");
+        return type.split("");
     }
 
     //페이징 처리
-    public Pageable getPageable (String... props) {
-        return PageRequest.of (this.page - 1, this.size, Sort.by (props).descending ());
+    public Pageable getPageable(String... props) {
+        return PageRequest.of(this.page - 1, this.size, Sort.by(props).descending());
     }
 }

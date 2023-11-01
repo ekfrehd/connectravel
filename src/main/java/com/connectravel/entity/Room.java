@@ -20,7 +20,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rno;  //방번호
 
-    @Column(length = 30,nullable = false)
+    @Column(length = 30, nullable = false)
     private String roomName; //방 이름
     @Column(nullable = false)
     private int price; //방 갸격

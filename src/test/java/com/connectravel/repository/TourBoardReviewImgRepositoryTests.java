@@ -24,21 +24,16 @@ public class TourBoardReviewImgRepositoryTests {
     private TourBoardRepository tourBoardRepository;
 
     @Test // 가이드 리뷰 추가 테스트
-    public void testTourBoarReviewInsert () {
-        Optional<TourBoard> resultTourBoard = tourBoardRepository.findById (1L);
-        TourBoard tourBoard = resultTourBoard.orElseThrow (() -> new NoSuchElementException ("게시글이 존재하지 않습니다."));
-        Member member = memberRepository.findByEmail ("sample@sample.com");
+    public void testTourBoarReviewInsert() {
+        Optional<TourBoard> resultTourBoard = tourBoardRepository.findById(1L);
+        TourBoard tourBoard = resultTourBoard.orElseThrow(() -> new NoSuchElementException("게시글이 존재하지 않습니다."));
+        Member member = memberRepository.findByEmail("sample@sample.com");
 
-        IntStream.rangeClosed (1, 5).forEach (i -> { // 1부터 10까지 생성
-            TourBoardReview tourBoardReview = TourBoardReview.builder ()
-                    .content ("추천합니다.")
-                    .recommend (i)
-                    .tourBoard (tourBoard)
-                    .member (member)
-                    .build ();
+        IntStream.rangeClosed(1, 5).forEach(i -> { // 1부터 10까지 생성
+            TourBoardReview tourBoardReview = TourBoardReview.builder().content("추천합니다.").recommend(i).tourBoard(tourBoard).member(member).build();
 
-            TourBoardReview result = tourBoardReviewRepository.save (tourBoardReview);
-            System.out.println (result);
+            TourBoardReview result = tourBoardReviewRepository.save(tourBoardReview);
+            System.out.println(result);
         });
     }
 
@@ -67,9 +62,9 @@ public class TourBoardReviewImgRepositoryTests {
         }*/
 
     @Test // 가이드 리뷰 삭제 테스트, 댓글이 있으면 안지워짐
-    public void testTourBoardReviewDelete () {
+    public void testTourBoardReviewDelete() {
         Long tbrno = 11L;
-        tourBoardReviewRepository.deleteById (tbrno);
+        tourBoardReviewRepository.deleteById(tbrno);
     }
 }
 

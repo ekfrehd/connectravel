@@ -63,20 +63,20 @@ tasks.named('test') {
 //쿼리 dsl 관련 설정 추가
 def querydslDir = "$buildDir/generated/querydsl"
 
-querydsl{
+querydsl {
     jpa = true
     querydslSourcesDir = querydslDir
 }
 
-sourceSets{
+sourceSets {
     main.java.srcDir querydslDir
 }
 
-configurations{
+configurations {
     querydsl.extendsFrom compileClasspath
 }
 
-compileQuerydsl{
+compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
 

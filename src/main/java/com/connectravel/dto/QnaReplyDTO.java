@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class QnaReplyDTO {
 
     private Long rno; // 댓글 일련번호
-    @NotBlank (message = "내용을 입력해주세요.")
+    @NotBlank(message = "내용을 입력해주세요.")
     private String text; // 댓글 내용
     private String replyer; // 댓글 작성자
     private Long bno; // 게시글 일련번호

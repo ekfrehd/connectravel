@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragmentsAdmin/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragmentsAdmin/layout}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Admin Dashboard</title>
@@ -11,8 +11,9 @@
 <div layout:fragment="content">
     <div style="padding: 15px;">
         <div class="white-box">
-            <button class="btn btn-primary" type="button" onclick="'location.href=\'/seller/room/update?rno=\' + ${dto.rno}'">수정하기</button>
-            <button class="btn btn-danger" type="button" onclick="deleteRoom(${dto.rno})">삭제하기</button><br/></br>
+            <button class="btn btn-primary" onclick="'location.href=\'/seller/room/update?rno=\' + ${dto.rno}'" type="button">수정하기</button>
+            <button class="btn btn-danger" onclick="deleteRoom(${dto.rno})" type="button">삭제하기</button>
+            <br/></br>
 
             <script th:inline="javascript">
                 function deleteRoom(rno) {
@@ -20,7 +21,7 @@
                         $.ajax({
                             url: '/seller/room/delete?rno=' + rno,
                             type: 'get',
-                            success: function(result) {
+                            success: function (result) {
                                 if (result === 'success') {
                                     location.reload();
                                 }
