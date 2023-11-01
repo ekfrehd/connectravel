@@ -20,6 +20,7 @@ public class Room {
 
     @Column(length = 30,nullable = false)
     private String roomName;
+
     @Column(nullable = false)
     private int price;
 
