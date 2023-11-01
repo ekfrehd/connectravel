@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragmentsAdmin/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragmentsAdmin/layout}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <div layout:fragment="content">
-  <!--<h1> 메인 페이지입니다. </h1>-->
-  <div id="carouselControls" class="carousel slide margin" data-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active item">
-        <div style="display: flex; justify-content: center; margin: 50px;">
-          <img th:src="@{/maintitle.jpg}" width="80%" height="80%">
+    <!--<h1> 메인 페이지입니다. </h1>-->
+    <div class="carousel slide margin" data-ride="carousel" id="carouselControls">
+        <div class="carousel-inner">
+            <div class="carousel-item active item">
+                <div style="display: flex; justify-content: center; margin: 50px;">
+                    <img height="80%" th:src="@{/maintitle.jpg}" width="80%">
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
 </div>

@@ -17,7 +17,7 @@ public class Member {
 
     @Id
     @GeneratedValue(generator = "system_uuid")
-    @GenericGenerator(name="system_uuid", strategy = "uuid")
+    @GenericGenerator(name = "system_uuid", strategy = "uuid")
     @Column(name = "id")
     private String id; // 아이디
 
@@ -40,7 +40,7 @@ public class Member {
 
     private String authProvider; // 인증 제공자 (카카오톡, 깃허브)
 
-    public static Member createMember(MemberFormDTO memberFormDto){
+    public static Member createMember(MemberFormDTO memberFormDto) {
         Member member = new Member();
         member.setName(memberFormDto.getName());
         member.setEmail(memberFormDto.getEmail());

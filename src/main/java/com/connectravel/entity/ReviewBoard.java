@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = "member") //FK지정(One쪽의 테이블에서는 외래키 연결시킬 자신의 엔티티의 컬럼명을 exclude 지정)
-public class ReviewBoard extends BaseEntity{
+public class ReviewBoard extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class ReviewBoard extends BaseEntity{
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Room room;
 
-    public void changeContent(String content){
+    public void changeContent(String content) {
         this.content = content;
     }
 

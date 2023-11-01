@@ -33,32 +33,32 @@ public class ImgServiceImpl implements ImgService {
 
 
     @Override
-    public void remove (Long ino) {
-        String filename = roomImgRepository.findById (ino).get ().getImgFile (); //select 하고
+    public void remove(Long ino) {
+        String filename = roomImgRepository.findById(ino).get().getImgFile(); //select 하고
         //fil name 불러오고 file 삭제하고 db 삭제하고 처리!
-        fileManager.remove (filename); //파일삭제
-        roomImgRepository.deleteById (ino); //이런식 //db삭제
+        fileManager.remove(filename); //파일삭제
+        roomImgRepository.deleteById(ino); //이런식 //db삭제
     }
 
 
     @Override
-    public ImgDTO get (Long ino) {
-        RoomImg img = roomImgRepository.findById (ino).get ();
-        ImgDTO imgDTO = modelMapper.map (img, ImgDTO.class);
+    public ImgDTO get(Long ino) {
+        RoomImg img = roomImgRepository.findById(ino).get();
+        ImgDTO imgDTO = modelMapper.map(img, ImgDTO.class);
         return imgDTO;
     }
 
     @Override
-    public void update (Long ino, MultipartFile file) {
-        String filename = get (ino).getImgFile ();
-        fileManager.remove (filename); //파일 삭제
-        String uuid = filename.split ("_")[0]; //전에 사용됬던 이미지 UUID
-        String realfilename = uuid + file.getOriginalFilename ();
-        fileManager.add (file, realfilename); //파일을 생성
+    public void update(Long ino, MultipartFile file) {
+        String filename = get(ino).getImgFile();
+        fileManager.remove(filename); //파일 삭제
+        String uuid = filename.split("_")[0]; //전에 사용됬던 이미지 UUID
+        String realfilename = uuid + file.getOriginalFilename();
+        fileManager.add(file, realfilename); //파일을 생성
 
-        RoomImg sec_entity = roomImgRepository.findById (ino).get ();
-        RoomImg entity = RoomImg.builder ().ino (sec_entity.getIno ()).imgFile (realfilename).room (sec_entity.getRoom ()).build ();
-        roomImgRepository.save (entity);
+        RoomImg sec_entity = roomImgRepository.findById(ino).get();
+        RoomImg entity = RoomImg.builder().ino(sec_entity.getIno()).imgFile(realfilename).room(sec_entity.getRoom()).build();
+        roomImgRepository.save(entity);
     }
 
     /*@Override
@@ -123,30 +123,30 @@ public class ImgServiceImpl implements ImgService {
     }*/
 
     @Override
-    public void TourBoardRegister (MultipartFile file, Long tbno) {
-        String origin = file.getOriginalFilename (); //사용자가 업로드한 파일 이름 가져오기 xxxx.png xxxx.jpg
-        String realname = fileManager.UUIDMaker (origin); //UUID 생성
-        boolean is_add = fileManager.add (file, realname); //파일 생성
+    public void TourBoardRegister(MultipartFile file, Long tbno) {
+        String origin = file.getOriginalFilename(); //사용자가 업로드한 파일 이름 가져오기 xxxx.png xxxx.jpg
+        String realname = fileManager.UUIDMaker(origin); //UUID 생성
+        boolean is_add = fileManager.add(file, realname); //파일 생성
         if (is_add) //파일 생성 여부에 따라서 Db에 저장한다.
         {
             // db 저장코드
-            TourBoard tourBoard = TourBoard.builder ().tbno (tbno).build ();
-            TourBoardImg tourBoardImg = TourBoardImg.builder ().imgFile (realname).tourBoard (tourBoard).build ();
-            tourBaordImgRepository.save (tourBoardImg);
+            TourBoard tourBoard = TourBoard.builder().tbno(tbno).build();
+            TourBoardImg tourBoardImg = TourBoardImg.builder().imgFile(realname).tourBoard(tourBoard).build();
+            tourBaordImgRepository.save(tourBoardImg);
         }
     }
 
     @Override
-    public void TourBoardReviewRegister (MultipartFile file, Long tbrno) {
-        String origin = file.getOriginalFilename (); //사용자가 업로드한 파일 이름 가져오기 xxxx.png xxxx.jpg
-        String realname = fileManager.UUIDMaker (origin); //UUID 생성
-        boolean is_add = fileManager.add (file, realname); //파일 생성
+    public void TourBoardReviewRegister(MultipartFile file, Long tbrno) {
+        String origin = file.getOriginalFilename(); //사용자가 업로드한 파일 이름 가져오기 xxxx.png xxxx.jpg
+        String realname = fileManager.UUIDMaker(origin); //UUID 생성
+        boolean is_add = fileManager.add(file, realname); //파일 생성
         if (is_add) //파일 생성 여부에 따라서 Db에 저장한다.
         {
             // db 저장코드
-            TourBoardReview tourBoardReview = TourBoardReview.builder ().tbrno (tbrno).build ();
-            TourBoardReviewImg tourBoardReviewImg = TourBoardReviewImg.builder ().imgFile (realname).tourBoardReview (tourBoardReview).build ();
-            tourBoardReivewImgRepository.save (tourBoardReviewImg);
+            TourBoardReview tourBoardReview = TourBoardReview.builder().tbrno(tbrno).build();
+            TourBoardReviewImg tourBoardReviewImg = TourBoardReviewImg.builder().imgFile(realname).tourBoardReview(tourBoardReview).build();
+            tourBoardReivewImgRepository.save(tourBoardReviewImg);
         }
     }
 }

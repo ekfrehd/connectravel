@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -30,28 +30,29 @@
                                     <div class="input-flex-item">
                                         <div class="single-input mt-4">
                                             <label class="label-title"> 이름 </label>
-                                            <input class="form--control" type="text" name="address" th:value="${member.name}" readonly>
+                                            <input class="form--control" name="address" readonly th:value="${member.name}" type="text">
                                         </div>
                                     </div>
                                     <div class="input-flex-item">
                                         <div class="single-input mt-4">
                                             <label class="label-title"> 전화번호 </label>
-                                            <input class="form--control" type="text" name="address" th:value="${member.tel}" readonly>
+                                            <input class="form--control" name="address" readonly th:value="${member.tel}" type="text">
                                         </div>
                                     </div>
                                     <div style="border-bottom: #b3b7bb solid 1px; margin:25px 0;"></div>
                                     <h4>요청사항</h4>
                                     <form action="register" method="post">
-                                        <input type="hidden" name="rno" th:value="${dto.rno}">
-                                        <input type="hidden" name="StartDate" th:value="${rv.StartDate}">
-                                        <input type="hidden" name="EndDate" th:value="${rv.EndDate}">
-                                        <input type="hidden" name="price" th:value="${dto.price}">
+                                        <input name="rno" th:value="${dto.rno}" type="hidden">
+                                        <input name="StartDate" th:value="${rv.StartDate}" type="hidden">
+                                        <input name="EndDate" th:value="${rv.EndDate}" type="hidden">
+                                        <input name="price" th:value="${dto.price}" type="hidden">
                                         <div class="input-flex-item">
                                             <div class="single-input mt-4">
-                                                <input class="form--control" type="text" name="message" placeholder="요청사항을 입력하세요.">
+                                                <input class="form--control" name="message" placeholder="요청사항을 입력하세요." type="text">
                                             </div>
-                                        </div><br/><br/>
-                                        <button type="submit" class="btn btn-dark">제출하기</button>
+                                        </div>
+                                        <br/><br/>
+                                        <button class="btn btn-dark" type="submit">제출하기</button>
                                     </form>
                                 </div>
                             </div>

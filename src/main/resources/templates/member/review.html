@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th = "http://www.thymeleaf.org"
-      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate = "~{fragments/layout1}">
+<html layout:decorate="~{fragments/layout1}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -92,49 +92,49 @@
                         <div class="single-reservation bg-white base-padding">
                             <h3 class="single-reservation-title"> 리뷰등록 </h3>
                             <div class="custom--form dashboard-form mat-25">
-                                <form th:action="@{/review/register}" th:object="${dto}" method="post"
-                                      enctype="multipart/form-data">
+                                <form enctype="multipart/form-data" method="post" th:action="@{/review/register}"
+                                      th:object="${dto}">
                                     <div th:if="${errorMessage}">
-                                        <p th:text="${errorMessage}" style="color: red;"></p>
+                                        <p style="color: red;" th:text="${errorMessage}"></p>
                                     </div>
-                                    <input type="hidden" th:field="*{writerEmail}">
-                                    <input type="hidden" th:field="*{rvno}">
+                                    <input th:field="*{writerEmail}" type="hidden">
+                                    <input th:field="*{rvno}" type="hidden">
 
                                     <h4 class="h4">숙소 이름 : [[${accommodationName}]]</h4>
                                     <h3 class="h5">객실 이름 : [[${roomName}]]</h3>
 
                                     <div class="star-rating mab-25">
-                                        <input type="radio" id="5-stars" name="grade" value="5" v-model="ratings"/>
-                                        <label for="5-stars" class="star pr-4">★</label>
-                                        <input type="radio" id="4-stars" name="grade" value="4" v-model="ratings"/>
-                                        <label for="4-stars" class="star">★</label>
-                                        <input type="radio" id="3-stars" name="grade" value="3" v-model="ratings"/>
-                                        <label for="3-stars" class="star">★</label>
-                                        <input type="radio" id="2-stars" name="grade" value="2" v-model="ratings"/>
-                                        <label for="2-stars" class="star">★</label>
-                                        <input type="radio" id="1-star" name="grade" value="1" v-model="ratings" />
-                                        <label for="1-star" class="star">★</label>
+                                        <input id="5-stars" name="grade" type="radio" v-model="ratings" value="5"/>
+                                        <label class="star pr-4" for="5-stars">★</label>
+                                        <input id="4-stars" name="grade" type="radio" v-model="ratings" value="4"/>
+                                        <label class="star" for="4-stars">★</label>
+                                        <input id="3-stars" name="grade" type="radio" v-model="ratings" value="3"/>
+                                        <label class="star" for="3-stars">★</label>
+                                        <input id="2-stars" name="grade" type="radio" v-model="ratings" value="2"/>
+                                        <label class="star" for="2-stars">★</label>
+                                        <input id="1-star" name="grade" type="radio" v-model="ratings" value="1"/>
+                                        <label class="star" for="1-star">★</label>
                                     </div>
 
-                                    <textarea id="content" name="content" th:field="*{content}" rows="5" cols="50"
-                                              required="required"></textarea>
+                                    <textarea cols="50" id="content" name="content" required="required" rows="5"
+                                              th:field="*{content}"></textarea>
 
                                     <div class="col-12 col-md-6">
                                         <label class="form-label">이미지</label>
-                                        <input class="form-control" type="file" name="images">
+                                        <input class="form-control" name="images" type="file">
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label class="form-label">이미지</label>
-                                        <input class="form-control" type="file" name="images">
+                                        <input class="form-control" name="images" type="file">
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label class="form-label">이미지</label>
-                                        <input class="form-control" type="file" name="images">
+                                        <input class="form-control" name="images" type="file">
                                     </div>
                                     <div class="row mat-25">
-                                        <button type="submit" class="btn btn-primary">작성완료</button>
-                                        <button type="button" class="btn btn-bg-white"
-                                                onclick="location.href='/reservation/list'">돌아가기
+                                        <button class="btn btn-primary" type="submit">작성완료</button>
+                                        <button class="btn btn-bg-white" onclick="location.href='/reservation/list'"
+                                                type="button">돌아가기
                                         </button>
                                     </div>
                                 </form>

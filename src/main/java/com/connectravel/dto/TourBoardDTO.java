@@ -16,7 +16,7 @@ import java.util.List;
 public class TourBoardDTO {
 
     private Long tbno; // 가이드 일련번호
-    @NotBlank (message = "제목을 입력해주세요.")
+    @NotBlank(message = "제목을 입력해주세요.")
     private String title; // 가이드 제목
     @NotBlank(message = "내용을 입력해주세요.")
     private String content; //가이드 내용
@@ -31,6 +31,7 @@ public class TourBoardDTO {
     private LocalDateTime regDate, modDate; // 등록일, 수정일
 
     private List<ImgDTO> imgDTOList;// imgDTO list
+
     public void setImgDTOList(List<ImgDTO> imgDTOList) {
         this.imgDTOList = imgDTOList;
     } // 이미지 리스트화

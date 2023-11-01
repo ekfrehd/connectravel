@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragmentsAdmin/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragmentsAdmin/layout}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -66,7 +66,7 @@
                     <td th:text="${dto.adminname}"></td>
                 </tr>
                 <tr>
-                    <th>숙박업소  종류</th>
+                    <th>숙박업소 종류</th>
                     <td th:text="${dto.category}"></td>
                 </tr>
                 <tr>
@@ -101,13 +101,13 @@
             <div th:each="img : ${accommodationImgDTOS}">
                  <span th:if="${img.accommodationDTO.ano == dto.ano}">
                     <br>
-                  <img th:src="'/imgtest/' + ${img.img.imgfile}" th:alt="${img.img.imgfile}"/>
+                  <img th:alt="${img.img.imgfile}" th:src="'/imgtest/' + ${img.img.imgfile}"/>
                     <br>
               </span>
             </div>
             <div class="button-container">
-                <button type="button" class="btn btn-dark" onclick="location.href='/seller/accommodation/update'">숙박정보수정</button>
-                <button type="button" class="btn btn-dark" onclick="location.href='/seller/accommodation/delete'">삭제
+                <button class="btn btn-dark" onclick="location.href='/seller/accommodation/update'" type="button">숙박정보수정</button>
+                <button class="btn btn-dark" onclick="location.href='/seller/accommodation/delete'" type="button">삭제
                 </button>
             </div>
         </div>

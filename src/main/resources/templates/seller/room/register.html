@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html
-        xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate = "~{fragmentsAdmin/layout}">
+        layout:decorate="~{fragmentsAdmin/layout}"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.tiny.cloud/1/3sfksqzu5vmtem6z88d0gi61nmmvqmyx39n9tokdq3jkwkkj/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script referrerpolicy="origin" src="https://cdn.tiny.cloud/1/3sfksqzu5vmtem6z88d0gi61nmmvqmyx39n9tokdq3jkwkkj/tinymce/6/tinymce.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@2/dist/tinymce-jquery.min.js"></script>
 
     <title>Admin Dashboard</title>
@@ -17,17 +17,17 @@
     <div style="padding: 15px;">
         <div class="white-box">
 
-            <form class="row g-3" action="/seller/room/register" method="post" enctype="multipart/form-data">
+            <form action="/seller/room/register" class="row g-3" enctype="multipart/form-data" method="post">
                 <h5 class="col-12 mb-3">방 정보를 입력하세요.</h5>
 
                 <div class="col-12 col-md-6">
                     <label class="form-label">방 이름</label>
-                    <input class="form-control" type="text" name="room_name">
+                    <input class="form-control" name="room_name" type="text">
                 </div>
 
                 <div class="col-12 col-md-6">
                     <label class="form-label">방 가격</label>
-                    <input class="form-control" type="number" name="price">
+                    <input class="form-control" name="price" type="number">
                 </div>
 
                 <div class="col-12">
@@ -35,11 +35,11 @@
                         영업여부
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="operating" id="operating-yes" value="true">
+                        <input class="form-check-input" id="operating-yes" name="operating" type="radio" value="true">
                         <label class="form-check-label" for="operating-yes">영업중</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="operating" id="operating-no" value="false">
+                        <input class="form-check-input" id="operating-no" name="operating" type="radio" value="false">
                         <label class="form-check-label" for="operating-no">영업안함</label>
                     </div>
                 </div>
@@ -51,12 +51,12 @@
 
                 <div class="col-12 col-md-6">
                     <label class="form-label">이미지</label>
-                    <input class="form-control" type="file" name="images">
+                    <input class="form-control" name="images" type="file">
                 </div>
 
                 <div class="col-12 col-md-6">
                     <label class="form-label">이미지</label>
-                    <input class="form-control" type="file" name="images">
+                    <input class="form-control" name="images" type="file">
                 </div>
 
                 <!-- 이미지 수만큼 위와 같은 코드를 반복해서 작성합니다. -->
