@@ -30,11 +30,13 @@ public class QnaBoardRepositoryTests {
         memberFormDTO.setTel("010-0000-0000");
         memberFormDTO.setPassword("1234");
         memberFormDTO.setRole(Role.valueOf("ADMIN"));
+
         return Member.createMember(memberFormDTO);
     }
 
     @Test //특정 회원의 게시글 추가 테스트
     public void testQnaBoardInsertAddMember() {
+
         Member member = memberRepository.findByEmail("sample@sample.com"); // 멤버 존재 확인
 
         if (member == null) { // 멤버가 없을 경우에만 새로운 멤버 생성

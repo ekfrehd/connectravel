@@ -17,7 +17,6 @@ public class QnaReplyServiceTests {
 
     @Test
     public void testRegisterQnaReply() {
-
         QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
         qnaReplyDTO.setText("테스트 답변 내용");
         qnaReplyDTO.setBno(1L);
@@ -58,12 +57,3 @@ public class QnaReplyServiceTests {
         qnaReplyService.remove(qnaReplyDTO.getRno());
     }
 }
-
-
-
-
-
-
-
-
-
