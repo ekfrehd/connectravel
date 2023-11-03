@@ -30,9 +30,9 @@ public class RoomRepositoryTest {
     @BeforeEach
     void setUp() {
         Accommodation accommodation = Accommodation.builder()
-                .name("테스트 숙소")
+                .accommodationName("테스트 숙소")
                 .postal(12345)
-                .adminName("운영자")
+                .sellerName("운영자")
                 .address("테스트 주소")
                 .count(0)
                 .accommodationType("테스트 타입")

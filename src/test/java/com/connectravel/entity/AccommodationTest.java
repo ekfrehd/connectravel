@@ -16,9 +16,9 @@ public class AccommodationTest {
     @BeforeEach
     public void setUp() {
         accommodation = Accommodation.builder()
-                .name("Test Hotel")
+                .accommodationName("Test Hotel")
                 .postal(12345)
-                .adminName("John Doe")
+                .sellerName("John Doe")
                 .address("123 Test St")
                 .accommodationType("Hotel")
                 .tel("010-1234-5678")
@@ -29,8 +29,8 @@ public class AccommodationTest {
     @Test
     public void testAccommodationCreation() {
         assertNotNull(accommodation);
-        assertEquals("Test Hotel", accommodation.getName());
-        assertEquals("John Doe", accommodation.getAdminName());
+        assertEquals("Test Hotel", accommodation.getAccommodationName());
+        assertEquals("John Doe", accommodation.getSellerName());
         log.debug("Accommodation created: {}", accommodation);
     }
 }

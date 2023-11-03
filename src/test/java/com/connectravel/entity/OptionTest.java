@@ -16,12 +16,11 @@ public class OptionTest {
     @BeforeEach
     public void setUp() {
         accommodation = Accommodation.builder()
-                .name("Test Hotel")
+                .accommodationName("Test Hotel")
                 .build();
 
         option = Option.builder()
                 .optionName("Wi-Fi")
-                .optionCategory("Common")
                 .build();
 
         accommodationOption = new AccommodationOption();

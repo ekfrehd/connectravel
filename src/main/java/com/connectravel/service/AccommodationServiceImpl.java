@@ -1,13 +1,19 @@
 package com.connectravel.service;
 
 import com.connectravel.dto.AccommodationDTO;
+import com.connectravel.dto.OptionDTO;
+import com.connectravel.dto.RoomDTO;
 import com.connectravel.entity.Accommodation;
+import com.connectravel.entity.AccommodationImg;
+import com.connectravel.entity.Room;
 import com.connectravel.repository.AccommodationRepository;
 import groovy.util.logging.Log4j2;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -21,7 +27,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     public AccommodationDTO modifyAccommodationDetails(AccommodationDTO accommodationDTO) {
         // 숙소 정보 수정을 위해 DTO에서 필요한 정보 추출
         Long accommodationId = accommodationDTO.getAno();
-        String newName = accommodationDTO.getName();
+        String newName = accommodationDTO.getAccommodationName();
         String newAddress = accommodationDTO.getAddress();
         // 이름, 주소 외 다른 것도 수정할 수 있게 할거면 여기에 추가
 
@@ -30,7 +36,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .orElseThrow(() -> new EntityNotFoundException("Accommodation not found"));
 
         // 엔티티에 수정된 정보 적용
-        accommodation.setName(newName);
+        accommodation.setAccommodationName(newName);
         accommodation.setAddress(newAddress);
 
         // 변경사항을 데이터베이스에 저장
@@ -48,5 +54,64 @@ public class AccommodationServiceImpl implements AccommodationService {
         return entityToDto(accommodation);
     }
 
+    @Override
+    public AccommodationDTO entityToDto(Accommodation accommodation) {
+
+        // 숙박 업소에 대한 이미지 정보만 변환
+        List<String> imageFiles = accommodation.getImages().stream()
+                .filter(image -> image.getAccommodation() != null)  // 숙박 업소에 연결된 이미지만 필터링
+                .map(AccommodationImg::getImgFile)
+                .collect(Collectors.toList());
+
+        // 옵션 정보 변환
+        List<OptionDTO> optionList = accommodation.getAccommodationOptions().stream()
+                .map(option -> new OptionDTO(option.getOption().getOptionName()))
+                .collect(Collectors.toList());
+
+        AccommodationDTO accommodationDTO = AccommodationDTO.builder()
+                .ano(accommodation.getAno())
+                .accommodationName(accommodation.getAccommodationName())
+                .sellerName(accommodation.getMember().getName()) // 관리자 이름
+                .email(accommodation.getMember().getEmail()) // 관리자 이메일
+                .address(accommodation.getAddress())
+                .postal(accommodation.getPostal())
+                .accommodationType(accommodation.getAccommodationType())
+                .region(accommodation.getRegion())
+                .tel(accommodation.getTel())
+                .intro(accommodation.getIntro())
+                .count(accommodation.getCount())
+                .content(accommodation.getContent())
+                .imgFiles(imageFiles)
+                .optionDTO(optionList)
+                .build();
+
+        return accommodationDTO;
+    }
+
+    @Override
+    public AccommodationDTO entityToDtoSearch(Accommodation accommodation, Room room, Integer minPrice) {
+
+        RoomDTO roomDTO = RoomDTO.builder().roomName(room.getRoomName()).build();
+        List<RoomDTO> roomDTOList = new ArrayList<>();
+        roomDTOList.add(roomDTO);
+
+        AccommodationDTO accommodationDTO = AccommodationDTO.builder()
+                .ano(accommodation.getAno())
+                .accommodationName(accommodation.getAccommodationName())
+                .sellerName(accommodation.getMember().getName()) // 관리자 이름
+                .email(accommodation.getMember().getEmail()) // 관리자 이메일
+                .address(accommodation.getAddress())
+                .postal(accommodation.getPostal())
+                .accommodationType(accommodation.getAccommodationType())
+                .region(accommodation.getRegion())
+                .tel(accommodation.getTel())
+                .intro(accommodation.getIntro())
+                .count(accommodation.getCount())
+                .content(accommodation.getContent())
+                .minPrice(minPrice)
+                .roomDTO(roomDTOList)
+                .build();
+        return accommodationDTO;
+    }
 
 }

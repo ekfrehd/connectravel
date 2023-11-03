@@ -40,12 +40,10 @@ public class SearchRepositoryTest {
 
         // 옵션 2개 추가
         Option option1 = Option.builder()
-                .optionCategory("공용")
                 .optionName("wifi")
                 .build();
 
         Option option2 = Option.builder()
-                .optionCategory("공용")
                 .optionName("세탁기")
                 .build();
 
@@ -54,9 +52,9 @@ public class SearchRepositoryTest {
 
         // Accommodation 정보 생성
         Accommodation accommodation = Accommodation.builder()
-                .name("Test Accommodation")
+                .accommodationName("Test Accommodation")
                 .postal(12345)
-                .adminName(member.getName())
+                .sellerName(member.getName())
                 .email(member.getEmail())
                 .address("123 Test Street, Test City")
                 .count(0)
@@ -115,7 +113,7 @@ public class SearchRepositoryTest {
         assertFalse(results.isEmpty());
 
         for(Accommodation accommodation : results) {
-            log.debug("Accommodation Name: {}", accommodation.getName());
+            log.debug("Accommodation Name: {}", accommodation.getAccommodationName());
             log.debug("Address: {}", accommodation.getAddress());
             log.debug("Tel: {}", accommodation.getTel());
             log.debug("Content: {}", accommodation.getContent());

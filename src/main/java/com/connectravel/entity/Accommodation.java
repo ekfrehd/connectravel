@@ -18,12 +18,12 @@ public class Accommodation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ano;
     @Column(nullable = false)
-    private String name;
+    private String accommodationName;
 
     @Column(nullable = false)
     private int postal;
     @Column(nullable = false)
-    private String adminName;
+    private String sellerName;
     @Column(nullable = false)
     private String address;
     @Column(scale = 0)
