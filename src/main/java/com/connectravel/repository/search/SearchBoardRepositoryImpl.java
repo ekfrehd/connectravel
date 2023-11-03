@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,7 +116,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
     // 1:1문의 형 페이지 리스트 출력 시키는거
     // 문제점 : 로그인 안 한사람은 member가 null이라 예외처리됨
-    @Override
+    /*@Override
     public Page<Object[]> searchPageByWriter(String[] type, Member writer, String keyword, Pageable pageable) {
         QQnaBoard qnaBoard = QQnaBoard.qnaBoard;
         QQnaReply reply = QQnaReply.qnaReply;
@@ -174,7 +173,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         long count = tuple.fetchCount();
 
         return new PageImpl<Object[]>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
-    }
+    }*/
 
     @Override
     public Page<Object[]> searchPageAdminBaord(String[] type, String category, String keyword, Pageable pageable) {
@@ -245,7 +244,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         return new PageImpl<Object[]>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
     }
 
-    @Override
+    /*@Override
     public Page<Object[]> searchPageAccommodation(String[] type, String keyword, String category, String region, LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice, Pageable pageable) {
         QAccommodation accommodation = QAccommodation.accommodation;
         QRoom room = QRoom.room;
@@ -311,7 +310,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         List<Object[]> result = tuples.stream().map(tuple -> new Object[]{tuple.get(accommodation), tuple.get(room), tuple.get(room.price.min()), tuple.get(reservationEntity.rvno)}).collect(Collectors.toList());
 
         return new PageImpl<>(result, pageable, count);
-    }
+    }*/
 
     @Override
     public Page<Object[]> searchTourBoard(String[] type, String keyword, String category, String region, Pageable pageable) {

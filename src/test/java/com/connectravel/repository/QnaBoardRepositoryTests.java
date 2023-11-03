@@ -1,5 +1,6 @@
 package com.connectravel.repository;
 
+import com.connectravel.constant.Role;
 import com.connectravel.dto.MemberFormDTO;
 import com.connectravel.entity.Member;
 import com.connectravel.entity.QnaBoard;
@@ -21,15 +22,6 @@ public class QnaBoardRepositoryTests {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Test // 게시글만 추가 테스트
-    public void testQnaBoardInsert() {
-        IntStream.rangeClosed(1, 10).forEach(i -> { // 1부터 10까지 생성
-            QnaBoard qnaBoard = QnaBoard.builder().title("QnA 게시글 더미데이터" + i).content("QnA 게시글 내용 더미데이터" + i).build(); // 빌더 패턴 사용 Qna 게시글 데이터 입력
-            QnaBoard result = qnaBoardRepository.save(qnaBoard); // Qna 게시글 DB 저장
-            System.out.println("BNO: " + result.getBno());
-        });
-    }
-
     private Member createMember() {
         MemberFormDTO memberFormDTO = new MemberFormDTO();
         memberFormDTO.setName("더미봇");
@@ -37,18 +29,44 @@ public class QnaBoardRepositoryTests {
         memberFormDTO.setNickName("더미봇");
         memberFormDTO.setTel("010-0000-0000");
         memberFormDTO.setPassword("1234");
+        memberFormDTO.setRole(Role.valueOf("ADMIN"));
+
         return Member.createMember(memberFormDTO);
     }
 
     @Test //특정 회원의 게시글 추가 테스트
     public void testQnaBoardInsertAddMember() {
-        Member member = createMember(); // 멤버 생성
-        memberRepository.save(member); // 멤버  DB 저장
 
-        IntStream.rangeClosed(1, 10).forEach(i -> {//1부터 10까지 생성
-            QnaBoard qnaBoard = QnaBoard.builder().title("QnA 게시글 더미데이터" + i).content("QnA 게시글 내용 더미데이터" + i).member(member).build(); // 빌더 패턴 사용 Qna 게시글 데이터 입력
+        Member member = memberRepository.findByEmail("sample@sample.com"); // 멤버 존재 확인
+
+        if (member == null) { // 멤버가 없을 경우에만 새로운 멤버 생성
+            member = createMember(); // 멤버 생성
+            memberRepository.save(member); // 멤버 DB 저장
+        }
+
+        String[] sampleQuestions = { // 질문을 배열로 저장
+                "숙박 예약을 어떻게 하나요?",
+                "수수료는 얼마인가요?",
+                "환불 정책은 어떻게 되나요?",
+                "숙박 시설에 대한 자세한 정보를 알 수 있을까요?",
+                "커넥트래블의 이용 방법을 설명해 주세요.",
+                "어떻게 안전한 결제를 할 수 있을까요?",
+                "커넥트래블의 혜택은 무엇인가요?",
+                "서비스 이용 시 주의사항을 알려주세요.",
+                "커넥트래블의 고객 지원에 대해 설명해 주세요.",
+                "추천하는 장소가 있나요?"
+        };
+
+        Member inputMember = member;
+        IntStream.rangeClosed(1, 10).forEach(i -> {
+            QnaBoard qnaBoard = QnaBoard.builder()
+                    .title(sampleQuestions[i - 1]) // 질문 제목
+                    .content(sampleQuestions[i - 1]) // 질문 내용
+                    .member(inputMember) // 해당 멤버
+                    .build();
+
             QnaBoard result = qnaBoardRepository.save(qnaBoard); // Qna 게시글 DB 저장
-            System.out.println("BNO: " + result.getBno());
+            System.out.println(result.getBno() + "번 게시물 등록");
         });
     }
 

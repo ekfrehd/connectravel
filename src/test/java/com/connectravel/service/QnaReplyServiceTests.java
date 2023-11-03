@@ -17,7 +17,6 @@ public class QnaReplyServiceTests {
 
     @Test
     public void testRegisterQnaReply() {
-        // 테스트 QnaReplyDTO 생성
         QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
         qnaReplyDTO.setText("테스트 답변 내용");
         qnaReplyDTO.setBno(1L);
@@ -40,15 +39,21 @@ public class QnaReplyServiceTests {
         }
     }
 
+    @Test
+    public void testModify() {
 
+        QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
+        qnaReplyDTO.setText("테스트 댓글 수정 1");
+        qnaReplyDTO.setRno(12L);
+        qnaReplyDTO.setReplyer("더미봇");
+
+        qnaReplyService.modify(qnaReplyDTO);
+    }
+
+    @Test
+    public void testRemove() {
+        QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
+        qnaReplyDTO.setRno(13L);
+        qnaReplyService.remove(qnaReplyDTO.getRno());
+    }
 }
-
-
-
-
-
-
-
-
-
-
