@@ -3,14 +3,15 @@ package com.connectravel.service;
 import com.connectravel.dto.AccommodationDTO;
 import com.connectravel.dto.OptionDTO;
 import com.connectravel.dto.RoomDTO;
-import com.connectravel.entity.Accommodation;
-import com.connectravel.entity.AccommodationImg;
-import com.connectravel.entity.Room;
+import com.connectravel.entity.*;
 import com.connectravel.repository.AccommodationRepository;
+import com.connectravel.repository.MemberRepository;
+import com.connectravel.repository.OptionRepository;
 import groovy.util.logging.Log4j2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,50 @@ import java.util.stream.Collectors;
 public class AccommodationServiceImpl implements AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
+    private final MemberRepository memberRepository;
+    private final OptionRepository optionRepository;
+
+    @Override
+    @Transactional
+    public Accommodation registerAccommodation(AccommodationDTO accommodationDTO) {
+        // Member 찾기
+        Member member = memberRepository.findByEmail(accommodationDTO.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Member not found or not authorized"));
+
+        // Accommodation 엔티티 생성
+        Accommodation accommodation = Accommodation.builder()
+                .accommodationName(accommodationDTO.getAccommodationName())
+                .postal(accommodationDTO.getPostal())
+                .sellerName(member.getName()) // Since it's a 1:1 relation, we can get the name directly
+                .address(accommodationDTO.getAddress())
+                .count(accommodationDTO.getCount())
+                .region(accommodationDTO.getRegion())
+                .tel(accommodationDTO.getTel())
+                .content(accommodationDTO.getContent())
+                .intro(accommodationDTO.getIntro())
+                .accommodationType(accommodationDTO.getAccommodationType())
+                .member(member)
+                .build();
+
+        // 이미지 추가
+        for (String imgFile : accommodationDTO.getImgFiles()) {
+            AccommodationImg img = new AccommodationImg();
+            img.setImgFile(imgFile);
+            accommodation.addImage(img);
+        }
+
+        // 옵션 추가
+        for (OptionDTO optionDTO : accommodationDTO.getOptionDTO()) {
+            Option option = optionRepository.findByOptionName(optionDTO.getOptionName())
+                    .orElseThrow(() -> new EntityNotFoundException("Option not found"));
+            AccommodationOption accommodationOption = new AccommodationOption();
+            accommodationOption.setOption(option);
+            accommodation.addAccommodationOption(accommodationOption);
+        }
+
+        // Accommodation 저장
+        return accommodationRepository.save(accommodation);
+    }
 
     @Override
     public AccommodationDTO modifyAccommodationDetails(AccommodationDTO accommodationDTO) {
@@ -54,6 +99,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         return entityToDto(accommodation);
     }
 
+
     @Override
     public AccommodationDTO entityToDto(Accommodation accommodation) {
 
@@ -65,7 +111,7 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         // 옵션 정보 변환
         List<OptionDTO> optionList = accommodation.getAccommodationOptions().stream()
-                .map(option -> new OptionDTO(option.getOption().getOptionName()))
+                .map(option -> new OptionDTO(option.getAono(), option.getOption().getOptionName()))
                 .collect(Collectors.toList());
 
         AccommodationDTO accommodationDTO = AccommodationDTO.builder()

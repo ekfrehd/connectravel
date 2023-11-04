@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OptionDTO {
 
+    private Long ono;
+
     private String optionName; // 예: "세탁기", "와이파이" 등
 
 }

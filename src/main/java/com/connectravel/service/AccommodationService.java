@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 public interface AccommodationService {
 
+    Accommodation registerAccommodation(AccommodationDTO accommodationDTO);
+
     AccommodationDTO modifyAccommodationDetails(AccommodationDTO accommodationDTO);
     // 숙소의 상세 정보를 수정(현재는 이름, 주소만 수정 가능)
 
