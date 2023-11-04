@@ -20,9 +20,9 @@ public class AccommodationImgTest {
     @BeforeEach
     public void setUp() {
         accommodation = Accommodation.builder()
-                .name("Test Hotel")
+                .accommodationName("Test Hotel")
                 .postal(12345)
-                .adminName("John Doe")
+                .sellerName("John Doe")
                 .address("123 Test St")
                 .tel("010-1234-5678")
                 .content("Welcome to Test Hotel")

@@ -28,12 +28,10 @@ public class OptionRepositoryTest {
         // 초기 옵션 데이터 설정
         Option option1 = Option.builder()
                 .optionName("옵션1")
-                .optionCategory("카테고리1")
                 .build();
 
         Option option2 = Option.builder()
                 .optionName("옵션2")
-                .optionCategory("카테고리2")
                 .build();
 
         entityManager.persist(option1);
@@ -44,7 +42,6 @@ public class OptionRepositoryTest {
     void saveOption() {
         Option newOption = Option.builder()
                 .optionName("새 옵션")
-                .optionCategory("새 카테고리")
                 .build();
 
         Option savedOption = optionRepository.save(newOption);
@@ -62,7 +59,6 @@ public class OptionRepositoryTest {
         log.debug("찾은 옵션: {}", foundOption);
 
         assertThat(foundOption).isNotNull();
-        assertThat(foundOption.getOptionCategory()).isEqualTo("카테고리1");
     }
 
     @Test

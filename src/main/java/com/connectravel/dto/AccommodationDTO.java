@@ -2,8 +2,6 @@ package com.connectravel.dto;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -14,13 +12,13 @@ public class AccommodationDTO {
 
     private Long ano;
 
-    private String name;
+    private String accommodationName;
 
     private int postal;
 
     private String address;
 
-    private String adminName;
+    private String sellerName;
 
     private int count;
 

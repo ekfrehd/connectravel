@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
@@ -44,9 +43,9 @@ public class AccommodationRepositoryTest {
 
         // Accommodation 정보 생성
         Accommodation accommodation = Accommodation.builder()
-                .name("Test Accommodation")
+                .accommodationName("Test Accommodation")
                 .postal(12345)
-                .adminName(member.getName())
+                .sellerName(member.getName())
                 .email(member.getEmail())
                 .address("123 Test Street, Test City")
                 .count(0)
@@ -65,12 +64,10 @@ public class AccommodationRepositoryTest {
 
         // 옵션 2개 추가
         Option option1 = Option.builder()
-                .optionCategory("공용")
                 .optionName("wifi")
                 .build();
 
         Option option2 = Option.builder()
-                .optionCategory("공용")
                 .optionName("세탁기")
                 .build();
 
@@ -106,7 +103,6 @@ public class AccommodationRepositoryTest {
         log.debug("Saved Accommodation ID: {}", savedAccommodation.getAno());
         savedAccommodation.getImages().forEach(img -> log.debug("Image: {}", img.getImgFile()));
         savedAccommodation.getAccommodationOptions().forEach(opt -> log.debug("Option: {}", opt.getOption().getOptionName()));
-        savedAccommodation.getAccommodationOptions().forEach(opt -> log.debug("Option: {}", opt.getOption().getOptionCategory()));
     }
 
 
@@ -117,7 +113,7 @@ public class AccommodationRepositoryTest {
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform update test.");
 
         // 2. 숙박시설의 기본 정보 수정
-        loadedAccommodation.setName("Updated Accommodation Name");
+        loadedAccommodation.setAccommodationName("Updated Accommodation Name");
         loadedAccommodation.setTel("987-654-3210");
         
         // 3. 이미지 추가
@@ -127,7 +123,6 @@ public class AccommodationRepositoryTest {
 
         // 옵션 추가
         Option option3 = Option.builder()
-                .optionCategory("개인")
                 .optionName("에어컨")
                 .build();
         optionRepository.save(option3);
@@ -140,7 +135,7 @@ public class AccommodationRepositoryTest {
         Accommodation updatedAccommodation = accommodationRepository.save(loadedAccommodation);
 
         // 5. 검증
-        assertEquals("Updated Accommodation Name", updatedAccommodation.getName());
+        assertEquals("Updated Accommodation Name", updatedAccommodation.getAccommodationName());
         assertEquals("987-654-3210", updatedAccommodation.getTel());
         assertEquals(3, updatedAccommodation.getImages().size());
         assertEquals(3, updatedAccommodation.getAccommodationOptions().size());
@@ -148,7 +143,6 @@ public class AccommodationRepositoryTest {
         log.debug("Updated Accommodation ID: {}", updatedAccommodation.getAno());
         updatedAccommodation.getImages().forEach(img -> log.debug("Image: {}", img.getImgFile()));
         updatedAccommodation.getAccommodationOptions().forEach(opt -> log.debug("Option: {}", opt.getOption().getOptionName()));
-        updatedAccommodation.getAccommodationOptions().forEach(opt -> log.debug("Option: {}", opt.getOption().getOptionCategory()));
     }
 
     @Test // Accommodation 수정 테스트
@@ -158,7 +152,7 @@ public class AccommodationRepositoryTest {
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform update test.");
 
         // 2. 숙박시설의 기본 정보 수정
-        loadedAccommodation.setName("Updated Accommodation Name");
+        loadedAccommodation.setAccommodationName("Updated Accommodation Name");
         loadedAccommodation.setTel("987-654-3210");
 
         // 3. 기존의 이미지 수정
@@ -177,7 +171,7 @@ public class AccommodationRepositoryTest {
         Accommodation updatedAccommodation = accommodationRepository.save(loadedAccommodation);
 
         // 6. 수정이 잘 이루어졌는지 검증
-        assertEquals("Updated Accommodation Name", updatedAccommodation.getName());
+        assertEquals("Updated Accommodation Name", updatedAccommodation.getAccommodationName());
         assertEquals("987-654-3210", updatedAccommodation.getTel());
         if (!updatedAccommodation.getImages().isEmpty()) {
             assertEquals("updated_image1.jpg", updatedAccommodation.getImages().get(0).getImgFile());

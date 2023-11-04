@@ -21,6 +21,4 @@ public class Option {
 
     private String optionName;
 
-    private String optionCategory;
-
 }
