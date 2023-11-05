@@ -12,6 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -33,20 +37,21 @@ public class RoomServiceTest {
 
     @BeforeEach
     public void registerAccommodation() {
+
         Member member = Member.builder()
-                .name("TestName")
-                .nickName("TestNickName")
-                .email("TestEmail")
+                .name("roomName")
+                .nickName("roomNickName")
+                .email("roomEmail")
                 .build();
         memberRepository.save(member);
 
         // 옵션 2개 추가
         Option option1 = Option.builder()
-                .optionName("wifi")
+                .optionName("침대")
                 .build();
 
         Option option2 = Option.builder()
-                .optionName("세탁기")
+                .optionName("온돌")
                 .build();
 
         optionRepository.save(option1);
@@ -54,14 +59,14 @@ public class RoomServiceTest {
 
         // Accommodation 정보 생성
         Accommodation accommodation = Accommodation.builder()
-                .accommodationName("Test Accommodation")
+                .accommodationName("테스트 숙소")
                 .sellerName(member.getName())
                 .postal(12345)
-                .address("123 Test Street, Test City")
+                .address("제주도에 있어요")
                 .count(0)
-                .region("Seoul")
+                .region("제주")
                 .tel("123-456-7890")
-                .accommodationType("Hotel")
+                .accommodationType("게스트하우스")
                 .member(member)
                 .build();
 
@@ -89,6 +94,7 @@ public class RoomServiceTest {
     }
 
     @Test
+    @Transactional
     public void testCreateRoom() {
         RoomDTO newRoom = RoomDTO.builder()
                 .roomName("Test Room")
@@ -97,6 +103,8 @@ public class RoomServiceTest {
                 .build();
 
         RoomDTO createdRoom = roomService.createRoom(newRoom);
+
+        log.debug("Created Room : {} ", createdRoom);
         assertNotNull(createdRoom);
         assertEquals(newRoom.getRoomName(), createdRoom.getRoomName());
 
