@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html layout:decorate="~{fragments/layout1}"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{fragments/layout1}">
 
 <head>
-    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
           integrity="sha512-F2E+YYE1gkt0T5TVajAslgDfTEUQKtlu4ralVq78ViNxhKXQLrgQLLie8u1tVdG2vWnB3ute4hcdbiBtvJQh0g=="
-          referrerpolicy="no-referrer" rel="stylesheet"/>
-    <script crossorigin="anonymous"
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"
             integrity="sha512-dSI4QnNeaXiNEjX2N8bkb16B7aMu/8SI5/rE6NIa3Hr/HnWUO+EAZpizN2JQJrXuvU7z0HTgpBVk/sfGd0oW+w=="
-            referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <!-- 사용자 CSS 추가 -->
@@ -36,23 +36,23 @@
                             <div class="row details-contents-header">
                                 <div class="col-7">
                                     <div th:each="img, i : ${accommodationImgDTOS}">
-                                        <div class="details-contents-header-thumb"
-                                             th:if="${i.index == 0}">
-                                            <img height="356px" th:alt="${img.imgfile}"
-                                                 th:src="|/imgtest/${img.imgfile}|" width="816px"/>
-                                            <a class="more-photos gallery-popup-two"
-                                               th:href="|/imgtest/${img.imgfile}|"> <i class="las la-plus"></i> 더 많은
+                                        <div th:if="${i.index == 0}"
+                                             class="details-contents-header-thumb">
+                                            <img th:src="|/imgtest/${img.imgFile}|" th:alt="${img.imgFile}"
+                                                 width="816px" height="356px"/>
+                                            <a th:href="|/imgtest/${img.imgFile}|"
+                                               class="more-photos gallery-popup-two"> <i class="las la-plus"></i> 더 많은
                                                 이미지 보기 </a>
                                         </div>
-                                        <div style="display: none;" th:if="${i.index > 0}">
-                                            <a class="gallery-popup-two" th:href="|/imgtest/${img.imgfile}|"></a>
+                                        <div th:if="${i.index > 0}" style="display: none;">
+                                            <a th:href="|/imgtest/${img.imgFile}|" class="gallery-popup-two"></a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-5">
                                     <span class="hotel-view-contents-review"> <i class="las la-star"></i> [[${accommodation.grade}]] <span
-                                            class="hotel-view-contents-review-count"> ([[${accommodation.reviewcount}]]) </span> </span>
-                                    <h3 class="hotel-view-contents-title"> [[${accommodation.name}]] </h3>
+                                            class="hotel-view-contents-review-count"> ([[${accommodation.reviewCount}]]) </span> </span>
+                                    <h3 class="hotel-view-contents-title"> [[${accommodation.accommodationName}]] </h3>
                                     <span class="hotel-view-contents-location-icon"> <i
                                             class="las la-map-marker-alt"></i> </span>
                                     <span class="hotel-view-contents-location-para"> [[${accommodation.address}]]  </span>
@@ -68,7 +68,7 @@
                                         <li data-tab="reviews"> 리뷰</li>
                                     </ul>
 
-                                    <div class="tab-content-item active" id="maps">
+                                    <div id="maps" class="tab-content-item active">
                                         <div class="maps-tab-contents">
                                             <div class="hotel-view-contents-location mt-2">
                                         <span class="hotel-view-contents-location-icon"> <i
@@ -76,8 +76,8 @@
                                                 <span class="hotel-view-contents-location-para"> [[${accommodation.address}]]  </span>
                                             </div>
                                             <div id="map" style="max-width:1000px;height:400px;"></div>
-                                            <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=524ae0cfbaecff9b3b0e658301ce5f94&libraries=services,clusterer"
-                                                    type="text/javascript"></script>
+                                            <script type="text/javascript"
+                                                    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=524ae0cfbaecff9b3b0e658301ce5f94&libraries=services,clusterer"></script>
                                             <script th:inline="javascript">
                                                 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                                                     mapOption = {
@@ -99,7 +99,7 @@
                                                 map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
                                                 var accommodationAddress = /*[[${accommodation.address}]]*/ "";
-                                                var accommodationName = /*[[${accommodation.name}]]*/ "";
+                                                var accommodationName = /*[[${accommodation.accommodationName}]]*/ "";
 
                                                 var geocoder = new kakao.maps.services.Geocoder();
 
@@ -130,20 +130,20 @@
                                         </div>
                                     </div>
 
-                                    <div class="tab-content-item" id="about">
+                                    <div id="about" class="tab-content-item">
                                         <div class="about-tab-contents">
                                             <p th:utext="${accommodation.content}"/>
                                         </div>
                                     </div>
 
-                                    <div class="tab-content-item" id="reviews">
+                                    <div id="reviews" class="tab-content-item">
                                         <div class="review-tab-contents">
                                             <div class="review-tab-contents-single">
                                                 <span class="hotel-view-contents-review"> <i class="las la-star"></i> [[${accommodation.grade}]]</span>
-                                                <span class="hotel-view-contents-review-count"> 총 [[${accommodation.reviewcount}]]건의 리뷰 </span>
+                                                <span class="hotel-view-contents-review-count"> 총 [[${accommodation.reviewCount}]]건의 리뷰 </span>
                                             </div>
-                                            <div class="border-bottom"
-                                                 th:each="dto : ${pageResultDTO.dtoList}" th:if="dto != null">
+                                            <div th:each="dto : ${pageResultDTO.dtoList}"
+                                                 th:if="dto != null" class="border-bottom">
 
 
                                                 <div class="review-tab-contents-author mt-4">
@@ -162,20 +162,20 @@
                                                 <div th:each="imgEntry : ${reviewBoardImgMap.entrySet()}"
                                                      th:if="${imgEntry.key == dto.rbno}">
                                                     <div th:each="img, iterStat : ${imgEntry.value}"
-                                                         th:if="${img != null and img.imgfile != null}">
+                                                         th:if="${img != null and img.imgFile != null}">
                                                         <div th:if="${iterStat.index == 0}">
                                                             <div th:id="'gallery-' + ${dto.rbno}">
-                                                                <a th:href="|/imgtest/${img.imgfile}|">
-                                                                    <img class="img-fluid"
-                                                                         style="width:150px; height: auto;"
-                                                                         th:src="|/imgtest/${img.imgfile}|"/>
+                                                                <a th:href="|/imgtest/${img.imgFile}|">
+                                                                    <img th:src="|/imgtest/${img.imgFile}|"
+                                                                         class="img-fluid"
+                                                                         style="width:150px; height: auto;"/>
                                                                 </a>
                                                             </div>
                                                         </div>
                                                         <div th:if="${iterStat.index > 0}">
-                                                            <a href="#" style="display: none;"
+                                                            <a href="#" th:href="|/imgtest/${img.imgFile}|"
                                                                th:attr="data-gallery-id='gallery-' + ${dto.rbno}"
-                                                               th:href="|/imgtest/${img.imgfile}|"></a>
+                                                               style="display: none;"></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -192,8 +192,8 @@
                                                         <ul class="pagination-list list-style-none">
                                                             <!-- 'Previous' 버튼 수정 -->
                                                             <li th:class="${pageResultDTO.prev} ? 'pagination-list-item-prev' : 'pagination-list-item-prev disabled'">
-                                                                <a class="pagination-list-item-button"
-                                                                   th:href="@{/product/{ano}(ano=${accommodation.ano}, page=${pageResultDTO.page - 1})}"> Prev </a>
+                                                                <a th:href="@{/product/{ano}(ano=${accommodation.ano}, page=${pageResultDTO.page - 1})}"
+                                                                   class="pagination-list-item-button"> Prev </a>
                                                             </li>
 
                                                             <!-- 페이지네이션 시작 페이지 및 끝 페이지 계산 -->
@@ -201,12 +201,12 @@
                                                                     th:with="startPage=${pageResultDTO.page - 5}, endPage=${pageResultDTO.page + 5}">
 
                                                                 <!-- 시작 페이지부터 끝 페이지까지 페이지 목록 생성 -->
-                                                                <li th:class="${pageResultDTO.page == page} ? 'pagination-list-item active' : 'pagination-list-item'"
-                                                                    th:each="page: ${#numbers.sequence(1, pageResultDTO.totalPage)}"
-                                                                    th:if="${page >= startPage and page <= endPage}">
-                                                                    <a class="pagination-list-item-link"
-                                                                       th:href="@{/product/{ano}(ano=${accommodation.ano}, page=${page})}"
-                                                                       th:onclick="'changePage(' + ${page} + ')'">
+                                                                <li th:each="page: ${#numbers.sequence(1, pageResultDTO.totalPage)}"
+                                                                    th:if="${page >= startPage and page <= endPage}"
+                                                                    th:class="${pageResultDTO.page == page} ? 'pagination-list-item active' : 'pagination-list-item'">
+                                                                    <a th:href="@{/product/{ano}(ano=${accommodation.ano}, page=${page})}"
+                                                                       th:onclick="'changePage(' + ${page} + ')'"
+                                                                       class="pagination-list-item-link">
                                                                         [[${page}]] </a>
                                                                 </li>
 
@@ -214,8 +214,8 @@
 
                                                             <!-- 'Next' 버튼 수정 -->
                                                             <li th:class="${pageResultDTO.next} ? 'pagination-list-item-next' : 'pagination-list-item-next disabled'">
-                                                                <a class="pagination-list-item-button disabled"
-                                                                   th:href="@{/product/{ano}(ano=${accommodation.ano}, page=${pageResultDTO.page + 1})}">
+                                                                <a th:href="@{/product/{ano}(ano=${accommodation.ano}, page=${pageResultDTO.page + 1})}"
+                                                                   class="pagination-list-item-button disabled">
                                                                     Next </a>
                                                             </li>
                                                         </ul>
@@ -229,15 +229,15 @@
                         </div>
                         <div class="hotel-view bg-white radius-20 mt-4">
                             <div class="row-cols-md-4" style="margin-left: 20px;">
-                                <form class="single-shop-left-inner mt-4" id="daterange"
-                                      onsubmit="disableDaterangeInput()">
-                                    <input name="StartDate" th:value="${date.StartDate}" type="hidden"/>
-                                    <input name="EndDate" th:value="${date.EndDate}" type="hidden"/>
+                                <form id="daterange" onsubmit="disableDaterangeInput()"
+                                      class="single-shop-left-inner mt-4">
+                                    <input type="hidden" name="startDate" th:value="${date.startDate}"/>
+                                    <input type="hidden" name="endDate" th:value="${date.endDate}"/>
                                     <ul class="single-shop-left-list active-list list-style-none">
                                         <li class="item-search">
-                                            <input class="form--control" name="daterange" type="text"/>
+                                            <input type="text" class="form--control" name="daterange"/>
                                             <div class="item-search-icon">
-                                                <button class="btn" id="submitBtn" type="submit"><i
+                                                <button id="submitBtn" type="submit" class="btn"><i
                                                         class="las la-search"></i></button>
                                             </div>
                                         </li>
@@ -245,19 +245,19 @@
                                 </form>
                             </div>
                             <div class="hotel-view-flex" th:each="dto : ${R_list}">
-                                <img th:height="150px" th:if="${dto[1] != null}" th:src="'/imgtest/' + ${dto[1]}"
-                                     th:width="280px">
+                                <img th:src="'/imgtest/' + ${dto[1]}" th:width="280px" th:height="150px"
+                                     th:if="${dto[1] != null}">
                                 <div class="no-image" th:if="${dto[1] == null}">No Image</div>
 
                                 <div class="hotel-view-contents">
                                     <div class="hotel-view-contents-header">
                                         <div class="hotel-view-contents-header-flex d-flex flex-wrap gap-3 align-items-center justify-content-between">
                                             <h3 class="hotel-view-contents-title">
-                                                [[${dto[0].room_name}]]
+                                                [[${dto[0].roomName}]]
                                             </h3>
                                             <div class="btn-wrapper" th:if="${dto[2] == null}">
-                                                <a class="cmn-btn btn-bg-1 btn-small"
-                                                   th:href="@{/reservation/register(rno=${dto[0].rno},StartDate=${date.StartDate},EndDate=${date.EndDate})}"> 예약하기 </a>
+                                                <a th:href="@{/reservation/register(rno=${dto[0].rno},startDate=${date.startDate},endDate=${date.endDate})}"
+                                                   class="cmn-btn btn-bg-1 btn-small"> 예약하기 </a>
                                             </div>
                                             <div class="cmn-btn btn-wrapper" th:if="${dto[2] != null}">
                                                 <div class="btn btn-danger">예약불가</div>
@@ -266,20 +266,20 @@
                                     </div>
                                     <div class="hotel-view-contents-middle">
                                         <div class="hotel-view-contents-flex">
-                                            <a data-bs-toggle="modal" href="#"
+                                            <a href="#" data-bs-toggle="modal"
                                                th:attr="data-bs-target='#roomModal' + ${dto[0].rno}">
                                                 <p>객실 정보보기</p>
                                             </a>
                                         </div>
                                         <!-- Modal -->
-                                        <div class="modal" tabindex="-1" th:attr="aria-labelledby='#roomModal' + ${dto[0].rno}"
-                                             th:id="'roomModal' + ${dto[0].rno}">
+                                        <div class="modal" tabindex="-1" th:id="'roomModal' + ${dto[0].rno}"
+                                             th:attr="aria-labelledby='#roomModal' + ${dto[0].rno}">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">객실 정보</h5>
-                                                        <button aria-label="Close" class="btn-close"
-                                                                data-bs-dismiss="modal" type="button">
+                                                        <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true"></span>
                                                         </button>
                                                     </div>
@@ -287,8 +287,8 @@
                                                         <p th:utext="${dto[0].content}"/>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button class="btn btn-secondary" data-bs-dismiss="modal"
-                                                                type="button">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">
                                                             닫기
                                                         </button>
                                                     </div>
@@ -318,8 +318,8 @@
 
     <script>
         $(function () {
-            let startDate = $('input[name="StartDate"]').val();
-            let endDate = $('input[name="EndDate"]').val();
+            let startDate = $('input[name="startDate"]').val();
+            let endDate = $('input[name="endDate"]').val();
 
             // Check if the dates are valid
             if (!moment(startDate, 'YYYY-MM-DD', true).isValid()) {
@@ -337,8 +337,8 @@
                 startDate = start.format('YYYY-MM-DD');
                 endDate = end.format('YYYY-MM-DD');
 
-                $('input[name="StartDate"]').val(startDate);
-                $('input[name="EndDate"]').val(endDate);
+                $('input[name="startDate"]').val(startDate);
+                $('input[name="endDate"]').val(endDate);
             });
         });
 

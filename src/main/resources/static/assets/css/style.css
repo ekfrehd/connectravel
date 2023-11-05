@@ -6809,7 +6809,7 @@ span {
 }
 
 .navbar-padding {
-    padding: 20px 0;
+    padding: 17px 0;
 }
 
 .navbar-area {
@@ -6833,6 +6833,7 @@ span {
 
 .navbar-area.navbar-border {
     border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+    background: #0d6efd;
 }
 
 .navbar-area.white-nav .nav-container .navbar-collapse .navbar-nav li {
@@ -6968,6 +6969,7 @@ span {
     padding: 10px 30px 10px 0;
     -webkit-transition: all 0.3s ease-in;
     transition: all 0.3s ease-in;
+    color: #fff;
 }
 
 @media (min-width: 1400px) and (max-width: 1599.98px) {
@@ -7229,6 +7231,10 @@ span {
     gap: 10px;
 }
 
+.nav-link {
+    color: #FFFFFF;
+}
+
 .navbar-right-flex {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -7243,7 +7249,7 @@ span {
     display: inline-block;
     font-size: 16px;
     font-weight: 500;
-    color: var(--heading-color);
+    color: #FFF;
     -webkit-transition: 0.2s;
     transition: 0.2s;
 }

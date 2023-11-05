@@ -107,9 +107,9 @@
                                     </thead>
                                     <tbody>
                                     <tr class="table-light" th:each="dto : ${result.dtoList}">
-                                        <td th:text="${dto.bno}"></td>
+                                        <td th:text="${dto.qbno}"></td>
                                         <td>
-                                            <a class="text-dark" th:href="@{/qna/read(bno = ${dto.bno},
+                                            <a class="text-dark" th:href="@{/qna/read(qbno = ${dto.qbno},
                     page= ${result.page},
                     type=${pageRequestDTO.type} ,
                     keyword = ${pageRequestDTO.keyword})}" th:text="${dto.title}">[[${dto.title}]]</a>

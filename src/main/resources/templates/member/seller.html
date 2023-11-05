@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html layout:decorate="~{fragmentsAdmin/layout}"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{fragmentsAdmin/layout}">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -30,29 +30,31 @@
 
     <div class="card" style="max-width: 450px; margin: 0 auto; margin-top: 75px; padding: 30px;">
         <div class="card-body">
-            <form action="/member/seller" method="post" role="form">
+            <form action="/member/seller" role="form" method="post">
                 <div class="form-group">
-                    <p th:if="${errorMessage}" th:text="${errorMessage}"></p>
+                    <p th:text="${errorMessage}" th:if="${errorMessage}"></p>
                 </div>
-                <p> 숙박 업소 등록전에 전화번호 인증이 필요합니다.</p>
+                <p> 숙박 업소 등록 전에 전화번호 인증이 필요합니다.</p>
                 <div class="form-group">
-                    <label th:for="email">이메일주소</label>
-                    <input class="form-control" name="email" th:if="${memberFormDto.email}" th:readonly="${true}" th:value="${memberFormDto.email}" type="email"/>
+                    <label th:for="email">이메일 주소</label>
+                    <input th:if="${memberDTO.email}" type="email" class="form-control" th:value="${memberDTO.email}" th:readonly="${true}" name="email" />
                 </div>
                 <div class="form-group">
-                    <label th:for="name">이름</label>
-                    <input class="form-control" name="name" placeholder="이름을 입력해주세요" required type="text">
+                    <label th:for="username">이름</label>
+                    <input type="text" name="username" class="form-control" placeholder="이름을 입력 해주세요" required>
                 </div>
                 <div class="form-group">
                     <label th:for="tel">전화번호</label>
                     <div style="display: flex;">
-                        <input class="form-control" maxlength="3" name="tel1" required style="flex: 1;" th:value="*{memberFormDto.tel1}" type="tel">&nbsp;&nbsp;
-                        <input class="form-control" maxlength="4" name="tel2" required style="flex: 1;" th:value="*{memberFormDto.tel2}" type="tel">&nbsp;&nbsp;
-                        <input class="form-control" maxlength="4" name="tel3" required style="flex: 1;" th:value="*{memberFormDto.tel3}" type="tel">
+                        <input type="tel" th:value="*{memberDTO.tel1}" name="tel1" class="form-control" maxlength="3" required style="flex: 1;">&nbsp;&nbsp;
+                        <input type="tel" th:value="*{memberDTO.tel2}" name="tel2" class="form-control" maxlength="4" required style="flex: 1;">&nbsp;&nbsp;
+                        <input type="tel" th:value="*{memberDTO.tel3}" name="tel3" class="form-control" maxlength="4" required style="flex: 1;">
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn btn-dark" type="submit">등록하기</button>
+                    <button type="submit" class="btn btn-dark">
+                        등록
+                    </button>
                 </div>
             </form>
         </div>

@@ -1,24 +1,19 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.ImgDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ImgService {
-    void remove(Long ino);
 
-    ImgDTO get(Long ino);
+    void AccommodationRegister(MultipartFile file, Long ano);
 
-    void update(Long ino, MultipartFile file);
-/*
-    public void RoomRegister(MultipartFile file, Long rno);
+    void addRoomImg(MultipartFile file, Long rno);
 
-    public void ReviewBoardRegister(MultipartFile file, Long rbno);
+    void addReviewBoardImg(MultipartFile file, Long rbno);
 
-    public void AccommodationRegister(MultipartFile file, Long ano);*/
+    void addAdminBoardImg(MultipartFile file, Long bno);
 
-    //public void AdminBoardRegister(MultipartFile file, Long bno);
+    void addTourBoardImg(MultipartFile file, Long tbno);
 
-    void TourBoardRegister(MultipartFile file, Long tbno);
+    void addTourBoardReviewImg(MultipartFile file, Long tbrno);
 
-    void TourBoardReviewRegister(MultipartFile file, Long tbrno);
 }

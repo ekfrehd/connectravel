@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html layout:decorate="~{fragments/layout1}"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{fragments/layout1}">
 
-<!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
         .fieldError {
@@ -12,109 +11,37 @@
     </style>
 </th:block>
 
-<!-- 사용자 스크립트 추가 -->
-<th:block layout:fragment="script">
+<div layout:fragment="content" style="height: 44vh;">
+    <div class="container d-flex justify-content-center">
+        <div style="width:700px; margin-top: 30px;">
+            <form class="form-horizontal" th:action="@{/member/join}" method="post">
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">아이디</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control input-large" name="username" id="username" placeholder="username" required>
+                    </div>
+                </div>
 
-    <script th:inline="javascript">
-        $(document).ready(function () {
-            var errorMessage = [[${errorMessage}]];
-            if (errorMessage != null) {
-                alert(errorMessage);
-            }
-        });
-    </script>
-
-</th:block>
-
-<div layout:fragment="content">
-
-    <div class="container">
-        <div class="login-wrapper-flex">
-            <div class="login-wrapper-contents login-padding">
-                <form action="/member/join"
-                      class="login-wrapper-form custom-form padding-top-20" id="join" method="post" th:object="${memberFormDto}">
-                    <p class="text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></p>
-                    <p class="text-danger" id="checkboxError"></p>
-                    <div class="single-input mt-4">
-                        <label class="label-title mb-3" th:for="email"> 이메일 </label>
-                        <input class="form--control" name="email" th:if="${param.email}" th:readonly="${true}" th:value="${param.email}" type="email"/>
-                        <input class="form--control" name="email" placeholder="이메일을 입력해주세요" required th:field="*{email}" th:unless="${param.email}" type="email"/>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">비밀번호</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control input-large" name="password" id="password" placeholder="Password" data-minlength="6" required>
                     </div>
-                    <div class="single-input mt-4">
-                        <label th:for="name">이름</label>
-                        <input class="form--control" placeholder="이름을 입력해주세요" required th:field="*{name}" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-sm-2 control-label">이메일</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control input-large" name="email" id="email" placeholder="이메일" required>
                     </div>
-                    <div class="single-input mt-4">
-                        <label th:for="nickName">닉네임</label>
-                        <input class="form--control" placeholder="닉네임을 입력해주세요" required th:field="*{nickName}" type="text">
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-1 col-sm-10">
+                        <button type="Submit" class="btn btn-dark btn-lg">가입하기</button>
                     </div>
-                    <div class="single-input mt-4">
-                        <label th:for="tel">전화번호</label>
-                        <div style="display: flex;">
-                            <input class="form--control" maxlength="3" name="tel1" required style="flex: 1;" type="tel">&nbsp;&nbsp;
-                            <input class="form--control" maxlength="4" name="tel2" required style="flex: 1;" type="tel">&nbsp;&nbsp;
-                            <input class="form--control" maxlength="4" name="tel3" required style="flex: 1;" type="tel">
-                        </div>
-                    </div>
-                    <div class="input-flex-item">
-                        <div class="single-input mt-4">
-                            <label class="label-title mb-3" th:for="password"> 비밀번호 생성 </label>
-                            <input class="form--control" placeholder="Type Password" th:field="*{password}" type="password">
-                            <div class="icon toggle-password">
-                                <div class="show-icon"><i class="las la-eye-slash"></i></div>
-                                <span class="hide-icon"> <i class="las la-eye"></i> </span>
-                            </div>
-                        </div>
-                        <div class="single-input mt-4">
-                            <label class="label-title mb-3"> 비밀번호 확인 </label>
-                            <input class="form--control" id="passwordConfirm" placeholder="Confirm Password" type="password">
-                            <div class="icon toggle-password">
-                                <div class="show-icon"><i class="las la-eye-slash"></i></div>
-                                <span class="hide-icon"> <i class="las la-eye"></i> </span>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-danger" id="passwordError"></p>
-                    <div class="checkbox-inline mt-4">
-                        <input class="check-input" id="check15" type="checkbox">
-                        <label class="checkbox-label" for="check15">TODAYTONIGHT의 <a class="color-one" href="javascript:void(0)">이용약관</a>과 <a class="color-one" href="javascript:void(0)">위치기반서비스</a>,
-                            <a class="color-one" href="javascript:void(0)"> 개인정보 수집 및 이용 </a>에 동의합니다. </label>
-                    </div>
-                    <button class="submit-btn w-100 mt-4" type="submit">회원가입</button>
-                    <span class="account color-light mt-3"> 이미 계정이 있으신가요? <a class="color-one" href="/member/login"> 로그인 </a> </span>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#join').on('submit', function (e) {
-                var password = $('#password').val();
-                var passwordConfirm = $('#passwordConfirm').val();
-
-                // 비밀번호 비교
-                if (password !== passwordConfirm) {
-                    $('#passwordError').text('비밀번호가 일치하지 않습니다.');
-                    e.preventDefault(); // 폼 제출을 중지합니다.
-                    return;
-                } else {
-                    $('#passwordError').text('');
-                }
-
-                // 체크 확인
-                var isChecked = $('#check15').is(':checked');
-                if (!isChecked) {
-                    $('#checkboxError').text('이용약관, 위치기반서비스, 개인정보 수집 및 이용에 동의해주세요.');
-                    e.preventDefault(); // 폼 제출을 중지합니다.
-
-                } else {
-                    $('#checkboxError').text('');
-                }
-            });
-        });
-    </script>
-
 </div>
 
 </html>

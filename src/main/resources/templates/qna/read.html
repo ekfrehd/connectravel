@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html layout:decorate="~{fragments/layout1}"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{fragments/layout1}">
+
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -49,19 +50,19 @@
                 <div class="dashboard-right-contents mt-4 mt-lg-0">
                     <div class="dashboard-reservation">
                         <div class="single-reservation bg-white base-padding">
-                            <h4 class="card-title" style="left: 0;" th:text="${dto.title}"></h4>
-                            <p class="card-text" style="text-align: right" th:text="${dto.writerName}"></p>
+                            <h4 class="card-title" th:text="${dto.title}" style="left: 0;"></h4>
+                            <p class="card-text" th:text="${dto.writerName}" style="text-align: right"></p>
                             <div style="width: 100%; border-bottom: #000000 solid 1px;"></div>
                             <p class="card-text" style="margin-top: 20px;">[[${dto.content}]]</p>
                             <p style="margin-top: 20px; text-align: right;">작성일 : [[${#temporals.format(dto.regDate,
                                 'yyyy/MM/dd HH:mm:ss')}]]<br/>
                                 수정일 : [[${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}]]</p>
-                            <a th:href="@{/qna/modify(bno = ${dto.bno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
-                                <button class="btn btn-primary" type="button">Modify</button>
+                            <a th:href="@{/qna/modify(qbno = ${dto.qbno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
+                                <button type="button" class="btn btn-primary">Modify</button>
                             </a>
 
                             <a th:href="@{/qna/list(page=${requestDTO.page} , type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
-                                <button class="btn btn-info" type="button">List</button>
+                                <button type="button" class="btn btn-info">List</button>
                             </a>
                             <div style="width: 100%; border-bottom: #000000 solid 1px; margin-top: 20px;"></div>
                             <div class="mt-4">
@@ -71,41 +72,41 @@
                             </div>
                             <form class="mt-4">
                                 <div class="form-group">
-                                    <input class="form-control" name="replyText" placeholder="Reply Text..."
-                                           type="text">
+                                    <input class="form-control" type="text" name="replyText"
+                                           placeholder="Reply Text...">
                                 </div>
-                                <button class="btn btn-primary addReply" style="margin-top: 15px;" type="button">Add
+                                <button type="button" class="btn btn-primary addReply" style="margin-top: 15px;">Add
                                     Reply
                                 </button>
                             </form>
 
-                            <div class="modal" role="dialog" tabindex="-1">
+                            <div class="modal" tabindex="-1" role="dialog">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Modal title</h5>
 
-                                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <input class="form-control" name="replyText" placeholder="Reply Text..."
-                                                       type="text">
+                                                <input class="form-control" type="text" name="replyText"
+                                                       placeholder="Reply Text...">
                                             </div>
                                             <div class="form-group">
-                                                <input class="form-control" name="replyer" placeholder="Replyer"
-                                                       readonly type="text">
-                                                <input name="rno" type="hidden">
+                                                <input class="form-control" type="text" name="replyer"
+                                                       placeholder="Replyer" readonly>
+                                                <input type="hidden" name="qrno">
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button class="btn btn-danger replyRemove" type="button">Remove</button>
-                                            <button class="btn btn-warning replyModify" type="button">Modify</button>
-                                            <button class="btn btn-primary replySave" type="button">Save</button>
-                                            <button class="btn btn-outline-secondary replyClose" data-dismiss="modal"
-                                                    type="button">
+                                            <button type="button" class="btn btn-danger replyRemove">Remove</button>
+                                            <button type="button" class="btn btn-warning replyModify">Modify</button>
+                                            <button type="button" class="btn btn-primary replySave">Save</button>
+                                            <button type="button" class="btn btn-outline-secondary replyClose"
+                                                    data-dismiss="modal">
                                                 Close
                                             </button>
                                         </div>
@@ -124,7 +125,7 @@
     <script th:inline="javascript">
         $(document).ready(function () {
 
-            var bno = [[${dto.bno}]];
+            var qbno = [[${dto.qbno}]];
 
 
             //날짜 처리를 위한 함수
@@ -140,14 +141,14 @@
 
             // 특정한 게시글의 댓글을 처리하는 함수
             function loadJSONData() {
-                $.getJSON('/qna/qnareply/' + bno, function (arr) {
+                $.getJSON('/qna/qnareply/' + qbno, function (arr) {
                     var replyList = $(".replyList");
                     console.log(replyList);
                     replyList.empty();
 
 
                     $.each(arr, function (idx, qnaReply) {
-                        var replyItem = $("<div>").addClass("list-group-item d-flex justify-content-between align-items-center").data("rno", qnaReply.rno);
+                        var replyItem = $("<div>").addClass("list-group-item d-flex justify-content-between align-items-center").data("qrno", qnaReply.qrno);
                         var replyText = $("<span>").addClass("replyText").text(qnaReply.text);
                         var replyTextEnd = $("</span>")
                         var replyer = $("<span>").addClass("replyer").text(qnaReply.replyer);
@@ -165,7 +166,7 @@
 
             $(".addReply").on("click", function (e) {
                 var qnaReply = {
-                    bno: bno,
+                    qbno: qbno,
                     text: $('input[name="replyText"]').val(),
                     replyer: $('input[name="replyer"]').val()
                 }
@@ -179,7 +180,7 @@
                     success: function (data) {
                         console.log(data);
 
-                        var newRno = parseInt(data);
+                        var newQrno = parseInt(data);
 
                         alert("댓글이 등록되었습니다.")
                         //댓글 입력하는 부분 초기화 시키기
@@ -196,7 +197,7 @@
             $(".replySave").click(function () {
 
                 var qnaReply = {
-                    bno: bno,
+                    qbno: qbno,
                     text: $('input[name="replyText"]').val(),
                     replyer: $('input[name="replyer"]').val()
                 }
@@ -210,9 +211,9 @@
                     success: function (data) {
                         console.log(data);
 
-                        var newRno = parseInt(data);
+                        var newQrno = parseInt(data);
 
-                        alert(newRno + "번 댓글이 등록되었습니다.")
+                        alert(newQrno + "번 댓글이 등록되었습니다.")
                         modal.modal('hide');
                         loadJSONData();
                     }
@@ -220,11 +221,11 @@
             });
 
             $('.replyList').on("click", ".list-group-item", function () {
-                var rno = $(this).data("rno");
+                var qrno = $(this).data("qrno");
 
                 $("input[name='replyText']").val($(this).find('.replyText').text());
                 $("input[name='replyer']").val($(this).find('.replyer').text());
-                $("input[name='rno']").val(rno);
+                $("input[name='qrno']").val(qrno);
 
                 $(".modal-footer .btn").hide();
                 $(".replyRemove, .replyModify, .replyClose").show();
@@ -232,20 +233,12 @@
                 modal.modal('show');
             });
 
-            $(".close").on("click", function () {
-                modal.modal('hide');
-            });
-
-            $(".replyClose").on("click", function () {
-                modal.modal('hide');
-            });
-
             $(".replyRemove").on("click", function () {
 
-                var rno = $("input[name='rno']").val(); //모달 창에 보이는 댓글 번호 - hidden처리되어 있음
+                var qrno = $("input[name='qrno']").val(); //모달 창에 보이는 댓글 번호 - hidden처리되어 있음
 
                 $.ajax({
-                    url: '/qna/' + rno,
+                    url: '/qna/' + qrno,
                     method: 'delete',
                     success: function (result) {
                         console.log("result: " + result);
@@ -260,18 +253,18 @@
 
             $(".replyModify").click(function () {
 
-                var rno = $("input[name='rno']").val();
+                var qrno = $("input[name='qrno']").val();
 
                 var qnaReply = {
-                    rno: rno,
-                    bno: bno,
+                    qrno: qrno,
+                    qbno: qbno,
                     text: $('input[name="replyText"]').val(),
-                    //replyer: $('input[name="replyer"]').val()
+                    replyer: $('input[name="replyer"]').val()
                 }
 
                 console.log(qnaReply);
                 $.ajax({
-                    url: '/qna/' + rno,
+                    url: '/qna/' + qrno,
                     method: 'put',
                     data: JSON.stringify(qnaReply),
                     contentType: 'application/json; charset=utf-8',

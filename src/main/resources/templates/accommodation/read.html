@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html layout:decorate="~{fragmentsAdmin/layout}"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      layout:decorate="~{fragmentsAdmin/layout}">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -59,15 +59,15 @@
             <table>
                 <tr>
                     <th>숙박업소 명</th>
-                    <td th:text="${dto.name}"></td>
+                    <td th:text="${dto.accommodationName}"></td>
                 </tr>
                 <tr>
                     <th>사업주 명</th>
-                    <td th:text="${dto.adminname}"></td>
+                    <td th:text="${dto.sellerName}"></td>
                 </tr>
                 <tr>
-                    <th>숙박업소 종류</th>
-                    <td th:text="${dto.category}"></td>
+                    <th>숙박업소  종류</th>
+                    <td th:text="${dto.accommodationType}"></td>
                 </tr>
                 <tr>
                     <th>숙박업소 전화번호</th>
@@ -99,15 +99,15 @@
                 </tr>
             </table>
             <div th:each="img : ${accommodationImgDTOS}">
-                 <span th:if="${img.accommodationDTO.ano == dto.ano}">
+                 <span th:if="${img.accommodation.ano == dto.ano}">
                     <br>
-                  <img th:alt="${img.img.imgfile}" th:src="'/imgtest/' + ${img.img.imgfile}"/>
+                  <img th:src="'/imgtest/' + ${img.imgFile}" th:alt="${img.imgFile}"/>
                     <br>
               </span>
             </div>
             <div class="button-container">
-                <button class="btn btn-dark" onclick="location.href='/seller/accommodation/update'" type="button">숙박정보수정</button>
-                <button class="btn btn-dark" onclick="location.href='/seller/accommodation/delete'" type="button">삭제
+                <button type="button" class="btn btn-dark" onclick="location.href='/seller/accommodation/update'">숙박정보수정</button>
+                <button type="button" class="btn btn-dark" onclick="location.href='/seller/accommodation/delete'">삭제
                 </button>
             </div>
         </div>

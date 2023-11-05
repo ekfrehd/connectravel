@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html layout:decorate="~{fragments/layout1}"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragments/layout1}">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -96,7 +97,7 @@
                             </ul>
                         </div>
 
-                        <div class="tab-content-item active" id="prev">
+                        <div id="prev" class="tab-content-item active">
                             <th:block th:each="rv : ${list}">
                                 <th:block th:with="acc=${accommodation[__${list.indexOf(rv)}__]}">
                                     <th:block th:if="${rv.StartDate} > ${Today} and ${rv.state} == true">
@@ -121,9 +122,9 @@
                                                                     <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
                                                                     <div th:each="img : ${accommodationImgDTOS}">
                                                             <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img style="width: 200px; height: auto; margin-bottom: 10px;"
+                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
                                                                      th:alt="${acc.name}"
-                                                                     th:src="'/imgtest/' + ${img.img.imgfile}"/>
+                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
                                                              </span>
                                                                     </div>
                                                                 </div>
@@ -153,7 +154,7 @@
                                                             <div class="single-reservation-details-item">
                                                                 <span class="single-reservation-details-subtitle"> 방이름 </span>
                                                                 <h5 class="single-reservation-details-title">
-                                                                    [[${rv.room.room_name}]] </h5>
+                                                                    [[${rv.room_id.room_name}]] </h5>
                                                             </div>
                                                             <div class="single-reservation-details-item">
                                                                 <span class="single-reservation-details-subtitle"> 예약날짜 </span>
@@ -179,12 +180,12 @@
                                                                 <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
                                                             </div>
                                                             <div class="single-reservation-btn">
-                                                                <form method="get"
-                                                                      onsubmit="return showConfirmation()"
-                                                                      style="display: inline" th:action="@{/reservation/cancel}">
-                                                                    <input name="rvno" th:value="${rv.rvno}"
-                                                                           type="hidden">
-                                                                    <button class="btn btn-danger" type="submit">
+                                                                <form style="display: inline"
+                                                                      th:action="@{/reservation/cancel}"
+                                                                      method="get" onsubmit="return showConfirmation()">
+                                                                    <input type="hidden" name="rvno"
+                                                                           th:value="${rv.rvno}">
+                                                                    <button type="submit" class="btn btn-danger">
                                                                         <i class="las la-exclamation-circle"></i>취소하기
                                                                     </button>
                                                                 </form>
@@ -208,7 +209,7 @@
                             </th:block>
                         </div>
 
-                        <div class="tab-content-item" id="end">
+                        <div id="end" class="tab-content-item">
                             <th:block th:each="rv : ${list}">
                                 <th:block th:with="acc=${accommodation[__${list.indexOf(rv)}__]}">
                                     <th:block th:if="${rv.StartDate} <= ${Today} and ${rv.state} == true">
@@ -233,9 +234,9 @@
                                                                     <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
                                                                     <div th:each="img : ${accommodationImgDTOS}">
                                                             <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img style="width: 200px; height: auto; margin-bottom: 10px;"
+                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
                                                                      th:alt="${acc.name}"
-                                                                     th:src="'/imgtest/' + ${img.img.imgfile}"/>
+                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
                                                              </span>
                                                                     </div>
                                                                 </div>
@@ -265,7 +266,7 @@
                                                             <div class="single-reservation-details-item">
                                                                 <span class="single-reservation-details-subtitle"> 방이름 </span>
                                                                 <h5 class="single-reservation-details-title">
-                                                                    [[${rv.room.room_name}]] </h5>
+                                                                    [[${rv.room_id.room_name}]] </h5>
                                                             </div>
                                                             <div class="single-reservation-details-item">
                                                                 <span class="single-reservation-details-subtitle"> 예약날짜 </span>
@@ -291,10 +292,10 @@
                                                                 <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
                                                             </div>
                                                             <div class="single-reservation-btn" th:if="${rv.existReview}==false">
-                                                                <form method="get"
-                                                                      style="display: inline"
-                                                                      th:action="@{/review/register/{rvno}(rvno=${rv.rvno})}">
-                                                                    <button class="btn btn-outline-primary" type="submit">리뷰쓰기</button>
+                                                                <form style="display: inline"
+                                                                      th:action="@{/review/register/{rvno}(rvno=${rv.rvno})}"
+                                                                      method="get">
+                                                                    <button type="submit" class="btn btn-outline-primary">리뷰쓰기</button>
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -307,7 +308,7 @@
                             </th:block>
                         </div>
 
-                        <div class="tab-content-item" id="cancel">
+                        <div id="cancel" class="tab-content-item">
                             <th:block th:each="rv : ${list}">
                                 <th:block th:with="acc=${accommodation[__${list.indexOf(rv)}__]}">
                                     <th:block th:if="${rv.state} == false">
@@ -332,9 +333,9 @@
                                                                     <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
                                                                     <div th:each="img : ${accommodationImgDTOS}">
                                                             <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img style="width: 200px; height: auto; margin-bottom: 10px;"
+                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
                                                                      th:alt="${acc.name}"
-                                                                     th:src="'/imgtest/' + ${img.img.imgfile}"/>
+                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
                                                              </span>
                                                                     </div>
                                                                 </div>
@@ -364,7 +365,7 @@
                                                             <div class="single-reservation-details-item">
                                                                 <span class="single-reservation-details-subtitle"> 방이름 </span>
                                                                 <h5 class="single-reservation-details-title">
-                                                                    [[${rv.room.room_name}]] </h5>
+                                                                    [[${rv.room_id.room_name}]] </h5>
                                                             </div>
                                                             <div class="single-reservation-details-item">
                                                                 <span class="single-reservation-details-subtitle"> 예약날짜 </span>

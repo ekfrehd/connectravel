@@ -14385,3 +14385,29 @@ File: scss
         display: block !important;
     }
 }
+
+/* 로고 */
+#logo {
+    background: url(../assets/img/로고.png);
+    width: 150px;
+    height: 25px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 가이드 버튼 수정 */
+#regButton {
+    position: absolute;
+    margin-left: 790px;
+    width: 58px;
+    height: 38px;
+}
+
+#mapButton {
+    position: absolute;
+    margin-left: 728px;
+    width: 58px;
+    height: 38px;
+}
+

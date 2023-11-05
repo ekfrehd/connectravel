@@ -1,17 +1,19 @@
 package com.connectravel.controller;
 
-import com.connectravel.dto.QnaReplyDTO;
-import com.connectravel.entity.Member;
-import com.connectravel.repository.MemberRepository;
+import com.connectravel.domain.dto.MemberDTO;
+import com.connectravel.domain.dto.QnaReplyDTO;
+import com.connectravel.domain.entity.Member;
+import com.connectravel.service.MemberService;
 import com.connectravel.service.QnaReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,49 +23,48 @@ import java.util.List;
 public class QnaReplyController {
 
     private final QnaReplyService qnaReplyService; //의존성 자동주입
-    @Autowired
-    private MemberRepository memberRepository; // Mmemer 조회가 필요하므로 추가
+    private final MemberService memberService;
 
     @GetMapping(value = "qnareply/{bno}")
     public ResponseEntity<List<QnaReplyDTO>> getListByBoard(@PathVariable("bno") Long bno) {
-
-        return new ResponseEntity<>(qnaReplyService.getList(bno), HttpStatus.OK);
-
+        return new ResponseEntity<>(qnaReplyService.getQnaRepliesByQbno(bno), HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<Long> register(@RequestBody QnaReplyDTO qnaReplyDTO, Authentication authentication) {
+    public ResponseEntity<Long> register(@AuthenticationPrincipal Member member, Principal principal, @RequestBody QnaReplyDTO qnaReplyDTO, Authentication authentication) {
 
-        // authentication.getName() : 로그인한 id나 email을 불러온다. (String 형식)
-        // 단 null(로그인 안한 경우)이면, NullPointException 오류가 발생하니 주의
-        String email = "1111@naver.com";
-        Member member = memberRepository.findByEmail(email);
+        String username = principal.getName();
+        MemberDTO memberDTO = memberService.getMember(member.getId());
 
-        //Member member = memberRepository.findByEmail(authentication.getName());
-
-        qnaReplyDTO.setReplyer(member.getEmail());
+       /* try {
+            // Code to fetch Member entity using email
+            // ...
+        } catch (EntityNotFoundException ex) {
+            log.error("Member not found for email: {}", member.getEmail());
+            // Handle the exception (e.g., return an error response or redirect)
+        }*/
 
         log.info(qnaReplyDTO);
 
-        Long rno = qnaReplyService.register(qnaReplyDTO);
+        Long qrno = qnaReplyService.createQnaReply(qnaReplyDTO);
 
-        return new ResponseEntity<>(rno, HttpStatus.OK);
+        return new ResponseEntity<>(qrno, HttpStatus.OK);
     }
 
-    @DeleteMapping("{rno}")
-    public ResponseEntity<String> remove(@PathVariable("rno") Long rno) {
-        log.info("RNO : " + rno);
+    @DeleteMapping("{qrno}")
+    public ResponseEntity<String> remove(@PathVariable("qrno") Long qrno) {
+        log.info("RNO : " + qrno);
 
-        qnaReplyService.remove(rno);
+        qnaReplyService.deleteQnaReply(qrno);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-    @PutMapping("{rno}")
+    @PutMapping("{qrno}")
     public ResponseEntity<String> modify(@RequestBody QnaReplyDTO qnaReplyDTO) {
         log.info(qnaReplyDTO);
 
-        qnaReplyService.modify(qnaReplyDTO);
+        qnaReplyService.updateQnaReply(qnaReplyDTO);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }

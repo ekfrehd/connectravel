@@ -2,8 +2,7 @@
 <html layout:decorate="~{fragments/layout1}"
       xmlns="http://www.w3.org/1999/html"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
@@ -257,8 +256,7 @@
                                                         </div>
                                                         <p th:utext="${dto.content}"></p>
                                                         <div class="mat-20">
-                                                            <form action="/tourreview/remove" method="post"
-                                                                  th:if="${dto.memberState}">
+                                                            <form action="/tourreview/remove" method="post">
                                                                 <input hidden="hidden" name="tbrno"
                                                                        th:value="${dto.tbrno}">
                                                                 <input hidden="hidden" name="tbno"
@@ -349,7 +347,7 @@
                         </div>
                         <!-- Comment area ends -->
                         <!-- Post Comment area Starts -->
-                        <!--<div class="comment-area color-two pat-50" sec:authorize="isAuthenticated()">-->
+                        <div class="comment-area color-two pat-50" sec:authorize="isAuthenticated()">
                         <form enctype="multipart/form-data" method="post" th:action="@{/tourreview/register}">
                             <input name="tbno" th:value="${tourboard.tbno}" type="hidden">
                             <h3 class="details-section-title"> 리뷰 쓰기 </h3>

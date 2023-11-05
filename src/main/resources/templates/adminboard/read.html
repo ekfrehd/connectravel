@@ -61,9 +61,11 @@
                             <p style="margin-top: 20px; text-align: right;">작성일 : [[${#temporals.format(dto.regDate,
                                 'yyyy/MM/dd HH:mm:ss')}]]<br/>
                                 수정일 : [[${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}]]</p>
-                            <a th:href="@{/adminboard/modify(bno = ${dto.bno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
+                            <a th:href="@{/adminboard/modify(abno = ${dto.abno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
                                 <button class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')"
                                         type="button">Modify
+                                </button>
+                                <!--<button class="btn btn-primary" type="button">Modify-->
                                 </button>
                             </a>
 
@@ -81,7 +83,7 @@
     <script th:inline="javascript">
         $(document).ready(function () {
 
-            var bno = [[${dto.bno}]];
+            var abno = [[${dto.abno}]];
 
 
             //날짜 처리를 위한 함수
@@ -97,7 +99,7 @@
 
             // 특정한 게시글의 댓글을 처리하는 함수
             function loadJSONData() {
-                $.getJSON('/adminboard/adminreply/' + bno, function (arr) {
+                $.getJSON('/adminboard/adminreply/' + abno, function (arr) {
                     var replyList = $(".replyList");
                     console.log(replyList);
                     replyList.empty();
@@ -122,7 +124,7 @@
 
             $(".addReply").on("click", function (e) {
                 var adminReply = {
-                    bno: bno,
+                    abno: abno,
                     text: $('input[name="replyText"]').val(),
                     replyer: $('input[name="replyer"]').val()
                 }
@@ -153,7 +155,7 @@
             $(".replySave").click(function () {
 
                 var adminReply = {
-                    bno: bno,
+                    abno: abno,
                     text: $('input[name="replyText"]').val(),
                     replyer: $('input[name="replyer"]').val()
                 }
@@ -213,7 +215,7 @@
 
                 var adminReply = {
                     rno: rno,
-                    bno: bno,
+                    abno: abno,
                     text: $('input[name="replyText"]').val(),
                     replyer: $('input[name="replyer"]').val()
                 }
@@ -241,6 +243,6 @@
     </script>
 </div>
 </div>
-
+</html>
 
 
