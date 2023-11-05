@@ -26,6 +26,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final MemberRepository memberRepository;
     private final OptionRepository optionRepository;
 
+
     @Override
     @Transactional
     public Accommodation registerAccommodation(AccommodationDTO accommodationDTO) {

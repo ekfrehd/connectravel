@@ -41,7 +41,7 @@ class AccommodationServiceTest {
     private EntityManager entityManager;
 
     @BeforeEach
-    public void setUp() {
+    public void registerAccommodation() {
         Member member = Member.builder()
                 .name("TestName")
                 .nickName("TestNickName")
@@ -150,17 +150,7 @@ class AccommodationServiceTest {
     }
 
 
-
    /* @Test
-    void removeAccommodation() {
-        boolean isRemoved = accommodationService.removeAccommodation(1L);
-
-        assertTrue(isRemoved);
-    }
-
-
-
-    @Test
     void listAllAccommodations() {
         List<AccommodationDTO> accommodations = accommodationService.listAllAccommodations();
 

@@ -95,33 +95,35 @@ class OptionServiceTest {
     @Test
     @Transactional
     void deleteOptionTest() {
-        // Given
+        // 초기 데이터 저장
         Option savedOption = optionRepository.save(option);
         assertNotNull(savedOption.getOno());
 
+        // 삭제 전 데이터 확인
         log.debug("Saved Option for delete: {}", savedOption);
 
-        // When
+        // 테스트 실행
         optionService.deleteOption(savedOption.getOno());
 
-        // Then
+        // 삭제가 됐는지 검증
         assertFalse(optionRepository.findById(savedOption.getOno()).isPresent());
 
+        // 삭제 후 데이터 확인
         log.debug("Option deleted, id: {}", savedOption.getOno());
     }
 
     @Test
     @Transactional
     void getAllOptionsTest() {
-        // Given
+        // 초기 데이터 저장
         Option firstOption = optionRepository.save(new Option(1L, "Wi-Fi"));
         Option secondOption = optionRepository.save(new Option(2L, "Breakfast"));
         Option thirdOption = optionRepository.save(new Option(3L, "Parking"));
 
-        // When
+        // 테스트 실행
         List<OptionDTO> options = optionService.getAllOptions();
 
-        // Then
+        // 검증
         assertNotNull(options);
         assertEquals(3, options.size());
 
