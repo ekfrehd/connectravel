@@ -18,5 +18,4 @@ public interface AdminBoardRepository extends JpaRepository<AdminBoard, Long>, Q
     // 이 쿼리를 사용하면 특정 관리자 게시물의 정보와 작성자 정보, 그리고 댓글 개수를 한 번의 쿼리로 가져올 수 있음! 이렇게 가져온 데이터는 Object 타입으로 반환되며, 필요한 경우 적절한 타입으로 캐스팅하여 사용할 수 있음!
     @Query("select b, w, count(r) from AdminBoard b left join b.member w left outer join AdminReply r on r.adminBoard = b where b.bno = :bno")
     Object getBoardByBno(@Param("bno") Long bno);
-
 }

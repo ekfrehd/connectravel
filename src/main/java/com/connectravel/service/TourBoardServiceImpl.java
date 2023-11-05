@@ -10,7 +10,6 @@ import com.connectravel.repository.TourBoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,12 +27,9 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class TourBoardServiceImpl implements TourBoardService {
 
-    @Autowired
-    ModelMapper modelMapper;
-    @Autowired
-    private TourBoardRepository tourBoardRepository;
-    @Autowired
-    private TourBaordImgRepository tourBaordImgRepository;
+    private final ModelMapper modelMapper;
+    private final TourBoardRepository tourBoardRepository;
+    private final TourBaordImgRepository tourBaordImgRepository;
 
     @Override
     @Transactional
@@ -78,7 +74,6 @@ public class TourBoardServiceImpl implements TourBoardService {
 
     @Override
     public void remove(Long tbno) {
-
         tourBoardRepository.deleteById(tbno);
     }
 

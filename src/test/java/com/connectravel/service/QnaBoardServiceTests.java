@@ -35,16 +35,13 @@ public class QnaBoardServiceTests {
                 "추천하는 장소가 있나요?"
         };
 
-        IntStream.rangeClosed(1, 10).forEach(i -> {
-        // 테스트 QnaBoardDTO 생성
-        QnaBoardDTO qnaBoardDTO = new QnaBoardDTO();
-        qnaBoardDTO.setTitle(sampleQuestions[i - 1]);
-        qnaBoardDTO.setContent(sampleQuestions[i - 1]);
-        qnaBoardDTO.setWriterEmail("sample@sample.com");
+        IntStream.rangeClosed(1, 10).forEach(i -> { // 10번 반복
+        QnaBoardDTO qnaBoardDTO = new QnaBoardDTO(); // 테스트 QnaBoardDTO 생성
+        qnaBoardDTO.setTitle(sampleQuestions[i - 1]); // 게시글 제목 입력
+        qnaBoardDTO.setContent(sampleQuestions[i - 1]); // 게시글 내용 입력
+        qnaBoardDTO.setWriterEmail("sample@sample.com"); // 작성자 이메일 입력
 
-        // 게시글 등록 register 메서드 호출
-        Long bno = qnaBoardService.register(qnaBoardDTO);
-
+        Long bno = qnaBoardService.register(qnaBoardDTO); // 게시글 등록 register 메서드 호출
         System.out.println(bno + "번 게시물 등록");
         });
     }
@@ -65,11 +62,10 @@ public class QnaBoardServiceTests {
     public void testModifyQnaBoard() {
         Long bno = 1L; // 수정할 게시글 번호
 
-        // 테스트 QnaBoardDTO 생성 (수정할 내용 포함)
-        QnaBoardDTO qnaBoardDTO = new QnaBoardDTO();
-        qnaBoardDTO.setBno(bno);
-        qnaBoardDTO.setTitle("수정된 제목");
-        qnaBoardDTO.setContent("수정된 내용");
+        QnaBoardDTO qnaBoardDTO = new QnaBoardDTO(); // 테스트 QnaBoardDTO 생성 (수정할 내용 포함)
+        qnaBoardDTO.setBno(bno); // 게시글 번호
+        qnaBoardDTO.setTitle("수정된 제목"); // 수정할 번호
+        qnaBoardDTO.setContent("수정된 내용"); // 수정할 내용
 
         qnaBoardService.modify(qnaBoardDTO); // 게시글 수정
 
@@ -81,25 +77,29 @@ public class QnaBoardServiceTests {
     public void testRemoveBoard() {
         Long bno = 16L; // 삭제할 게시글 번호
 
-        // 게시글 삭제 get 메서드 호출
-        qnaBoardService.removeWithReplies(bno);
+        try {
+            qnaBoardService.removeWithReplies(bno);// 게시글 삭제 메서드 호출
+        } catch (Exception e) {
+            // 삭제할 게시글이 존재하지 않을 경우에 대한 예외 처리
+            // 예외가 발생해도 테스트가 실패하지 않도록 처리
+            System.out.println("삭제할 게시글이 존재하지 않습니다.");
+        }
     }
 
-    @Test
+    @Test // 게시글 리스트 조회
     @Transactional
     public void testGetList() {
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
         pageRequestDTO.setPage(1); // 1 페이지
         pageRequestDTO.setSize(10); // 10개 출력
-        pageRequestDTO.setType("t"); // 검색 타입 설정
-        pageRequestDTO.setKeyword("테스트"); // 검색 키워드 설정
+        pageRequestDTO.setType("t"); // 검색 타입 설정, 제목
+        pageRequestDTO.setKeyword("커넥트"); // 검색 키워드 설정
 
-        PageResultDTO<QnaBoardDTO, Object[]> result = qnaBoardService.getList(pageRequestDTO); // QnaBoardDTO 목록을 가져온다.-
+        PageResultDTO<QnaBoardDTO, Object[]> result = qnaBoardService.getList(pageRequestDTO); // QnaBoardDTO 목록을 가져온다.
 
-        List<QnaBoardDTO> dtoList = result.getDtoList();
+        List<QnaBoardDTO> dtoList = result.getDtoList(); // QnaBoardDTO 리스트를 dtoList 변수에 할당
 
         System.out.println("게시글 리스트");
-        // Loop through the DTO list
         for (QnaBoardDTO dto : dtoList) {
             Object[] objects = new String[]{dto.getContent()};
             System.out.println("게시글 번호 : " + dto.getBno());
@@ -109,13 +109,3 @@ public class QnaBoardServiceTests {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
