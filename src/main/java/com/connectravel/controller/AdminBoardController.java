@@ -9,7 +9,6 @@ import com.connectravel.repository.MemberRepository;
 import com.connectravel.service.AdminBoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,9 +25,7 @@ import java.util.List;
 public class AdminBoardController {
 
     private final AdminBoardService adminBoardService;
-
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @GetMapping("{category}")
     public String list(@PathVariable("category") String category, PageRequestDTO pageRequestDTO, Model model) {
@@ -55,7 +52,7 @@ public class AdminBoardController {
 
         //Member member = memberRepository.findByEmail(authentication.getName());
 
-        String email = "1111@naver.com";
+        String email = "sample@sample.com";
         Member member = memberRepository.findByEmail(email);
 
         dto.setWriterEmail(member.getEmail());
@@ -87,17 +84,6 @@ public class AdminBoardController {
         model.addAttribute("adminBoardImgs", adminBoardImgDTOS);
         model.addAttribute("dto", adminBoardDTO);
         model.addAttribute("category", category);
-    }
-
-    @PostMapping("remove")
-    public String remove(long bno, RedirectAttributes redirectAttributes) {
-        log.info("bno : " + bno);
-
-        adminBoardService.removeWithReplies(bno);
-
-        redirectAttributes.addFlashAttribute("msg", bno);
-
-        return "redirect:/adminboard/list";
     }
 
     @PostMapping("modify")

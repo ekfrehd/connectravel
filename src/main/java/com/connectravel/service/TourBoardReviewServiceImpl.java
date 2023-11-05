@@ -15,7 +15,6 @@ import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -33,16 +33,11 @@ import java.util.function.Function;
 @Log4j2
 public class TourBoardReviewServiceImpl implements TourBoardReviewService {
 
-    @Autowired
-    TourBoardReviewRepository tourBoardReviewRepository;
-    @Autowired
-    TourBoardRepository tourBoardRepository;
-    @Autowired
-    MemberRepository memberRepository;
-    @Autowired
-    TourBoardReivewImgRepository tourBoardReivewImgRepository;
-    @Autowired
-    ModelMapper modelMapper;
+    private final TourBoardReviewRepository tourBoardReviewRepository;
+    private final TourBoardRepository tourBoardRepository;
+    private final MemberRepository memberRepository;
+    private final TourBoardReivewImgRepository tourBoardReivewImgRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public PageResultDTO<TourBoardReivewDTO, TourBoardReview> getTourReviewBoardsAndPageInfoByTourBoardId(Long tbno, PageRequestDTO pageRequestDTO) {
@@ -84,74 +79,80 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
     @Transactional
     @Override
     public Long register(TourBoardReivewDTO dto) throws NotFoundException {
-        Optional<Member> memberOptional = Optional.ofNullable(memberRepository.findByEmail(dto.getWriterEmail()));
+        //Optional<Member> memberOptional = Optional.ofNullable(memberRepository.findByEmail(dto.getWriterEmail()));
+        Optional<Member> memberOptional = Optional.ofNullable(memberRepository.findByEmail("sample@sample.com"));
         if (!memberOptional.isPresent()) {
             throw new NotFoundException("Member not found");
         }
-        Member member = memberOptional.get();
+        Member member = memberOptional.get(); //멤버 정보 등록
 
-        Optional<TourBoard> tourBoardOptional = tourBoardRepository.findById(dto.getTbno());
-        if (!tourBoardOptional.isPresent()) {
-            throw new NotFoundException("TourBoard not found");
-        }
+        Optional<TourBoard> tourBoardOptional = tourBoardRepository.findById(dto.getTbno()); // 받은 tbno 값과 일치하는 게시글 정보를 찾는다.
+        if (!tourBoardOptional.isPresent()) {throw new NotFoundException("TourBoard not found");}
         TourBoard tourBoard = tourBoardOptional.get();
 
-        double currentGrade = tourBoard.getGrade();
-        double newGrade = dto.getGrade();
-        int currentCount = tourBoard.getReviewCount();
+        double currentGrade = tourBoard.getGrade(); // 현재 평점
+        double newGrade = dto.getGrade(); // 새 평점
+        int currentCount = tourBoard.getReviewCount(); // 현재 리뷰
 
-        double avarageGrade = ((currentGrade * currentCount) + newGrade) / (currentCount + 1);
+        double avarageGrade = ((currentGrade * currentCount) + newGrade) / (currentCount + 1); // 평균 평점 = 현재 평점 * 현재 리뷰 수 / 현재 리뷰 수 + 1
 
-        tourBoard.setReviewCount(currentCount + 1);
-        tourBoard.setGrade(avarageGrade);
-        tourBoardRepository.saveAndFlush(tourBoard);
+        tourBoard.setReviewCount(currentCount + 1); //게시글의 리뷰 수를 올린다.
+        tourBoard.setGrade(avarageGrade); // 게시글의 평균 평점 입력
+        tourBoardRepository.saveAndFlush(tourBoard); // DB 반영
 
-        TourBoardReview tourBoardReview = dtoToEntity(dto, tourBoard, member);
-        tourBoardReviewRepository.save(tourBoardReview);
+        TourBoardReview tourBoardReview = dtoToEntity(dto, tourBoard, member); // 리뷰 정보, 게시글 정보, 회원 정보 입력
+        tourBoardReviewRepository.save(tourBoardReview); // DB 반영
         return tourBoardReview.getTbrno();
     }
 
     @Override
-    public TourBoardReivewDTO get(Long bno) {
-        return null;
+    public TourBoardReivewDTO get(Long tbrno) {
+        Optional<TourBoardReview> result = tourBoardReviewRepository.findById(tbrno);
+        Member member = memberRepository.findByEmail("sample@sample.com");
+
+        return result.isPresent() ? entityToDTO(result.get(), member) : null;
     }
 
     @Override
     public void modify(TourBoardReivewDTO tourBoardReivewDTO) {
 
+        Optional<TourBoardReview> optionalTourBoardReview = tourBoardReviewRepository.findById(tourBoardReivewDTO.getTbrno());
+        TourBoardReview tourBoardReview = optionalTourBoardReview.orElseThrow(() -> new NoSuchElementException("게시글이 존재하지 않습니다."));
+
+        tourBoardReview.changeContent(tourBoardReivewDTO.getContent());
+        tourBoardReview.changeGrade(tourBoardReivewDTO.getGrade());
+        tourBoardReviewRepository.save(tourBoardReview); //수정된 객체를 repository에 저장
     }
 
     @Override
     @Transactional
     public void removeWithReplies(Long tbrno, Long tbno) throws NotFoundException {
 
-        Optional<TourBoard> tourBoardOptional = tourBoardRepository.findById(tbno);
-        if (!tourBoardOptional.isPresent()) {
-            throw new NotFoundException("TourBoard not found");
-        }
+        Optional<TourBoard> tourBoardOptional = tourBoardRepository.findById(tbno); // 게시글 정보를 가져온다.
+        if (!tourBoardOptional.isPresent()) {throw new NotFoundException("TourBoard not found");}
         TourBoard tourBoard = tourBoardOptional.get();
-        Optional<TourBoardReview> tourBoardReview = tourBoardReviewRepository.findById(tbrno);
 
-        double currentGrade = tourBoard.getGrade();
-        double newGrade = tourBoardReview.get().getGrade();
-        int currentCount = tourBoard.getReviewCount();
+        Optional<TourBoardReview> tourBoardReview = tourBoardReviewRepository.findById(tbrno); // 게시글 리뷰 정보를 가져온다.
 
-        if (currentCount > 1) {
-            double avarageGrade = ((currentGrade * currentCount) - newGrade) / (currentCount - 1);
-            tourBoard.setGrade(avarageGrade);
-            tourBoard.setReviewCount(currentCount - 1);
+        double currentGrade = tourBoard.getGrade(); // 현재 평점
+        double newGrade = tourBoardReview.get().getGrade(); // 새 평점
+        int currentCount = tourBoard.getReviewCount(); // 현재 리뷰 수
+
+        if (currentCount > 1) { //리뷰 수가 1개 이상일 때
+            double avarageGrade = ((currentGrade * currentCount) - newGrade) / (currentCount - 1); //평균 평점 계산
+            tourBoard.setGrade(avarageGrade); // 평균 평점 계산
+            tourBoard.setReviewCount(currentCount - 1); // 리뷰 수 계산
         }
         else {
-            tourBoardReviewRepository.deleteById(tbrno);
-            tourBoard.setGrade(0);
-            tourBoard.setReviewCount(0);
+            tourBoardReviewRepository.deleteById(tbrno); // 리뷰를 삭제한다.
+            tourBoard.setGrade(0); // 등급 초기화
+            tourBoard.setReviewCount(0); // 리뷰 수 초기화
             tourBoardRepository.save(tourBoard);
             return;
         }
 
-        tourBoardRepository.save(tourBoard);
-        tourBoardReviewRepository.deleteById(tbrno);
-
+        tourBoardRepository.save(tourBoard); // DB 반영
+        tourBoardReviewRepository.deleteById(tbrno); // 리뷰 삭제
     }
 
     @Override

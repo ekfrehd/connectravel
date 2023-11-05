@@ -2,7 +2,6 @@
 <html layout:decorate="~{fragments/layout1}"
       xmlns="http://www.w3.org/1999/html"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -201,9 +200,10 @@
                                             </button>
                                         </a>
                                         <a th:href="@{/tour/modify(tbno = ${tourboard.tbno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
-                                            <button class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')"
+                                            <!--<button class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')"
                                                     type="button">수정하기
-                                            </button>
+                                            </button>-->
+                                            <button class="btn btn-primary" type="button">수정하기</button>
                                         </a>
                                     </div>
                                 </div>

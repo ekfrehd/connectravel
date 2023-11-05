@@ -6,7 +6,6 @@ import com.connectravel.repository.MemberRepository;
 import com.connectravel.service.QnaReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,8 +20,7 @@ import java.util.List;
 public class QnaReplyController {
 
     private final QnaReplyService qnaReplyService; //의존성 자동주입
-    @Autowired
-    private MemberRepository memberRepository; // Mmemer 조회가 필요하므로 추가
+    private final  MemberRepository memberRepository; // Mmemer 조회가 필요하므로 추가
 
     @GetMapping(value = "qnareply/{bno}")
     public ResponseEntity<List<QnaReplyDTO>> getListByBoard(@PathVariable("bno") Long bno) {
@@ -41,7 +39,7 @@ public class QnaReplyController {
 
         //Member member = memberRepository.findByEmail(authentication.getName());
 
-        qnaReplyDTO.setReplyer(member.getEmail());
+        /*qnaReplyDTO.setReplyer(member.getEmail());*/
 
         log.info(qnaReplyDTO);
 
