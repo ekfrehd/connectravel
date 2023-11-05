@@ -19,18 +19,32 @@ public class TourBoardImgRepositoryTests {
     @Autowired
     private TourBoardRepository tourBoardRepository;
 
-    @Test
+    @Test // 가이드 게시글 이미지 입력
     public void testTourBoardImgInsert() {
-        Optional<TourBoard> optionalTbno = tourBoardRepository.findById(21L);
-        TourBoard tbno = optionalTbno.orElseThrow(() -> new NoSuchElementException("게시글이 존재하지 않습니다."));
+        Optional<TourBoard> optionalTbno = tourBoardRepository.findById(1L); // 해당 게시글 조회
+        TourBoard tbno = optionalTbno.orElseThrow(() -> new NoSuchElementException("게시글이 존재하지 않습니다.")); // 예외 처리
 
-        TourBoardImg tourBoardImg = TourBoardImg.builder().imgFile("sample.jpg").tourBoard(tbno).build();
+        TourBoardImg tourBoardImg = TourBoardImg.builder() // 게시글 이미지 정보 입력
+                .imgFile("sample.jpg")
+                .tourBoard(tbno)
+                .build();
 
-        tourBaordImgRepository.save(tourBoardImg);
-        System.out.println(tourBaordImgRepository.save(tourBoardImg));
+        tourBaordImgRepository.save(tourBoardImg); // DB 반영
+        System.out.println("게시글 번호 : " + tbno.getTbno());
+        System.out.println("입력된 이미지 정보 : " + tourBoardImg);
     }
 
-    /*@Test
+    @Test // 가이드 게시글 이미지 삭제
+    public void testTourBoardImgDelete() {
+        Long ino = 5L;
+
+        Optional<TourBoardImg> optionalTourBoardImg = tourBaordImgRepository.findById(ino); // 게시글 이미지 조회
+        TourBoardImg tourBoardImg = optionalTourBoardImg.orElseThrow(() -> new NoSuchElementException("이미지가 존재하지 않습니다.")); // 예외 처리
+
+        tourBaordImgRepository.deleteById(tourBoardImg.getIno()); // 게시글 이미지가 존재하면 삭제 처리
+    }
+}
+/*@Test
     public void testInsertWithImages() {
         TourBoard tourBoard = TourBoard.builder()
                 .title("여행 게시판 데이터")
@@ -50,15 +64,6 @@ public class TourBoardImgRepositoryTests {
         // 여행게시판과 이미지들을 저장
         tourBoardRepository.save(tourBoard);
     }*/
-
-    @Test // 게시글 삭제 테스트, 댓글이 있으면 안지워짐
-    public void testTourBoardImgDelete() {
-        Long ino = 3L;
-        tourBaordImgRepository.deleteById(ino);
-    }
-}
-
-
 
 
 

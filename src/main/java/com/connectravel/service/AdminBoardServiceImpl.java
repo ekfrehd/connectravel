@@ -8,7 +8,6 @@ import com.connectravel.entity.AdminBoard;
 import com.connectravel.entity.Member;
 import com.connectravel.repository.AdminBoardImgRepository;
 import com.connectravel.repository.AdminBoardRepository;
-import com.connectravel.repository.AdminReplyRepository;
 import com.connectravel.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,14 +30,12 @@ import java.util.function.Function;
 @Log4j2
 public class AdminBoardServiceImpl implements AdminBoardService {
 
-    private final AdminBoardRepository repository;
-    private final AdminReplyRepository adminReplyRepository;
+    private final AdminBoardRepository adminBoardRepository;
     private final AdminBoardImgRepository adminBoardImgRepository;
     private final MemberRepository memberRepository; // Member 객체를 불러오기 위해 필요
 
     @Autowired
     private ModelMapper modelMapper;
-
 
     @Override
     @Transactional
@@ -48,22 +45,38 @@ public class AdminBoardServiceImpl implements AdminBoardService {
 
         AdminBoard adminBoard = dtoToEntity(dto, memberRepository);
 
-        repository.save(adminBoard);
+        adminBoardRepository.save(adminBoard);
 
         return adminBoard.getBno();
     }
 
     @Override
     public AdminBoardDTO get(Long bno) {
-        Object result = repository.getBoardByBno(bno);
+        Object result = adminBoardRepository.getBoardByBno(bno);
 
         Object[] arr = (Object[]) result;
 
         return entityToDTO((AdminBoard) arr[0], (Member) arr[1], (Long) arr[2]);
-        // { {bno, writer, contet, category... }, {id, email,...}, {1}}
-        //AdminBoard, Member 엔티티와 댓글의 수(Long)를 가져오는 getBoardByBno메서드 이용 처리
     }
 
+    @Override
+    @Transactional
+    public void modify(AdminBoardDTO adminBoardDTO) {
+
+        AdminBoard adminBoard = adminBoardRepository.getOne(adminBoardDTO.getBno()); //adminRepository에서 Board객체를 받아
+        //필요한 순간까지 로딩을 지연하는 getOne메서드 이용
+
+        adminBoard.changeTitle(adminBoardDTO.getTitle()); //Board객체의 제목 수정
+        adminBoard.changeContent(adminBoardDTO.getContent()); //Board객체의 내용 수정
+
+        adminBoardRepository.save(adminBoard); //수정된 객체를 repository에 저장
+    }
+
+    @Override // 게시글 삭제
+    @Transactional
+    public void remove (Long bno) {
+        adminBoardRepository.deleteById(bno); //이후 본 글 삭제
+    }
 
     @Override
     public PageResultDTO<AdminBoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO, String category) {
@@ -78,43 +91,20 @@ public class AdminBoardServiceImpl implements AdminBoardService {
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), sort);
 
         //조회는 모든 사용자가 다 볼 수 있게 설정(Role에 상관없이)
-        result = repository.searchPageAdminBaord(type, category, pageRequestDTO.getKeyword(), pageable);
+        result = adminBoardRepository.searchPageAdminBaord(type, category, pageRequestDTO.getKeyword(), pageable);
 
         log.info("실행결과 : " + result);
 
         return new PageResultDTO<>(result, fn);
     }
 
-    @Transactional
-    @Override
-    public void modify(AdminBoardDTO adminBoardDTO) {
-
-        AdminBoard adminBoard = repository.getOne(adminBoardDTO.getBno()); //adminRepository에서 Board객체를 받아
-        //필요한 순간까지 로딩을 지연하는 getOne메서드 이용
-
-        adminBoard.changeTitle(adminBoardDTO.getTitle()); //Board객체의 제목 수정
-        adminBoard.changeContent(adminBoardDTO.getContent()); //Board객체의 내용 수정
-
-        repository.save(adminBoard); //수정된 객체를 repository에 저장
-    }
-
-    @Transactional
-    @Override
-    public void removeWithReplies(Long bno) {
-
-        adminReplyRepository.deleteByBno(bno); //댓글부터 삭제
-
-        repository.deleteById(bno); //이후 본 글 삭제
-    }
-
     public List<ImgDTO> getImgList(Long bno) {
         List<ImgDTO> list = new ArrayList<>();
-        AdminBoard entity = repository.findById(bno).get();
+        AdminBoard entity = adminBoardRepository.findById(bno).get();
         adminBoardImgRepository.GetImgbybno(entity).forEach(i -> { //이미지는 룸을 참조하고 있다 그러니 이미지가 참조하는 룸에 해당하는 모든 이미지를 불러온다
             ImgDTO imgDTO = modelMapper.map(i, ImgDTO.class); //dto변환
             list.add(imgDTO); // list화
         });
         return list;
     }
-
 }

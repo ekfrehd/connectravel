@@ -31,7 +31,6 @@ public class TourBoardReviewController {
     private final ImgService imgService;
     private final MemberRepository memberRepository;
 
-
     @PostMapping("register")
     public String register(@RequestParam("images") List<MultipartFile> images, TourBoardDTO tourBoardDTO, TourBoardReivewDTO tourBoardReivewDTO) throws NotFoundException {
         /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,7 +40,7 @@ public class TourBoardReviewController {
 
         TourBoard tourBoard = tourBoardRepository.findById(tourBoardDTO.getTbno()).orElseThrow(() -> new NotFoundException("TourBoard not found"));
 
-        tourBoardReivewDTO.setWriterEmail(member.getEmail());
+        /*tourBoardReivewDTO.setWriterEmail(member.getEmail());*/
         tourBoardReivewDTO.setTbno(tourBoard.getTbno());
         Long trbno = tourBoardReviewService.register(tourBoardReivewDTO);
         images.forEach(i -> {

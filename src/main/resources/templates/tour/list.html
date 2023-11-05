@@ -43,6 +43,9 @@
                     <a href="/tour/list?category=shopping">
                         <button class="btn btn-outline-primary" type="button">쇼핑</button>
                     </a>
+                    <a>
+                        <button id="mapButton">Map</button>
+                    </a>
                     <a th:href="@{/tour/register}">
                         <!--<button type="button" class="btn btn-primary"
                                 sec:authorize="hasAnyAuthority('ROLE_ADMIN')">REGISTER</button>-->
@@ -64,6 +67,10 @@
                                     <option th:selected="${pageRequestDTO.type =='tc'}" value="tc">제목 +
                                         내용
                                     </option>
+                                    <option th:selected="${pageRequestDTO.type =='a'}" value="a">주소
+                                    </option>
+                                    <option th:selected="${pageRequestDTO.type =='r'}" value="r">지역
+                                    </option>
                                 </select>
                             </div>
                             <input class="form-control" name="keyword"
@@ -79,7 +86,7 @@
             </div>
 
             <div class="row gy-5 mat-25">
-                <th:block th:each="dto : ${result.dtoList}">
+                <th:block th:each="dto, iterStat : ${result.dtoList}">
                     <div class="col-xxl-4 col-lg-4 col-md-6">
                         <div class="single-blog">
                             <div class="single-blog-thumbs">
@@ -101,6 +108,9 @@
                     type=${pageRequestDTO.type} ,
                     keyword = ${pageRequestDTO.keyword})}">[[${dto.title}]]</a></h4>
                             </div>
+
+                            </span>
+                            <span class="single-blog-contents-tags-item" th:data-dto-address="${dto.address}"> [[${dto.address}]]</span>
                         </div>
                     </div>
                 </th:block>
@@ -143,6 +153,78 @@
     </section>
     <!-- Blog area end -->
 
+    <!--모달-->
+    <div id="mapModal" class="modal">
+        <div class="modal-content">
+            <div id="map" style="width:500px;height:400px;"></div>
+
+            <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c7a803e4f5e6440b0235c7fa6922d495&libraries=services,clusterer"></script>
+
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                document.getElementById("mapButton").addEventListener("click", function () {
+                    // 모달 요소 및 닫기 버튼 이벤트 핸들러 설정
+                    var modal = document.getElementById("mapModal");
+                    var closeBtn = document.getElementsByClassName("close")[0];
+                    modal.style.display = "block";
+
+                    closeBtn.addEventListener("click", function () {
+                        modal.style.display = "none";
+                    });
+                });
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    // dtoAddresses 배열에서 주소 가져오기
+                    var dtoAddresses = /*[[${result.dtoList.![address]}]]*/ [];
+                    dtoAddresses.forEach(function (address) {
+                        console.log("주소 로그 : " + address);
+                    });
+
+                    // 카카오맵 지오코더 및 맵 관련 설정
+                    var geocoder = new kakao.maps.services.Geocoder();
+                    var mapContainer = document.getElementById('map');
+                    var mapOption = {
+                        center: new kakao.maps.LatLng(37.26555243259681, 127.00028466367232),
+                        level: 3
+                    };
+                    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+                    // 각 주소에 대한 좌표를 가져와서 지도에 마커 표시
+                    dtoAddresses.forEach(function (address) {
+                        // 주소를 좌표로 변환하는 지오코더 함수
+                        geocoder.addressSearch(address, function (result, status) {
+                            if (status === kakao.maps.services.Status.OK) {
+                                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+
+                                // 주소별로 마커 생성하여 지도에 추가
+                                var marker = new kakao.maps.Marker({
+                                    map: map,
+                                    position: coords,
+                                    title: "여기에 제목을 입력하세요", // 원하는 제목 입력
+                                });
+
+                                var titles = /*[[${result.dtoList.![title]}]]*/ []; //인포 타이틀 설정
+                                var titleString = titles.join(', '); // 배열 요소들을 쉼표(,)로 구분된 하나의 문자열로 변환
+
+                                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                                var infowindow = new kakao.maps.InfoWindow({
+                                    content: '<div style="width:150px;text-align:center;">' + titleString + '</div>'
+                                });
+                                infowindow.open(map, marker);
+                            }
+                        });
+                    });
+                });
+                /*]]>*/
+            </script>
+
+            <button onclick="relayout()">relayout 호출하기</button>
+            <span class="close">&times;</span>
+            <div id="kakaoMap"></div>
+        </div>
+    </div>
+
     <script th:inline="javascript">
 
         var msg = [[${msg}]];
@@ -165,9 +247,39 @@
             searchForm.empty().submit();
 
         });
+    </script>
+    <script th:inline="javascript">
 
+        var msg = [[${msg}]];
 
+        console.log(msg);
+
+        if (msg) {
+            $(".modal").modal();
+        }
+        var searchForm = $("#searchForm");
+
+        $('#search').click(function (e) {
+            searchForm.submit();
+        });
+
+        $('#clear').click(function (e) {
+            searchForm.empty().submit();
+        });
     </script>
 
 </div>
 </html>
+<!--
+별도 마커 이미지를 사용하고 싶을 경우
+ // 마커 이미지 URL 및 크기 설정
+                    var imageSrc = '마커_이미지_URL';
+                    var imageSize = new kakao.maps.Size(24, 35);
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+  var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords,
+                        title: "여기에 제목을 입력하세요", // 원하는 제목 입력
+                        image: markerImage
+-->

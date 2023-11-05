@@ -7,7 +7,6 @@ import com.connectravel.entity.Member;
 import com.connectravel.entity.QnaBoard;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.QnaBoardRepository;
-import com.connectravel.repository.QnaReplyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -24,9 +23,8 @@ import java.util.function.Function;
 @Log4j2
 public class QnaBoardServiceImpl implements QnaBoardService {
 
-    //의존성 자동 주입
     private final QnaBoardRepository qnaBoardRepository;
-    private final QnaReplyRepository qnaReplyRepository;
+    //private final QnaReplyRepository qnaReplyRepository;
     private final MemberRepository memberRepository; // Member 객체를 불러오기 위해 필요
 
     @Override // 게시글 등록

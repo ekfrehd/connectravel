@@ -24,21 +24,20 @@ import java.util.Map;
 public class TourBoardController {
 
     private final TourBoardService tourBoardService;
-
     private final TourBoardReviewService tourBoardReviewService;
-
     private final ImgService imgService;
 
     @GetMapping("list")
     public String list(PageRequestDTO pageRequestDTO, Model model) {
 
         pageRequestDTO.setSize(9); // 한 페이지 9개 리뷰 출력
-        PageResultDTO<TourBoardDTO, Object[]> tourBoard = tourBoardService.getList(pageRequestDTO, pageRequestDTO.getType(), pageRequestDTO.getCategory(), pageRequestDTO.getKeyword(), pageRequestDTO.getRegion());
+        PageResultDTO<TourBoardDTO, Object[]> tourBoard = tourBoardService.getList(pageRequestDTO, pageRequestDTO.getType(), pageRequestDTO.getCategory(), pageRequestDTO.getKeyword(), pageRequestDTO.getRegion(), pageRequestDTO.getAddress());
         if (tourBoard.getTotalPage() == 0) {
             tourBoard.setTotalPage(1);
         } // 글이 하나도 없을 땐 0으로 인식하므로
 
         model.addAttribute("result", tourBoard);
+        tourBoard.getDtoList().forEach(obj -> log.info(obj));
         return "tour/list";
     }
 

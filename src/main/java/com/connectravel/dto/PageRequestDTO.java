@@ -18,6 +18,7 @@ public class PageRequestDTO {
     private String keyword; // 검색어
     private String category; // 숙소종류
     private String region; // 지역
+    private String address; // 주소
 
     public PageRequestDTO() {
         this.page = 1;
