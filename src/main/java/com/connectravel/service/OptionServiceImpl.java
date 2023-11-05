@@ -4,7 +4,6 @@ import com.connectravel.dto.OptionDTO;
 import com.connectravel.entity.Option;
 import com.connectravel.repository.OptionRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Log4j2
 @RequiredArgsConstructor
 public class OptionServiceImpl implements OptionService {
 
