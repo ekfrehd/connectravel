@@ -15,7 +15,7 @@ public class QnaReplyServiceTests {
     @Autowired
     private QnaReplyService qnaReplyService;
 
-    @Test
+    @Test // 댓글 추가 테스트
     public void testRegisterQnaReply() {
 
         QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
@@ -29,7 +29,7 @@ public class QnaReplyServiceTests {
         System.out.println(generatedRno + "번 댓글 등록");
     }
 
-    @Test
+    @Test // 댓글 리스트 조회 테스트
     public void testGetListQnaReplies() {
         Long bno = 1L; // 가져올 게시글 번호
 
@@ -40,7 +40,7 @@ public class QnaReplyServiceTests {
         }
     }
 
-    @Test
+    @Test // 댓글 수정 테스트
     public void testModify() {
 
         QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
@@ -51,7 +51,7 @@ public class QnaReplyServiceTests {
         qnaReplyService.modify(qnaReplyDTO);
     }
 
-    @Test
+    @Test // 댓글 삭제 테스트
     public void testRemove() {
         QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
         qnaReplyDTO.setRno(13L);

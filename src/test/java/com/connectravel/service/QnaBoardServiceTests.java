@@ -49,7 +49,7 @@ public class QnaBoardServiceTests {
         });
     }
 
-    @Test
+    @Test // 게시글 조회 테스트
     public void testGetQnaBoard() {
         Long bno = 1L; // 테스트 게시글 번호
 
@@ -60,7 +60,7 @@ public class QnaBoardServiceTests {
         System.out.println("Member 정보: " + result.getWriterEmail() + ", " + result.getWriterName());
     }
 
-    @Test
+    @Test // 게시글 수정 테스트
     @Transactional
     public void testModifyQnaBoard() {
         Long bno = 1L; // 수정할 게시글 번호
@@ -77,7 +77,7 @@ public class QnaBoardServiceTests {
         System.out.println("QnaBoard 정보: " + result.toString());
     }
 
-    @Test
+    @Test // 게시글 삭제 테스트
     public void testRemoveBoard() {
         Long bno = 16L; // 삭제할 게시글 번호
 

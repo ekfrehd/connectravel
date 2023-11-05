@@ -52,17 +52,11 @@ public class TourBoardServiceImpl implements TourBoardService {
     }
 
     @Override
-    public TourBoardDTO read(Long gno) {
+    public TourBoardDTO read(Long tbno) {
 
-        Optional<TourBoard> result = tourBoardRepository.findById(gno);
+        Optional<TourBoard> result = tourBoardRepository.findById(tbno);
 
         return result.isPresent() ? entityToDto(result.get()) : null;
-    }
-
-    @Override
-    public void remove(Long gno) {
-
-        tourBoardRepository.deleteById(gno);
     }
 
     @Override
@@ -80,6 +74,12 @@ public class TourBoardServiceImpl implements TourBoardService {
 
             tourBoardRepository.save(entity);
         }
+    }
+
+    @Override
+    public void remove(Long tbno) {
+
+        tourBoardRepository.deleteById(tbno);
     }
 
     @Override
