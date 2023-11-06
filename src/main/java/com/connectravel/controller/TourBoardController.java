@@ -24,9 +24,7 @@ import java.util.Map;
 public class TourBoardController {
 
     private final TourBoardService tourBoardService;
-
     private final TourBoardReviewService tourBoardReviewService;
-
     private final ImgService imgService;
 
     @GetMapping("list")

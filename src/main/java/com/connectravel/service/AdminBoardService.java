@@ -18,7 +18,7 @@ public interface AdminBoardService {
 
     void modify(AdminBoardDTO adminBoardDTO); //수정
 
-    void removeWithReplies(Long bno); //삭제
+    void remove(Long bno); //삭제
 
     PageResultDTO<AdminBoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO, String category); // 리스트 출력
 

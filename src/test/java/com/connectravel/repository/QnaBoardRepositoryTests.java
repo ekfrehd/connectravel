@@ -22,6 +22,7 @@ public class QnaBoardRepositoryTests {
     @Autowired
     private MemberRepository memberRepository;
 
+    // 더미봇 생성...
     private Member createMember() {
         MemberFormDTO memberFormDTO = new MemberFormDTO();
         memberFormDTO.setName("더미봇");
@@ -34,7 +35,7 @@ public class QnaBoardRepositoryTests {
         return Member.createMember(memberFormDTO);
     }
 
-    @Test //특정 회원의 게시글 추가 테스트
+    @Test // 특정 회원의 게시글 추가 테스트
     public void testQnaBoardInsertAddMember() {
 
         Member member = memberRepository.findByEmail("sample@sample.com"); // 멤버 존재 확인
@@ -57,12 +58,13 @@ public class QnaBoardRepositoryTests {
                 "추천하는 장소가 있나요?"
         };
 
-        Member inputMember = member;
-        IntStream.rangeClosed(1, 10).forEach(i -> {
+        Member inputMember = member; // 게시글 작성자 입력
+
+        IntStream.rangeClosed(1, 10).forEach(i -> { // 10번 반복
             QnaBoard qnaBoard = QnaBoard.builder()
                     .title(sampleQuestions[i - 1]) // 질문 제목
                     .content(sampleQuestions[i - 1]) // 질문 내용
-                    .member(inputMember) // 해당 멤버
+                    .member(inputMember) // 게시글 작성자
                     .build();
 
             QnaBoard result = qnaBoardRepository.save(qnaBoard); // Qna 게시글 DB 저장
@@ -70,17 +72,12 @@ public class QnaBoardRepositoryTests {
         });
     }
 
-    @Test // 게시글 조회 테스트
-    public void testQnaBoardReadOne() {
-        Long bno = 10L; // 존재하는 게시글 입력
-        qnaBoardRepository.findById(bno); // 해당 번호의 게시글 데이터를 조회
-        System.out.println(qnaBoardRepository.findById(bno));
-    }
-
     @Test // 게시글 전체 조회 테스트
-    public void testQnaBoardReadOne1() {
+    public void testQnaBoardReadList() {
         Long bno = 1L; // 존재하는 게시글의 번호
-        Object result = qnaBoardRepository.getBoardByBno(bno);
+
+        Object result = qnaBoardRepository.getBoardByBno(bno); // 번호에 해당하는 게시글을 찾아 저장
+
         if (result != null) { // 결과가 Object 타입이므로 해당 객체를 적절한 타입으로 캐스팅하여 사용
             Object[] row = (Object[]) result;
             QnaBoard qnaBoard = (QnaBoard) row[0]; // 게시글 정보
@@ -99,13 +96,16 @@ public class QnaBoardRepositoryTests {
     @Test // 게시글 수정 테스트
     public void testQnaBoardUpdate() {
         Long bno = 9L; // 존재하는 게시글 입력
+
         Optional<QnaBoard> result = qnaBoardRepository.findById(bno); // Optional 객체는 null 에러 방지, 해당 번호의 게시글 조회
-        //System.out.println ("기존 게시글 데이터 : " + result);
-        QnaBoard qnaBoard = result.orElseThrow(() -> new NoSuchElementException("게시글이 존재하지 않습니다.")); // result가 null일 경우 board에 담는다.
+
+        QnaBoard qnaBoard = result.orElseThrow(() -> new NoSuchElementException("게시글이 존재하지 않습니다."));
         qnaBoard.changeTitle("게시글 제목 수정"); // board 클래스의 change 메서드 실행
         qnaBoard.changeContent("게시글 내용 수정"); // board 클래스의 change 메서드 실행
         qnaBoardRepository.save(qnaBoard); // 업데이트 내용 DB 저장
-        //System.out.println ("수정된 게시글 데이터 : " + qnaBoard);
+
+        System.out.println ("기존 게시글 데이터 : " + result);
+        System.out.println ("수정된 게시글 데이터 : " + qnaBoard);
     }
 
     @Test // 게시글 삭제 테스트, 댓글이 있으면 안지워짐

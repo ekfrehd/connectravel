@@ -13,7 +13,6 @@ import java.util.List;
 
 public interface TourBoardReviewService {
 
-
     Long register(TourBoardReivewDTO dto) throws NotFoundException; //등록
 
     TourBoardReivewDTO get(Long bno); //조회

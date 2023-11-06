@@ -11,9 +11,9 @@ import java.util.List;
 public interface TourBoardService {
     Long register(TourBoardDTO dto);
 
-    TourBoardDTO read(Long gno);
+    TourBoardDTO read(Long tbno);
 
-    void remove(Long gno);
+    void remove(Long tbno);
 
     void modify(TourBoardDTO dto);
 
