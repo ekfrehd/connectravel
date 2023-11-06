@@ -21,6 +21,6 @@ public class ReviewReply extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY) //지연로딩 설정
     private ReviewBoard reviewBoard; //연관관계 지정
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Member member; // id
 }

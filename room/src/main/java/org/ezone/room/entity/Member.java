@@ -3,7 +3,7 @@ package org.ezone.room.entity;
 import lombok.*;
 import org.ezone.room.constant.Role;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -11,7 +11,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-public class Member {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Member extends BaseEntity{
 
     @Id
     @GeneratedValue(generator = "system_uuid")
