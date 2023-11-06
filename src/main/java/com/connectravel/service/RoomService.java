@@ -15,8 +15,8 @@ public interface RoomService {
     Room dtoToEntity(RoomDTO roomDTO);
     ImgDTO imgToDTO(RoomImg roomImg);
 
-    /*RoomDTO updateRoom(Long rno, RoomDTO roomDTO);
+    RoomDTO updateRoom(Long rno, RoomDTO roomDTO);
     void deleteRoom(Long rno);
     RoomDTO getRoom(Long rno);
-    List<RoomDTO> getAllRooms();*/
+    List<RoomDTO> getAllRooms();
 }
