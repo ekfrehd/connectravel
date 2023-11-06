@@ -1,11 +1,13 @@
 package com.connectravel.service;
 
 import com.connectravel.dto.AccommodationDTO;
+import com.connectravel.dto.ImgDTO;
 import com.connectravel.dto.RoomDTO;
 import com.connectravel.entity.*;
 import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.OptionRepository;
+import com.connectravel.repository.RoomRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -14,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +26,9 @@ public class RoomServiceTest {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -39,7 +42,7 @@ public class RoomServiceTest {
     private Accommodation savedAccommodation;
 
     @BeforeEach
-    public void registerAccommodation() {
+    public void setUp() {
 
         Member member = Member.builder()
                 .name("roomName")
@@ -105,18 +108,59 @@ public class RoomServiceTest {
         RoomDTO newRoom = RoomDTO.builder()
                 .roomName("Test Room")
                 .price(100000)
+                .minimumOccupancy(1) // 최소 인원 설정
+                .maximumOccupancy(4) // 최대 인원 설정
                 .operating(true)
                 .accommodationDTO(accommodationDTO)
                 .build();
 
         RoomDTO createdRoom = roomService.createRoom(newRoom);
 
-        log.debug("Created Room : {} ", createdRoom);
-        assertNotNull(createdRoom);
-        assertEquals(newRoom.getRoomName(), createdRoom.getRoomName());
+        assertNotNull(createdRoom, "The room should not be null");
+        assertEquals(newRoom.getRoomName(), createdRoom.getRoomName(), "The room names should match");
+        assertEquals(newRoom.getMinimumOccupancy(), createdRoom.getMinimumOccupancy(), "The minimum occupancy should match");
+        assertEquals(newRoom.getMaximumOccupancy(), createdRoom.getMaximumOccupancy(), "The maximum occupancy should match");
 
-
+        log.debug("Created Room: {}", createdRoom);
+        // 또한, 필드 값이 null이 아닌지도 확인할 수 있습니다.
+        assertNotNull(createdRoom.getMinimumOccupancy(), "The minimum occupancy should not be null");
+        assertNotNull(createdRoom.getMaximumOccupancy(), "The maximum occupancy should not be null");
     }
+
+    @Test
+    @Transactional
+    public void testAddRoomImage() {
+        // Room 객체 생성 및 저장
+        Room room = Room.builder()
+                .roomName("Sample Room")
+                .price(50000)
+                .minimumOccupancy(1)
+                .maximumOccupancy(2)
+                .operating(true)
+                .accommodation(savedAccommodation)
+                .build();
+        room = roomRepository.save(room); // roomRepository는 주입되어 있어야 합니다.
+
+        // RoomDTO로 변환
+        RoomDTO roomDTO = roomService.entityToDTO(room); // entityToDTO는 Room을 RoomDTO로 변환하는 메서드입니다.
+
+        // 이미지 정보 생성
+        ImgDTO newImage = ImgDTO.builder()
+                .imgFile("room_image.jpg")
+                .build();
+
+        // 이미지 추가 로직 실행
+        ImgDTO addedImage = roomService.addRoomImage(roomDTO.getRno(), newImage);
+
+        // 검증: 추가된 이미지가 null이 아니어야 하고 파일 이름이 일치해야 합니다.
+        assertNotNull(addedImage, "The returned ImgDTO should not be null");
+        assertEquals("room_image.jpg", addedImage.getImgFile(), "The image file name should match the expected value");
+        log.debug("Added Room Image: {}", addedImage);
+    }
+
+
+
+
 
    /* @Test
     public void testUpdateRoom() {

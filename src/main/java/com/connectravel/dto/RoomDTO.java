@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import java.util.List;
 
 @Data
 @Builder
@@ -21,5 +22,5 @@ public class RoomDTO {
     private boolean operating;
 
     private AccommodationDTO accommodationDTO;
-
+    private List<String> imgFiles;
 }
