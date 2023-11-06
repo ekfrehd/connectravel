@@ -58,6 +58,7 @@ public class Accommodation {
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Room> rooms = new ArrayList<>();
 
+    /* 편의 메서드 */
     public void addImage(AccommodationImg img) {
         images.add(img);
         img.setAccommodation(this);

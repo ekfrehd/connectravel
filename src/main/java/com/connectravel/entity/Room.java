@@ -1,5 +1,6 @@
 package com.connectravel.entity;
 
+import com.connectravel.dto.RoomDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,9 +25,15 @@ public class Room {
     @Column(nullable = false)
     private int price;
 
-    private boolean operating;
+    @Column(nullable = false)
+    private int minimumOccupancy; // 최소 인원
+
+    @Column(nullable = false)
+    private int maximumOccupancy; // 최대 인원
 
     private String content;
+
+    private boolean operating; // 예약 Y/N
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Accommodation accommodation;
@@ -39,6 +46,7 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
+    /* 편의 메서드 */
     public void addImage(RoomImg img) {
         images.add(img);
         img.setRoom(this);
@@ -57,6 +65,14 @@ public class Room {
     public void removeReservation(Reservation reservation) {
         reservations.remove(reservation);
         reservation.setRoom(null);
+    }
+
+    public void updateRoomDetails(RoomDTO roomDTO) {
+        this.roomName = roomDTO.getRoomName();
+        this.price = roomDTO.getPrice();
+        this.minimumOccupancy = roomDTO.getMinimumOccupancy();
+        this.maximumOccupancy = roomDTO.getMaximumOccupancy();
+        this.content = roomDTO.getContent();
     }
 
 }

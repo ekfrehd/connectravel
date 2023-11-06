@@ -48,6 +48,8 @@ public class RoomRepositoryTest {
         Room room = Room.builder()
                 .roomName("테스트 방")
                 .price(10000)
+                .minimumOccupancy(1) // 최소 인원 설정
+                .maximumOccupancy(2) // 최대 인원 설정
                 .operating(true)
                 .content("테스트 방 내용")
                 .accommodation(accommodation)
@@ -66,6 +68,8 @@ public class RoomRepositoryTest {
         Room newRoom = Room.builder()
                 .roomName("새 테스트 방")
                 .price(20000)
+                .minimumOccupancy(1)
+                .maximumOccupancy(4)
                 .operating(true)
                 .content("새 테스트 방 내용")
                 .build();

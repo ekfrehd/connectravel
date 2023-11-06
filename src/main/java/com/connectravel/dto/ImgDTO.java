@@ -16,7 +16,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class ImgDTO {
     private Long ino;
-    private Room room;
-    private Accommodation accommodation;
     private String imgFile;
+    private RoomDTO room;
+    private AccommodationDTO accommodation;
+
 }

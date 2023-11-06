@@ -45,6 +45,8 @@ public class ReservationRepositoryTest {
         Room room = Room.builder()
                 .roomName("테스트 방")
                 .price(10000)
+                .minimumOccupancy(1) // 최소 인원 설정
+                .maximumOccupancy(2) // 최대 인원 설정
                 .operating(true)
                 .content("테스트 방 내용")
                 .build();
@@ -69,6 +71,7 @@ public class ReservationRepositoryTest {
         Reservation newReservation = Reservation.builder()
                 .room(roomForReservation)
                 .member(memberForReservation)
+                .numberOfGuests(2) // 예약 인원 수 설정
                 .startDate(LocalDate.now().plusDays(2))
                 .endDate(LocalDate.now().plusDays(3))
                 .message("새 예약 요청사항")
@@ -121,5 +124,6 @@ public class ReservationRepositoryTest {
 
         assertThat(deletedReservation).isNull();
     }
+
 
 }

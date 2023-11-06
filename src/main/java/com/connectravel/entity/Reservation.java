@@ -23,6 +23,9 @@ public class Reservation extends BaseTimeEntity {
     @Column(length = 200)
     private String message; //요청사항
 
+    @Column(nullable = false)
+    private int numberOfGuests; // 예약 인원 수
+
     private LocalDate startDate; //예약 시작
     private LocalDate endDate; //예약 종료
     private int money;

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public interface AccommodationService {
 
     Accommodation registerAccommodation(AccommodationDTO accommodationDTO);
+    // Test에서 setUp() 대신 사용 중
 
     AccommodationDTO modifyAccommodationDetails(AccommodationDTO accommodationDTO);
     // 숙소의 상세 정보를 수정(현재는 이름, 주소만 수정 가능)
