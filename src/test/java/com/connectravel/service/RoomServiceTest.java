@@ -1,5 +1,6 @@
 package com.connectravel.service;
 
+import com.connectravel.dto.AccommodationDTO;
 import com.connectravel.dto.RoomDTO;
 import com.connectravel.entity.*;
 import com.connectravel.repository.AccommodationRepository;
@@ -34,6 +35,8 @@ public class RoomServiceTest {
 
     @Autowired
     private AccommodationRepository accommodationRepository;
+
+    private Accommodation savedAccommodation;
 
     @BeforeEach
     public void registerAccommodation() {
@@ -89,17 +92,21 @@ public class RoomServiceTest {
         accommodation.addAccommodationOption(accommodationOption2);
 
         // 저장
-        accommodationRepository.save(accommodation);
+        savedAccommodation = accommodationRepository.save(accommodation);
 
     }
 
     @Test
     @Transactional
     public void testCreateRoom() {
+        AccommodationDTO accommodationDTO = new AccommodationDTO();
+        accommodationDTO.setAno(savedAccommodation.getAno());
+
         RoomDTO newRoom = RoomDTO.builder()
                 .roomName("Test Room")
                 .price(100000)
                 .operating(true)
+                .accommodationDTO(accommodationDTO)
                 .build();
 
         RoomDTO createdRoom = roomService.createRoom(newRoom);

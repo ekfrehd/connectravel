@@ -17,7 +17,6 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
     private final AccommodationRepository accommodationRepository;
-    // ... other required repositories or services
 
     @Override
     @Transactional

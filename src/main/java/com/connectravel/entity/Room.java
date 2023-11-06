@@ -24,9 +24,15 @@ public class Room {
     @Column(nullable = false)
     private int price;
 
-    private boolean operating;
-
     private String content;
+
+    @Column(nullable = false)
+    private int minimumOccupancy; // 최소 인원
+
+    @Column(nullable = false)
+    private int maximumOccupancy; // 최대 인원
+
+    private boolean operating; // 예약 Y/N
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Accommodation accommodation;
