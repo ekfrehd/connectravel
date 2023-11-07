@@ -101,8 +101,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
-    @Override
-    public AccommodationDTO entityToDto(Accommodation accommodation) {
+    private AccommodationDTO entityToDto(Accommodation accommodation) {
 
         // 숙박 업소에 대한 이미지 정보만 변환
         List<String> imageFiles = accommodation.getImages().stream()
@@ -135,8 +134,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         return accommodationDTO;
     }
 
-    @Override
-    public AccommodationDTO entityToDtoSearch(Accommodation accommodation, Room room, Integer minPrice) {
+    private AccommodationDTO entityToDtoSearch(Accommodation accommodation, Room room, Integer minPrice) {
 
         RoomDTO roomDTO = RoomDTO.builder().roomName(room.getRoomName()).build();
         List<RoomDTO> roomDTOList = new ArrayList<>();

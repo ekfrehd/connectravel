@@ -1,4 +1,4 @@
-package org.ezone.room.manager;
+package com.connectravel.manager;
 
 import java.io.File;
 import java.util.List;

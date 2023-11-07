@@ -1,70 +1,38 @@
-package org.ezone.room.service;
+package com.connectravel.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+import com.connectravel.dto.*;
+import com.connectravel.entity.*;
+import com.connectravel.repository.*;
 import javassist.NotFoundException;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.ezone.room.dto.ImgDTO;
-import org.ezone.room.dto.PageRequestDTO;
-import org.ezone.room.dto.PageResultDTO;
-import org.ezone.room.dto.ReviewBoardDTO;
-import org.ezone.room.dto.ReviewReplyDTO;
-import org.ezone.room.entity.Accommodation;
-import org.ezone.room.entity.Member;
-import org.ezone.room.entity.Reservation;
-import org.ezone.room.entity.ReviewBoard;
-import org.ezone.room.entity.Room;
-import org.ezone.room.repository.AccommodationRepository;
-import org.ezone.room.repository.MemberRepository;
-import org.ezone.room.repository.ReservationRepository;
-import org.ezone.room.repository.ReviewBoardImgRepository;
-import org.ezone.room.repository.ReviewBoardRepository;
-import org.ezone.room.repository.ReviewReplyRepository;
-import org.ezone.room.repository.RoomRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 @Service
 @Log4j2
 @RequiredArgsConstructor
 public class ReviewBoardServiceImpl implements ReviewBoardService {
 
-    @Autowired
-    private ReviewBoardRepository reviewBoardRepository;
-
-
-    @Autowired
-    private ReviewReplyRepository reviewReplyRepository;
-    @Autowired
-    private ReviewReplyService reviewReplyService;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private AccommodationRepository accommodationRepository;
-
-    @Autowired
-    private RoomRepository roomRepository;
-
-    @Autowired
-    private ReservationRepository reservationRepository;
-
-    @Autowired
-    private ReviewBoardImgRepository reviewBoardImgRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
+    private final ReviewBoardRepository reviewBoardRepository;
+    private final ReviewReplyRepository reviewReplyRepository;
+    private final ReviewReplyService reviewReplyService;
+    private final MemberRepository memberRepository;
+    private final AccommodationRepository accommodationRepository;
+    private final RoomRepository roomRepository;
+    private final ReservationRepository reservationRepository;
+    private final ReviewBoardImgRepository reviewBoardImgRepository;
+    private final ModelMapper modelMapper;
 
     public Accommodation findAccommodationByRoomId(Long rno) {
         Room roomEntity = roomRepository.findById(rno).orElse(null);
@@ -93,11 +61,8 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     @Transactional
     @Override
     public Long register(ReviewBoardDTO dto) throws NotFoundException {
-        Optional<Member> memberOptional = Optional.ofNullable(memberRepository.findByEmail(dto.getWriterEmail()));
-        if (!memberOptional.isPresent()) {
-            throw new NotFoundException("Member not found");
-        }
-        Member member = memberOptional.get();
+        Optional<Member> memberOptional = memberRepository.findByEmail(dto.getWriterEmail());
+        Member member = memberOptional.orElseThrow(() -> new NotFoundException("Member not found"));
 
         Optional<Accommodation> accommodationOptional = accommodationRepository.findById(dto.getAno());
         if (!accommodationOptional.isPresent()) {
@@ -154,22 +119,54 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
             reviewReplyRepository.deleteByRbno(rbno);
         }
         if (reviewBoardImgRepository != null) {
-            reviewBoardImgRepository.deleteByRbno(rbno);
+            reviewBoardImgRepository.deleteImgByRbno(rbno);
         }
         if (reviewBoardRepository != null) {
             reviewBoardRepository.deleteById(rbno);
         }
     }
 
-
     @Override
     public List<ImgDTO> getImgList(Long rbno) {
         List<ImgDTO> list = new ArrayList<>();
-        ReviewBoard entity = reviewBoardRepository.findById(rbno).get();
-        reviewBoardImgRepository.GetImgbyrbno(entity).forEach(i -> { //이미지는 룸을 참조하고 있다 그러니 이미지가 참조하는 룸에 해당하는 모든 이미지를 불러온다
+        ReviewBoard entity = reviewBoardRepository.findById(rbno)
+                .orElseThrow(() -> new NotFoundException("ReviewBoard not found"));
+
+        reviewBoardImgRepository.getImgByRbno(entity).forEach(i -> { //이미지는 룸을 참조하고 있다 그러니 이미지가 참조하는 룸에 해당하는 모든 이미지를 불러온다
             ImgDTO imgDTO = modelMapper.map(i,ImgDTO.class); //dto변환
             list.add(imgDTO); // list화
         });
         return list;
+    }
+
+    // DTO 객체를 Entity 객체로 변환하는 메소드
+    private ReviewBoard dtoToEntity(ReviewBoardDTO dto, Member member, Reservation reservation) {
+        return ReviewBoard.builder()
+                .rbno(dto.getRbno())
+                .content(dto.getContent())
+                .grade(dto.getGrade())
+                .member(member)
+                .reservation(reservation)
+                .build();
+    }
+
+    // Entity 객체를 DTO 객체로 변환하는 메소드
+    private ReviewBoardDTO entityToDTO(ReviewBoard reviewBoard, List<ReviewReplyDTO> replyDTOs) {
+        Member member = reviewBoard.getReservation().getMember();
+        return ReviewBoardDTO.builder()
+                .rbno(reviewBoard.getRbno())
+                .rno(reviewBoard.getReservation().getRoom().getRno())
+                .rvno(reviewBoard.getReservation().getRvno())
+                .content(reviewBoard.getContent())
+                .grade(reviewBoard.getGrade())
+                .ano(reviewBoard.getReservation().getRoom().getAccommodation().getAno())
+                .writerEmail(member.getEmail())
+                .writerName(member.getName())
+                .roomName(reviewBoard.getReservation().getRoom().getRoomName())
+                .replies(replyDTOs)
+                .replyCount(replyDTOs.size())
+                .regDate(reviewBoard.getRegTime())
+                .modDate(reviewBoard.getModTime())
+                .build();
     }
 }

@@ -107,8 +107,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     // Room 엔티티를 RoomDTO로 변환하는 메서드
-    @Override
-    public RoomDTO entityToDTO(Room room) {
+    private RoomDTO entityToDTO(Room room) {
         AccommodationDTO accommodationDTO = new AccommodationDTO();
         accommodationDTO.setAno(room.getAccommodation().getAno());
 
@@ -125,8 +124,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     // RoomServiceImpl 내에 추가할 dtoToEntity 메서드
-    @Override
-    public Room dtoToEntity(RoomDTO roomDTO){
+    private Room dtoToEntity(RoomDTO roomDTO){
         Accommodation accommodation = accommodationRepository.findById(roomDTO.getAccommodationDTO().getAno())
                 .orElseThrow(() -> new EntityNotFoundException("숙소를 찾을 수 없습니다."));
 
@@ -143,8 +141,7 @@ public class RoomServiceImpl implements RoomService {
 
 
     // RoomImg 엔티티를 ImgDTO로 변환하는 메서드
-    @Override
-    public ImgDTO imgToDTO(RoomImg roomImg) {
+    private ImgDTO imgToDTO(RoomImg roomImg) {
         return ImgDTO.builder()
                 .ino(roomImg.getIno())
                 .imgFile(roomImg.getImgFile())

@@ -1,11 +1,12 @@
-package org.ezone.room.repository;
+package com.connectravel.repository;
 
-import java.util.List;
-import org.ezone.room.entity.ReviewBoard;
-import org.ezone.room.entity.ReviewReply;
+import com.connectravel.entity.ReviewBoard;
+import com.connectravel.entity.ReviewReply;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface ReviewReplyRepository extends JpaRepository<ReviewReply, Long> {
 

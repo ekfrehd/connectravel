@@ -15,9 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -104,6 +102,20 @@ public class RoomServiceTest {
         createAndSaveRoom(savedAccommodation, "Deluxe Room", 200000, 2, 4, true);
     }
 
+    // Room 객체를 생성하고 저장하는 공통 메서드
+    private RoomDTO createAndSaveRoom(Accommodation accommodation, String roomName, int price, int minOccupancy, int maxOccupancy, boolean operating) {
+        RoomDTO newRoom = RoomDTO.builder()
+                .roomName(roomName)
+                .price(price)
+                .minimumOccupancy(minOccupancy)
+                .maximumOccupancy(maxOccupancy)
+                .operating(operating)
+                .accommodationDTO(AccommodationDTO.builder().ano(accommodation.getAno()).build())
+                .build();
+
+        return roomService.createRoom(newRoom);
+    }
+
     @Test
     @Transactional
     public void testCreateRoom() {
@@ -146,8 +158,8 @@ public class RoomServiceTest {
                 .build();
         room = roomRepository.save(room);
 
-        // RoomDTO로 변환
-        RoomDTO roomDTO = roomService.entityToDTO(room);
+        // RoomDTO로 변환하지 않고 서비스에서 제공하는 메서드로 RoomDTO를 얻음
+        RoomDTO roomDTO = roomService.getRoom(room.getRno());
 
         // 이미지 정보 생성
         ImgDTO newImage = ImgDTO.builder()
@@ -223,17 +235,4 @@ public class RoomServiceTest {
         assertThrows(EntityNotFoundException.class, () -> roomService.getRoom(roomId));
     }*/
 
-    // Room 객체를 생성하고 저장하는 공통 메서드
-    private RoomDTO createAndSaveRoom(Accommodation accommodation, String roomName, int price, int minOccupancy, int maxOccupancy, boolean operating) {
-        RoomDTO newRoom = RoomDTO.builder()
-                .roomName(roomName)
-                .price(price)
-                .minimumOccupancy(minOccupancy)
-                .maximumOccupancy(maxOccupancy)
-                .operating(operating)
-                .accommodationDTO(AccommodationDTO.builder().ano(accommodation.getAno()).build())
-                .build();
-
-        return roomService.createRoom(newRoom);
-    }
 }

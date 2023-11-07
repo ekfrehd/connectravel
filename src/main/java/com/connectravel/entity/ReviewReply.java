@@ -1,4 +1,4 @@
-package org.ezone.room.entity;
+package com.connectravel.entity;
 
 import lombok.*;
 
@@ -18,8 +18,9 @@ public class ReviewReply extends BaseEntity{
 
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY) //지연로딩 설정
-    private ReviewBoard reviewBoard; //연관관계 지정
+    /* 연관 관계 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ReviewBoard reviewBoard;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Member member;

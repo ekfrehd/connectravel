@@ -1,8 +1,6 @@
-package org.ezone.room.entity;
+package com.connectravel.entity;
 
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,11 +18,11 @@ public class ReviewBoard extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rbno;
 
-    private double grade;
-
     @Column(length = 1500, nullable = false)
     private String content;
+    private double grade;
 
+    /* 연관 관계 */
     @OneToMany(mappedBy = "reviewBoard", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ReviewReply> replies = new ArrayList<>();
 
@@ -34,6 +32,7 @@ public class ReviewBoard extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    /* 도메인 로직 */
     public void changeContent(String content){
         this.content = content;
     }
