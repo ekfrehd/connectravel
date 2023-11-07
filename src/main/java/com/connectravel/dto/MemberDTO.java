@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-public class MemberFormDTO {
+public class MemberDTO {
 
     private String id;
     private String password;
