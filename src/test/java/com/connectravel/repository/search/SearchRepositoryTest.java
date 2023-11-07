@@ -55,7 +55,7 @@ public class SearchRepositoryTest {
                 .accommodationName("Test Accommodation")
                 .postal(12345)
                 .sellerName(member.getName())
-                .email(member.getEmail())
+                .sellerEmail(member.getEmail())
                 .address("123 Test Street, Test City")
                 .count(0)
                 .region("Seoul")

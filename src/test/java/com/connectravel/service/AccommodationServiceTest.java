@@ -125,7 +125,7 @@ class AccommodationServiceTest {
         log.info("Tel: " + foundDto.getTel());
         log.info("Address: " + foundDto.getAddress());
         log.info("Admin Name: " + foundDto.getSellerName());
-        log.info("Email: " + foundDto.getEmail());
+        log.info("Email: " + foundDto.getSellerEmail());
         log.info("Type: " + foundDto.getAccommodationType());
         log.info("Region: " + foundDto.getRegion());
         log.info("Intro: " + foundDto.getIntro());
