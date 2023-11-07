@@ -20,4 +20,6 @@ public class ImgDTO {
     private RoomDTO room;
     private AccommodationDTO accommodation;
 
+ private ReviewBoard reviewBoard;
+
 }

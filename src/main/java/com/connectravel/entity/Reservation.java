@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"room","member"})
-//예약 엔티티
 public class Reservation extends BaseTimeEntity {
 
     @Id
