@@ -7,11 +7,10 @@ import java.util.List;
 
 public interface RoomService {
 
-    RoomDTO createRoom(RoomDTO roomDTO);
+    RoomDTO registerRoom(RoomDTO roomDTO);
     ImgDTO addRoomImage(Long roomId, ImgDTO imgDTO);
-
-    RoomDTO updateRoom(Long rno, RoomDTO roomDTO);
-    void deleteRoom(Long rno);
+    RoomDTO modifyRoom(Long rno, RoomDTO roomDTO);
+    void removeRoom(Long rno);
     RoomDTO getRoom(Long rno);
-    List<RoomDTO> getAllRooms();
+    List<RoomDTO> listAllRooms();
 }

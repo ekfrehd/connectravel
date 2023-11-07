@@ -31,7 +31,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Transactional
     public Accommodation registerAccommodation(AccommodationDTO accommodationDTO) {
         // Member 찾기
-        Member member = memberRepository.findByEmail(accommodationDTO.getEmail())
+        Member member = memberRepository.findByEmail(accommodationDTO.getSellerEmail())
                 .orElseThrow(() -> new EntityNotFoundException("Member not found or not authorized"));
 
         // Accommodation 엔티티 생성
@@ -118,7 +118,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .ano(accommodation.getAno())
                 .accommodationName(accommodation.getAccommodationName())
                 .sellerName(accommodation.getMember().getName()) // 관리자 이름
-                .email(accommodation.getMember().getEmail()) // 관리자 이메일
+                .sellerEmail(accommodation.getMember().getEmail()) // 관리자 이메일
                 .address(accommodation.getAddress())
                 .postal(accommodation.getPostal())
                 .accommodationType(accommodation.getAccommodationType())
@@ -144,7 +144,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .ano(accommodation.getAno())
                 .accommodationName(accommodation.getAccommodationName())
                 .sellerName(accommodation.getMember().getName()) // 관리자 이름
-                .email(accommodation.getMember().getEmail()) // 관리자 이메일
+                .sellerEmail(accommodation.getMember().getEmail()) // 관리자 이메일
                 .address(accommodation.getAddress())
                 .postal(accommodation.getPostal())
                 .accommodationType(accommodation.getAccommodationType())

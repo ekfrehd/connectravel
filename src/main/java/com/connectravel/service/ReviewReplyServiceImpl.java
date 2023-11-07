@@ -1,6 +1,7 @@
 package com.connectravel.service;
 
 import com.connectravel.dto.ReviewReplyDTO;
+import com.connectravel.entity.Member;
 import com.connectravel.entity.ReviewBoard;
 import com.connectravel.entity.ReviewReply;
 import com.connectravel.repository.MemberRepository;
@@ -26,34 +27,52 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
 
     @Override
     public Long register(ReviewReplyDTO reviewReplyDTO) {
-
-        ReviewReply reviewReply = dtoToEntity(reviewReplyDTO, memberRepository);
-
+        ReviewReply reviewReply = dtoToEntity(reviewReplyDTO);
         reviewReplyRepository.save(reviewReply);
-
         return reviewReply.getRrno();
+    }
+
+    @Override
+    public void modify(ReviewReplyDTO reviewReplyDTO) {
+        ReviewReply reviewReply = dtoToEntity(reviewReplyDTO);
+        reviewReplyRepository.save(reviewReply);
     }
 
     public List<ReviewReplyDTO> getList(Long rbno) {
         List<ReviewReply> result = reviewReplyRepository.getRepliesByReviewBoardOrderByRrno(ReviewBoard.builder().rbno(rbno).build());
         log.info("ReviewReplyServiceImpl - getList() 결과: " + result);
         return result.stream()
-                .flatMap(this::entityToDTO)
+                .map(this::entityToDTO)
                 .collect(Collectors.toList());
-    }
-
-
-
-    @Override
-    public void modify(ReviewReplyDTO reviewReplyDTO) {
-
-        ReviewReply reviewReply = dtoToEntity(reviewReplyDTO, memberRepository);
-
-        reviewReplyRepository.save(reviewReply);
     }
 
     @Override
     public void remove(Long rno) {
         reviewReplyRepository.deleteById(rno);
+    }
+
+
+    private ReviewReply dtoToEntity(ReviewReplyDTO reviewReplyDTO) {
+        ReviewBoard reviewBoard = ReviewBoard.builder().rbno(reviewReplyDTO.getRbno()).build();
+        Member member = memberRepository.findByEmail(reviewReplyDTO.getReplyer())
+                .orElseThrow(() -> new RuntimeException("해당 이메일을 가진 회원을 찾을 수 없습니다: " + reviewReplyDTO.getReplyer()));
+
+        return ReviewReply.builder()
+                .rrno(reviewReplyDTO.getRrno())
+                .text(reviewReplyDTO.getText())
+                .member(member)
+                .reviewBoard(reviewBoard)
+                .build();
+    }
+
+    private ReviewReplyDTO entityToDTO(ReviewReply reviewReply) {
+        return ReviewReplyDTO.builder()
+                .rrno(reviewReply.getRrno())
+                .rbno(reviewReply.getReviewBoard().getRbno())
+                .text(reviewReply.getText())
+                .replyer(reviewReply.getMember().getEmail())
+                .regDate(reviewReply.getRegTime())
+                .modDate(reviewReply.getModTime())
+                .build();
     }
 }

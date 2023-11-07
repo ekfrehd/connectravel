@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,14 +131,15 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     public List<ImgDTO> getImgList(Long rbno) {
         List<ImgDTO> list = new ArrayList<>();
         ReviewBoard entity = reviewBoardRepository.findById(rbno)
-                .orElseThrow(() -> new NotFoundException("ReviewBoard not found"));
+                .orElseThrow(() -> new EntityNotFoundException("ReviewBoard not found"));
 
-        reviewBoardImgRepository.getImgByRbno(entity).forEach(i -> { //이미지는 룸을 참조하고 있다 그러니 이미지가 참조하는 룸에 해당하는 모든 이미지를 불러온다
-            ImgDTO imgDTO = modelMapper.map(i,ImgDTO.class); //dto변환
-            list.add(imgDTO); // list화
+        reviewBoardImgRepository.getImgByRbno(rbno).forEach(i -> {
+            ImgDTO imgDTO = modelMapper.map(i, ImgDTO.class);
+            list.add(imgDTO); // 리스트화
         });
         return list;
-    }
+    } // 사용자가 남긴 숙소 리뷰의 이미지들을 가져오는 메서드
+
 
     // DTO 객체를 Entity 객체로 변환하는 메소드
     private ReviewBoard dtoToEntity(ReviewBoardDTO dto, Member member, Reservation reservation) {
