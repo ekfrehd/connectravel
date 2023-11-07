@@ -18,7 +18,6 @@ public class QnaReplyServiceTests {
 
     @Test // 댓글 추가 테스트
     public void testRegisterQnaReply() {
-
         QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
         qnaReplyDTO.setText("테스트 답변 내용");
         qnaReplyDTO.setBno(100L);
@@ -61,12 +60,3 @@ public class QnaReplyServiceTests {
         qnaReplyService.remove(qnaReplyDTO.getRno()); // 게시글 삭제 메서드
     }
 }
-
-
-
-
-
-
-
-
-
