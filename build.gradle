@@ -26,7 +26,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -39,8 +38,12 @@ dependencies {
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     annotationProcessor 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    // test
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
     //jjwt
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
@@ -48,13 +51,13 @@ dependencies {
     implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time', version: '3.0.4.RELEASE'
     implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.1.0'
 
-
     //쿼리 dsl 의존성 추가
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
     // modelmapper
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0'
+
 }
 
 tasks.named('test') {
@@ -80,4 +83,3 @@ configurations{
 compileQuerydsl{
     options.annotationProcessorPath = configurations.querydsl
 }
-
