@@ -1,4 +1,4 @@
-package org.ezone.room.dto;
+package com.connectravel.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;

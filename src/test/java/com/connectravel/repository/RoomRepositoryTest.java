@@ -1,9 +1,8 @@
 package com.connectravel.repository;
 
-import com.connectravel.entity.AccommodationOption;
+import com.connectravel.entity.Accommodation;
 import com.connectravel.entity.Room;
 import com.connectravel.entity.RoomImg;
-import com.connectravel.entity.Accommodation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -39,7 +38,7 @@ public class RoomRepositoryTest {
                 .region("테스트 지역")
                 .tel("010-1234-5678")
                 .content("테스트 내용")
-                .email("test@test.com")
+                .sellerEmail("test@test.com")
                 .intro("테스트 소개")
                 .build();
 

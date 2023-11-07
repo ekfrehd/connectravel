@@ -1,13 +1,13 @@
-package org.ezone.room.service;
+package com.connectravel.service;
+
+import com.connectravel.dto.ReviewReplyDTO;
+import com.connectravel.entity.Member;
+import com.connectravel.entity.ReviewBoard;
+import com.connectravel.entity.ReviewReply;
+import com.connectravel.repository.MemberRepository;
 
 import java.util.List;
 import java.util.stream.Stream;
-import org.ezone.room.dto.ReviewReplyDTO;
-import org.ezone.room.entity.Member;
-import org.ezone.room.entity.ReviewBoard;
-import org.ezone.room.entity.ReviewReply;
-import org.ezone.room.repository.MemberRepository;
-import org.springframework.stereotype.Service;
 
 public interface ReviewReplyService {
 
@@ -21,7 +21,7 @@ public interface ReviewReplyService {
         ReviewBoard reviewBoard = ReviewBoard.builder().rbno(reviewReplyDTO.getRbno()).build();
 
         Member member = memberRepository.findByEmail(reviewReplyDTO.getReplyer());
-//        member = Member.builder().email(reviewReplyDTO.getReplyer()).build();
+
         ReviewReply reviewReply = ReviewReply.builder()
                 .rrno(reviewReplyDTO.getRrno())
                 .text(reviewReplyDTO.getText())

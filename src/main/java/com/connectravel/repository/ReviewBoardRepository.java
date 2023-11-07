@@ -1,7 +1,6 @@
-package org.ezone.room.repository;
+package com.connectravel.repository;
 
-import java.util.List;
-import org.ezone.room.entity.ReviewBoard;
+import com.connectravel.entity.ReviewBoard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

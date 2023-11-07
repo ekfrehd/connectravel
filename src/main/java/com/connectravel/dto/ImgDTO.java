@@ -2,6 +2,7 @@ package com.connectravel.dto;
 
 
 import com.connectravel.entity.Accommodation;
+import com.connectravel.entity.ReviewBoard;
 import com.connectravel.entity.Room;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,6 @@ public class ImgDTO {
     private String imgFile;
     private RoomDTO room;
     private AccommodationDTO accommodation;
-
- private ReviewBoard reviewBoard;
+    private ReviewBoard reviewBoard;
 
 }

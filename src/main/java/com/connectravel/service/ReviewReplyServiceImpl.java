@@ -1,16 +1,17 @@
-package org.ezone.room.service;
+package com.connectravel.service;
+
+import com.connectravel.dto.ReviewReplyDTO;
+import com.connectravel.entity.ReviewBoard;
+import com.connectravel.entity.ReviewReply;
+import com.connectravel.repository.MemberRepository;
+import com.connectravel.repository.ReviewBoardRepository;
+import com.connectravel.repository.ReviewReplyRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.ezone.room.dto.ReviewReplyDTO;
-import org.ezone.room.entity.ReviewBoard;
-import org.ezone.room.entity.ReviewReply;
-import org.ezone.room.repository.MemberRepository;
-import org.ezone.room.repository.ReviewBoardRepository;
-import org.ezone.room.repository.ReviewReplyRepository;
-import org.springframework.stereotype.Service;
 
 @Service
 @Log4j2
@@ -25,9 +26,6 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
 
     @Override
     public Long register(ReviewReplyDTO reviewReplyDTO) {
-
-//        ReviewBoard reviewBoard = reviewBoardRepository.findById(reviewReplyDTO.getRbno())
-//                .orElseThrow(() -> new IllegalArgumentException("No item found with ID: " + reviewReplyDTO.getRbno()));
 
         ReviewReply reviewReply = dtoToEntity(reviewReplyDTO, memberRepository);
 

@@ -1,8 +1,6 @@
-package org.ezone.room.entity;
+package com.connectravel.entity;
 
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -18,10 +16,11 @@ public class ReviewBoardImg {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ino;
 
-    @ManyToOne
-    private ReviewBoard reviewBoard;
-
     @Column(length = 200)
     private String imgFile;
+
+    /* 연관 관계 */
+    @ManyToOne
+    private ReviewBoard reviewBoard;
 
 }
