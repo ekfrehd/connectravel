@@ -1,11 +1,19 @@
 package com.connectravel.service;
 
+import com.connectravel.dto.MemberDTO;
 import com.connectravel.dto.ReservationDTO;
+import com.connectravel.dto.RoomDTO;
+import com.connectravel.entity.Member;
+import com.connectravel.entity.Reservation;
+import com.connectravel.entity.Room;
+import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.ReservationRepository;
+import com.connectravel.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,14 +22,23 @@ import java.util.List;
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final RoomRepository roomRepository;
+    private final MemberRepository memberRepository;
+    private final RoomService roomService;
+    private final MemberService memberService;
 
     @Override
     @Transactional
     public ReservationDTO bookRoom(ReservationDTO reservationDTO) {
-        // 예약 생성 로직 구현
-        return null;
-    }
+        // DTO를 Entity로 변환
+        Reservation reservation = dtoToEntity(reservationDTO);
 
+        // 예약 엔티티 저장
+        Reservation savedReservation = reservationRepository.save(reservation);
+
+        // 저장된 엔티티를 DTO로 변환하여 반환
+        return entityToDTO(savedReservation);
+    }
     @Override
     @Transactional(readOnly = true)
     public ReservationDTO getRoomBookingDetails(Long rvno) {
@@ -75,4 +92,42 @@ public class ReservationServiceImpl implements ReservationService {
     public void updateRoomBookingStatus(Long rvno, ReservationStatus status) {
         // 예약 상태 변경 로직 구현
     }*/
+
+    // Reservation 엔티티를 ReservationDTO로 변환하는 메서드
+    private ReservationDTO entityToDTO(Reservation reservation) {
+        RoomDTO roomDTO = roomService.entityToDTO(reservation.getRoom());
+        MemberDTO memberDTO = memberService.entityToDTO(reservation.getMember()); // Member 변환
+
+        return ReservationDTO.builder()
+                .rvno(reservation.getRvno())
+                .message(reservation.getMessage())
+                .money(reservation.getMoney())
+                .numberOfGuests(reservation.getNumberOfGuests())
+                .startDate(reservation.getStartDate())
+                .endDate(reservation.getEndDate())
+                .state(reservation.isState())
+                .roomDTO(roomDTO) // Room 엔티티를 DTO로 변환
+                .memberDTO(memberDTO) // Member 엔티티를 DTO로 변환
+                .build();
+    }
+
+    // ReservationDTO를 Reservation 엔티티로 변환하는 메서드
+    private Reservation dtoToEntity(ReservationDTO reservationDTO) {
+        Room room = roomRepository.findById(reservationDTO.getRoomDTO().getRno())
+                .orElseThrow(() -> new EntityNotFoundException("방을 찾을 수 없습니다."));
+        Member member = memberRepository.findByEmail(reservationDTO.getMemberDTO().getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
+        return Reservation.builder()
+                .message(reservationDTO.getMessage())
+                .money(reservationDTO.getMoney())
+                .numberOfGuests(reservationDTO.getNumberOfGuests())
+                .startDate(reservationDTO.getStartDate())
+                .endDate(reservationDTO.getEndDate())
+                .state(reservationDTO.isState())
+                .room(room) // 여기서 Room 엔티티를 설정합니다.
+                .member(member) // 여기서 Member 엔티티를 설정합니다.
+                .build();
+    }
+
 }
