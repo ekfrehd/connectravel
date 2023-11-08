@@ -1,15 +1,16 @@
 package com.connectravel.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.ezone.room.constant.Role;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
-@Getter
-@Setter
-public class MemberFormDTO {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class MemberDTO {
 
     private String id;
     private String password;
@@ -22,7 +23,6 @@ public class MemberFormDTO {
     private String email;
 
     private String tel;
-    private String tel1, tel2, tel3;
 
     private int point;
     private Role role;

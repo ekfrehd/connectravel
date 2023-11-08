@@ -1,7 +1,5 @@
 package com.connectravel.dto;
 
-import com.connectravel.entity.Member;
-import com.connectravel.entity.Room;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,19 +13,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ReservationDTO {
 
-    private Long rvno;
-
-    private String message; //요청사항
-    private int money;
-
+    private Long rvno; // 예약 번호
+    private String message; // 요청 사항
+    private int money; // 결제 금액
     private int numberOfGuests; // 예약 인원 수
+    private LocalDate startDate; // 예약 시작 일자
+    private LocalDate endDate; // 예약 종료 일자
+    private boolean state; // 예약 상태
 
-    private LocalDate startDate; //예약 시작
-    private LocalDate endDate; //예약 종료
-
-    private boolean state = true;
-
-    private Room room;
-    private Member member;
+    private RoomDTO roomDTO; // 예약한 방에 대한 정보
+    private MemberDTO memberDTO; // 예약한 회원에 대한 정보
 
 }
