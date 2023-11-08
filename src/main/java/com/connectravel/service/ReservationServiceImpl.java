@@ -162,11 +162,6 @@ public class ReservationServiceImpl implements ReservationService {
         return existingReservations.isEmpty();
     }
 
-   /* @Override
-    @Transactional
-    public void updateRoomBookingStatus(Long rvno, ReservationStatus status) {
-        // 예약 상태 변경 로직 구현
-    }*/
 
     // Reservation 엔티티를 ReservationDTO로 변환하는 메서드
     private ReservationDTO entityToDTO(Reservation reservation) {

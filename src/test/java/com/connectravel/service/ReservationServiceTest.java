@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -191,8 +192,6 @@ public class ReservationServiceTest {
         assertEquals(ReservationStatus.CANCELLED, finalReservation.getStatus(), "예약 상태가 최종적으로 취소된 상태여야 합니다.");
     }
 
-
-  /*
     @Test
     @Transactional
     void testListUserRoomBookings() {
@@ -201,6 +200,10 @@ public class ReservationServiceTest {
         assertNotNull(bookings, "사용자 예약 목록이 반환되어야 합니다.");
         // 추가적인 검증 로직
     }
+
+
+  /*
+
 
     @Test
     @Transactional
