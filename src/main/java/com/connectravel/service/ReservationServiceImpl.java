@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -128,27 +129,25 @@ public class ReservationServiceImpl implements ReservationService {
         return false;
     }
 
-
-
     @Override
     @Transactional(readOnly = true)
     public List<ReservationDTO> listUserRoomBookings(String userEmail) {
-        // 사용자별 예약 목록 조회 로직 구현
-        return null;
+        List<Reservation> reservations = reservationRepository.findByMemberEmail(userEmail);
+        return reservations.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ReservationDTO> listAccommodationRoomBookings(Long ano) {
-        // 숙소별 예약 목록 조회 로직 구현
-        return null;
+        List<Reservation> reservations = reservationRepository.findByRoomAccommodationAno(ano);
+        return reservations.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ReservationDTO> listRoomBookings(Long rno) {
-        // 방별 예약 목록 조회 로직 구현
-        return null;
+        List<Reservation> reservations = reservationRepository.findByRoomRno(rno);
+        return reservations.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
     @Override
