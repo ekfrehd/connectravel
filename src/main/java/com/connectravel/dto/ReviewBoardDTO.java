@@ -23,7 +23,7 @@ public class ReviewBoardDTO {
     private LocalDateTime regDate, modDate;
 
     private String roomName;
-    private String writerEmail; //작성자 이메일
+    private String writerEmail;
     private String writerName;
 
     private List<ReviewReplyDTO> replies;

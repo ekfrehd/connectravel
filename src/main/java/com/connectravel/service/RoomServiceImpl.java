@@ -75,8 +75,7 @@ public class RoomServiceImpl implements RoomService {
         Room room = roomRepository.findById(rno)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid room Id: " + rno));
 
-        // 여기에 roomDTO의 정보를 room 엔티티에 매핑하는 로직 추가
-        room.updateRoomDetails(roomDTO); // 예시 메서드, 실제 구현 필요
+        room.updateRoomDetails(roomDTO);
 
         Room updatedRoom = roomRepository.save(room);
         return entityToDTO(updatedRoom);
@@ -135,11 +134,10 @@ public class RoomServiceImpl implements RoomService {
                 .maximumOccupancy(roomDTO.getMaximumOccupancy())
                 .operating(roomDTO.isOperating())
                 .content(roomDTO.getContent())
-                .accommodation(accommodation) // 여기서 숙소를 설정합니다.
+                .accommodation(accommodation)
                 .build();
     }
 
-    // RoomImg 엔티티를 ImgDTO로 변환하는 메서드
     private ImgDTO imgToDTO(RoomImg roomImg) {
         return ImgDTO.builder()
                 .ino(roomImg.getIno())

@@ -51,7 +51,7 @@ public class ReviewBoardServiceTest {
                 .build();
 
         // 후기 등록 테스트
-        Long rbno = reviewBoardService.register(dto);
+        Long rbno = reviewBoardService.createReview(dto);
 
         // 테스트 검증
         assertNotNull(rbno, "The review must be registered and return a review board number");
