@@ -1,7 +1,6 @@
 package com.connectravel.service;
 
 import com.connectravel.constant.ReservationStatus;
-import com.connectravel.dto.AccommodationDTO;
 import com.connectravel.dto.MemberDTO;
 import com.connectravel.dto.ReservationDTO;
 import com.connectravel.dto.RoomDTO;
@@ -9,7 +8,6 @@ import com.connectravel.entity.Accommodation;
 import com.connectravel.entity.Member;
 import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.repository.MemberRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,54 +42,54 @@ public class ReservationServiceTest {
     private ReservationDTO testReservation;
     private Accommodation testAccommodation;
 
-    @BeforeEach
-    public void setUp() {
-        // 회원 정보 생성 및 저장
-        testMember = Member.builder()
-                .name("Test Member Name")
-                .nickName("Test Member NickName")
-                .email("testmember5@example.com")
-                .build();
-        memberRepository.save(testMember);
-
-        testAccommodation = Accommodation.builder()
-                .accommodationName("테스트 숙소")
-                .sellerName(testMember.getName())
-                .sellerEmail(testMember.getEmail())
-                .postal(12345)
-                .address("테스트 주소")
-                .count(0)
-                .region("테스트 지역")
-                .tel("010-1234-5678")
-                .accommodationType("모텔")
-                .member(testMember)
-                .build();
-        accommodationRepository.save(testAccommodation);
-
-        // 방 정보 생성 및 저장
-        testRoom = roomService.registerRoom(RoomDTO.builder()
-                .roomName("스위트룸")
-                .price(150000)
-                .accommodationDTO(AccommodationDTO.builder().ano(testAccommodation.getAno()).build())
-                .build());
-
-        // 예약 정보 생성
-        testReservation = ReservationDTO.builder()
-                .message("테스트 예약입니다")
-                .money(150000)
-                .numberOfGuests(2)
-                .startDate(LocalDate.now())
-                .endDate(LocalDate.now().plusDays(2))
-                .status(ReservationStatus.ACTIVE) // 상태를 ACTIVE로 설정
-                .roomDTO(testRoom) // 예약할 방의 정보
-                .memberDTO(MemberDTO.builder() // 예약자의 정보
-                        .id(testMember.getId())
-                        .name(testMember.getName())
-                        .nickName(testMember.getNickName())
-                        .email(testMember.getEmail())
-                        .build())
-                .build();
-    }
+//    @BeforeEach
+//    public void setUp() {
+//        // 회원 정보 생성 및 저장
+//        testMember = Member.builder()
+//                .name("Test Member Name")
+//                .nickName("Test Member NickName")
+//                .email("testmember5@example.com")
+//                .build();
+//        memberRepository.save(testMember);
+//
+//        testAccommodation = Accommodation.builder()
+//                .accommodationName("테스트 숙소")
+//                .sellerName(testMember.getName())
+//                .sellerEmail(testMember.getEmail())
+//                .postal(12345)
+//                .address("테스트 주소")
+//                .count(0)
+//                .region("테스트 지역")
+//                .tel("010-1234-5678")
+//                .accommodationType("모텔")
+//                .member(testMember)
+//                .build();
+//        accommodationRepository.save(testAccommodation);
+//
+//        // 방 정보 생성 및 저장
+//        testRoom = roomService.registerRoom(RoomDTO.builder()
+//                .roomName("스위트룸")
+//                .price(150000)
+//                .accommodationDTO(AccommodationDTO.builder().ano(testAccommodation.getAno()).build())
+//                .build());
+//
+//        // 예약 정보 생성
+//        testReservation = ReservationDTO.builder()
+//                .message("테스트 예약입니다")
+//                .money(150000)
+//                .numberOfGuests(2)
+//                .startDate(LocalDate.now())
+//                .endDate(LocalDate.now().plusDays(2))
+//                .status(ReservationStatus.ACTIVE) // 상태를 ACTIVE로 설정
+//                .roomDTO(testRoom) // 예약할 방의 정보
+//                .memberDTO(MemberDTO.builder() // 예약자의 정보
+//                        .id(testMember.getId())
+//                        .name(testMember.getName())
+//                        .nickName(testMember.getNickName())
+//                        .email(testMember.getEmail())
+//                        .build())
+//                .build();
+//    }
 
     @Test
     // @Transactional
@@ -191,35 +190,37 @@ public class ReservationServiceTest {
         assertEquals(ReservationStatus.CANCELLED, finalReservation.getStatus(), "예약 상태가 최종적으로 취소된 상태여야 합니다.");
     }
 
-
-  /*
     @Test
     @Transactional
     void testListUserRoomBookings() {
-        String userEmail = "user@example.com"; // 테스트용 사용자 이메일
+        String userEmail = "testmember@example.com"; // 테스트용 사용자 이메일
         List<ReservationDTO> bookings = reservationService.listUserRoomBookings(userEmail);
         assertNotNull(bookings, "사용자 예약 목록이 반환되어야 합니다.");
-        // 추가적인 검증 로직
+
+        log.debug("Get User's Reservation List : {} ", bookings);
     }
 
     @Test
     @Transactional
     void testListAccommodationRoomBookings() {
-        Long ano = 1L; // 테스트용 숙소 번호
+        Long ano = 51L; // 테스트용 숙소 번호
         List<ReservationDTO> bookings = reservationService.listAccommodationRoomBookings(ano);
         assertNotNull(bookings, "숙소 예약 목록이 반환되어야 합니다.");
-        // 추가적인 검증 로직
+
+        log.debug("Get Accommodation's Reservation List : {} ", bookings);
     }
 
     @Test
     @Transactional
     void testListRoomBookings() {
-        Long rno = 1L; // 테스트용 방 번호
+        Long rno = 107L; // 테스트용 방 번호
         List<ReservationDTO> bookings = reservationService.listRoomBookings(rno);
         assertNotNull(bookings, "방 예약 목록이 반환되어야 합니다.");
-        // 추가적인 검증 로직
+
+        log.debug("Get Room's Reservation List : {} ", bookings);
     }
 
+  /*
     @Test
     @Transactional
     void testCheckRoomAvailability() {
