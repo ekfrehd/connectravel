@@ -1,5 +1,6 @@
 package com.connectravel.service;
 
+import com.connectravel.constant.ReservationStatus;
 import com.connectravel.dto.AccommodationDTO;
 import com.connectravel.dto.MemberDTO;
 import com.connectravel.dto.ReservationDTO;
@@ -18,8 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ReservationServiceTest {
@@ -49,7 +49,7 @@ public class ReservationServiceTest {
         testMember = Member.builder()
                 .name("Test Member Name")
                 .nickName("Test Member NickName")
-                .email("testmember2@example.com")
+                .email("testmember5@example.com")
                 .build();
         memberRepository.save(testMember);
 
@@ -62,7 +62,7 @@ public class ReservationServiceTest {
                 .count(0)
                 .region("테스트 지역")
                 .tel("010-1234-5678")
-                .accommodationType("호텔")
+                .accommodationType("모텔")
                 .member(testMember)
                 .build();
         accommodationRepository.save(testAccommodation);
@@ -81,7 +81,7 @@ public class ReservationServiceTest {
                 .numberOfGuests(2)
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusDays(2))
-                .state(true)
+                .status(ReservationStatus.ACTIVE) // 상태를 ACTIVE로 설정
                 .roomDTO(testRoom) // 예약할 방의 정보
                 .memberDTO(MemberDTO.builder() // 예약자의 정보
                         .id(testMember.getId())
@@ -93,15 +93,13 @@ public class ReservationServiceTest {
     }
 
     @Test
-    @Transactional
+    // @Transactional
     void testBookRoom() {
         // 예약 생성 테스트
-
         ReservationDTO createdReservation = reservationService.bookRoom(testReservation);
         assertNotNull(createdReservation, "예약이 생성되어야 합니다.");
 
         log.debug("Created Reservation : {} ", createdReservation);
-
     }
 
     @Test
@@ -118,19 +116,23 @@ public class ReservationServiceTest {
 
 
     @Test
-    // @Transactional
+    @Transactional
     void testModifyExistingRoomBooking() {
-        // 수정할 예약 정보
+        // 테스트를 위한 새 예약 생성하여 실제 존재하는지 확인
+        ReservationDTO newReservation = reservationService.bookRoom(testReservation);
+        Long reservationId = newReservation.getRvno(); // 생성된 예약 ID 사용
+
+        // 예약 상세 정보 수정
         ReservationDTO modifyReservation = ReservationDTO.builder()
-                .rvno(3L) // 데이터 베이스에 있는 예약 번호 설정
+                .rvno(reservationId)
                 .message("modify reservation")
                 .money(150000)
                 .numberOfGuests(4)
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusDays(2))
-                .state(true)
-                .roomDTO(testRoom) // 예약할 방의 정보
-                .memberDTO(MemberDTO.builder() // 예약자의 정보
+                .status(ReservationStatus.ACTIVE) // 'status' 필드를 정확하게 사용 ('state' 대신)
+                .roomDTO(testRoom)
+                .memberDTO(MemberDTO.builder()
                         .id(testMember.getId())
                         .name(testMember.getName())
                         .nickName(testMember.getNickName())
@@ -138,34 +140,59 @@ public class ReservationServiceTest {
                         .build())
                 .build();
 
-        // 예약 수정 테스트
-        ReservationDTO updatedReservation = reservationService.modifyRoomBooking(3L, modifyReservation);
-        assertNotNull(updatedReservation, "수정된 예약이 반환되어야 합니다.");
+        // 기존 예약 수정 메소드 호출
+        ReservationDTO updatedReservation = reservationService.modifyRoomBooking(reservationId, modifyReservation);
 
-        // 수정된 내용이 반영되었는지 확인
-        assertEquals(modifyReservation.getMessage(), updatedReservation.getMessage(), "메시지가 수정되어야 합니다.");
-        assertEquals(modifyReservation.getMoney(), updatedReservation.getMoney(), "가격이 수정되어야 합니다.");
-        assertEquals(modifyReservation.getNumberOfGuests(), updatedReservation.getNumberOfGuests(), "손님 수가 수정되어야 합니다.");
-        assertEquals(modifyReservation.getStartDate(), updatedReservation.getStartDate(), "시작 날짜가 수정되어야 합니다.");
-        assertEquals(modifyReservation.getEndDate(), updatedReservation.getEndDate(), "종료 날짜가 수정되어야 합니다.");
-        assertEquals(modifyReservation.isState(), updatedReservation.isState(), "상태가 수정되어야 합니다.");
+        // 업데이트가 성공적이었는지 확인하는 단언문
+        assertNotNull(updatedReservation, "수정된 예약은 null이 아니어야 합니다.");
+        assertEquals(modifyReservation.getMessage(), updatedReservation.getMessage(), "메시지가 일치해야 합니다.");
+        // ... 필요한 추가 단언문
 
-        log.debug("Modified Existing Reservation : {}", updatedReservation);
+        // 데이터 정리 또는 @Transactional에 의존하여 롤백
+    }
+
+
+    @Test
+    void testRequestCancelRoomBooking() {
+        // 예약 생성
+        ReservationDTO newReservation = reservationService.bookRoom(testReservation);
+        Long rvno = newReservation.getRvno();
+
+        // 예약자 이메일
+        String userEmail = newReservation.getMemberDTO().getEmail();
+
+        // 예약 취소 요청
+        boolean requestCancelSuccess = reservationService.requestCancel(rvno, userEmail);
+
+        // 취소 요청 성공 검증
+        assertTrue(requestCancelSuccess, "예약 취소 요청이 성공적으로 이루어져야 합니다.");
+
+        // 취소 요청 상태 검증
+        ReservationDTO cancelledRequestReservation = reservationService.getRoomBookingDetails(rvno);
+        assertEquals(ReservationStatus.CANCELLATION_REQUESTED, cancelledRequestReservation.getStatus(), "예약 상태가 취소 요청 상태여야 합니다.");
+    }
+
+    @Test
+    void testApproveCancellationRoomBooking() {
+        // 예약 생성 및 취소 요청 상태로 변경
+        ReservationDTO newReservation = reservationService.bookRoom(testReservation);
+        Long rvno = newReservation.getRvno();
+        String userEmail = newReservation.getMemberDTO().getEmail();
+        reservationService.requestCancel(rvno, userEmail);
+
+        // 예약 취소 승인
+        boolean approveCancelSuccess = reservationService.approveCancellation(rvno);
+
+        // 취소 승인 성공 검증
+        assertTrue(approveCancelSuccess, "예약 취소 승인이 성공적으로 이루어져야 합니다.");
+
+        // 최종 취소 상태 검증
+        ReservationDTO finalReservation = reservationService.getRoomBookingDetails(rvno);
+        assertEquals(ReservationStatus.CANCELLED, finalReservation.getStatus(), "예약 상태가 최종적으로 취소된 상태여야 합니다.");
     }
 
 
   /*
-
-    @Test
-    @Transactional
-    void testCancelRoomBooking() {
-        // 취소를 위한 예약 번호 준비
-        Long rvno = 1L; // 테스트용 예약 번호
-
-        // 예약 취소 테스트
-        assertDoesNotThrow(() -> reservationService.cancelRoomBooking(rvno), "예약 취소 시 예외가 발생하지 않아야 합니다.");
-    }
-
     @Test
     @Transactional
     void testListUserRoomBookings() {

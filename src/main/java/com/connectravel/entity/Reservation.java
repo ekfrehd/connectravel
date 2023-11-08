@@ -1,5 +1,6 @@
 package com.connectravel.entity;
 
+import com.connectravel.constant.ReservationStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,8 +28,8 @@ public class Reservation extends BaseTimeEntity {
     private LocalDate startDate; // 입실일
     private LocalDate endDate; // 퇴실일
 
-    @Builder.Default
-    private boolean state = true;
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
 
     /* 연관 관계 */
     @ManyToOne

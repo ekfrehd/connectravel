@@ -1,11 +1,13 @@
 package com.connectravel.service;
 
+import com.connectravel.constant.ReservationStatus;
 import com.connectravel.dto.MemberDTO;
 import com.connectravel.dto.ReservationDTO;
 import com.connectravel.dto.RoomDTO;
 import com.connectravel.entity.Member;
 import com.connectravel.entity.Reservation;
 import com.connectravel.entity.Room;
+import com.connectravel.exception.RoomNotAvailableException;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.ReservationRepository;
 import com.connectravel.repository.RoomRepository;
@@ -30,15 +32,19 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public ReservationDTO bookRoom(ReservationDTO reservationDTO) {
-        // DTO를 Entity로 변환
+        // 예약하기 전에 원하는 날짜에 방이 이용 가능한지 확인합니다.
+        if (!checkRoomAvailability(
+                reservationDTO.getRoomDTO().getRno(),
+                reservationDTO.getStartDate(),
+                reservationDTO.getEndDate())) {
+            throw new RoomNotAvailableException("선택한 날짜에 방이 이용 불가능합니다.");
+        }
+
         Reservation reservation = dtoToEntity(reservationDTO);
-
-        // 예약 엔티티 저장
         Reservation savedReservation = reservationRepository.save(reservation);
-
-        // 저장된 엔티티를 DTO로 변환하여 반환
         return entityToDTO(savedReservation);
     }
+
     @Override
     @Transactional(readOnly = true)
     public ReservationDTO getRoomBookingDetails(Long rvno) {
@@ -54,29 +60,22 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public ReservationDTO modifyRoomBooking(Long rvno, ReservationDTO reservationDTO) {
-        // 기존 예약을 ID를 사용하여 찾기
         Reservation reservation = reservationRepository.findById(rvno)
                 .orElseThrow(() -> new EntityNotFoundException("해당 예약을 찾을 수 없습니다. 예약 번호: " + rvno));
 
-        // 날짜가 변경되었는지 확인하고 변경된 경우 새 날짜에 대한 방의 예약 가능 여부 확인
         if (!reservation.getStartDate().isEqual(reservationDTO.getStartDate()) ||
                 !reservation.getEndDate().isEqual(reservationDTO.getEndDate())) {
-            boolean isAvailable = checkRoomAvailability(reservation.getRoom().getRno(),
-                    reservationDTO.getStartDate(),
-                    reservationDTO.getEndDate());
-            // 만약 새로운 날짜에 방이 예약 가능하지 않다면 예외 발생
-            if (!isAvailable) {
-                throw new IllegalStateException("새로운 날짜에 방이 예약 가능하지 않습니다.");
+            if (!checkRoomAvailability(reservation.getRoom().getRno(), reservationDTO.getStartDate(), reservationDTO.getEndDate())) {
+                throw new RoomNotAvailableException("새로운 날짜에 방이 이용 불가능합니다.");
             }
         }
 
-        // 예약 상세 정보 업데이트
         reservation.setMessage(reservationDTO.getMessage());
         reservation.setMoney(reservationDTO.getMoney());
         reservation.setNumberOfGuests(reservationDTO.getNumberOfGuests());
         reservation.setStartDate(reservationDTO.getStartDate());
         reservation.setEndDate(reservationDTO.getEndDate());
-        reservation.setState(reservationDTO.isState());
+        reservation.setStatus(reservationDTO.getStatus()); // 상태 업데이트 부분 변경
 
         // 업데이트된 예약 저장
         Reservation updatedReservation = reservationRepository.save(reservation);
@@ -86,11 +85,50 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
 
+
     @Override
     @Transactional
-    public void cancelRoomBooking(Long rvno) {
-        // 예약 취소 로직 구현
+    public boolean requestCancel(Long rvno, String userEmail) {
+        // 예약 정보를 ID를 통해 조회
+        Reservation reservation = reservationRepository.findById(rvno)
+                .orElseThrow(() -> new EntityNotFoundException("예약 정보를 찾을 수 없습니다. 예약 ID: " + rvno));
+
+        // 예약한 사용자 이메일이 요청한 이메일과 같은지 확인
+        if (!reservation.getMember().getEmail().equals(userEmail)) {
+            throw new SecurityException("자신의 예약만 취소 요청을 할 수 있습니다.");
+        }
+
+        // 예약 상태가 활성화된 상태인지 확인 후 취소 요청 상태로 변경
+        if (reservation.getStatus() == ReservationStatus.ACTIVE) {
+            reservation.setStatus(ReservationStatus.CANCELLATION_REQUESTED);
+            reservationRepository.save(reservation); // 변경된 예약 상태를 저장
+            return true;
+        }
+
+        return false;
     }
+
+
+    @Override
+    @Transactional
+    public boolean approveCancellation(Long rvno) {
+        // 해당 메서드는 관리자나 숙박업소의 주인과 같은 적절한 권한을 가진 사람만 호출해야 합니다.
+
+        // 예약 정보를 ID를 통해 조회
+        Reservation reservation = reservationRepository.findById(rvno)
+                .orElseThrow(() -> new EntityNotFoundException("예약 정보를 찾을 수 없습니다. 예약 ID: " + rvno));
+
+        // 예약 상태가 취소 요청 중인지 확인 후 취소 상태로 변경
+        if (reservation.getStatus() == ReservationStatus.CANCELLATION_REQUESTED) {
+            reservation.setStatus(ReservationStatus.CANCELLED);
+            reservationRepository.save(reservation); // 변경된 예약 상태를 저장
+            return true;
+        }
+
+        return false;
+    }
+
+
 
     @Override
     @Transactional(readOnly = true)
@@ -116,8 +154,12 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional(readOnly = true)
     public boolean checkRoomAvailability(Long rno, LocalDate startDate, LocalDate endDate) {
-        // 예약 가능 여부 확인 로직 구현
-        return true;
+        // 방의 예약 가능 여부를 확인하기 위한 로직
+        // 날짜 범위가 겹치는 기존 예약이 있는지 확인
+        List<Reservation> existingReservations = reservationRepository.findAvailableReservations(rno, endDate, startDate);
+
+        // 겹치는 예약이 있으면 방은 이용 불가능
+        return existingReservations.isEmpty();
     }
 
    /* @Override
@@ -138,11 +180,12 @@ public class ReservationServiceImpl implements ReservationService {
                 .numberOfGuests(reservation.getNumberOfGuests())
                 .startDate(reservation.getStartDate())
                 .endDate(reservation.getEndDate())
-                .state(reservation.isState())
+                .status(reservation.getStatus()) // 상태 변환
                 .roomDTO(roomDTO) // Room 엔티티를 DTO로 변환
                 .memberDTO(memberDTO) // Member 엔티티를 DTO로 변환
                 .build();
     }
+
 
     // ReservationDTO를 Reservation 엔티티로 변환하는 메서드
     private Reservation dtoToEntity(ReservationDTO reservationDTO) {
@@ -152,15 +195,17 @@ public class ReservationServiceImpl implements ReservationService {
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
         return Reservation.builder()
+                .rvno(reservationDTO.getRvno()) // 예약 번호 추가
                 .message(reservationDTO.getMessage())
                 .money(reservationDTO.getMoney())
                 .numberOfGuests(reservationDTO.getNumberOfGuests())
                 .startDate(reservationDTO.getStartDate())
                 .endDate(reservationDTO.getEndDate())
-                .state(reservationDTO.isState())
+                .status(reservationDTO.getStatus()) // 상태 변환
                 .room(room) // 여기서 Room 엔티티를 설정합니다.
                 .member(member) // 여기서 Member 엔티티를 설정합니다.
                 .build();
     }
+
 
 }
