@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -46,6 +47,7 @@ public class ReviewReplyServiceTest {
     }
 
     @Test
+    @Transactional
     public void testRegisterReviewReply() {
         // 리뷰 답글 등록
         Long replyId = reviewReplyService.register(testReviewReply);

@@ -49,34 +49,35 @@ public class ReservationServiceTest {
         testMember = Member.builder()
                 .name("Test Member Name")
                 .nickName("Test Member NickName")
-                .email("testmember@example.com")
+                .email("testmember2@example.com")
                 .build();
         memberRepository.save(testMember);
 
         testAccommodation = Accommodation.builder()
                 .accommodationName("테스트 숙소")
                 .sellerName(testMember.getName())
+                .sellerEmail(testMember.getEmail())
                 .postal(12345)
                 .address("테스트 주소")
                 .count(0)
                 .region("테스트 지역")
                 .tel("010-1234-5678")
-                .accommodationType("게스트하우스")
+                .accommodationType("호텔")
                 .member(testMember)
                 .build();
         accommodationRepository.save(testAccommodation);
 
         // 방 정보 생성 및 저장
         testRoom = roomService.registerRoom(RoomDTO.builder()
-                .roomName("Sample Room")
-                .price(50000)
+                .roomName("스위트룸")
+                .price(150000)
                 .accommodationDTO(AccommodationDTO.builder().ano(testAccommodation.getAno()).build())
                 .build());
 
         // 예약 정보 생성
         testReservation = ReservationDTO.builder()
-                .message("Test reservation")
-                .money(50000)
+                .message("테스트 예약입니다")
+                .money(150000)
                 .numberOfGuests(2)
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusDays(2))
@@ -115,22 +116,45 @@ public class ReservationServiceTest {
         log.debug("Get RoomBookingDetails : {}", reservation);
     }
 
-  /*
 
     @Test
-    @Transactional
-    void testModifyRoomBooking() {
-        // 수정을 위한 예약 번호와 DTO 준비
-        Long rvno = 1L; // 테스트용 예약 번호
-        ReservationDTO reservationDTO = new ReservationDTO();
-        // 수정 정보 셋업
-        // ...
+    // @Transactional
+    void testModifyExistingRoomBooking() {
+        // 수정할 예약 정보
+        ReservationDTO modifyReservation = ReservationDTO.builder()
+                .rvno(3L) // 데이터 베이스에 있는 예약 번호 설정
+                .message("modify reservation")
+                .money(150000)
+                .numberOfGuests(4)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now().plusDays(2))
+                .state(true)
+                .roomDTO(testRoom) // 예약할 방의 정보
+                .memberDTO(MemberDTO.builder() // 예약자의 정보
+                        .id(testMember.getId())
+                        .name(testMember.getName())
+                        .nickName(testMember.getNickName())
+                        .email(testMember.getEmail())
+                        .build())
+                .build();
 
         // 예약 수정 테스트
-        ReservationDTO updatedReservation = reservationService.modifyRoomBooking(rvno, reservationDTO);
+        ReservationDTO updatedReservation = reservationService.modifyRoomBooking(3L, modifyReservation);
         assertNotNull(updatedReservation, "수정된 예약이 반환되어야 합니다.");
-        // 추가적인 검증 로직
+
+        // 수정된 내용이 반영되었는지 확인
+        assertEquals(modifyReservation.getMessage(), updatedReservation.getMessage(), "메시지가 수정되어야 합니다.");
+        assertEquals(modifyReservation.getMoney(), updatedReservation.getMoney(), "가격이 수정되어야 합니다.");
+        assertEquals(modifyReservation.getNumberOfGuests(), updatedReservation.getNumberOfGuests(), "손님 수가 수정되어야 합니다.");
+        assertEquals(modifyReservation.getStartDate(), updatedReservation.getStartDate(), "시작 날짜가 수정되어야 합니다.");
+        assertEquals(modifyReservation.getEndDate(), updatedReservation.getEndDate(), "종료 날짜가 수정되어야 합니다.");
+        assertEquals(modifyReservation.isState(), updatedReservation.isState(), "상태가 수정되어야 합니다.");
+
+        log.debug("Modified Existing Reservation : {}", updatedReservation);
     }
+
+
+  /*
 
     @Test
     @Transactional

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
@@ -24,6 +26,7 @@ public class ReviewBoardServiceTest {
     private MemberRepository memberRepository;  // 회원 정보를 가져오기 위한 의존성 주입
 
     @Test
+    @Transactional
     public void testRegister() throws NotFoundException {
         // 기존의 예약 정보 가져오기
         Long reservationId = 3L;  // 가정된 예약 ID

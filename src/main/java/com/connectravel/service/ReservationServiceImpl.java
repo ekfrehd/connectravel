@@ -54,9 +54,37 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public ReservationDTO modifyRoomBooking(Long rvno, ReservationDTO reservationDTO) {
-        // 예약 수정 로직 구현
-        return null;
+        // 기존 예약을 ID를 사용하여 찾기
+        Reservation reservation = reservationRepository.findById(rvno)
+                .orElseThrow(() -> new EntityNotFoundException("해당 예약을 찾을 수 없습니다. 예약 번호: " + rvno));
+
+        // 날짜가 변경되었는지 확인하고 변경된 경우 새 날짜에 대한 방의 예약 가능 여부 확인
+        if (!reservation.getStartDate().isEqual(reservationDTO.getStartDate()) ||
+                !reservation.getEndDate().isEqual(reservationDTO.getEndDate())) {
+            boolean isAvailable = checkRoomAvailability(reservation.getRoom().getRno(),
+                    reservationDTO.getStartDate(),
+                    reservationDTO.getEndDate());
+            // 만약 새로운 날짜에 방이 예약 가능하지 않다면 예외 발생
+            if (!isAvailable) {
+                throw new IllegalStateException("새로운 날짜에 방이 예약 가능하지 않습니다.");
+            }
+        }
+
+        // 예약 상세 정보 업데이트
+        reservation.setMessage(reservationDTO.getMessage());
+        reservation.setMoney(reservationDTO.getMoney());
+        reservation.setNumberOfGuests(reservationDTO.getNumberOfGuests());
+        reservation.setStartDate(reservationDTO.getStartDate());
+        reservation.setEndDate(reservationDTO.getEndDate());
+        reservation.setState(reservationDTO.isState());
+
+        // 업데이트된 예약 저장
+        Reservation updatedReservation = reservationRepository.save(reservation);
+
+        // 업데이트된 예약을 DTO로 변환하여 반환
+        return entityToDTO(updatedReservation);
     }
+
 
     @Override
     @Transactional
