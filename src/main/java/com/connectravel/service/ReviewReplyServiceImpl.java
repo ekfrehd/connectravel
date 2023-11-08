@@ -59,7 +59,7 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
 
         return ReviewReply.builder()
                 .rrno(reviewReplyDTO.getRrno())
-                .text(reviewReplyDTO.getText())
+                .content(reviewReplyDTO.getContent())
                 .member(member)
                 .reviewBoard(reviewBoard)
                 .build();
@@ -69,7 +69,7 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
         return ReviewReplyDTO.builder()
                 .rrno(reviewReply.getRrno())
                 .rbno(reviewReply.getReviewBoard().getRbno())
-                .text(reviewReply.getText())
+                .content(reviewReply.getContent())
                 .replyer(reviewReply.getMember().getEmail())
                 .regDate(reviewReply.getRegTime())
                 .modDate(reviewReply.getModTime())

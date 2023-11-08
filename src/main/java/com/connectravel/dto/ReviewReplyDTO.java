@@ -16,7 +16,7 @@ public class ReviewReplyDTO {
     private Long rrno;
     private Long rbno;
 
-    private String text;
+    private String content;
     private String replyer;
     private LocalDateTime regDate, modDate;
 

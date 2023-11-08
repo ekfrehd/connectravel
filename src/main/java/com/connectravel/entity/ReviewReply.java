@@ -16,7 +16,7 @@ public class ReviewReply extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rrno;
 
-    private String text;
+    private String content;
 
     /* 연관 관계 */
     @ManyToOne(fetch = FetchType.LAZY)

@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
@@ -52,7 +53,6 @@ public class ReservationServiceTest {
                 .build();
         memberRepository.save(testMember);
 
-        // Accommodation 정보 생성 및 저장 (RoomServiceTest 참조)
         testAccommodation = Accommodation.builder()
                 .accommodationName("테스트 숙소")
                 .sellerName(testMember.getName())
@@ -70,7 +70,6 @@ public class ReservationServiceTest {
         testRoom = roomService.registerRoom(RoomDTO.builder()
                 .roomName("Sample Room")
                 .price(50000)
-                // 여기에 더 많은 방 설정을 추가하세요
                 .accommodationDTO(AccommodationDTO.builder().ano(testAccommodation.getAno()).build())
                 .build());
 
@@ -104,16 +103,22 @@ public class ReservationServiceTest {
 
     }
 
-  /*  @Test
+    @Test
+    @Transactional
     void testGetRoomBookingDetails() {
         // 테스트를 위한 예약을 미리 생성하고 그 rvno를 사용
         Long rvno = 1L; // 테스트용 예약 번호
         ReservationDTO reservation = reservationService.getRoomBookingDetails(rvno);
+
         assertNotNull(reservation, "예약 정보가 조회되어야 합니다.");
         assertEquals(rvno, reservation.getRvno(), "예약 번호가 일치해야 합니다.");
+        log.debug("Get RoomBookingDetails : {}", reservation);
     }
 
+  /*
+
     @Test
+    @Transactional
     void testModifyRoomBooking() {
         // 수정을 위한 예약 번호와 DTO 준비
         Long rvno = 1L; // 테스트용 예약 번호
@@ -128,6 +133,7 @@ public class ReservationServiceTest {
     }
 
     @Test
+    @Transactional
     void testCancelRoomBooking() {
         // 취소를 위한 예약 번호 준비
         Long rvno = 1L; // 테스트용 예약 번호
@@ -137,6 +143,7 @@ public class ReservationServiceTest {
     }
 
     @Test
+    @Transactional
     void testListUserRoomBookings() {
         String userEmail = "user@example.com"; // 테스트용 사용자 이메일
         List<ReservationDTO> bookings = reservationService.listUserRoomBookings(userEmail);
@@ -145,6 +152,7 @@ public class ReservationServiceTest {
     }
 
     @Test
+    @Transactional
     void testListAccommodationRoomBookings() {
         Long ano = 1L; // 테스트용 숙소 번호
         List<ReservationDTO> bookings = reservationService.listAccommodationRoomBookings(ano);
@@ -153,6 +161,7 @@ public class ReservationServiceTest {
     }
 
     @Test
+    @Transactional
     void testListRoomBookings() {
         Long rno = 1L; // 테스트용 방 번호
         List<ReservationDTO> bookings = reservationService.listRoomBookings(rno);
@@ -161,6 +170,7 @@ public class ReservationServiceTest {
     }
 
     @Test
+    @Transactional
     void testCheckRoomAvailability() {
         Long rno = 1L; // 테스트용 방 번호
         LocalDate startDate = LocalDate.now();

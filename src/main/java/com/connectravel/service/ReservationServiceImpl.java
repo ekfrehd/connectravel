@@ -42,9 +42,14 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional(readOnly = true)
     public ReservationDTO getRoomBookingDetails(Long rvno) {
-        // 예약 조회 로직 구현
-        return null;
+        // 예약 엔티티를 ID를 이용해 조회
+        Reservation reservation = reservationRepository.findById(rvno)
+                .orElseThrow(() -> new EntityNotFoundException("해당 예약을 찾을 수 없습니다. 예약 번호: " + rvno));
+
+        // 조회된 엔티티를 DTO로 변환하여 반환
+        return entityToDTO(reservation);
     }
+
 
     @Override
     @Transactional
