@@ -7,6 +7,7 @@ import com.connectravel.entity.TourBoardReviewReply;
 import com.connectravel.repository.MemberRepository;
 
 import java.util.List;
+
 import java.util.stream.Stream;
 
 public interface TourBoardReviewReplyService {
@@ -14,6 +15,7 @@ public interface TourBoardReviewReplyService {
     Long register(TourBoardReviewReplyDTO TourBoardReviewReplyDTO); //등록
 
     List<TourBoardReviewReplyDTO> getList(Long tbrno); //특정 게시물의 댓글 목록(조회)
+
 
     void modify(TourBoardReviewReplyDTO TourBoardReviewReplyDTO); //수정
 

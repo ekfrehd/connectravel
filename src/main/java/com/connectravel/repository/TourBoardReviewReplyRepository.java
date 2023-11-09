@@ -16,4 +16,4 @@ public interface TourBoardReviewReplyRepository extends JpaRepository<TourBoardR
 /*
     @Query("SELECT reply FROM TourBoardReviewReply reply JOIN reply.tourBoardReview review WHERE review.tbrno = :tbrno ORDER BY reply.tbrrno")
     List<TourBoardReviewReply> getRepliesByTourBoardReviewOrderByTbrrno(@Param("tbrno") Long tbrno);*/
-}
+

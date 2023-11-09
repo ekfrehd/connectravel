@@ -100,7 +100,9 @@ public class TourBoardReviewServiceTests {
     @Test
     public void testRemove() throws NotFoundException {
         Long tbno = 5L; // 존재하는 게시글
+
         Long tbrno = 9L; // 존재하는 게시글의 댓글
+
 
         tourBoardReviewService.removeWithReplies(tbrno, tbno); // read 메소드 호출
     }

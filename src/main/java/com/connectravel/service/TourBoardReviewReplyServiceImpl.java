@@ -5,6 +5,7 @@ import com.connectravel.entity.TourBoardReview;
 import com.connectravel.entity.TourBoardReviewReply;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.TourBoardReviewReplyRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class TourBoardReviewReplyServiceImpl implements TourBoardReviewReplyServ
 
 //        ReviewBoard reviewBoard = reviewBoardRepository.findById(TourBoardReviewReplyDTO.getRbno())
 //                .orElseThrow(() -> new IllegalArgumentException("No item found with ID: " + TourBoardReviewReplyDTO.getRbno()));
+
         TourBoardReviewReply tourBoardReviewReply = dtoToEntity(TourBoardReviewReplyDTO, memberRepository);
 
         tourBoardReviewReplyRepository.save(tourBoardReviewReply);
@@ -36,6 +38,7 @@ public class TourBoardReviewReplyServiceImpl implements TourBoardReviewReplyServ
 
     public List<TourBoardReviewReplyDTO> getList(Long tbrno) {
         List<TourBoardReviewReply> result = tourBoardReviewReplyRepository.getRepliesByTourBoardReviewOrderByTbrrno(TourBoardReview.builder().tbrno(tbrno).build());
+
         log.info("ReviewReplyServiceImpl - getList() 결과: " + result);
         return result.stream()
                 .flatMap(this::entityToDTO)
