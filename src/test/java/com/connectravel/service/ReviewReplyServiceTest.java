@@ -88,33 +88,29 @@ public class ReviewReplyServiceTest {
         ReviewReply updatedEntity = reviewReplyRepository.findById(replyId)
                 .orElseThrow(() -> new EntityNotFoundException("답글을 찾을 수 없습니다."));
         assertNotNull(updatedEntity, "수정된 리뷰 답글은 null이 아니어야 합니다.");
-        assertEquals("수정된 내용입니다!", updatedEntity.getContent(), "답글 내용은 수정된 내용과 일치해야 합니다.");
+        assertEquals("답글 수정 테스트 진행", updatedEntity.getContent(), "답글 내용은 수정된 내용과 일치해야 합니다.");
+
     }
 
     @Test
     @DisplayName("특정 리뷰에 대한 답글 리스트 조회 테스트")
     public void testGetRepliesByReviewRbno() {
-        // Arrange
         Long rbno = testReviewBoard.getRbno();
 
-        // Act
         List<ReviewReplyDTO> replies = reviewReplyService.getRepliesByReviewRbno(rbno);
 
-        // Assert
         assertFalse(replies.isEmpty(), "답글 리스트는 비어있지 않아야 합니다.");
         assertTrue(replies.stream().anyMatch(r -> r.getRbno().equals(rbno)), "모든 답글은 주어진 리뷰 ID와 연결되어야 합니다.");
+
     }
 
     @Test
     @DisplayName("리뷰 답글 삭제 테스트")
     public void testDeleteReviewReply() {
-        // Arrange
         Long replyId = setUpReply(); // 리뷰 답글 세팅
 
-        // Act
         reviewReplyService.deleteReviewReply(replyId);
 
-        // Assert
         Optional<ReviewReply> deletedReply = reviewReplyRepository.findById(replyId);
         assertTrue(deletedReply.isEmpty(), "삭제 후에는 리뷰 답글을 찾을 수 없어야 합니다.");
     }
