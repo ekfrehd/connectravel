@@ -33,14 +33,6 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     private final ReviewBoardImgRepository reviewBoardImgRepository;
     private final ModelMapper modelMapper;
 
-    public Accommodation getAccommodationDetailsByRoomRno(Long rno) {
-        Room roomEntity = roomRepository.findById(rno).orElse(null);
-        if (roomEntity != null) {
-            return roomEntity.getAccommodation();
-        }
-        return null;
-    }
-
     @Override
     public PageResultDTO<ReviewBoardDTO, ReviewBoard> getPaginatedReviewsByAccommodation(Long ano, PageRequestDTO pageRequestDTO) {
         Sort sort = Sort.by(Sort.Direction.DESC, "rbno");

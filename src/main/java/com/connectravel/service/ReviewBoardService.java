@@ -4,7 +4,6 @@ import com.connectravel.dto.ImgDTO;
 import com.connectravel.dto.PageRequestDTO;
 import com.connectravel.dto.PageResultDTO;
 import com.connectravel.dto.ReviewBoardDTO;
-import com.connectravel.entity.Accommodation;
 import com.connectravel.entity.ReviewBoard;
 
 import java.util.List;
@@ -20,8 +19,6 @@ public interface ReviewBoardService {
     void deleteReview(Long bno);
 
     PageResultDTO<ReviewBoardDTO, ReviewBoard> getPaginatedReviewsByAccommodation(Long ano, PageRequestDTO pageRequestDTO); // 리스트 출력
-
-    Accommodation getAccommodationDetailsByRoomRno(Long rno);
 
     List<ImgDTO> listReviewImages(Long rbno);
     

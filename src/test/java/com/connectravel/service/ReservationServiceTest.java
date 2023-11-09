@@ -50,7 +50,7 @@ public class ReservationServiceTest {
         testMember = Member.builder()
                 .name("Test Member Name")
                 .nickName("Test Member NickName")
-                .email("testmember8@example.com")
+                .email("testmember12@example.com")
                 .build();
         memberRepository.save(testMember);
 
