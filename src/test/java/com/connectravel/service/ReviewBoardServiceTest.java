@@ -4,9 +4,11 @@ import com.connectravel.dto.ImgDTO;
 import com.connectravel.dto.PageRequestDTO;
 import com.connectravel.dto.PageResultDTO;
 import com.connectravel.dto.ReviewBoardDTO;
+import com.connectravel.entity.Reservation;
 import com.connectravel.entity.ReviewBoard;
+import com.connectravel.repository.MemberRepository;
+import com.connectravel.repository.ReservationRepository;
 import javassist.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -27,12 +29,42 @@ public class ReviewBoardServiceTest {
     @Autowired
     private ReviewBoardService reviewBoardService;
 
+    @Autowired
+    private ReservationRepository reservationRepository;
 
-    private ReviewBoardDTO reviewBoardDTO;
+    @Autowired
+    private MemberRepository memberRepository;  // 회원 정보를 가져오기 위한 의존성 주입
 
-    @BeforeEach
-    void setUp() {
-        // reviewBoardDTO 설정을 위한 코드
+    @Test
+    @DisplayName("숙소에 대한 리뷰를 작성하는 테스트")
+    public void testRegister() throws NotFoundException {
+        // 기존의 예약 정보 가져오기
+        Long rvno = 7L;  // 가정된 예약 ID
+        Reservation reservation = reservationRepository.findById(rvno)
+                .orElseThrow(() -> new NotFoundException("Reservation not found"));
+
+        // 회원 이메일 검증
+        String writerEmail = "testmember@example.com";  // 데이터베이스에 존재하는 회원 이메일
+        boolean memberExists = memberRepository.findByEmail(writerEmail).isPresent();
+        if (!memberExists) {
+            throw new NotFoundException("Member not found");
+        }
+
+        // DTO 생성
+        ReviewBoardDTO dto = ReviewBoardDTO.builder()
+                .grade(5d)
+                .content("리뷰게시판 테스트...")
+                .rno(reservation.getRoom().getRno())  // 예약 정보에서 방 번호를 가져옵니다.
+                .ano(49L)  // 숙소 번호는 예제로 1L로 설정했습니다.
+                .rvno(rvno)  // 예약 ID를 설정합니다.
+                .writerEmail(writerEmail)
+                .build();
+
+        // 후기 등록 테스트
+        Long rbno = reviewBoardService.createReview(dto);
+
+        // 테스트 검증
+        assertNotNull(rbno, "The review must be registered and return a review board number");
     }
 
     @Test
