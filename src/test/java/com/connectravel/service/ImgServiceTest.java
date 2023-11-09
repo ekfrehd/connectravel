@@ -31,11 +31,10 @@ public class ImgServiceTest {
     @Autowired
     private ImgService imgService;
 
-    @Test
+    @Test // mock를 이용해서 DB에 저장 X
     @DisplayName("리뷰 게시물에 이미지 추가 테스트")
     void testAddReviewBoardImg() throws IOException {
-        // 준비: 테스트용 파일 데이터와 리뷰 게시판 번호 설정
-        Long rbno = 1L;
+        Long rbno = 4L;
         MultipartFile mockMultipartFile = new MockMultipartFile(
                 "image", "test.jpg", "image/jpeg", "test image content".getBytes());
 
