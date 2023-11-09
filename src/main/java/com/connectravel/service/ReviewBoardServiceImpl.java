@@ -42,7 +42,7 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
 
         Function<ReviewBoard, ReviewBoardDTO> fn = (reviewBoard -> {
             Member member = reviewBoard.getMember();
-            List<ReviewReplyDTO> replyDTOs = reviewReplyService.getList(reviewBoard.getRbno());
+            List<ReviewReplyDTO> replyDTOs = reviewReplyService.getRepliesByReviewRbno(reviewBoard.getRbno());
             return entityToDTO(reviewBoard, replyDTOs);
         });
 
@@ -84,7 +84,7 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
                 .orElseThrow(() -> new EntityNotFoundException("ReviewBoard with id " + rbno + " not found"));
 
         // 엔티티에서 필요한 정보를 가져와서 ReviewReplyDTO 리스트 생성
-        List<ReviewReplyDTO> replyDTOs = reviewReplyService.getList(rbno);
+        List<ReviewReplyDTO> replyDTOs = reviewReplyService.getRepliesByReviewRbno(rbno);
 
         return entityToDTO(reviewBoard, replyDTOs);
     }

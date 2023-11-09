@@ -26,19 +26,19 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
     private final ReviewBoardRepository reviewBoardRepository;
 
     @Override
-    public Long register(ReviewReplyDTO reviewReplyDTO) {
+    public Long createReviewReply(ReviewReplyDTO reviewReplyDTO) {
         ReviewReply reviewReply = dtoToEntity(reviewReplyDTO);
         reviewReplyRepository.save(reviewReply);
         return reviewReply.getRrno();
     }
 
     @Override
-    public void modify(ReviewReplyDTO reviewReplyDTO) {
+    public void updateReviewReply(ReviewReplyDTO reviewReplyDTO) {
         ReviewReply reviewReply = dtoToEntity(reviewReplyDTO);
         reviewReplyRepository.save(reviewReply);
     }
 
-    public List<ReviewReplyDTO> getList(Long rbno) {
+    public List<ReviewReplyDTO> getRepliesByReviewRbno(Long rbno) {
         List<ReviewReply> result = reviewReplyRepository.getRepliesByReviewBoardOrderByRrno(ReviewBoard.builder().rbno(rbno).build());
         log.info("ReviewReplyServiceImpl - getList() 결과: " + result);
         return result.stream()
@@ -47,8 +47,8 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
     }
 
     @Override
-    public void remove(Long rno) {
-        reviewReplyRepository.deleteById(rno);
+    public void deleteReviewReply(Long rrno) {
+        reviewReplyRepository.deleteById(rrno);
     }
 
 
