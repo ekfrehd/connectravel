@@ -7,7 +7,7 @@ import com.connectravel.dto.RoomDTO;
 import com.connectravel.entity.Member;
 import com.connectravel.entity.Reservation;
 import com.connectravel.entity.Room;
-import com.connectravel.exception.RoomNotAvailableException;
+import com.connectravel.exception.EntityNotAvailableException;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.ReservationRepository;
 import com.connectravel.repository.RoomRepository;
@@ -38,7 +38,7 @@ public class ReservationServiceImpl implements ReservationService {
                 reservationDTO.getRoomDTO().getRno(),
                 reservationDTO.getStartDate(),
                 reservationDTO.getEndDate())) {
-            throw new RoomNotAvailableException("선택한 날짜에 방이 이용 불가능합니다.");
+            throw new EntityNotAvailableException("선택한 날짜에 방이 이용 불가능합니다.");
         }
 
         Reservation reservation = dtoToEntity(reservationDTO);
@@ -57,7 +57,6 @@ public class ReservationServiceImpl implements ReservationService {
         return entityToDTO(reservation);
     }
 
-
     @Override
     @Transactional
     public ReservationDTO modifyRoomBooking(Long rvno, ReservationDTO reservationDTO) {
@@ -67,7 +66,7 @@ public class ReservationServiceImpl implements ReservationService {
         if (!reservation.getStartDate().isEqual(reservationDTO.getStartDate()) ||
                 !reservation.getEndDate().isEqual(reservationDTO.getEndDate())) {
             if (!checkRoomAvailability(reservation.getRoom().getRno(), reservationDTO.getStartDate(), reservationDTO.getEndDate())) {
-                throw new RoomNotAvailableException("새로운 날짜에 방이 이용 불가능합니다.");
+                throw new EntityNotAvailableException("새로운 날짜에 방이 이용 불가능합니다.");
             }
         }
 
@@ -84,8 +83,6 @@ public class ReservationServiceImpl implements ReservationService {
         // 업데이트된 예약을 DTO로 변환하여 반환
         return entityToDTO(updatedReservation);
     }
-
-
 
     @Override
     @Transactional
@@ -108,7 +105,6 @@ public class ReservationServiceImpl implements ReservationService {
 
         return false;
     }
-
 
     @Override
     @Transactional
@@ -162,7 +158,6 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
 
-    // Reservation 엔티티를 ReservationDTO로 변환하는 메서드
     private ReservationDTO entityToDTO(Reservation reservation) {
         RoomDTO roomDTO = roomService.entityToDTO(reservation.getRoom());
         MemberDTO memberDTO = memberService.entityToDTO(reservation.getMember()); // Member 변환
@@ -180,8 +175,6 @@ public class ReservationServiceImpl implements ReservationService {
                 .build();
     }
 
-
-    // ReservationDTO를 Reservation 엔티티로 변환하는 메서드
     private Reservation dtoToEntity(ReservationDTO reservationDTO) {
         Room room = roomRepository.findById(reservationDTO.getRoomDTO().getRno())
                 .orElseThrow(() -> new EntityNotFoundException("방을 찾을 수 없습니다."));
@@ -200,6 +193,5 @@ public class ReservationServiceImpl implements ReservationService {
                 .member(member) // 여기서 Member 엔티티를 설정합니다.
                 .build();
     }
-
 
 }

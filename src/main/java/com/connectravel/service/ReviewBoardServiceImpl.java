@@ -3,7 +3,6 @@ package com.connectravel.service;
 import com.connectravel.dto.*;
 import com.connectravel.entity.*;
 import com.connectravel.repository.*;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -17,7 +16,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -35,16 +33,8 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     private final ReviewBoardImgRepository reviewBoardImgRepository;
     private final ModelMapper modelMapper;
 
-    public Accommodation findAccommodationByRoomId(Long rno) {
-        Room roomEntity = roomRepository.findById(rno).orElse(null);
-        if (roomEntity != null) {
-            return roomEntity.getAccommodation();
-        }
-        return null;
-    }
-
     @Override
-    public PageResultDTO<ReviewBoardDTO, ReviewBoard> getReviewBoardsAndPageInfoByAccommodationId(Long ano, PageRequestDTO pageRequestDTO) {
+    public PageResultDTO<ReviewBoardDTO, ReviewBoard> getPaginatedReviewsByAccommodation(Long ano, PageRequestDTO pageRequestDTO) {
         Sort sort = Sort.by(Sort.Direction.DESC, "rbno");
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), sort);
 
@@ -52,70 +42,68 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
 
         Function<ReviewBoard, ReviewBoardDTO> fn = (reviewBoard -> {
             Member member = reviewBoard.getMember();
-            List<ReviewReplyDTO> replyDTOs = reviewReplyService.getList(reviewBoard.getRbno());
+            List<ReviewReplyDTO> replyDTOs = reviewReplyService.getRepliesByReviewRbno(reviewBoard.getRbno());
             return entityToDTO(reviewBoard, replyDTOs);
         });
 
         return new PageResultDTO<>(result, fn);
     }
-
-    @Transactional
     @Override
-    public Long register(ReviewBoardDTO dto) throws NotFoundException {
-        Optional<Member> memberOptional = memberRepository.findByEmail(dto.getWriterEmail());
-        Member member = memberOptional.orElseThrow(() -> new NotFoundException("Member not found"));
+    @Transactional
+    public Long createReview(ReviewBoardDTO dto) {
+        Member member = memberRepository.findByEmail(dto.getWriterEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Member with email " + dto.getWriterEmail() + " not found"));
 
-        Optional<Accommodation> accommodationOptional = accommodationRepository.findById(dto.getAno());
-        if (!accommodationOptional.isPresent()) {
-            throw new NotFoundException("Accommodation not found");
-        }
-        Accommodation accommodation = accommodationOptional.get();
+        Accommodation accommodation = accommodationRepository.findById(dto.getAno())
+                .orElseThrow(() -> new EntityNotFoundException("Accommodation with id " + dto.getAno() + " not found"));
 
-        Optional<Room> roomOptional = roomRepository.findById(dto.getRno());
-        if (!roomOptional.isPresent()) {
-            throw new NotFoundException("Room not found");
-        }
-        Room room = roomOptional.get();
+        Room room = roomRepository.findById(dto.getRno())
+                .orElseThrow(() -> new EntityNotFoundException("Room with id " + dto.getRno() + " not found"));
 
-        Optional<Reservation> reservationOptional = reservationRepository.findById(dto.getRvno());
-        if (!reservationOptional.isPresent()) {
-            throw new NotFoundException("Reservation not found");
-        }
-        Reservation reservation = reservationOptional.get();
+        Reservation reservation = reservationRepository.findById(dto.getRvno())
+                .orElseThrow(() -> new EntityNotFoundException("Reservation with id " + dto.getRvno() + " not found"));
 
         double currentGrade = accommodation.getGrade();
         double newGrade = dto.getGrade();
         int currentCount = accommodation.getReviewCount();
 
-        double avarageGrade = ((currentGrade * currentCount) + newGrade) / (currentCount + 1);
+        double averageGrade = ((currentGrade * currentCount) + newGrade) / (currentCount + 1);
 
         accommodation.setReviewCount(currentCount + 1);
-        accommodation.setGrade(avarageGrade);
-        accommodationRepository.saveAndFlush(accommodation);
+        accommodation.setGrade(averageGrade);
+        accommodationRepository.save(accommodation);
 
         ReviewBoard reviewBoard = dtoToEntity(dto, member, reservation);
-        reviewBoardRepository.save(reviewBoard);
+        reviewBoard = reviewBoardRepository.save(reviewBoard);
         return reviewBoard.getRbno();
     }
 
     @Override
-    public ReviewBoardDTO get(Long bno){
+    public ReviewBoardDTO getReviewByRbno(Long rbno){
+        ReviewBoard reviewBoard = reviewBoardRepository.findById(rbno)
+                .orElseThrow(() -> new EntityNotFoundException("ReviewBoard with id " + rbno + " not found"));
 
-       return null;
+        // 엔티티에서 필요한 정보를 가져와서 ReviewReplyDTO 리스트 생성
+        List<ReviewReplyDTO> replyDTOs = reviewReplyService.getRepliesByReviewRbno(rbno);
+
+        return entityToDTO(reviewBoard, replyDTOs);
     }
+
 
     @Transactional
     @Override
-    public void modify(ReviewBoardDTO reviewBoardDTO) {
+    public void updateReview(ReviewBoardDTO reviewBoardDTO) {
         ReviewBoard reviewBoard = reviewBoardRepository.findById(reviewBoardDTO.getRbno()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
+
         reviewBoard.changeContent(reviewBoardDTO.getContent());
+
         reviewBoardRepository.save(reviewBoard);
     }
 
     @Transactional
     @Override
-    public void remove(Long rbno) {
+    public void deleteReview(Long rbno) {
         if (reviewReplyRepository != null) {
             reviewReplyRepository.deleteByRbno(rbno);
         }
@@ -128,7 +116,7 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     }
 
     @Override
-    public List<ImgDTO> getImgList(Long rbno) {
+    public List<ImgDTO> listReviewImages(Long rbno) {
         List<ImgDTO> list = new ArrayList<>();
         ReviewBoard entity = reviewBoardRepository.findById(rbno)
                 .orElseThrow(() -> new EntityNotFoundException("ReviewBoard not found"));
@@ -141,7 +129,6 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     } // 사용자가 남긴 숙소 리뷰의 이미지들을 가져오는 메서드
 
 
-    // DTO 객체를 Entity 객체로 변환하는 메소드
     private ReviewBoard dtoToEntity(ReviewBoardDTO dto, Member member, Reservation reservation) {
         return ReviewBoard.builder()
                 .rbno(dto.getRbno())
@@ -152,7 +139,6 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
                 .build();
     }
 
-    // Entity 객체를 DTO 객체로 변환하는 메소드
     private ReviewBoardDTO entityToDTO(ReviewBoard reviewBoard, List<ReviewReplyDTO> replyDTOs) {
         Member member = reviewBoard.getReservation().getMember();
         return ReviewBoardDTO.builder()
