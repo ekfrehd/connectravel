@@ -14,7 +14,7 @@ public interface ReviewBoardImgRepository extends JpaRepository<ReviewBoardImg,L
     List<ReviewBoardImg> getImgByRbno(@Param("rbno") Long rbno);
 
     @Modifying
-    @Query("delete from ReviewBoardImg r where r.reviewBoard.rbno =:rbno")
-    void deleteImgByRbno(Long rbno);
+    @Query("DELETE FROM ReviewBoardImg rbi WHERE rbi.reviewBoard.rbno = :rbno")
+    void deleteImgByRbno(@Param("rbno") Long rbno);
 
 }

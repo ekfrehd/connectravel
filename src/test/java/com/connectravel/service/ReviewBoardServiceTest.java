@@ -38,12 +38,12 @@ public class ReviewBoardServiceTest {
     @Test
     @DisplayName("숙소에 대한 페이징된 리뷰 목록 테스트")
     void getPaginatedReviewsByAccommodation() {
-        // DB에 있는 숙소 번호와 pageRequestDTO
-        Long accommodationNumber = 49L;
+        // 존재하는 숙소 번호
+        Long ano = 49L;
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
 
         PageResultDTO<ReviewBoardDTO, ReviewBoard> paginatedResult =
-                reviewBoardService.getPaginatedReviewsByAccommodation(accommodationNumber, pageRequestDTO);
+                reviewBoardService.getPaginatedReviewsByAccommodation(ano, pageRequestDTO);
 
         // 검증
         assertNotNull(paginatedResult);
@@ -65,52 +65,83 @@ public class ReviewBoardServiceTest {
 
     @Test
     @DisplayName("특정 리뷰 게시물 번호로 리뷰 검색 테스트")
-    void getReviewByBno() {
-        // 가짜 게시물 번호
-        Long boardNumber = 1L;
+    void getReviewByRbno() {
+        // 존재하는 리뷰 게시물 번호
+        Long rbno = 3L;
 
         // 테스트할 메소드 호출
-        ReviewBoardDTO foundReview = reviewBoardService.getReviewByBno(boardNumber);
+        ReviewBoardDTO foundReview = reviewBoardService.getReviewByRbno(rbno);
 
         // 검증
         assertNotNull(foundReview);
-        assertEquals(foundReview.getRbno(), boardNumber);
+        assertEquals(rbno, foundReview.getRbno());
+
+        // 로그 내용 작성
+        log.info("검색된 리뷰 게시물 번호: {}", foundReview.getRbno());
+        log.info("리뷰 내용: {}", foundReview.getContent());
+        log.info("리뷰 작성자 이메일: {}", foundReview.getWriterEmail());
+        log.info("리뷰 작성자 이름: {}", foundReview.getWriterName());
+        log.info("리뷰 등록일: {}", foundReview.getRegDate());
+        log.info("리뷰 수정일: {}", foundReview.getModDate());
     }
 
+
     @Test
-    @DisplayName("리뷰 업데이트 테스트")
+    @DisplayName("리뷰 수정 테스트")
     void updateReview() {
-        // 새로운 내용 설정
-        reviewBoardDTO.setContent("업데이트된 내용");
+        // 존재하는 리뷰 게시물 번호
+        Long rbno = 3L;
 
-        // 테스트할 메소드 호출
-        reviewBoardService.updateReview(reviewBoardDTO);
+        // 테스트를 위해 불러온 리뷰 정보
+        ReviewBoardDTO reviewToBeUpdated = reviewBoardService.getReviewByRbno(rbno);
 
-        // 업데이트된 리뷰 검색
-        ReviewBoardDTO updatedReview = reviewBoardService.getReviewByBno(reviewBoardDTO.getRbno());
+        // 수정할 내용
+        String updatedContent = "업데이트된 리뷰 내용입니다.";
+
+        // 리뷰 내용 수정
+        reviewToBeUpdated.setContent(updatedContent);
+        reviewBoardService.updateReview(reviewToBeUpdated);
+
+        // 수정된 리뷰 정보 검색
+        ReviewBoardDTO updatedReview = reviewBoardService.getReviewByRbno(rbno);
+
+        // 로그 내용 작성
+        log.info("리뷰 게시물 번호: {}", updatedReview.getRbno());
+        log.info("수정된 리뷰 내용: {}", updatedReview.getContent());
 
         // 검증
-        assertEquals("업데이트된 내용", updatedReview.getContent());
+        assertNotNull(updatedReview);
+        assertEquals(updatedContent, updatedReview.getContent());
     }
 
     @Test
     @DisplayName("리뷰 삭제 테스트")
     void deleteReview() {
-        // 가짜 게시물 번호
-        Long boardNumber = 1L;
+        // 존재하는 리뷰 게시물 번호
+        Long rbno = 3L; //
+
+        // 삭제 전 리뷰가 존재하는지 확인
+        ReviewBoardDTO existingReview = reviewBoardService.getReviewByRbno(rbno);
+        assertNotNull(existingReview, "삭제 전 리뷰가 존재해야 합니다.");
+        log.info("삭제 전 리뷰 확인 - 게시물 번호: {}, 내용: {}", existingReview.getRbno(), existingReview.getContent());
 
         // 테스트할 메소드를 호출해 삭제
-        reviewBoardService.deleteReview(boardNumber);
+        reviewBoardService.deleteReview(rbno);
+        log.info("리뷰 삭제 수행 - 게시물 번호: {}", rbno);
 
-        // 삭제 확인
-        NotFoundException thrown = assertThrows(
+        // 삭제 후 리뷰가 존재하지 않는지 확인
+        Exception exception = assertThrows(
                 NotFoundException.class,
-                () -> reviewBoardService.getReviewByBno(boardNumber),
-                "getReviewByBno() 호출시 예외가 발생해야 합니다."
+                () -> reviewBoardService.getReviewByRbno(rbno),
+                "NotFoundException이 발생해야 합니다."
         );
+        log.info("삭제 후 리뷰 존재 여부 확인 - 예외 메시지: {}", exception.getMessage());
 
-        assertTrue(thrown.getMessage().contains("리뷰를 찾을 수 없습니다."));
+        // 예외 메시지 확인
+        assertTrue(exception.getMessage().contains("리뷰를 찾을 수 없습니다."), "예외 메시지에 '리뷰를 찾을 수 없습니다'가 포함되어야 합니다.");
     }
+
+
 
     @Test
     @DisplayName("특정 리뷰의 이미지 목록 테스트")
@@ -125,4 +156,5 @@ public class ReviewBoardServiceTest {
         assertNotNull(images);
         assertThat(images).isNotEmpty();
     }
+
 }

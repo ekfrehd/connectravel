@@ -78,19 +78,26 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
         return reviewBoard.getRbno();
     }
 
-
     @Override
-    public ReviewBoardDTO getReviewByBno(Long bno){
+    public ReviewBoardDTO getReviewByRbno(Long rbno){
+        ReviewBoard reviewBoard = reviewBoardRepository.findById(rbno)
+                .orElseThrow(() -> new EntityNotFoundException("ReviewBoard with id " + rbno + " not found"));
 
-       return null;
+        // 엔티티에서 필요한 정보를 가져와서 ReviewReplyDTO 리스트 생성
+        List<ReviewReplyDTO> replyDTOs = reviewReplyService.getList(rbno);
+
+        return entityToDTO(reviewBoard, replyDTOs);
     }
+
 
     @Transactional
     @Override
     public void updateReview(ReviewBoardDTO reviewBoardDTO) {
         ReviewBoard reviewBoard = reviewBoardRepository.findById(reviewBoardDTO.getRbno()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 게시글이 없습니다."));
+
         reviewBoard.changeContent(reviewBoardDTO.getContent());
+
         reviewBoardRepository.save(reviewBoard);
     }
 

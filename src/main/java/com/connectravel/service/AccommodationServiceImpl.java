@@ -37,7 +37,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         Accommodation accommodation = Accommodation.builder()
                 .accommodationName(accommodationDTO.getAccommodationName())
                 .postal(accommodationDTO.getPostal())
-                .sellerName(member.getName()) // Since it's a 1:1 relation, we can get the name directly
+                .sellerName(member.getName())
                 .address(accommodationDTO.getAddress())
                 .count(accommodationDTO.getCount())
                 .region(accommodationDTO.getRegion())

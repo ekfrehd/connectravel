@@ -12,7 +12,7 @@ public interface ReviewBoardService {
 
     Long createReview(ReviewBoardDTO dto);
 
-    ReviewBoardDTO getReviewByBno(Long bno);
+    ReviewBoardDTO getReviewByRbno(Long rbno);
 
     void updateReview(ReviewBoardDTO reviewBoardDTO);
 
