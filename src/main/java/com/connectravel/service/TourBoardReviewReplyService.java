@@ -6,13 +6,16 @@ import com.connectravel.entity.TourBoardReview;
 import com.connectravel.entity.TourBoardReviewReply;
 import com.connectravel.repository.MemberRepository;
 
+import java.util.List;
+
 import java.util.stream.Stream;
 
 public interface TourBoardReviewReplyService {
 
     Long register(TourBoardReviewReplyDTO TourBoardReviewReplyDTO); //등록
 
-   /*List<TourBoardReviewReplyDTO> getList(Long bno); //특정 게시물의 댓글 목록(조회)*/
+    List<TourBoardReviewReplyDTO> getList(Long tbrno); //특정 게시물의 댓글 목록(조회)
+
 
     void modify(TourBoardReviewReplyDTO TourBoardReviewReplyDTO); //수정
 
@@ -38,18 +41,20 @@ public interface TourBoardReviewReplyService {
 
     default Stream<TourBoardReviewReplyDTO> entityToDTO(TourBoardReviewReply tourBoardReviewReply) {
 
-//        String replyer = reviewReply.getMember() != null ? reviewReply.getMember().getEmail() : null;
+        String replyer = tourBoardReviewReply.getMember() != null ? tourBoardReviewReply.getMember().getEmail() : null;
 
-        TourBoardReviewReplyDTO dto = TourBoardReviewReplyDTO.builder()
-                .tbrrno(tourBoardReviewReply.getTbrrno())
-                .tbrno(tourBoardReviewReply.getTourBoardReview().getTbrno())
-                .text(tourBoardReviewReply.getText())
-                .replyer(tourBoardReviewReply.getMember().getEmail())
-                .regDate(tourBoardReviewReply.getRegTime())
-                .modDate(tourBoardReviewReply.getModTime())
-                .build();
+        /*QnaReplyDTO dto = QnaReplyDTO.builder()
+                .rno(qnaReply.getRno())
+                .text(qnaReply.getText())
+                .replyer(replyer)
+                .regDate(qnaReply.getRegTime())
+                .modDate(qnaReply.getModTime())
+                .build();*/
 
+        TourBoardReviewReplyDTO dto = TourBoardReviewReplyDTO.builder().tbrrno(tourBoardReviewReply.getTbrrno()).text(tourBoardReviewReply.getText()).regDate(tourBoardReviewReply.getRegTime()).modDate(tourBoardReviewReply.getModTime()).build();
+
+        // 생성된 QnaReplyDTO 객체를 Stream으로 감싸서 반환
+        // 결과상 QnyReplyDTO가 여러개 일 수 있으니까, 한줄 형태인 stream 사용
         return Stream.of(dto);
     }
-
 }

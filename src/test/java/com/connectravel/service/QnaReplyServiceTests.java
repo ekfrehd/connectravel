@@ -45,7 +45,7 @@ public class QnaReplyServiceTests {
 
         QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
         qnaReplyDTO.setText("테스트 댓글 수정 1");
-        qnaReplyDTO.setRno(12L);
+        qnaReplyDTO.setRno(2L);
         qnaReplyDTO.setReplyer("더미봇");
 
         qnaReplyService.modify(qnaReplyDTO); // 게시글 수정 메서드
@@ -55,7 +55,9 @@ public class QnaReplyServiceTests {
     public void testRemove() {
 
         QnaReplyDTO qnaReplyDTO = new QnaReplyDTO();
-        qnaReplyDTO.setRno(13L);
+
+        qnaReplyDTO.setRno(4L);
+
 
         qnaReplyService.remove(qnaReplyDTO.getRno()); // 게시글 삭제 메서드
     }

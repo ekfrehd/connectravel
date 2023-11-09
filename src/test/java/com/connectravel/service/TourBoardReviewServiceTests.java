@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -70,7 +69,6 @@ public class TourBoardReviewServiceTests {
 
 
     @Test // 댓글 수정
-    @Transactional
     public void testModifyTourBoardReview() {
         TourBoardReivewDTO reviewDTO = TourBoardReivewDTO.builder()
                 .tbno(5L)
@@ -102,7 +100,9 @@ public class TourBoardReviewServiceTests {
     @Test
     public void testRemove() throws NotFoundException {
         Long tbno = 5L; // 존재하는 게시글
-        Long tbrno = 8L; // 존재하는 게시글의 댓글
+
+        Long tbrno = 9L; // 존재하는 게시글의 댓글
+
 
         tourBoardReviewService.removeWithReplies(tbrno, tbno); // read 메소드 호출
     }

@@ -68,7 +68,7 @@ public class AdminBoardServiceTests {
 
     @Test // 게시글 수정 테스트
     public void testModifyQnaBoard() {
-        Long bno = 1L; // 수정할 게시글 번호
+        Long bno = 2L; // 수정할 게시글 번호
 
         AdminBoardDTO adminBoardDTO = new AdminBoardDTO(); // 테스트 QnaBoardDTO 생성 (수정할 내용 포함)
         adminBoardDTO.setBno(bno); // 게시글 번호
@@ -84,7 +84,7 @@ public class AdminBoardServiceTests {
 
     @Test // 게시글 삭제 테스트
     public void testRemoveAdminBoard() {
-        Long bno = 12L; // 삭제할 게시글 번호
+        Long bno = 23L; // 삭제할 게시글 번호
 
         try {
             adminBoardService.remove(bno);// 게시글 삭제 메서드 호출

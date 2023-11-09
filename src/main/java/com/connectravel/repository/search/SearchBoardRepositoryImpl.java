@@ -313,7 +313,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
     }*/
 
     @Override
-    public Page<Object[]> searchTourBoard(String[] type, String keyword, String category, String region, Pageable pageable) {
+    public Page<Object[]> searchTourBoard(String[] type, String keyword, String category, String region, Pageable pageable, String address) {
 
         QTourBoard qTourBoard = QTourBoard.tourBoard;
 
@@ -321,7 +321,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
 
         //검색 조건을 작성하기
-        if (type != null || region != null || category != null || keyword != null) {
+        if (type != null || region != null || category != null || keyword != null || address != null) {
             BooleanBuilder conditionBuilder = new BooleanBuilder();
 
             if (type != null) {
@@ -336,10 +336,16 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
                         case "r":
                             conditionBuilder.or(qTourBoard.region.contains(keyword));
                             break;
+                        case "a":
+                            conditionBuilder.or(qTourBoard.address.contains(keyword));
+                            break;
                     }
                 }
             }
 
+            if (address != null) {
+                conditionBuilder.or(qTourBoard.address.contains(address));
+            }
             if (region != null) {
                 conditionBuilder.or(qTourBoard.region.contains(region));
             }

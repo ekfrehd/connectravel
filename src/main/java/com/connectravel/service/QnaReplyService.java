@@ -48,7 +48,7 @@ public interface QnaReplyService {
         // 2. qnaReply.getMember.getEmail (QnaReply.getMember.getEmail : qnaReply의 id필드의 email)
         // 즉, 외래키한 qnaReply에 등록된 id = Member의 id 이잖음?
         // 그 Member의 id행에 있는 email을 추출하는거
-        String replyer = qnaReply.getMember() != null ? qnaReply.getMember().getEmail() : null;
+        //String replyer = qnaReply.getMember() != null ? qnaReply.getMember().getEmail() : null;
 
         /*QnaReplyDTO dto = QnaReplyDTO.builder()
                 .rno(qnaReply.getRno())

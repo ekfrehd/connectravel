@@ -1,7 +1,9 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.ImgDTO;
-import com.connectravel.entity.*;
+import com.connectravel.entity.TourBoard;
+import com.connectravel.entity.TourBoardImg;
+import com.connectravel.entity.TourBoardReview;
+import com.connectravel.entity.TourBoardReviewImg;
 import com.connectravel.manager.FileManager;
 import com.connectravel.repository.AdminBoardImgRepository;
 import com.connectravel.repository.RoomImgRepository;
@@ -32,23 +34,23 @@ public class ImgServiceImpl implements ImgService {
     FileManager fileManager;
 
 
-    @Override
+    /*@Override
     public void remove(Long ino) {
         String filename = roomImgRepository.findById(ino).get().getImgFile(); //select 하고
         //fil name 불러오고 file 삭제하고 db 삭제하고 처리!
         fileManager.remove(filename); //파일삭제
         roomImgRepository.deleteById(ino); //이런식 //db삭제
-    }
+    }*/
 
 
-    @Override
+    /*@Override
     public ImgDTO get(Long ino) {
         RoomImg img = roomImgRepository.findById(ino).get();
         ImgDTO imgDTO = modelMapper.map(img, ImgDTO.class);
         return imgDTO;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void update(Long ino, MultipartFile file) {
         String filename = get(ino).getImgFile();
         fileManager.remove(filename); //파일 삭제
@@ -59,7 +61,7 @@ public class ImgServiceImpl implements ImgService {
         RoomImg sec_entity = roomImgRepository.findById(ino).get();
         RoomImg entity = RoomImg.builder().ino(sec_entity.getIno()).imgFile(realfilename).room(sec_entity.getRoom()).build();
         roomImgRepository.save(entity);
-    }
+    }*/
 
     /*@Override
     public void RoomRegister(MultipartFile file, Long rno) {

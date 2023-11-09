@@ -3,6 +3,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
@@ -55,6 +59,65 @@
                 <div class="dashboard-right-contents mt-4 mt-lg-0">
                     <div class="dashboard-reservation">
                         <div class="single-reservation bg-white base-padding">
+
+
+                            <!---->
+                            <button id="mapButton">지도</button>
+
+                            <div id="modal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+
+                                    <!--지도 담을 영역-->
+                                    <div id="map" style="max-width:1000px;height:400px;"></div>
+                                    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c7a803e4f5e6440b0235c7fa6922d495"></script>
+                                    <script>
+                                        var container = document.getElementById('map');
+                                        var options = {
+                                            center: new kakao.maps.LatLng(37.266129099555634, 126.99978579599939), //지도 중심 좌표
+                                            level: 3 //지도 확대 레벨
+                                        };
+
+                                        var map = new kakao.maps.Map(container, options); //지도 생성
+                                        var mapTypeControl = new kakao.maps.MapTypeControl(); // 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+                                    </script>
+                                    <script>
+                                        // 버튼 및 모달 요소 가져오기
+                                        const mapButton = document.getElementById("mapButton");
+                                        const modal = document.getElementById("modal");
+                                        const closeBtn = document.getElementsByClassName("close")[0];
+
+                                        // '지도' 버튼 클릭 시 모달 열기
+                                        mapButton.addEventListener("click", function() {
+                                            modal.style.display = "block";
+                                        });
+
+                                        // 모달 닫기 버튼 클릭 시 모달 닫기
+                                        closeBtn.addEventListener("click", function() {
+                                            modal.style.display = "none";
+                                        });
+
+                                        // 모달 외 다른 부분 클릭 시 모달 닫기
+                                        window.addEventListener("click", function(event) {
+                                            if (event.target === modal) {
+                                                modal.style.display = "none";
+                                            }
+                                        });
+                                        function relayout() {
+
+                                            // 지도를 표시하는 div 크기를 변경한 이후 지도가 정상적으로 표출되지 않을 수도 있습니다
+                                            // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다
+                                            // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
+                                            map.relayout();
+                                        }
+                                    </script>
+                                    <!---->
+                                    </div>
+                                <button onclick="relayout()">relayout 호출하기</button>
+                                </div>
+                            </div>
+
+
                             <div class="row justify-content-between">
                                 <div class="col-md-2">
                                     <a th:href="@{/qna/register}">

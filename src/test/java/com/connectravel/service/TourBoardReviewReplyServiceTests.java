@@ -1,11 +1,14 @@
 package com.connectravel.service;
 
 import com.connectravel.dto.TourBoardReviewReplyDTO;
-import com.connectravel.repository.TourBoardReviewReplyRepository;
+
 import groovy.util.logging.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @SpringBootTest//스프링부트 테스트 명시
 @Log4j2//로그 사용 명시
@@ -13,9 +16,6 @@ public class TourBoardReviewReplyServiceTests {
 
     @Autowired
     private TourBoardReviewReplyService tourBoardReviewReplyService;
-
-    @Autowired
-    private TourBoardReviewReplyRepository tourBoardReviewReplyRepository;
 
     @Test
     void testRegister() {
@@ -48,6 +48,17 @@ public class TourBoardReviewReplyServiceTests {
         tourBoardReviewReplyDTO.setTbrno(tbrrno);
 
         tourBoardReviewReplyService.remove(tourBoardReviewReplyDTO.getTbrno()); // 게시글 삭제 메서드
+    }
+
+    @Test
+    @Transactional
+    public void testList(){
+
+        List<TourBoardReviewReplyDTO> result = tourBoardReviewReplyService.getList(5L);
+
+        for(TourBoardReviewReplyDTO reviewReplyDTO : result){
+            System.out.println(reviewReplyDTO);
+        }
     }
 }
 

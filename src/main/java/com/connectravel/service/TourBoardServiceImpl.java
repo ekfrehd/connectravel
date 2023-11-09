@@ -78,16 +78,16 @@ public class TourBoardServiceImpl implements TourBoardService {
     }
 
     @Override
-    public PageResultDTO<TourBoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO, String[] type, String keyword, String category, String region) {
+    public PageResultDTO<TourBoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO, String[] type, String keyword, String category, String region, String address) {
         Sort sort = Sort.by(Sort.Direction.DESC, "tbno");
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), sort);
 
         Page<Object[]> result;
         if (pageRequestDTO.getKeyword() != null) {
-            result = tourBoardRepository.searchTourBoard(type, pageRequestDTO.getKeyword(), category, region, pageable);
+            result = tourBoardRepository.searchTourBoard(type, pageRequestDTO.getKeyword(), category, region, pageable, address);
         }
         else {
-            result = tourBoardRepository.searchTourBoard(type, keyword, category, region, pageable);
+            result = tourBoardRepository.searchTourBoard(type, keyword, category, region, pageable, address);
         }
 
         Function<Object[], TourBoardDTO> fn = (objectArr -> {

@@ -5,7 +5,7 @@ import com.connectravel.entity.TourBoardReview;
 import com.connectravel.entity.TourBoardReviewReply;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.TourBoardReviewReplyRepository;
-import com.connectravel.repository.TourBoardReviewRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,6 @@ public class TourBoardReviewReplyServiceImpl implements TourBoardReviewReplyServ
 
     private final TourBoardReviewReplyRepository tourBoardReviewReplyRepository;
     private final MemberRepository memberRepository;
-    private final TourBoardReviewRepository tourBoardReviewRepository;
 
     @Override
     public Long register(TourBoardReviewReplyDTO TourBoardReviewReplyDTO) {
@@ -37,13 +36,14 @@ public class TourBoardReviewReplyServiceImpl implements TourBoardReviewReplyServ
         return tourBoardReviewReply.getTbrrno();
     }
 
-   /* public List<TourBoardReviewReplyDTO> getList(Long tbrno) {
-        List<TourBoardReviewReply> result = tourBoardReviewReplyRepository.getRepliesBytourBoardReviewOrderBytbrno(TourBoardReview.builder().tbrno(tbrno).build());
+    public List<TourBoardReviewReplyDTO> getList(Long tbrno) {
+        List<TourBoardReviewReply> result = tourBoardReviewReplyRepository.getRepliesByTourBoardReviewOrderByTbrrno(TourBoardReview.builder().tbrno(tbrno).build());
+
         log.info("ReviewReplyServiceImpl - getList() 결과: " + result);
         return result.stream()
                 .flatMap(this::entityToDTO)
                 .collect(Collectors.toList());
-    }*/
+    }
 
     @Override
     public void modify(TourBoardReviewReplyDTO TourBoardReviewReplyDTO) {
