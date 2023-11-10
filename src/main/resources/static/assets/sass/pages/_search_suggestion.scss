@@ -1,0 +1,267 @@
+/* Search Suggestions */
+
+.search-suggestions-wrapper {
+    position: relative;
+    z-index: 98;
+    .search-click-icon {
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 55px;
+        width: 55px;
+        color: $white;
+        background-color: var(--main-color-one);
+        font-weight: 500;
+        @include transition(300ms);
+        border-radius: 5px;
+        &:hover {
+            background-color: rgba(var(--main-color-one-rgb), .8);
+            color: $white;
+        }
+    }
+}
+
+.search-show {
+    position: absolute;
+    top: 0;
+    right: 0;
+    visibility: hidden;
+    opacity: 0;
+    @include transition(400ms);
+    @include responsive(allPhone) {
+        right: 0px;
+        max-width: 500px;
+    }
+    @include responsive(sm) {
+        width: 500px;
+    }
+    @include responsive(xs) {
+        max-width: 450px;
+    }
+    @include responsive(xxs) {
+        max-width: 340px;
+    }
+    @include responsive(vxxs) {
+        max-width: 270px;
+    }
+    &.open {
+        visibility: visible;
+        opacity: 1;
+        top: 100%;
+    }
+    &-inner {
+        position: relative;
+    }
+    &-form {
+        position: relative;
+        z-index: 1;
+        .suggestions-icon-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: absolute;
+            right: 0%;
+            top: 0;
+            font-size: 24px;
+            background-color: rgba($steam-color, .3);
+            height: 100%;
+            padding: 0 15px;
+            @include transition(300ms);
+            &:hover {
+                background-color: var(--main-color-one);
+                color: $white;
+            }
+        }
+        .form--control {
+            padding: 0 15px;
+            padding-left: 50px;
+            padding-right: 70px;
+            font-size: 15px;
+            height: 55px;
+            width: 700px;
+            color: var(--extra-light-color);
+            border: 1px solid rgba($steam-color, .5);
+            @include box-shadow(0, 0, 30px, rgba($white, .01));
+            @include transition(300ms);
+            &:focus {
+                @include box-shadow(0, 0, 30px, rgba(var(--main-color-one-rgb), .1));
+                border-color: rgba(var(--main-color-one-rgb), .3);
+            }
+            @include responsive(allPhone) {
+                width: fit-content;
+            }
+            @include responsive(sm) {
+                width: 100%;
+            }
+        }
+        button {
+            position: absolute;
+            top: 0;
+            left: 15px;
+            font-size: 20px;
+            background: none;
+            border: 0;
+            outline: none;
+            color: var(--light-color);
+            bottom: 0;
+        }
+    }
+}
+
+.search-product {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 700px;
+    background: $white;
+    padding: 30px 20px;
+    box-shadow: 0 0 10px rgba($steam-color, .4);
+    visibility: hidden;
+    opacity: 0;
+    height: 550px;
+    overflow-y: hidden;
+    @include responsive(xxxl) {
+        height: 475px;
+    }
+    @include responsive(xxl) {
+        height: 475px;
+    }
+    @include responsive(xl) {
+        height: 475px;
+    }
+    @include responsive(lg) {
+        height: 475px;
+        padding: 30px 10px;
+    }
+    @include responsive(allPhone) {
+        height: 485px;
+    }
+    @include responsive(sm) {
+        width: 100%;
+    }
+    @include responsive(xxs) {
+        padding: 30px 10px;
+    }
+    &.show {
+        visibility: visible;
+        opacity: 1;
+    }
+    .nicescroll-rails {
+        .nicescroll-cursors {
+            background-color: var(--main-color-two) !important;
+        }
+    }
+    &-title {
+        font-size: 18px;
+        width: 100%;
+        background-color: rgba($steam-color, .2);
+        padding: 5px 10px;
+    }
+    &-list {
+        height: calc(100vh - 210px);
+        overflow-y: scroll;
+        padding: 0 10px;
+        &-item {
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+        }
+        &-link {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            @include responsive(xxs) {
+                display: block;
+            }
+        }
+        &-image {
+            border: 1px solid rgba($steam-color, .5);
+            padding: 5px;
+            height: 100px;
+            width: 100px;
+            @include responsive(lg) {
+                width: 80px;
+                height: 100px;
+                padding: 10px 0px;
+            }
+        }
+        &-info {
+            flex: 1;
+            &-top {
+                @include responsive(xxs) {
+                    margin-top: 10px;
+                }
+            }
+            &-title {
+                font-size: 18px;
+                line-height: 28px;
+                @include responsive(lg) {
+                    font-size: 17px;
+                }
+            }
+            &-price {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                @include responsive(lg) {
+                    gap: 7px;
+                }
+                &-through {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    .flash-price {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: var(--heading-color);
+                        @include responsive(lg) {
+                            font-size: 16px;
+                        }
+                    }
+                    .old-price {
+                        font-size: 14px;
+                        text-decoration: line-through;
+                    }
+                }
+                .main-price {
+                    font-size: 16px;
+                    @include responsive(lg) {
+                        font-size: 17px;
+                    }
+                }
+            }
+            .stock-out {
+                font-size: 16px;
+                background: #ff0000;
+                color: $white;
+                padding: 5px 10px;
+                display: inline-block;
+                @include responsive(lg) {
+                    font-size: 15px;
+                    padding: 5px 5px;
+                }
+            }
+        }
+    }
+}
+
+.search-suggestion-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background-color: rgba($black, .5);
+    z-index: 92;
+    visibility: hidden;
+    opacity: 0;
+    @include transition(500ms);
+    &.show {
+        visibility: visible;
+        opacity: 1;
+    }
+}

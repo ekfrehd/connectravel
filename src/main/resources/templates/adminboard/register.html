@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout1}">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/3sfksqzu5vmtem6z88d0gi61nmmvqmyx39n9tokdq3jkwkkj/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@2/dist/tinymce-jquery.min.js"></script>
+</head>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+    <div class="dashboard-area section-bg-2 pat-100 pab-100">
+        <div class="container">
+            <div class="dashboard-contents-wrapper">
+                <div class="dashboard-icon">
+                    <div class="sidebar-icon">
+                        <i class="las la-bars"></i>
+                    </div>
+                </div>
+                <div class="dashboard-left-content">
+                    <div class="dashboard-close-main">
+                        <div class="close-bars"><i class="las la-times"></i></div>
+                        <div class="dashboard-bottom">
+                            <ul class="dashboard-list list-style-none">
+                                <li class="list">
+                                    <a href="/qna/list"> <i class="las la-briefcase"></i> 1:1문의 </a>
+                                </li>
+                                <li th:class="${category == 'notice' ? 'list active' : 'list'}">
+                                    <a href="/adminboard/notice"> <i class="las la-briefcase"></i> 공지사항 </a>
+                                </li>
+                                <li th:class="${category == 'event' ? 'list active' : 'list'}">
+                                    <a href="/adminboard/event"> <i class="las la-briefcase"></i> 이벤트 </a>
+                                </li>
+                                <li th:class="${category == 'faq' ? 'list active' : 'list'}">
+                                    <a href="/adminboard/faq"> <i class="las la-briefcase"></i> 자주 묻는 질문 </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-right-contents mt-4 mt-lg-0">
+                    <div class="dashboard-reservation">
+                        <div class="single-reservation bg-white base-padding">
+                            <form th:action="@{/adminboard/register}" th:method="post" enctype="multipart/form-data">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Title</th>
+                                        <td>
+                                            <input type="text" class="form-control" name="title" placeholder="Enter Title">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Category</th>
+                                        <td>
+                                            <select name="category">
+                                                <option value="" selected="selected">카테고리</option>
+                                                <option value="notice">공지사항</option>
+                                                <option value="faq">자주묻는질문</option>
+                                                <option value="event">이벤트</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Content</th>
+                                        <td>
+                                            <textarea id="tiny" name="content"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Upload</th>
+                                        <td>
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label">이미지</label>
+                                                <input class="form-control" type="file" name="images">
+                                            </div>
+
+                                            <div class="col-12 col-md-6">
+                                                <label class="form-label">이미지</label>
+                                                <input class="form-control" type="file" name="images">
+                                            </div></textarea>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <button type="submit" class="btn btn-dark">Submit</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dashboard area end -->
+
+    <script>
+        tinymce.init({
+            selector: '#tiny',
+            height: 500,
+            menubar: false,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | blocks | bold italic backcolor | ' +
+                'alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | removeformat | help'
+        });
+    </script>
+
+</div>
+</html>

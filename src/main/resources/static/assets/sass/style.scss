@@ -1,0 +1,55 @@
+/*
+Theme Name: Newspaper Magazine Bussiness
+Theme URI: 
+Author: 
+Author URI: 
+Description: Newspaper Magazine is a business website template
+Version: 1.0.0
+*/
+
+//== Abstract page
+@import "abstracts/mixins";
+@import "abstracts/variables";
+//== Global page
+@import "base/global";
+//== Components
+@import "components/button";
+@import "components/back_top";
+@import "components/section_title";
+@import "components/nice_selects";
+@import "components/mouse_cursor";
+@import "components/slider_custom";
+@import "components/faq";
+@import "components/form";
+@import "components/checkbox";
+@import "components/breadcrumb";
+@import "components/range-slider";
+@import "components/pagination";
+@import "components/global_ratings";
+@import "components/tab";
+@import "components/custom_radio";
+@import "components/popup_modal";
+//== layout Pages
+@import "layout/navbar";
+@import "layout/footer";
+// Section page
+@import "pages/banner";
+@import "pages/location_area";
+@import "pages/search_suggestion";
+@import "pages/why";
+@import "pages/attraction";
+@import "pages/guest";
+@import "pages/shots_gallery";
+@import "pages/brand_logo";
+@import "pages/newsletter";
+@import "pages/login";
+@import "pages/history";
+@import "pages/team";
+@import "pages/blog";
+@import "pages/blog_details";
+@import "pages/contact";
+@import "pages/listing";
+@import "pages/checkout";
+@import "pages/confirmation";
+@import "pages/dashboard";
+@import "pages/error";
