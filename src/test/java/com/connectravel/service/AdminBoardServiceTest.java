@@ -2,6 +2,8 @@ package com.connectravel.service;
 
 import com.connectravel.constant.Role;
 import com.connectravel.dto.AdminBoardDTO;
+import com.connectravel.dto.PageRequestDTO;
+import com.connectravel.dto.PageResultDTO;
 import com.connectravel.entity.AdminBoard;
 import com.connectravel.entity.Member;
 import com.connectravel.repository.AdminBoardRepository;
@@ -14,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 @SpringBootTest
 public class AdminBoardServiceTest {
@@ -36,8 +38,10 @@ public class AdminBoardServiceTest {
     // 테스트에 필요한 기본 데이터 설정
     @BeforeEach
     public void setUp() {
+        // 테스트 실행 시마다 다른 이메일을 사용합니다.
+        String uniqueEmail = "adminTest+" + System.currentTimeMillis() + "@example.com";
         Member member = memberRepository.save(Member.builder()
-                .email("adminTest@example.com")
+                .email(uniqueEmail)
                 .password("password")
                 .name("홍길동")
                 .nickName("gildong")
@@ -88,26 +92,21 @@ public class AdminBoardServiceTest {
 
     }
 
-/*
-
-
     @Test
     @Transactional
     public void testUpdateAdminBoard() {
         // 관리자 게시글 수정 테스트
-        adminBoardDTO.setTitle("Updated Title");
+        adminBoardDTO.setTitle("제목 수정 테스트");
         adminBoardService.updateAdminBoard(adminBoardDTO);
 
         AdminBoard updatedAdminBoard = adminBoardRepository.findById(adminBoardDTO.getAbno()).orElse(null);
         assertNotNull(updatedAdminBoard, "수정된 게시글을 찾을 수 있어야 합니다.");
-        assertEquals("Updated Title", updatedAdminBoard.getTitle(), "수정된 게시글의 제목이 일치해야 합니다.");
+        assertEquals("제목 수정 테스트", updatedAdminBoard.getTitle(), "수정된 게시글의 제목이 일치해야 합니다.");
 
         log.debug("수정된 게시글 ID: {}", updatedAdminBoard.getAbno());
         log.debug("수정된 게시글 제목: {}", updatedAdminBoard.getTitle());
 
     }
-
-    // ...
 
     @Test
     @Transactional
@@ -128,15 +127,19 @@ public class AdminBoardServiceTest {
         pageRequestDTO.setPage(1);
         pageRequestDTO.setSize(10);
 
-        PageResultDTO<AdminBoardDTO, Object[]> pageResultDTO = adminBoardService.getPaginatedAdminBoardList(pageRequestDTO, "category1");
+        // 기존에 존재하는 '공지사항' 카테고리의 게시글 수를 확인합니다.
+        long existingCount = adminBoardRepository.countByCategory("공지사항");
+
+        PageResultDTO<AdminBoardDTO, Object[]> pageResultDTO = adminBoardService.getPaginatedAdminBoardList(pageRequestDTO, "공지사항");
 
         assertNotNull(pageResultDTO, "페이지 결과는 null이 아니어야 합니다.");
-        assertEquals(1, pageResultDTO.getDtoList().size(), "조회된 페이지의 게시글 수는 요청한 페이지 크기와 일치해야 합니다.");
+        // 조회된 페이지의 게시글 수가 기존에 존재하는 게시글 수와 일치하는지 확인합니다.
+        assertEquals(existingCount, pageResultDTO.getDtoList().size(), "조회된 페이지의 게시글 수가 기존에 존재하는 게시글 수와 일치해야 합니다.");
 
         // 로그를 통한 결과 확인
         log.debug("총 페이지 수: {}", pageResultDTO.getTotalPage());
-        log.debug("전체 게시글 수: {}", pageResultDTO.getTotalSize());
+        log.debug("전체 게시글 수: {}", pageResultDTO.getSize());
         pageResultDTO.getDtoList().forEach(dto -> log.debug("게시글 제목: {}", dto.getTitle()));
-    }*/
+    }
 
 }

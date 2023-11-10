@@ -14,5 +14,6 @@ public interface AdminBoardRepository extends JpaRepository<AdminBoard, Long>, Q
             "left outer join AdminReply r on r.adminBoard = b " +
             "where b.abno = :abno")
     Object getBoardByAbno(@Param("abno") Long abno);
+    long countByCategory(String category);
 
 }
