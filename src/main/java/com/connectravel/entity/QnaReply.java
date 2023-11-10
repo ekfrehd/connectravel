@@ -5,22 +5,27 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@ToString(exclude = {"reviewBoard","member"})
-public class ReviewReply extends BaseEntity{
+@ToString(exclude = {"member", "qnaBoard"})
+public class QnaReply extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rrno;
+    private Long rno;
     private String content;
 
     /* 연관 관계 */
     @ManyToOne(fetch = FetchType.LAZY)
-    private ReviewBoard reviewBoard;
+    private QnaBoard qnaBoard;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    /* 비즈니스 로직 */
+    public void changeContent(String content) {
+        this.content = content;
+    }
 }
