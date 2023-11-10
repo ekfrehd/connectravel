@@ -9,6 +9,7 @@ import com.connectravel.entity.QnaBoard;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.QnaBoardRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +104,7 @@ public class QnaBoardServiceTest {
         log.debug("수정된 게시글 제목: {}", updatedQnaBoard.getTitle());
     }
 
-    @Test
+    /*@Test
     @Transactional
     public void testDeleteQnaWithReplies() {
         // QnA 게시글과 답변 삭제 테스트
@@ -112,7 +113,26 @@ public class QnaBoardServiceTest {
         assertFalse(exists, "게시글이 삭제된 후에는 더 이상 존재하지 않아야 합니다.");
 
         log.debug("삭제된 게시글 ID: {}", qnaBoardDTO.getQbno());
+    }*/
+
+    @Test
+    @Transactional
+    @DisplayName("QnA 게시글 번호 7번과 답변 삭제 테스트")
+    public void testDeleteQnaWithReplies() {
+        // 테스트를 위해 지정된 QnA 게시글 번호
+        Long qbno = 7L;
+
+        // 삭제 전 QnA 게시글이 존재하는지 확인
+        assertTrue(qnaBoardRepository.existsById(qbno), "삭제 전 QnA 게시글이 존재해야 합니다.");
+
+        // 테스트할 메소드를 호출해 삭제
+        qnaBoardService.deleteQnaWithReplies(qbno);
+        log.info("QnA 게시글 삭제 수행 - 게시물 번호: {}", qbno);
+
+        // 삭제 후 QnA 게시글이 존재하지 않는지 확인
+        assertFalse(qnaBoardRepository.existsById(qbno), "삭제 후 QnA 게시글은 존재하지 않아야 합니다.");
     }
+
 
     @Test
     public void testGetPaginatedQnas() {
