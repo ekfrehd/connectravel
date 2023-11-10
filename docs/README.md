@@ -6,10 +6,10 @@
 
 + [] Qna/Admin/Tour Board 병합
 + + [] 병합 후 필드명 등 오류 안나게 하기 
++ + [] AdminBoard -> bno, rno -> abno, arno 로 변경
 + + [] 병합 후 테스트 진행
-+ [] 
 
-
+    
 ### 2. 테스트 코드
 
 + [] 
