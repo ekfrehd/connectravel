@@ -8,7 +8,6 @@ import com.connectravel.entity.TourBoard;
 import com.connectravel.repository.TourBoardImgRepository;
 import com.connectravel.repository.TourBoardRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +23,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-@Log4j2
 @RequiredArgsConstructor
 public class TourBoardServiceImpl implements TourBoardService {
 
@@ -36,12 +34,7 @@ public class TourBoardServiceImpl implements TourBoardService {
     @Transactional
     public Long createTourBoard(TourBoardDTO dto) {
 
-        log.info("DTO.................");
-        log.info(dto);
-
         TourBoard entity = dtoToEntity(dto);
-
-        log.info(entity);
 
         tourBoardRepository.save(entity);
 
@@ -59,7 +52,6 @@ public class TourBoardServiceImpl implements TourBoardService {
     @Override
     public void updateTourBoard(TourBoardDTO dto) {
 
-        //업데이트 하는 항목은 제목, 내용
         Optional<TourBoard> result = tourBoardRepository.findById(dto.getTbno());
 
         if (result.isPresent()) {
@@ -113,8 +105,8 @@ public class TourBoardServiceImpl implements TourBoardService {
     public List<ImgDTO> listTourBoardImages(Long tbno) {
         List<ImgDTO> list = new ArrayList<>();
         TourBoard entity = tourBoardRepository.findById(tbno).get();
-        tourBoardImgRepository.getImgByTourBoardTbno(entity).forEach(i -> { //이미지는 룸을 참조하고 있다 그러니 이미지가 참조하는 룸에 해당하는 모든 이미지를 불러온다
-            ImgDTO imgDTO = modelMapper.map(i, ImgDTO.class); //dto변환
+        tourBoardImgRepository.getImgByTourBoardTbno(entity).forEach(i -> {
+            ImgDTO imgDTO = modelMapper.map(i, ImgDTO.class);
             list.add(imgDTO); // list화
         });
         return list;
