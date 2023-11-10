@@ -10,8 +10,8 @@ public interface ImgService {
 
     void addAdminBoardImg(MultipartFile file, Long bno);
 
-    void addTourBoardImg(MultipartFile file, Long tbno);
+   // void addTourBoardImg(MultipartFile file, Long tbno);
 
-    void addTourBoardReviewImg(MultipartFile file, Long tbrno);
+  //  void addTourBoardReviewImg(MultipartFile file, Long tbrno);
 
 }

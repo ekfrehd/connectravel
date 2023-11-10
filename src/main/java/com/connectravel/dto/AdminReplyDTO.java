@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Data
 public class AdminReplyDTO {
 
-    private Long rno;
-    private Long bno;
+    private Long arno;
+    private Long abno;
 
     private String content;
     private String replyer;

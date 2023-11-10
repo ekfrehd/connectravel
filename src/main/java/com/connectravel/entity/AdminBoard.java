@@ -14,7 +14,7 @@ public class AdminBoard extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bno;
+    private Long abno;
 
     @Column(length = 100, nullable = false)
     private String title;

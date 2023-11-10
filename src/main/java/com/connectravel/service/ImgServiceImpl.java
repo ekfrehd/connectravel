@@ -16,8 +16,8 @@ public class ImgServiceImpl implements ImgService {
     private final RoomImgRepository roomImgRepository;
     private final ReviewBoardImgRepository reviewBoardImgRepository;
     private final AdminBoardImgRepository adminBoardImgRepository;
-    private final TourBaordImgRepository tourBaordImgRepository;
-    private final TourBoardReivewImgRepository tourBoardReivewImgRepository;
+   // private final TourBaordImgRepository tourBaordImgRepository;
+   // private final TourBoardReivewImgRepository tourBoardReivewImgRepository;
     private final FileManager fileManager;
 
 
@@ -48,19 +48,19 @@ public class ImgServiceImpl implements ImgService {
     }
 
     @Override
-    public void addAdminBoardImg(MultipartFile file, Long bno) {
+    public void addAdminBoardImg(MultipartFile file, Long abno) {
         String origin = file.getOriginalFilename();
         String realName = fileManager.UUIDMaker(origin);
         boolean is_add =fileManager.add(file,realName);
         if(is_add)
         {
-            AdminBoard adminBoard = AdminBoard.builder().bno(bno).build();
+            AdminBoard adminBoard = AdminBoard.builder().abno(abno).build();
             AdminBoardImg adminBoardImg = AdminBoardImg.builder().imgFile(realName).adminBoard(adminBoard).build();
             adminBoardImgRepository.save(adminBoardImg);
         }
     }
 
-    @Override
+    /*@Override
     public void addTourBoardImg(MultipartFile file, Long tbno) {
         String origin = file.getOriginalFilename();
         String realName = fileManager.UUIDMaker(origin);
@@ -84,6 +84,6 @@ public class ImgServiceImpl implements ImgService {
             TourBoardReviewImg tourBoardReviewImg = TourBoardReviewImg.builder().imgFile(realName).tourBoardReview(tourBoardReview).build();
             tourBoardReivewImgRepository.save(tourBoardReviewImg);
         }
-    }
+    }*/
 
 }

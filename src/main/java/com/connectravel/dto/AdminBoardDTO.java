@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AdminBoardDTO {
 
-    private Long bno;
+    private Long abno;
 
     private String title;
     private String content;

@@ -23,6 +23,7 @@ public class ReviewBoard extends BaseEntity{
     private double grade;
 
     /* 연관 관계 */
+    @Builder.Default
     @OneToMany(mappedBy = "reviewBoard", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ReviewReply> replies = new ArrayList<>();
 
