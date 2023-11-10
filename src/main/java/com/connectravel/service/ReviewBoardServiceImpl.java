@@ -129,6 +129,7 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     } // 사용자가 남긴 숙소 리뷰의 이미지들을 가져오는 메서드
 
 
+    /* 변환 메서드 */
     private ReviewBoard dtoToEntity(ReviewBoardDTO dto, Member member, Reservation reservation) {
         return ReviewBoard.builder()
                 .rbno(dto.getRbno())

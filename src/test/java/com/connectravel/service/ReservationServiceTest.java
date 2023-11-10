@@ -222,15 +222,4 @@ public class ReservationServiceTest {
         log.debug("Get Room's Reservation List : {} ", bookings);
     }
 
-  /*
-    @Test
-    @Transactional
-    void testCheckRoomAvailability() {
-        Long rno = 1L; // 테스트용 방 번호
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = startDate.plusDays(1);
-        boolean available = reservationService.checkRoomAvailability(rno, startDate, endDate);
-        assertTrue(available, "방이 예약 가능해야 합니다.");
-        // 추가적인 검증 로직
-    }*/
 }

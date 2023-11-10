@@ -51,7 +51,7 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
         reviewReplyRepository.deleteById(rrno);
     }
 
-
+    /* 변환 메서드 */
     private ReviewReply dtoToEntity(ReviewReplyDTO reviewReplyDTO) {
         ReviewBoard reviewBoard = ReviewBoard.builder().rbno(reviewReplyDTO.getRbno()).build();
         Member member = memberRepository.findByEmail(reviewReplyDTO.getReplyer())

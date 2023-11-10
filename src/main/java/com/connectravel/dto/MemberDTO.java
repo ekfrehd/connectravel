@@ -1,7 +1,7 @@
 package com.connectravel.dto;
 
+import com.connectravel.constant.Role;
 import lombok.*;
-import org.ezone.room.constant.Role;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;

@@ -1,7 +1,7 @@
 package com.connectravel.entity;
 
 import lombok.*;
-import org.ezone.room.constant.Role;
+import com.connectravel.constant.Role;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
