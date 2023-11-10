@@ -40,7 +40,7 @@ public class AdminBoardRepositoryTest {
                 .nickName("gildong")
                 .tel("010-1234-5678")
                 .point(1000)
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
         member = memberRepository.save(member); // 저장
 

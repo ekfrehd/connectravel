@@ -75,7 +75,7 @@ public class AdminBoardServiceTest {
         log.debug("등록된 게시글 제목: {}", adminBoard.getTitle());
 
     }
-/*
+
     @Test
     public void testGetAdminBoard() {
         // 관리자 게시글 조회 테스트
@@ -87,6 +87,9 @@ public class AdminBoardServiceTest {
         log.debug("조회된 게시글 제목: {}", foundAdminBoardDTO.getTitle());
 
     }
+
+/*
+
 
     @Test
     @Transactional
