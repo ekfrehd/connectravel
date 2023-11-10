@@ -1,14 +1,12 @@
 package com.connectravel.repository.search;
 
-import com.connectravel.entity.QAdminBoard;
-import com.connectravel.entity.QAdminReply;
-import com.connectravel.entity.QMember;
-import com.connectravel.entity.QnaBoard;
+import com.connectravel.entity.*;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -42,6 +40,8 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
         return null;
     }
+*/
+
 
     @Override
     public Page<Object[]> searchPage(String[] type, String keyword, Pageable pageable) {
@@ -91,8 +91,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         long count = tuple.fetchCount();
 
         return new PageImpl<Object[]>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
-    }*/
-
+    }
 
     @Override
     public Page<Object[]> searchPageAdminBoard(String[] type, String category, String keyword, Pageable pageable) {

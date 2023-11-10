@@ -18,8 +18,7 @@ public class AdminBoardDTO {
     private String category;
 
     private int replyCount;
-    private LocalDateTime regDate;
-    private LocalDateTime modDate;
+    private LocalDateTime regDate, modDate;
 
     private String writerEmail;
     private String writerName;

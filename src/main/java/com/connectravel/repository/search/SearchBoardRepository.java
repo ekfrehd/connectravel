@@ -7,7 +7,7 @@ public interface SearchBoardRepository {
 
     //QnaBoard search1();
 
-    //Page<Object[]> searchPage(String[] type, String keyword, Pageable pageable);
+    Page<Object[]> searchPage(String[] type, String keyword, Pageable pageable);
 
     //Page<Object[]> searchPageByWriter(String[] type, Member member, String keyword, Pageable pageable);
 

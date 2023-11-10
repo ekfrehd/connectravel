@@ -24,7 +24,7 @@ public class QnaReply extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    /* 비즈니스 로직 */
+    /* 도메인 로직 */
     public void changeContent(String content) {
         this.content = content;
     }
