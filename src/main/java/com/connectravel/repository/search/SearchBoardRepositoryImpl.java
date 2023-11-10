@@ -49,7 +49,13 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         QQnaReply reply = QQnaReply.qnaReply;
         QMember member = QMember.member;
 
-        JPQLQuery<Tuple> tuple = from(qnaBoard).leftJoin(member).on(qnaBoard.member.eq(member)).leftJoin(reply).on(reply.qnaBoard.eq(qnaBoard)).select(qnaBoard, member, reply.count()).where(qnaBoard.bno.gt(0L));
+        JPQLQuery<Tuple> tuple = from(qnaBoard)
+                .leftJoin(member)
+                .on(qnaBoard.member.eq(member))
+                .leftJoin(reply)
+                .on(reply.qnaBoard.eq(qnaBoard))
+                .select(qnaBoard, member, reply.count())
+                .where(qnaBoard.qbno.gt(0L));
 
         // 검색 조건을 설정함. 검색 조건에 따라 BooleanExpression 객체를 생성하여 배열에 저장
         if (type != null) {
@@ -69,7 +75,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
                 }
             }
 
-            tuple.where(qnaBoard.bno.gt(0L).andAnyOf(conditions));
+            tuple.where(qnaBoard.qbno.gt(0L).andAnyOf(conditions));
         }
 
         Sort sort = pageable.getSort();
