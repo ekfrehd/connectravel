@@ -9,17 +9,17 @@ import java.util.List;
 
 public interface AdminBoardService {
 
-    Long register(AdminBoardDTO dto); //등록
+    Long registerAdminBoard(AdminBoardDTO dto);
 
-    AdminBoardDTO get(Long abno); //조회
+    AdminBoardDTO getAdminBoard(Long abno);
 
-    void modify(AdminBoardDTO adminBoardDTO); //수정
+    void updateAdminBoard(AdminBoardDTO adminBoardDTO);
 
-    void remove(Long abno); //삭제
+    void deleteAdminBoard(Long abno);
 
-    PageResultDTO<AdminBoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO, String category); // 리스트 출력
+    PageResultDTO<AdminBoardDTO, Object[]> getPaginatedAdminBoardList(PageRequestDTO pageRequestDTO, String category); // 리스트 출력
 
-    List<ImgDTO> getImgList(Long abno);
+    List<ImgDTO> getAdminBoardImgList(Long abno);
 
 
 }

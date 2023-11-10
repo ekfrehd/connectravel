@@ -40,7 +40,7 @@ public class AdminBoardServiceImpl implements AdminBoardService {
 
     @Override
     @Transactional
-    public Long register(AdminBoardDTO dto) {
+    public Long registerAdminBoard(AdminBoardDTO dto) {
 
         log.info("테스트 : " + dto);
 
@@ -52,7 +52,7 @@ public class AdminBoardServiceImpl implements AdminBoardService {
     }
 
     @Override
-    public AdminBoardDTO get(Long abno) {
+    public AdminBoardDTO getAdminBoard(Long abno) {
         Object result = adminBoardRepository.getBoardByAbno(abno);
 
         Object[] arr = (Object[]) result;
@@ -62,7 +62,7 @@ public class AdminBoardServiceImpl implements AdminBoardService {
 
     @Override
     @Transactional
-    public void modify(AdminBoardDTO adminBoardDTO) {
+    public void updateAdminBoard(AdminBoardDTO adminBoardDTO) {
 
         AdminBoard adminBoard = adminBoardRepository.getOne(adminBoardDTO.getAbno()); //adminRepository에서 Board객체를 받아
         //필요한 순간까지 로딩을 지연하는 getOne메서드 이용
@@ -75,12 +75,12 @@ public class AdminBoardServiceImpl implements AdminBoardService {
 
     @Override // 게시글 삭제
     @Transactional
-    public void remove (Long abno) {
+    public void deleteAdminBoard(Long abno) {
         adminBoardRepository.deleteById(abno); //이후 본 글 삭제
     }
 
     @Override
-    public PageResultDTO<AdminBoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO, String category) {
+    public PageResultDTO<AdminBoardDTO, Object[]> getPaginatedAdminBoardList(PageRequestDTO pageRequestDTO, String category) {
 
         Function<Object[], AdminBoardDTO> fn = (en -> entityToDTO((AdminBoard) en[0], (Member) en[1], (Long) en[2]));
 
@@ -99,7 +99,7 @@ public class AdminBoardServiceImpl implements AdminBoardService {
         return new PageResultDTO<>(result, fn);
     }
 
-    public List<ImgDTO> getImgList(Long abno) {
+    public List<ImgDTO> getAdminBoardImgList(Long abno) {
         List<ImgDTO> list = new ArrayList<>();
         AdminBoard entity = adminBoardRepository.findById(abno)
                         .orElseThrow(() -> new EntityNotFoundException("AdminBoard not found"));
