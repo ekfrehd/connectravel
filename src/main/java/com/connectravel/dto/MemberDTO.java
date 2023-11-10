@@ -6,10 +6,10 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class MemberDTO {
 
     private String id;

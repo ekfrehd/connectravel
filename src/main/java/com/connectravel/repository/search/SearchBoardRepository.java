@@ -15,5 +15,5 @@ public interface SearchBoardRepository {
 
     //Page<Object[]> searchPageAccommodation(String[] type, String keyword, String category, String region, LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice, Pageable pageable);
 
-    //Page<Object[]> searchTourBoard(String[] type, String keyword, String category, String region, Pageable pageable);
+    Page<Object[]> searchTourBoard(String[] type, String keyword, String category, String region, Pageable pageable);
 }

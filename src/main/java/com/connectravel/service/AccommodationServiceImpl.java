@@ -100,6 +100,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
+    /* 변환 메서드 */
     private AccommodationDTO entityToDto(Accommodation accommodation) {
 
         // 숙박 업소에 대한 이미지 정보만 변환

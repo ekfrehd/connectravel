@@ -8,6 +8,7 @@ import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.QnaReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -31,6 +32,8 @@ public class QnaReplyServiceImpl implements QnaReplyService {
         return qnaReply.getQrno();
     }
 
+    @Override
+    @Transactional(readOnly = true)
     public List<QnaReplyDTO> getQnaRepliesByQbno(Long qbno) {
         List<QnaReply> result = qnaReplyRepository.getRepliesByQnaBoardOrderByQrno(QnaBoard.builder().qbno(qbno).build());
         return result.stream()

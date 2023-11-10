@@ -101,6 +101,7 @@ public class AdminBoardServiceImpl implements AdminBoardService {
         return list;
     }
 
+    /* 변환 메서드 */
     private AdminBoard dtoToEntity(AdminBoardDTO dto, MemberRepository memberRepository) {
 
         Member member = memberRepository.findByEmail(dto.getWriterEmail())

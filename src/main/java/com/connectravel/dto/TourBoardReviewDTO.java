@@ -8,18 +8,17 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminBoardDTO {
+public class TourBoardReviewDTO {
 
-    private Long abno;
+    private Long tbrno;
+    private Long tbno;
 
-    private String title;
     private String content;
-    private String category;
-
-    private int replyCount;
-    private LocalDateTime regDate, modDate;
+    private double grade;
 
     private String writerEmail;
     private String writerName;
+    private LocalDateTime regDate, modDate;
 
+    private int recommend; // 추천수
 }

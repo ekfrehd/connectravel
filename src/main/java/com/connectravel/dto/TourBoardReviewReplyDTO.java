@@ -1,6 +1,5 @@
 package com.connectravel.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,12 +11,13 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminReplyDTO {
+public class TourBoardReviewReplyDTO {
 
-    private Long arno;
-    private Long abno;
+    private Long tbrrno;
+    private Long tbrno;
 
     private String content;
     private String replyer;
     private LocalDateTime regDate, modDate;
+
 }

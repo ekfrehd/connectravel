@@ -3,6 +3,8 @@ package com.connectravel.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +27,10 @@ public class QnaBoard extends BaseEntity {
     /* 연관 관계 */
     @ManyToOne(fetch = FetchType.LAZY) //지연 로딩 지정
     private Member member;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "qnaBoard", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<QnaReply> replies = new ArrayList<>();
 
     /* 도메인 로직 */
     public void changeTitle(String title) {
