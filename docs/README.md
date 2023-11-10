@@ -28,3 +28,7 @@
 + [x] QnaBoard Test
 + + [x] QnaBoardService CRUD, 페이징, 리뷰 게시판 삭제 시 댓글도 같이 삭제 (cascade)
 + + [x] QnaBoardReplyService CRUD
+
+
+### 3. 개선할 점 (미리 체크, 나중에 개선하기)
++ [] Room의 add, removeReservation이 사용이 안되고 있음. 방 예약할 때 이 메서드를 쓰기
