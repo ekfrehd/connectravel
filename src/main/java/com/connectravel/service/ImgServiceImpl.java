@@ -2,9 +2,7 @@ package com.connectravel.service;
 
 import com.connectravel.entity.*;
 import com.connectravel.manager.FileManager;
-import com.connectravel.repository.AdminBoardImgRepository;
-import com.connectravel.repository.ReviewBoardImgRepository;
-import com.connectravel.repository.RoomImgRepository;
+import com.connectravel.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,8 +14,8 @@ public class ImgServiceImpl implements ImgService {
     private final RoomImgRepository roomImgRepository;
     private final ReviewBoardImgRepository reviewBoardImgRepository;
     private final AdminBoardImgRepository adminBoardImgRepository;
-   // private final TourBaordImgRepository tourBaordImgRepository;
-   // private final TourBoardReivewImgRepository tourBoardReivewImgRepository;
+    private final TourBoardImgRepository tourBoardImgRepository;
+    private final TourBoardReviewImgRepository tourBoardReviewImgRepository;
     private final FileManager fileManager;
 
 
@@ -60,7 +58,7 @@ public class ImgServiceImpl implements ImgService {
         }
     }
 
-    /*@Override
+    @Override
     public void addTourBoardImg(MultipartFile file, Long tbno) {
         String origin = file.getOriginalFilename();
         String realName = fileManager.UUIDMaker(origin);
@@ -69,7 +67,7 @@ public class ImgServiceImpl implements ImgService {
         {
             TourBoard tourBoard = TourBoard.builder().tbno(tbno).build();
             TourBoardImg tourBoardImg = TourBoardImg.builder().imgFile(realName).tourBoard(tourBoard).build();
-            tourBaordImgRepository.save(tourBoardImg);
+            tourBoardImgRepository.save(tourBoardImg);
         }
     }
 
@@ -82,8 +80,8 @@ public class ImgServiceImpl implements ImgService {
         {
             TourBoardReview tourBoardReview = TourBoardReview.builder().tbrno(tbrno).build();
             TourBoardReviewImg tourBoardReviewImg = TourBoardReviewImg.builder().imgFile(realName).tourBoardReview(tourBoardReview).build();
-            tourBoardReivewImgRepository.save(tourBoardReviewImg);
+            tourBoardReviewImgRepository.save(tourBoardReviewImg);
         }
-    }*/
+    }
 
 }

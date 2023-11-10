@@ -168,8 +168,6 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         return new PageImpl<Object[]>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
     }
 
-
-/*
     @Override
     public Page<Object[]> searchTourBoard(String[] type, String keyword, String category, String region, Pageable pageable) {
 
@@ -231,5 +229,5 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
         return new PageImpl<>(result.stream().map(t -> new Object[]{t}).collect(Collectors.toList()), pageable, count);
     }
-*/
+
 }

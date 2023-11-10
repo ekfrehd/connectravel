@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class ReviewReplyDTO {
 
     private Long rrno;

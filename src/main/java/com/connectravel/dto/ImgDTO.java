@@ -1,6 +1,5 @@
 package com.connectravel.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +17,7 @@ public class ImgDTO {
     private RoomDTO room;
     private AccommodationDTO accommodation;
     private ReviewBoardDTO reviewBoard;
+    private TourBoardDTO tourBoard;
+    private TourBoardReviewDTO tourBoardReview;
 
 }
