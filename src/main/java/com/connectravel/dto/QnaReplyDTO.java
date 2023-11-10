@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Data
 public class QnaReplyDTO {
 
-    private Long rno;
-    private Long bno;
+    private Long qrno;
+    private Long qbno;
 
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;

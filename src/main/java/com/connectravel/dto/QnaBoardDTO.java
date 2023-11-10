@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class QnaBoardDTO {
 
-    private Long bno;
+    private Long qbno;
 
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;
@@ -23,7 +23,6 @@ public class QnaBoardDTO {
 
     private int replyCount;
     private LocalDateTime regDate, modDate;
-    private String createdBy, modifiedBy;
 
     private String writerEmail;
     private String writerName;

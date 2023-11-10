@@ -14,7 +14,7 @@ public class QnaReply extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rno;
+    private Long qrno;
     private String content;
 
     /* 연관 관계 */

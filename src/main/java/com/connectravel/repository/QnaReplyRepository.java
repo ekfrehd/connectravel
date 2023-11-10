@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface QnaReplyRepository extends JpaRepository<QnaReply, Long> {
 
-    List<QnaReply> getRepliesByQnaBoardOrderByRno(QnaBoard qnaBoard);
+    List<QnaReply> getRepliesByQnaBoardOrderByQrno(QnaBoard qnaBoard);
 }

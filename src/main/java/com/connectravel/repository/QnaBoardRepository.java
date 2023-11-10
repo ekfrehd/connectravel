@@ -13,7 +13,7 @@ public interface QnaBoardRepository extends JpaRepository<QnaBoard, Long>, Query
             "FROM QnaBoard b " +
             "LEFT JOIN b.member w " +
             "LEFT OUTER JOIN QnaReply r ON r.qnaBoard = b " +
-            "WHERE b.bno = :bno")
-    Object getBoardByBno(@Param("bno") Long bno);
+            "WHERE b.qbno = :qbno")
+    Object getBoardByQbno(@Param("qbno") Long qbno);
 
 }

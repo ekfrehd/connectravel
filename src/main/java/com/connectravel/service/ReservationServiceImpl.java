@@ -158,6 +158,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
 
+    /* 변환 메서드 */
     private ReservationDTO entityToDTO(Reservation reservation) {
         RoomDTO roomDTO = roomService.entityToDTO(reservation.getRoom());
         MemberDTO memberDTO = memberService.entityToDTO(reservation.getMember()); // Member 변환

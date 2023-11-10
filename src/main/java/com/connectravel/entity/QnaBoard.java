@@ -14,7 +14,7 @@ public class QnaBoard extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bno;
+    private Long qbno;
 
     @Column(length = 100, nullable = false)
     private String title;
