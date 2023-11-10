@@ -9,12 +9,12 @@ import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.QnaBoardRepository;
 import com.connectravel.repository.QnaReplyRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -69,9 +69,8 @@ public class QnaReplyServiceTest {
     }
 
     @Test
-    @Transactional
+    @DisplayName("QnA 댓글 등록 테스트")
     public void testCreateQnaReply() {
-        // QnA 댓글 등록 테스트
         Long qrno = qnaReplyService.createQnaReply(qnaReplyDTO);
         assertNotNull(qrno, "댓글 등록 후 ID를 반환해야 합니다.");
 
@@ -84,8 +83,8 @@ public class QnaReplyServiceTest {
     }
 
     @Test
+    @DisplayName("특정 QnA 게시물의 댓글 목록 조회 테스트")
     public void testGetQnaRepliesByQbno() {
-        // 특정 QnA 게시물의 댓글 목록 조회 테스트
         Long qrno = qnaReplyService.createQnaReply(qnaReplyDTO); // 댓글 먼저 생성
         List<QnaReplyDTO> replies = qnaReplyService.getQnaRepliesByQbno(savedQnaBoard.getQbno());
 
@@ -99,10 +98,9 @@ public class QnaReplyServiceTest {
     }
 
     @Test
-    @Transactional
+    @DisplayName("QnA 댓글 수정 테스트")
     public void testUpdateQnaReply() {
-        // QnA 댓글 수정 테스트
-        Long qrno = qnaReplyService.createQnaReply(qnaReplyDTO); // 댓글 먼저 생성
+        Long qrno = qnaReplyService.createQnaReply(qnaReplyDTO);
         qnaReplyDTO.setQrno(qrno);
         qnaReplyDTO.setContent("수정된 댓글 내용입니다.");
 
@@ -116,10 +114,9 @@ public class QnaReplyServiceTest {
         log.debug("수정된 댓글 내용: {}", updatedQnaReply.getContent());
     }
 
-    @Test
-    @Transactional
+   /* @Test
+    @DisplayName("QnA 댓글 삭제 테스트")
     public void testDeleteQnaReply() {
-        // QnA 댓글 삭제 테스트
         Long qrno = qnaReplyService.createQnaReply(qnaReplyDTO); // 댓글 먼저 생성
         qnaReplyService.deleteQnaReply(qrno);
 
@@ -128,4 +125,22 @@ public class QnaReplyServiceTest {
 
         log.debug("삭제된 댓글 ID: {}", qrno);
     }
+*/
+   @Test
+   // @Transactional
+   @DisplayName("특정 번호 7번과 댓글 삭제 테스트")
+   public void testDeleteQnaReply() {
+       // 테스트를 위해 지정된 댓글 번호
+       Long qrno = 7L;
+
+       // 삭제 전 댓글이 존재하는지 확인
+       assertTrue(qnaReplyRepository.existsById(qrno), "삭제 전 댓글이 존재해야 합니다.");
+
+       // 테스트할 메소드를 호출해 삭제
+       qnaReplyService.deleteQnaReply(qrno);
+       log.info("특정 번호 댓글 삭제 수행 - 댓글 번호: {}", qrno);
+
+       // 삭제 후 댓글이 존재하지 않는지 확인
+       assertFalse(qnaReplyRepository.existsById(qrno), "삭제 후 댓글은 존재하지 않아야 합니다.");
+   }
 }
