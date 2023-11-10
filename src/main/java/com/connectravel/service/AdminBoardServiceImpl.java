@@ -10,9 +10,7 @@ import com.connectravel.repository.AdminBoardImgRepository;
 import com.connectravel.repository.AdminBoardRepository;
 import com.connectravel.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,21 +26,17 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class AdminBoardServiceImpl implements AdminBoardService {
 
     private final AdminBoardRepository adminBoardRepository;
     private final AdminBoardImgRepository adminBoardImgRepository;
-    private final MemberRepository memberRepository; // Member 객체를 불러오기 위해 필요
+    private final MemberRepository memberRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Override
     @Transactional
     public Long registerAdminBoard(AdminBoardDTO dto) {
-
-        log.info("테스트 : " + dto);
 
         AdminBoard adminBoard = dtoToEntity(dto, memberRepository);
 
@@ -64,19 +58,18 @@ public class AdminBoardServiceImpl implements AdminBoardService {
     @Transactional
     public void updateAdminBoard(AdminBoardDTO adminBoardDTO) {
 
-        AdminBoard adminBoard = adminBoardRepository.getOne(adminBoardDTO.getAbno()); //adminRepository에서 Board객체를 받아
-        //필요한 순간까지 로딩을 지연하는 getOne메서드 이용
+        AdminBoard adminBoard = adminBoardRepository.getOne(adminBoardDTO.getAbno());
 
-        adminBoard.changeTitle(adminBoardDTO.getTitle()); //Board객체의 제목 수정
-        adminBoard.changeContent(adminBoardDTO.getContent()); //Board객체의 내용 수정
+        adminBoard.changeTitle(adminBoardDTO.getTitle());
+        adminBoard.changeContent(adminBoardDTO.getContent());
 
-        adminBoardRepository.save(adminBoard); //수정된 객체를 repository에 저장
+        adminBoardRepository.save(adminBoard);
     }
 
     @Override // 게시글 삭제
     @Transactional
     public void deleteAdminBoard(Long abno) {
-        adminBoardRepository.deleteById(abno); //이후 본 글 삭제
+        adminBoardRepository.deleteById(abno);
     }
 
     @Override
@@ -84,21 +77,18 @@ public class AdminBoardServiceImpl implements AdminBoardService {
 
         Function<Object[], AdminBoardDTO> fn = (en -> entityToDTO((AdminBoard) en[0], (Member) en[1], (Long) en[2]));
 
-        //SearchBoardRepository에서 정의한 내용으로 세팅
-        Page<Object[]> result; //Object결과를 Page객체에 담고
-        String[] type = pageRequestDTO.getType(); //검색 종류 담고
-        Sort sort = Sort.by(Sort.Direction.DESC, "bno"); //정렬방식 담음
-        // SearchBaordRepositoryImpl에서 정의한 Sort 정렬방식과 맞춰야 한다
+        Page<Object[]> result;
+        String[] type = pageRequestDTO.getType();
+        Sort sort = Sort.by(Sort.Direction.DESC, "abno");
+
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), sort);
 
-        //조회는 모든 사용자가 다 볼 수 있게 설정(Role에 상관없이)
         result = adminBoardRepository.searchPageAdminBoard(type, category, pageRequestDTO.getKeyword(), pageable);
-
-        log.info("실행결과 : " + result);
 
         return new PageResultDTO<>(result, fn);
     }
 
+    @Override
     public List<ImgDTO> getAdminBoardImgList(Long abno) {
         List<ImgDTO> list = new ArrayList<>();
         AdminBoard entity = adminBoardRepository.findById(abno)
