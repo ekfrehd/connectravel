@@ -1,9 +1,8 @@
 package com.connectravel.entity;
 
 import lombok.*;
-import org.ezone.room.constant.Role;
+import com.connectravel.constant.Role;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -20,24 +19,18 @@ public class Member {
     @GenericGenerator(name="system_uuid", strategy = "uuid")
     @Column(name = "id")
     private String id;
-
-    private String name;
+    private String password;
 
     @Column(unique = true)
     private String email;
+    private String name;
+    private String nickName;
+    private String tel;
 
     @Column(scale = 0)
     private int point;
 
-    private String nickName;
-
-    private String tel;
-
-    private String password;
-
     @Enumerated(EnumType.STRING)
     private Role role;
-
-
 
 }

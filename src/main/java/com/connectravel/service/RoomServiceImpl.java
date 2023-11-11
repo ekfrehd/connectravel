@@ -28,7 +28,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public RoomDTO createRoom(RoomDTO roomDTO) {
+    public RoomDTO registerRoom(RoomDTO roomDTO) {
         // 숙소 ID로 숙소 정보 조회
         Accommodation accommodation = accommodationRepository.findById(roomDTO.getAccommodationDTO().getAno())
                 .orElseThrow(() -> new EntityNotFoundException("숙소를 찾을 수 없습니다."));
@@ -71,12 +71,11 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public RoomDTO updateRoom(Long rno, RoomDTO roomDTO) {
+    public RoomDTO modifyRoom(Long rno, RoomDTO roomDTO) {
         Room room = roomRepository.findById(rno)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid room Id: " + rno));
 
-        // 여기에 roomDTO의 정보를 room 엔티티에 매핑하는 로직 추가
-        room.updateRoomDetails(roomDTO); // 예시 메서드, 실제 구현 필요
+        room.updateRoomDetails(roomDTO);
 
         Room updatedRoom = roomRepository.save(room);
         return entityToDTO(updatedRoom);
@@ -84,7 +83,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional
-    public void deleteRoom(Long rno) {
+    public void removeRoom(Long rno) {
         Room room = roomRepository.findById(rno)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid room Id: " + rno));
         roomRepository.delete(room);
@@ -100,13 +99,12 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<RoomDTO> getAllRooms() {
+    public List<RoomDTO> listAllRooms() {
         return roomRepository.findAll().stream()
                 .map(this::entityToDTO)
                 .collect(Collectors.toList());
     }
 
-    // Room 엔티티를 RoomDTO로 변환하는 메서드
     @Override
     public RoomDTO entityToDTO(Room room) {
         AccommodationDTO accommodationDTO = new AccommodationDTO();
@@ -124,9 +122,8 @@ public class RoomServiceImpl implements RoomService {
                 .build();
     }
 
-    // RoomServiceImpl 내에 추가할 dtoToEntity 메서드
     @Override
-    public Room dtoToEntity(RoomDTO roomDTO){
+    public Room dtoToEntity(RoomDTO roomDTO) {
         Accommodation accommodation = accommodationRepository.findById(roomDTO.getAccommodationDTO().getAno())
                 .orElseThrow(() -> new EntityNotFoundException("숙소를 찾을 수 없습니다."));
 
@@ -137,14 +134,11 @@ public class RoomServiceImpl implements RoomService {
                 .maximumOccupancy(roomDTO.getMaximumOccupancy())
                 .operating(roomDTO.isOperating())
                 .content(roomDTO.getContent())
-                .accommodation(accommodation) // 여기서 숙소를 설정합니다.
+                .accommodation(accommodation)
                 .build();
     }
 
-
-    // RoomImg 엔티티를 ImgDTO로 변환하는 메서드
-    @Override
-    public ImgDTO imgToDTO(RoomImg roomImg) {
+    private ImgDTO imgToDTO(RoomImg roomImg) {
         return ImgDTO.builder()
                 .ino(roomImg.getIno())
                 .imgFile(roomImg.getImgFile())

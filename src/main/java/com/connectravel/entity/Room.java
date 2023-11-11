@@ -33,8 +33,9 @@ public class Room {
 
     private String content;
 
-    private boolean operating; // 예약 Y/N
+    private boolean operating; // 방의 운영 여부
 
+    /* 연관 관계 */
     @ManyToOne(fetch = FetchType.LAZY)
     private Accommodation accommodation;
 

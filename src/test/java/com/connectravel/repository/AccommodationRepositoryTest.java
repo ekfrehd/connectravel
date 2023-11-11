@@ -46,7 +46,7 @@ public class AccommodationRepositoryTest {
                 .accommodationName("Test Accommodation")
                 .postal(12345)
                 .sellerName(member.getName())
-                .email(member.getEmail())
+                .sellerEmail(member.getEmail())
                 .address("123 Test Street, Test City")
                 .count(0)
                 .tel("123-456-7890")
@@ -92,7 +92,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 등록 테스트
     public void saveAccommodationWithImagesAndOptions() {
         // Accommodation 정보를 불러옵니다.
-        Accommodation savedAccommodation = accommodationRepository.findByEmail("TestEmail")
+        Accommodation savedAccommodation = accommodationRepository.findBySellerEmail("TestEmail")
                 .orElseThrow(() -> new RuntimeException("Failed to retrieve saved accommodation"));
 
         // 테스트 결과 확인
@@ -148,7 +148,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 수정 테스트
     public void modifyExistingAccommodationWithImagesAndOptions() {
         // 1. 기존의 숙박시설을 불러옵니다.
-        Accommodation loadedAccommodation = accommodationRepository.findByEmail("TestEmail").orElse(null);
+        Accommodation loadedAccommodation = accommodationRepository.findBySellerEmail("TestEmail").orElse(null);
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform update test.");
 
         // 2. 숙박시설의 기본 정보 수정
@@ -188,7 +188,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 삭제 테스트
     public void deleteAccommodationWithImagesAndOptions() {
         // 1. 삭제할 숙박시설 정보를 불러옵니다.
-        Accommodation loadedAccommodation = accommodationRepository.findByEmail("TestEmail").orElse(null);
+        Accommodation loadedAccommodation = accommodationRepository.findBySellerEmail("TestEmail").orElse(null);
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform delete test.");
 
         Long accommodationId = loadedAccommodation.getAno();
@@ -211,7 +211,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 특정 이미지를 삭제하는 테스트
     public void removeImageFromAccommodation() {
         // 1. 숙박시설을 불러옵니다.
-        Accommodation loadedAccommodation = accommodationRepository.findByEmail("TestEmail").orElse(null);
+        Accommodation loadedAccommodation = accommodationRepository.findBySellerEmail("TestEmail").orElse(null);
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform remove image test.");
 
         // 2. 첫 번째 이미지를 삭제합니다.
@@ -231,7 +231,7 @@ public class AccommodationRepositoryTest {
     @Test // Accommodation 특정 옵션을 삭제하는 테스트
     public void removeAccommodationOptionFromAccommodation() {
         // 1. 숙박시설을 불러옵니다.
-        Accommodation loadedAccommodation = accommodationRepository.findByEmail("TestEmail").orElse(null);
+        Accommodation loadedAccommodation = accommodationRepository.findBySellerEmail("TestEmail").orElse(null);
         assertNotNull(loadedAccommodation, "Accommodation must exist to perform remove option test.");
 
         // 2. 첫 번째 옵션을 삭제합니다.

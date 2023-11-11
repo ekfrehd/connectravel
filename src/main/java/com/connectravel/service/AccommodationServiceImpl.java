@@ -26,19 +26,18 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final MemberRepository memberRepository;
     private final OptionRepository optionRepository;
 
-
     @Override
     @Transactional
     public Accommodation registerAccommodation(AccommodationDTO accommodationDTO) {
         // Member 찾기
-        Member member = memberRepository.findByEmail(accommodationDTO.getEmail())
+        Member member = memberRepository.findByEmail(accommodationDTO.getSellerEmail())
                 .orElseThrow(() -> new EntityNotFoundException("Member not found or not authorized"));
 
         // Accommodation 엔티티 생성
         Accommodation accommodation = Accommodation.builder()
                 .accommodationName(accommodationDTO.getAccommodationName())
                 .postal(accommodationDTO.getPostal())
-                .sellerName(member.getName()) // Since it's a 1:1 relation, we can get the name directly
+                .sellerName(member.getName())
                 .address(accommodationDTO.getAddress())
                 .count(accommodationDTO.getCount())
                 .region(accommodationDTO.getRegion())
@@ -101,8 +100,8 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
-    @Override
-    public AccommodationDTO entityToDto(Accommodation accommodation) {
+    /* 변환 메서드 */
+    private AccommodationDTO entityToDto(Accommodation accommodation) {
 
         // 숙박 업소에 대한 이미지 정보만 변환
         List<String> imageFiles = accommodation.getImages().stream()
@@ -119,7 +118,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .ano(accommodation.getAno())
                 .accommodationName(accommodation.getAccommodationName())
                 .sellerName(accommodation.getMember().getName()) // 관리자 이름
-                .email(accommodation.getMember().getEmail()) // 관리자 이메일
+                .sellerEmail(accommodation.getMember().getEmail()) // 관리자 이메일
                 .address(accommodation.getAddress())
                 .postal(accommodation.getPostal())
                 .accommodationType(accommodation.getAccommodationType())
@@ -135,8 +134,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         return accommodationDTO;
     }
 
-    @Override
-    public AccommodationDTO entityToDtoSearch(Accommodation accommodation, Room room, Integer minPrice) {
+    private AccommodationDTO entityToDtoSearch(Accommodation accommodation, Room room, Integer minPrice) {
 
         RoomDTO roomDTO = RoomDTO.builder().roomName(room.getRoomName()).build();
         List<RoomDTO> roomDTOList = new ArrayList<>();
@@ -146,7 +144,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .ano(accommodation.getAno())
                 .accommodationName(accommodation.getAccommodationName())
                 .sellerName(accommodation.getMember().getName()) // 관리자 이름
-                .email(accommodation.getMember().getEmail()) // 관리자 이메일
+                .sellerEmail(accommodation.getMember().getEmail()) // 관리자 이메일
                 .address(accommodation.getAddress())
                 .postal(accommodation.getPostal())
                 .accommodationType(accommodation.getAccommodationType())

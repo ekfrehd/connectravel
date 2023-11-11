@@ -8,16 +8,16 @@ import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.OptionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -36,9 +36,6 @@ class AccommodationServiceTest {
 
     @Autowired
     private OptionRepository optionRepository;
-
-    @Autowired
-    private EntityManager entityManager;
 
     @BeforeEach
     public void registerAccommodation() {
@@ -128,7 +125,7 @@ class AccommodationServiceTest {
         log.info("Tel: " + foundDto.getTel());
         log.info("Address: " + foundDto.getAddress());
         log.info("Admin Name: " + foundDto.getSellerName());
-        log.info("Email: " + foundDto.getEmail());
+        log.info("Email: " + foundDto.getSellerEmail());
         log.info("Type: " + foundDto.getAccommodationType());
         log.info("Region: " + foundDto.getRegion());
         log.info("Intro: " + foundDto.getIntro());

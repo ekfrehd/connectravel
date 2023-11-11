@@ -15,9 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -104,9 +102,23 @@ public class RoomServiceTest {
         createAndSaveRoom(savedAccommodation, "Deluxe Room", 200000, 2, 4, true);
     }
 
+    // Room 객체를 생성하고 저장하는 공통 메서드
+    private RoomDTO createAndSaveRoom(Accommodation accommodation, String roomName, int price, int minOccupancy, int maxOccupancy, boolean operating) {
+        RoomDTO newRoom = RoomDTO.builder()
+                .roomName(roomName)
+                .price(price)
+                .minimumOccupancy(minOccupancy)
+                .maximumOccupancy(maxOccupancy)
+                .operating(operating)
+                .accommodationDTO(AccommodationDTO.builder().ano(accommodation.getAno()).build())
+                .build();
+
+        return roomService.registerRoom(newRoom);
+    }
+
     @Test
     @Transactional
-    public void testCreateRoom() {
+    public void testRegisterRoom() {
         // AccommodationDTO 설정
         AccommodationDTO accommodationDTO = new AccommodationDTO();
         accommodationDTO.setAno(savedAccommodation.getAno());
@@ -122,7 +134,7 @@ public class RoomServiceTest {
                 .build();
 
         // createRoom 메서드를 통해 신규 방 생성
-        RoomDTO createdRoom = roomService.createRoom(newRoom);
+        RoomDTO createdRoom = roomService.registerRoom(newRoom);
 
         // 생성된 방의 정보 검증
         assertNotNull(createdRoom, "The room should not be null");
@@ -146,8 +158,8 @@ public class RoomServiceTest {
                 .build();
         room = roomRepository.save(room);
 
-        // RoomDTO로 변환
-        RoomDTO roomDTO = roomService.entityToDTO(room);
+        // RoomDTO로 변환하지 않고 서비스에서 제공하는 메서드로 RoomDTO를 얻음
+        RoomDTO roomDTO = roomService.getRoom(room.getRno());
 
         // 이미지 정보 생성
         ImgDTO newImage = ImgDTO.builder()
@@ -165,14 +177,14 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    public void testUpdateRoom() {
+    public void testModifyRoom() {
         // 업데이트를 원하는 room의 ID
         Long roomId = savedAccommodation.getRooms().get(0).getRno(); // 예를 들어 첫번째 방 ID를 가져옴
         RoomDTO roomToUpdate = roomService.getRoom(roomId); // 기존 방 정보를 가져옴
         roomToUpdate.setPrice(120000); // 가격 변경
 
         // 업데이트 메서드 호출
-        RoomDTO updatedRoom = roomService.updateRoom(roomId, roomToUpdate);
+        RoomDTO updatedRoom = roomService.modifyRoom(roomId, roomToUpdate);
 
         // 검증
         assertNotNull(updatedRoom);
@@ -199,9 +211,9 @@ public class RoomServiceTest {
 
     @Test
     @Transactional
-    public void testGetAllRooms() {
+    public void testListAllRooms() {
         // 모든 방 조회 메서드 호출
-        List<RoomDTO> rooms = roomService.getAllRooms();
+        List<RoomDTO> rooms = roomService.listAllRooms();
 
         // 검증
         assertNotNull(rooms);
@@ -212,28 +224,15 @@ public class RoomServiceTest {
 
    /* @Test
     @Transactional
-    public void testDeleteRoom() {
+    public void testRemoveRoom() {
         // 삭제를 원하는 방 ID를 설정
         Long roomId = savedAccommodation.getRooms().get(0).getRno(); // 예를 들어 첫번째 방 ID를 가져옴
 
         // 삭제 메서드 호출
-        roomService.deleteRoom(roomId);
+        roomService.removeRoom(roomId);
 
         // 방이 삭제되었는지 확인하기 위한 검증
         assertThrows(EntityNotFoundException.class, () -> roomService.getRoom(roomId));
     }*/
 
-    // Room 객체를 생성하고 저장하는 공통 메서드
-    private RoomDTO createAndSaveRoom(Accommodation accommodation, String roomName, int price, int minOccupancy, int maxOccupancy, boolean operating) {
-        RoomDTO newRoom = RoomDTO.builder()
-                .roomName(roomName)
-                .price(price)
-                .minimumOccupancy(minOccupancy)
-                .maximumOccupancy(maxOccupancy)
-                .operating(operating)
-                .accommodationDTO(AccommodationDTO.builder().ano(accommodation.getAno()).build())
-                .build();
-
-        return roomService.createRoom(newRoom);
-    }
 }
