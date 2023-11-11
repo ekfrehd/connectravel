@@ -61,6 +61,7 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
     }
 
     @Override
+    @Transactional
     public TourBoardReviewDTO getTourBoardReview(Long tbrno) {
         TourBoardReview tourBoardReview = tourBoardReviewRepository.findById(tbrno)
                 .orElseThrow(() -> new EntityNotFoundException("TourBoardReview not found"));
@@ -82,29 +83,16 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
 
     @Override
     @Transactional
-    public void deleteTourBoardReviewWithReplies(Long tbrno, Long tbno) {
-        TourBoard tourBoard = tourBoardRepository.findById(tbno)
-                .orElseThrow(() -> new EntityNotFoundException("TourBoard not found"));
-
+    public void deleteTourBoardReviewWithReplies(Long tbrno) {
+        // TourBoardReview 조회
         TourBoardReview tourBoardReview = tourBoardReviewRepository.findById(tbrno)
                 .orElseThrow(() -> new EntityNotFoundException("TourBoardReview not found"));
 
-        double currentGrade = tourBoard.getGrade(); // 현재 평점
-        double reviewGrade = tourBoardReview.getGrade(); // 해당 리뷰 평점
-        int currentCount = tourBoard.getReviewCount(); // 현재 리뷰 수
+        // TourBoardReview 삭제
+        tourBoardReviewRepository.deleteById(tbrno);
 
-        if (currentCount > 1) { //리뷰 수가 1개 이상일 때
-            double averageGrade = ((currentGrade * currentCount) - reviewGrade) / (currentCount - 1); //평균 평점 계산
-            tourBoard.setGrade(averageGrade); // 평균 평점 계산
-            tourBoard.setReviewCount(currentCount - 1); // 리뷰 수 감소
-        } else {
-            tourBoard.setGrade(0); // 등급 초기화
-            tourBoard.setReviewCount(0); // 리뷰 수 초기화
-        }
-
-        tourBoardRepository.save(tourBoard); // DB 반영
-        tourBoardReviewRepository.deleteById(tbrno); // 리뷰 삭제
     }
+
 
 
     @Override

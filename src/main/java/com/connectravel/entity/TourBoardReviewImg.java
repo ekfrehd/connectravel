@@ -23,7 +23,6 @@ public class TourBoardReviewImg {
 
     /* 연관 관계 */
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private TourBoardReview tourBoardReview;
 
 }
