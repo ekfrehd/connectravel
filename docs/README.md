@@ -8,17 +8,20 @@
 + + [x] 병합 후 필드명 등 오류 안나게 하기 
 + + [x] AdminBoard -> bno, rno -> abno, arno 로 변경
 + + [x] 병합 후 테스트 진행
-+ 
+
 + [x] QnaBoard 병합
 + + [x] 병합 후 필드명 등 오류 안나게 하기
 + + [x] QnaBoard/Reply -> bno, rno -> qbno, qrno 로 변경
 + + [x] 병합 후 테스트 진행
-+ 
-+ [] TourBoard 병합 (TourBoard, TourBoardReview, TourBoardReviewReply)
+
++ [x] TourBoard 병합 (TourBoard, TourBoardReview, TourBoardReviewReply)
 + + [x] 병합 후 필드명 등 오류 안나게 하기
 + + [x] 병합 후 테스트 진행 
 + + [x] TourBoard(+Img) - TourBoardReview(+Img) - TourBoardReviewReply 연관 관계 수정함
 
++ [] 숙박 업소 필터링 기능 구현
++ + [] repository 지역/옵션/기타 메서드 별로 구현
++ + [] service repository 활용해서 동적으로 필터링 기능 구현
     
 ### 2. 테스트 코드
 
