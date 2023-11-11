@@ -16,7 +16,7 @@ public interface TourBoardReviewService {
 
     void updateTourBoardReview(TourBoardReviewDTO tourBoardReivewDTO);
 
-    void deleteTourBoardReviewWithReplies(Long tbrno, Long tbno);
+    void deleteTourBoardReviewWithReplies(Long tbrno);
 
     PageResultDTO<TourBoardReviewDTO, TourBoardReview> getPaginatedTourBoardReviews(Long trbno, PageRequestDTO pageRequestDTO); // 리스트 출력
 

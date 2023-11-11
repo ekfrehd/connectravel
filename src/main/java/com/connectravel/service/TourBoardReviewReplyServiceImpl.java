@@ -31,6 +31,15 @@ public class TourBoardReviewReplyServiceImpl implements TourBoardReviewReplyServ
 
         return tourBoardReviewReply.getTbrrno();
     }
+
+    @Override
+    public TourBoardReviewReplyDTO getTourBoardReviewReply(Long tbrrno) {
+        TourBoardReviewReply tourBoardReviewReply = tourBoardReviewReplyRepository.findById(tbrrno)
+                .orElseThrow(() -> new EntityNotFoundException("TourBoardReviewReply not found"));
+
+        return entityToDTO(tourBoardReviewReply);
+    }
+
     @Override
     public void updateTourBoardReviewReply(TourBoardReviewReplyDTO TourBoardReviewReplyDTO) {
 
@@ -42,8 +51,8 @@ public class TourBoardReviewReplyServiceImpl implements TourBoardReviewReplyServ
     }
 
     @Override
-    public void deleteTourBoardReviewReply(Long tbrno) {
-        tourBoardReviewReplyRepository.deleteById(tbrno);
+    public void deleteTourBoardReviewReply(Long tbrrno) {
+        tourBoardReviewReplyRepository.deleteById(tbrrno);
     }
 
     private TourBoardReviewReply dtoToEntity(TourBoardReviewReplyDTO TourBoardReviewReplyDTO, MemberRepository memberRepository){
@@ -54,7 +63,7 @@ public class TourBoardReviewReplyServiceImpl implements TourBoardReviewReplyServ
                 .orElseThrow(() -> new EntityNotFoundException("Member with email " + TourBoardReviewReplyDTO.getReplyer() + " not found"));
 
         return TourBoardReviewReply.builder()
-                .tbrrno(TourBoardReviewReplyDTO.getTbrno())
+                .tbrrno(TourBoardReviewReplyDTO.getTbrrno())
                 .content(TourBoardReviewReplyDTO.getContent())
                 .member(member)
                 .tourBoardReview(tourBoardReview)

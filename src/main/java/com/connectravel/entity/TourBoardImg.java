@@ -24,8 +24,7 @@ public class TourBoardImg {
     private String imgFile;
 
     /* 연관 관계 */
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY)
     private TourBoard tourBoard;
 
 }

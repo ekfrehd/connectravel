@@ -3,13 +3,15 @@ package com.connectravel.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"images", "reviews"})
 public class TourBoard extends BaseEntity {
 
     @Id
@@ -33,7 +35,17 @@ public class TourBoard extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
+    /* 연관 관계 */
+    @Builder.Default
+    @OneToMany(mappedBy = "tourBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TourBoardImg> images = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "tourBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TourBoardReview> reviews = new ArrayList<>();
+
     /* 도메인 로직 */
+
     public void changeTitle(String title) {
         this.title = title;
     }
