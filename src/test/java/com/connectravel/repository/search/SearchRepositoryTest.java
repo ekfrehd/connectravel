@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,17 +39,13 @@ public class SearchRepositoryTest {
                 .build();
         memberRepository.save(member);
 
-        // 옵션 2개 추가
-        Option option1 = Option.builder()
-                .optionName("wifi")
-                .build();
-
-        Option option2 = Option.builder()
-                .optionName("세탁기")
-                .build();
-
+        // 다양한 옵션 추가
+        Option option1 = Option.builder().optionName("wifi").build();
+        Option option2 = Option.builder().optionName("세탁기").build();
+        // 추가 옵션들...
         optionRepository.save(option1);
         optionRepository.save(option2);
+        // 추가 옵션 저장...
 
         // Accommodation 정보 생성
         Accommodation accommodation = Accommodation.builder()
@@ -73,7 +70,7 @@ public class SearchRepositoryTest {
         img2.setImgFile("image2.jpg");
         accommodation.addImage(img2);
 
-        // 옵션과 숙박업소의 연관 관계 매핑
+        // 옵션과 숙박업소 연관 관계 설정
         AccommodationOption accommodationOption1 = new AccommodationOption();
         accommodationOption1.setOption(option1);
         accommodation.addAccommodationOption(accommodationOption1);
@@ -81,28 +78,34 @@ public class SearchRepositoryTest {
         AccommodationOption accommodationOption2 = new AccommodationOption();
         accommodationOption2.setOption(option2);
         accommodation.addAccommodationOption(accommodationOption2);
+        // 추가 옵션 연관 관계 설정...
 
-        // 저장
         accommodationRepository.save(accommodation);
 
-        // Room 정보 생성
-        Room room = Room.builder()
-                .roomName("테스트 방")
+        // 다양한 방 추가
+        Room room1 = Room.builder()
+                .roomName("테스트 방 1")
                 .price(10000)
+                .minimumOccupancy(1)
+                .maximumOccupancy(2)
                 .operating(true)
-                .content("테스트 방 내용")
                 .accommodation(accommodation)
                 .build();
 
-        // RoomImg 추가
-        RoomImg roomImg = new RoomImg();
-        roomImg.setImgFile("image.jpg");
-        room.addImage(roomImg);
+        Room room2 = Room.builder()
+                .roomName("테스트 방 2")
+                .price(15000)
+                .minimumOccupancy(2)
+                .maximumOccupancy(3)
+                .operating(true)
+                .accommodation(accommodation)
+                .build();
+        // 추가 방 생성...
 
-        // Room 저장 (RoomImg는 Room에 종속되므로 별도의 저장은 필요 없습니다)
-        accommodation.addRoom(room);
+        accommodation.addRoom(room1);
+        accommodation.addRoom(room2);
+        // 추가 방을 숙박업소에 연결...
 
-        // 저장된 Accommodation 엔터티의 상태를 갱신
         accommodationRepository.save(accommodation);
     }
 
@@ -159,34 +162,40 @@ public class SearchRepositoryTest {
         assertTrue(results.isEmpty());
     }
 
+    @Test
+    public void testSearchByOptions() {
+        // 옵션 ID 집합 생성
+        Set<Long> optionIds = Set.of(1L, 2L); // 예시 옵션 ID
 
-
-    /*@Test
-    public void testSearchByOption() {
-        List<Accommodation> results = searchRepository.findByOption("WiFi");
+        // 옵션 기반 검색 수행
+        List<Accommodation> results = accommodationRepository.findByOptions(optionIds);
         assertFalse(results.isEmpty());
 
-        results = searchRepository.findByOption("NonExistentOption");
-        assertTrue(results.isEmpty());
+        // 결과 확인
+        for (Accommodation accommodation : results) {
+            log.debug("Accommodation Name: {}", accommodation.getAccommodationName());
+            // 추가적인 결과 출력
+        }
     }
 
     @Test
-    public void testSearchByPriceRange() {
-        List<Accommodation> results = searchRepository.findByPriceRange(10000, 50000);
+    public void testSearchByRoomCriteria() {
+        // 방 검색 조건 설정
+        int price = 20000; // 예시 가격
+        int minimumOccupancy = 1; // 최소 인원
+        int maximumOccupancy = 2; // 최대 인원
+        boolean operating = true; // 운영 여부
+
+        // 방 기반 검색 수행
+        List<Accommodation> results = accommodationRepository.findByRoomCriteria(price, minimumOccupancy, maximumOccupancy, operating);
         assertFalse(results.isEmpty());
 
-        results = searchRepository.findByPriceRange(900000, 950000);
-        assertTrue(results.isEmpty());
+        // 결과 확인
+        for (Accommodation accommodation : results) {
+            log.debug("Accommodation Name: {}", accommodation.getAccommodationName());
+            // 추가적인 결과 출력
+        }
     }
 
-    @Test
-    public void testSearchByCapacityAndDates() {
-        List<Accommodation> results = searchRepository.findByCapacityAndDates(3, "2023-12-01", "2023-12-07");
-        assertFalse(results.isEmpty());
 
-        results = searchRepository.findByCapacityAndDates(10, "2023-12-01", "2023-12-07");
-        assertTrue(results.isEmpty());
-    }*/
-
-    // Add more test methods as required
 }
