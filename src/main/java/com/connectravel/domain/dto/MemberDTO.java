@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MemberDTO {
 
-    private String id;
+    private Long id;
 
     private String username;
 
@@ -34,6 +34,6 @@ public class MemberDTO {
 
     private boolean social;
 
-    private List<String> roles;
+    private List<String> memberRoles;
 
 }

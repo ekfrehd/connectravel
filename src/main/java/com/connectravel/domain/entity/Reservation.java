@@ -1,8 +1,7 @@
 package com.connectravel.domain.entity;
 
+import com.connectravel.constant.ReservationStatus;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,29 +10,32 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Getter @Setter
 @ToString(exclude = {"room","member"})
 public class Reservation extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rvno; //예약 번호
-
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Room room; // 방 번호
+    private Long rvno;
 
     @Column(length = 200)
-    private String message; // 요청사항
-
-    private LocalDate startDate; // 예약 시작
-    private LocalDate endDate; // 예약 종료
-
+    private String message; // 요청 사항
     private int money;
 
+    @Column(nullable = false)
+    private int numberOfGuests; // 예약 인원 수
+
+    private LocalDate startDate; // 입실
+    private LocalDate endDate; // 퇴실
+
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
+
+    /* 연관 관계 */
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Room room;
+
+    @ManyToOne
     private Member member;
 
-    @Builder.Default
-    private boolean state = true;
 }

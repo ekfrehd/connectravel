@@ -48,10 +48,10 @@ public class MemberServiceImpl implements MemberService {
         ModelMapper modelMapper = new ModelMapper();
         Member account = modelMapper.map(memberDTO, Member.class);
 
-        if (memberDTO.getRoles() != null) {
+        if (memberDTO.getMemberRoles() != null) {
             Set<Role> roles = new HashSet<>();
-            memberDTO.getRoles().forEach(role -> {
-                Role r = roleRepository.findByRoleName(role);
+            memberDTO.getMemberRoles().forEach(role -> {
+                Role r = roleRepository.findByRoleName(String.valueOf(role));
                 roles.add(r);
             });
             account.setMemberRoles(roles);
@@ -73,7 +73,7 @@ public class MemberServiceImpl implements MemberService {
                 .map(role -> role.getRoleName())
                 .collect(Collectors.toList());
 
-        memberDTO.setRoles(roles);
+        memberDTO.setMemberRoles(roles);
 
         return memberDTO;
     }
@@ -86,6 +86,40 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(Long id) {
         memberRepository.deleteById(id);
+    }
+
+    @Override
+    public MemberDTO entityToDTO(Member member) {
+        if (member == null) {
+            return null;
+        }
+
+        return MemberDTO.builder()
+                .id(member.getId())
+                .username(member.getUsername())
+                .nickName(member.getNickName())
+                .email(member.getEmail())
+                .tel(member.getTel())
+                .point(member.getPoint())
+                .memberRoles(member.getMemberRoles())
+                .build();
+    }
+
+    @Override
+    public Member dtoToEntity(MemberDTO memberDTO) {
+        if (memberDTO == null) {
+            return null;
+        }
+
+        return Member.builder()
+                .id(memberDTO.getId())
+                .username(memberDTO.getUsername())
+                .nickName(memberDTO.getNickName())
+                .email(memberDTO.getEmail())
+                .tel(memberDTO.getTel())
+                .point(memberDTO.getPoint())
+                .memberRoles(memberDTO.getMemberRoles())
+                .build();
     }
 
 }

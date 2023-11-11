@@ -18,4 +18,8 @@ public interface MemberService {
 
   void deleteMember(Long idx);
 
+  MemberDTO entityToDTO(Member member);
+
+  Member dtoToEntity(MemberDTO memberDTO);
+
 }

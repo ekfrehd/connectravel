@@ -11,17 +11,22 @@ import javax.persistence.*;
 @Getter
 @ToString(exclude = {"member","qnaBoard"})
 public class QnaReply extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rno;
+    private Long qrno;
+    private String content;
 
-    private String text;
-
+    /* 연관 관계 */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bno")
     private QnaBoard qnaBoard;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
     private Member member;
+
+    /* 도메인 로직 */
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
 }

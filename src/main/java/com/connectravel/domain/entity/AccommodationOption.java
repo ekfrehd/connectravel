@@ -9,10 +9,12 @@ import javax.persistence.*;
 @Getter @Setter
 @ToString(exclude = "accommodation")
 public class AccommodationOption {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aono;
 
+    /* 연관 관계 */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ano", nullable = false)
     private Accommodation accommodation;
@@ -20,4 +22,5 @@ public class AccommodationOption {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ono", nullable = false)
     private Option option;
+
 }
