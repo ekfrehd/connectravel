@@ -1,14 +1,21 @@
 package com.connectravel.service;
 
+import com.connectravel.dto.ImgDTO;
 import com.connectravel.dto.RoomDTO;
+import com.connectravel.entity.Room;
 
 import java.util.List;
 
 public interface RoomService {
 
-    RoomDTO createRoom(RoomDTO roomDTO);
-    /*RoomDTO updateRoom(Long rno, RoomDTO roomDTO);
-    void deleteRoom(Long rno);
+    RoomDTO registerRoom(RoomDTO roomDTO);
+    ImgDTO addRoomImage(Long roomId, ImgDTO imgDTO);
+    RoomDTO modifyRoom(Long rno, RoomDTO roomDTO);
+    void removeRoom(Long rno);
     RoomDTO getRoom(Long rno);
-    List<RoomDTO> getAllRooms();*/
+    List<RoomDTO> listAllRooms();
+
+    RoomDTO entityToDTO(Room room);
+    Room dtoToEntity(RoomDTO roomDTO);
+
 }

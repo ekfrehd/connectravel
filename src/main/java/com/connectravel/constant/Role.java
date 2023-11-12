@@ -1,4 +1,4 @@
-package org.ezone.room.constant;
+package com.connectravel.constant;
 
 public enum Role {
 

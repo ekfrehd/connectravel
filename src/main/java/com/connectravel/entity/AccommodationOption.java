@@ -14,6 +14,7 @@ public class AccommodationOption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aono;
 
+    /* 연관 관계 */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ano", nullable = false)
     private Accommodation accommodation;
