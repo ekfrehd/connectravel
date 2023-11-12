@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/resources/**").permitAll()
+                .antMatchers("/", "/home", "/imgtest/**", "/resources/**").permitAll() // '/imgtest/**' 경로 추가
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -22,6 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) // 명시적으로 로그아웃 매칭 경로 추가
+                .logoutSuccessUrl("/") // 로그아웃 성공 시 리다이렉트 될 경로
                 .permitAll();
     }
 
