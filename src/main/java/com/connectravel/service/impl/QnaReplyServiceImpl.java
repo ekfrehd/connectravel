@@ -68,8 +68,11 @@ public class QnaReplyServiceImpl implements QnaReplyService {
 
         QnaBoard qnaBoard = QnaBoard.builder().qbno(qnaReplyDTO.getQbno()).build();
 
-        Member member = memberRepository.findByEmail(qnaReplyDTO.getReplyer())
-                .orElseThrow(() -> new EntityNotFoundException("Member with email " + qnaReplyDTO.getReplyer() + " not found"));
+        Member member = memberRepository.findByEmail(qnaReplyDTO.getReplyer());
+
+        if (member == null) {
+            throw new EntityNotFoundException("Member with email " + qnaReplyDTO.getReplyer() + " not found");
+        }
 
         return QnaReply.builder()
                 .qrno(qnaReplyDTO.getQrno())

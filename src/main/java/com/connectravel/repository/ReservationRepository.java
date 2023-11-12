@@ -14,7 +14,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Optional<Reservation> findByMember(Member member);
 
-    List<Reservation> findByUsername(String username);
+    List<Reservation> findByMember_Username(String username);
 
     List<Reservation> findByRoomAccommodationAno(Long ano);
 

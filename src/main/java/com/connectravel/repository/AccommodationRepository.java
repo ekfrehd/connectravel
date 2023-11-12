@@ -10,4 +10,5 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
 
     Optional<Accommodation> findBySellerEmail(String sellerEmail);
 
+
 }

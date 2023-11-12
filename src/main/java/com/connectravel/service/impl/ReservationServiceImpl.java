@@ -28,9 +28,13 @@ import java.util.stream.Collectors;
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
+
     private final RoomRepository roomRepository;
+
     private final MemberRepository memberRepository;
+
     private final RoomService roomService;
+
     private final MemberService memberService;
 
     @Override
@@ -137,7 +141,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional(readOnly = true)
     public List<ReservationDTO> listUserRoomBookings(String username) {
-        List<Reservation> reservations = reservationRepository.findByUsername(username);
+        List<Reservation> reservations = reservationRepository.findByMember_Username(username);
         return reservations.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 

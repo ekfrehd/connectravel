@@ -88,8 +88,11 @@ public class QnaBoardServiceImpl implements QnaBoardService {
     }
     private QnaBoard dtoToEntity(QnaBoardDTO dto, MemberRepository memberRepository) {
 
-        Member member = memberRepository.findByEmail(dto.getWriterEmail())
-                .orElseThrow(() -> new EntityNotFoundException("Member with email " + dto.getWriterEmail() + " not found"));
+        Member member = memberRepository.findByEmail(dto.getWriterEmail());
+
+        if (member == null) {
+            throw new EntityNotFoundException("Member with email " + dto.getWriterEmail() + " not found");
+        }
 
         QnaBoard qnaBoard = QnaBoard.builder().qbno(dto.getQbno()).title(dto.getTitle()).content(dto.getContent()).member(member).build();
 

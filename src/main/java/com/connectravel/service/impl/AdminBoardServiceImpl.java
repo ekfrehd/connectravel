@@ -110,8 +110,14 @@ public class AdminBoardServiceImpl implements AdminBoardService {
     /* 변환 메서드 */
     private AdminBoard dtoToEntity(AdminBoardDTO dto, MemberRepository memberRepository) {
 
-        Member member = memberRepository.findByEmail(dto.getWriterEmail())
-                .orElseThrow(() -> new EntityNotFoundException("Member with email " + dto.getWriterEmail() + " not found"));
+        Member member = memberRepository.findByEmail(dto.getWriterEmail());
+
+        if (member == null) {
+            throw new EntityNotFoundException("Member with email " + dto.getWriterEmail() + " not found");
+        }
+
+// Continue with the rest of your code using the 'member' object.
+
 
         AdminBoard adminBoard = AdminBoard.builder().abno(dto.getAbno()).title(dto.getTitle()).content(dto.getContent()).category(dto.getCategory()).member(member).build(); // 상단에서 생성한 Member객체 활용 Board객체 생성
 
