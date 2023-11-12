@@ -1,27 +1,12 @@
 package com.connectravel.repository.search;
 
 import com.connectravel.domain.entity.Accommodation;
-import com.connectravel.domain.entity.QAccommodation;
-import com.connectravel.domain.entity.QReservation;
-import com.connectravel.domain.entity.QRoom;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPQLQuery;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Repository
 public class SearchRepositoryImpl implements SearchRepository {
@@ -36,5 +21,21 @@ public class SearchRepositoryImpl implements SearchRepository {
                 .getResultList();
     }
 
+    @Override
+    public List<Accommodation> findByOptions(Set<Long> optionIds) {
+        return em.createQuery("SELECT DISTINCT a FROM Accommodation a JOIN a.accommodationOptions ao WHERE ao.option.ono IN :optionIds", Accommodation.class)
+                .setParameter("optionIds", optionIds)
+                .getResultList();
+    }
+
+    @Override
+    public List<Accommodation> findByRoomCriteria(int price, int minimumOccupancy, int maximumOccupancy, boolean operating) {
+        return em.createQuery("SELECT DISTINCT a FROM Accommodation a JOIN a.rooms r WHERE r.price <= :price AND r.minimumOccupancy >= :minimumOccupancy AND r.maximumOccupancy <= :maximumOccupancy AND r.operating = :operating", Accommodation.class)
+                .setParameter("price", price)
+                .setParameter("minimumOccupancy", minimumOccupancy)
+                .setParameter("maximumOccupancy", maximumOccupancy)
+                .setParameter("operating", operating)
+                .getResultList();
+    }
 
 }

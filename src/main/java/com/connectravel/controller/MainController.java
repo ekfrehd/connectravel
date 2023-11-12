@@ -1,5 +1,6 @@
 package com.connectravel.controller;
 
+import com.connectravel.domain.dto.AccommodationDTO;
 import com.connectravel.domain.dto.PageRequestDTO;
 import com.connectravel.domain.dto.PageResultDTO;
 import com.connectravel.domain.dto.TourBoardDTO;
@@ -43,6 +44,7 @@ public class MainController {
                          @RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model) {
 
         int pageSize = 10;
+
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, pageSize);
 
         LocalDate startDate = LocalDate.now();
@@ -50,11 +52,13 @@ public class MainController {
 
         Integer min = null, max = null;
 
-        PageResultDTO<TourBoardDTO, Object[]> tourBoard = tourBoardService.getPaginatedTourBoardList(pageRequestDTO, pageRequestDTO.getType(), keyword, pageRequestDTO.getCategory(), pageRequestDTO.getRegion());
-       // PageResultDTO<AccommodationDTO, Object[]> accommodation = accommodationService.searchAccommodationList(pageRequestDTO, keyword, pageRequestDTO.getCategory(), pageRequestDTO.getRegion(),  startDate, endDate, min, max);
+        PageResultDTO<TourBoardDTO, Object[]> tourBoard = tourBoardService.getPaginatedTourBoardList(pageRequestDTO,
+                pageRequestDTO.getType(), keyword, pageRequestDTO.getCategory(), pageRequestDTO.getRegion());
+        PageResultDTO<AccommodationDTO, Object[]> accommodation = accommodationService.searchAccommodationList(pageRequestDTO,
+                keyword, pageRequestDTO.getCategory(), pageRequestDTO.getRegion(),  startDate, endDate, min, max);
 
         model.addAttribute("tourBoard", tourBoard);
-       // model.addAttribute("accommodation", accommodation);
+        model.addAttribute("accommodation", accommodation);
 
         return "search";
     }

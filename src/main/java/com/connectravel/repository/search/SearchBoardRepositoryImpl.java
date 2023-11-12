@@ -1,5 +1,6 @@
 package com.connectravel.repository.search;
 
+import com.connectravel.constant.ReservationStatus;
 import com.connectravel.domain.entity.*;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
@@ -7,6 +8,7 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +32,6 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
     // 검색 조건이 없는 게시판
     @Override
     public QnaBoard search1() {
-
         log.info("search1.....");
 
         QQnaBoard qnaBoard = QQnaBoard.qnaBoard;
@@ -44,9 +46,9 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
     }
     */
 
+
     @Override
     public Page<Object[]> searchPage(String[] type, String keyword, Pageable pageable) {
-
         QQnaBoard qnaBoard = QQnaBoard.qnaBoard;
         QQnaReply reply = QQnaReply.qnaReply;
         QMember member = QMember.member;
@@ -90,7 +92,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
         tuple.groupBy(qnaBoard);
 
-        // page 처리
+        //page 처리
         tuple.offset(pageable.getOffset());
         tuple.limit(pageable.getPageSize());
 
@@ -159,7 +161,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         // 이렇게 하여 동일한 게시물이 여러 번 반환되지 않도록 해야됨(예: 한 사람이 한 게시물에 여러 댓글을 쓴 경우.)
         tuple.groupBy(adminBoard);
 
-        // page 처리
+        //page 처리
         tuple.offset(pageable.getOffset());
         tuple.limit(pageable.getPageSize());
 
@@ -177,7 +179,8 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
         JPQLQuery<TourBoard> tuple = from(qTourBoard).select(qTourBoard).where(qTourBoard.tbno.gt(0L));
 
-        // 검색 조건을 작성하기
+
+        //검색 조건을 작성하기
         if (type != null || region != null || category != null || keyword != null) {
             BooleanBuilder conditionBuilder = new BooleanBuilder();
 
@@ -220,7 +223,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
         tuple.groupBy(qTourBoard);
 
-        // page 처리
+        //page 처리
         tuple.offset(pageable.getOffset());
         tuple.limit(pageable.getPageSize());
 
@@ -229,6 +232,91 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         long count = tuple.fetchCount();
 
         return new PageImpl<>(result.stream().map(t -> new Object[]{t}).collect(Collectors.toList()), pageable, count);
+    }
+
+    @Override
+    public Page<Object[]> searchPageAccommodation(String[] type, String keyword, String category, String region,
+                                                  LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice,
+                                                  Pageable pageable) {
+        QAccommodation accommodation = QAccommodation.accommodation;
+        QRoom room = QRoom.room;
+        QReservation reservation = QReservation.reservation;
+
+        JPQLQuery<Tuple> query = from(accommodation)
+                .select(accommodation, room, room.price.min())
+                .join(accommodation.rooms, room)
+                .leftJoin(room.reservations, reservation)
+                .on(reservation.startDate.lt(endDate)
+                        .and(reservation.endDate.gt(startDate))
+                        .and(reservation.status.eq(ReservationStatus.AVAILABLE)))
+                .where(reservation.rvno.isNull().or(room.rno.isNull()))
+                .groupBy(accommodation);
+
+        BooleanBuilder conditionBuilder = new BooleanBuilder();
+
+        // 키워드 검색 조건
+        if (type != null) {
+            for (String t : type) {
+                if ("c".equals(t)) {
+                    conditionBuilder.or(accommodation.accommodationType.contains(keyword));
+                }
+                if ("r".equals(t)) {
+                    conditionBuilder.or(accommodation.region.contains(keyword));
+                }
+            }
+        }
+
+        if (region != null) {
+            conditionBuilder.and(accommodation.region.contains(region));
+        }
+        if (category != null) {
+            conditionBuilder.and(accommodation.accommodationType.contains(category));
+        }
+        if (keyword != null) {
+            conditionBuilder.and(
+                    accommodation.accommodationName.contains(keyword)
+                            .or(accommodation.address.contains(keyword))
+                            .or(accommodation.accommodationType.contains(keyword))
+                            .or(accommodation.region.contains(keyword))
+            );
+        }
+
+        // 가격 검색 조건
+        if (inputedMinPrice != null && inputedMaxPrice != null) {
+            conditionBuilder.and(room.price.between(inputedMinPrice, inputedMaxPrice));
+        }
+
+        query.where(conditionBuilder);
+
+        // 정렬 조건
+        Sort sort = pageable.getSort();
+        sort.stream().forEach(order -> {
+            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+            String prop = order.getProperty();
+
+            // 엔티티의 속성을 기반으로 적절한 Querydsl 경로 생성
+            PathBuilder<Object> entityPath = new PathBuilder<>(accommodation.getType(), accommodation.getMetadata());
+            query.orderBy(new OrderSpecifier(direction, entityPath.get(prop)));
+        });
+
+        // 페이지 처리
+        query.offset(pageable.getOffset());
+        query.limit(pageable.getPageSize());
+
+        // 결과 가져오기
+        List<Tuple> tuples = query.fetch();
+        long count = query.fetchCount();
+
+        // Tuple 결과를 Object[]로 변환
+        List<Object[]> result = tuples.stream()
+                .map(tuple -> new Object[]{
+                        tuple.get(accommodation),
+                        tuple.get(room),
+                        tuple.get(room.price.min())
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(result, pageable, count);
     }
 
 }
