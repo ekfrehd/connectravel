@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+
+    <div class="dashboard-area section-bg-2 pat-100 pab-100">
+        <div class="container">
+            <div class="dashboard-contents-wrapper">
+                <div class="dashboard-icon">
+                    <div class="sidebar-icon">
+                        <i class="las la-bars"></i>
+                    </div>
+                </div>
+                <div class="dashboard-left-content">
+                    <div class="dashboard-close-main">
+                        <div class="close-bars"><i class="las la-times"></i></div>
+                        <div class="dashboard-bottom">
+                            <ul class="dashboard-list list-style-none">
+                                <li class="list active">
+                                    <a href="/qna/list"> <i class="las la-briefcase"></i> 1:1문의 </a>
+                                </li>
+                                <li class="list">
+                                    <a href="/adminboard/notice"> <i class="las la-briefcase"></i> 공지사항 </a>
+                                </li>
+                                <li class="list">
+                                    <a href="/adminboard/event"> <i class="las la-briefcase"></i> 이벤트 </a>
+                                </li>
+                                <li class="list">
+                                    <a href="/adminboard/faq"> <i class="las la-briefcase"></i> 자주 묻는 질문 </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-right-contents mt-4 mt-lg-0">
+                    <div class="dashboard-reservation">
+                        <div class="single-reservation bg-white base-padding">
+                            <form action="/qna/modify" method="post">
+
+                                <!--페이지 번호  -->
+                                <input type="hidden" name="page" th:value="${requestDTO.page}">
+                                <input type="hidden" name="type" th:value="${requestDTO.type}">
+                                <input type="hidden" name="keyword" th:value="${requestDTO.keyword}">
+
+
+                                <div class="form-group">
+                                    <label>Bno</label>
+                                    <input type="text" class="form-control" name="bno" th:value="${dto.bno}" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" class="form-control" name="title" th:value="${dto.title}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Content</label>
+                                    <textarea class="form-control" rows="5" name="content">[[${dto.content}]]</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Writer</label>
+                                    <input type="text" class="form-control" name="writer" th:value="${dto.writerEmail}"
+                                           readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>RegDate</label>
+                                    <input type="text" class="form-control"
+                                           th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>ModDate</label>
+                                    <input type="text" class="form-control"
+                                           th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                </div>
+
+                            </form>
+
+                            <div class="mat-25">
+                                <button type="button" class="btn btn-primary modifyBtn">Modify</button>
+
+                                <button type="button" class="btn btn-info listBtn">List</button>
+
+                                <button type="button" class="btn btn-danger removeBtn">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dashboard area end -->
+
+    <script th:inline="javascript">
+
+        var actionForm = $("form"); //form 태그 객체
+
+        $(".removeBtn").click(function () { //삭제 버튼 작동 함수
+
+            actionForm
+                .attr("action", "/qna/remove")
+                .attr("method", "post");
+
+            actionForm.submit();
+
+        });
+
+        $(".modifyBtn").click(function () { //수정 버튼 작동 함수
+
+            if (!confirm("수정하시겠습니까?")) {
+                return;
+            }
+
+            actionForm
+                .attr("action", "/qna/modify")
+                .attr("method", "post")
+                .submit();
+        });
+
+        $(".listBtn").click(function () { //목록 버튼 작동 함수
+
+            //var pageInfo = $("input[name='page']");
+            var page = $("input[name='page']");
+            var type = $("input[name='type']");
+            var keyword = $("input[name='keyword']"); //페이지와 타입, 검색내용을 불러옴
+
+            actionForm.empty(); //form 태그의 모든 내용을 지우고
+
+            actionForm.append(page);
+            actionForm.append(type);
+            actionForm.append(keyword);
+            //페이지,타입,검색내용을 보냄
+
+            actionForm
+                .attr("action", "/qna/list")
+                .attr("method", "get");
+
+            actionForm.submit();
+
+        })
+
+    </script>
+</div>
+</html>

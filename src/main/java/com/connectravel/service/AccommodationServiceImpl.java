@@ -1,19 +1,26 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.AccommodationDTO;
-import com.connectravel.dto.OptionDTO;
-import com.connectravel.dto.RoomDTO;
+import com.connectravel.dto.*;
 import com.connectravel.entity.*;
+import com.connectravel.repository.AccommodationImgRepository;
 import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.OptionRepository;
 import groovy.util.logging.Log4j2;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -23,8 +30,11 @@ import java.util.stream.Collectors;
 public class AccommodationServiceImpl implements AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
+    private final AccommodationImgRepository accommodationImgRepository;
     private final MemberRepository memberRepository;
     private final OptionRepository optionRepository;
+
+    private final ModelMapper modelMapper;
 
     @Override
     @Transactional
@@ -98,6 +108,48 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         return entityToDto(accommodation);
     }
+
+    @Override
+    public PageResultDTO<AccommodationDTO, Object[]> searchAccommodationList(
+            PageRequestDTO pageRequestDTO, String keyword, String category, String region,
+            LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice) {
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "ano");
+        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), sort);
+
+        Page<Object[]> result = accommodationRepository.searchPageAccommodation(
+                pageRequestDTO.getType(), keyword, category, region, startDate, endDate,
+                inputedMinPrice, inputedMaxPrice, pageable);
+
+        Function<Object[], AccommodationDTO> fn = (objectArr -> {
+            Accommodation accommodation = (Accommodation) objectArr[0];
+            Room room = (Room) objectArr[1];
+            Integer minPrice = (Integer) objectArr[2];
+            AccommodationDTO accommodationDTO = entityToDtoSearch(accommodation, room, minPrice);
+            List<ImgDTO> imgDTOList = getImgList(accommodation.getAno());
+            List<String> imgFiles = imgDTOList.stream().map(ImgDTO::getImgFile).collect(Collectors.toList());
+            accommodationDTO.setImgFiles(imgFiles); // 올바른 메서드를 사용하여 이미지 파일 경로 설정
+            return accommodationDTO;
+        });
+
+        return new PageResultDTO<>(result, fn);
+    }
+
+
+    public List<ImgDTO> getImgList(Long ano) {
+        List<ImgDTO> imgDTOList = new ArrayList<>();
+
+        List<AccommodationImg> accommodationImgList = accommodationImgRepository.findByAccommodationAno(ano);
+        for (AccommodationImg accommodationImg : accommodationImgList) {
+            ImgDTO imgDTO = new ImgDTO();
+            imgDTO.setIno(accommodationImg.getIno());
+            imgDTO.setImgFile(accommodationImg.getImgFile());
+            imgDTOList.add(imgDTO);
+        }
+
+        return imgDTOList;
+    }
+
 
 
     /* 변환 메서드 */
