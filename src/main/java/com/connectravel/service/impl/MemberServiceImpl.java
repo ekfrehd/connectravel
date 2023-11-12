@@ -48,10 +48,10 @@ public class MemberServiceImpl implements MemberService {
         ModelMapper modelMapper = new ModelMapper();
         Member account = modelMapper.map(memberDTO, Member.class);
 
-        if (memberDTO.getRoles() != null) {
+        if (memberDTO.getMemberRoles() != null) {
             Set<Role> roles = new HashSet<>();
-            memberDTO.getRoles().forEach(role -> {
-                Role r = roleRepository.findByRoleName(role);
+            memberDTO.getMemberRoles().forEach(role -> {
+                Role r = roleRepository.findByRoleName(String.valueOf(role));
                 roles.add(r);
             });
             account.setMemberRoles(roles);
@@ -68,12 +68,12 @@ public class MemberServiceImpl implements MemberService {
         ModelMapper modelMapper = new ModelMapper();
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
 
-        List<String> roles = member.getMemberRoles()
+        Set<String> roles = member.getMemberRoles()
                 .stream()
                 .map(role -> role.getRoleName())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        memberDTO.setRoles(roles);
+        memberDTO.setMemberRoles(roles);
 
         return memberDTO;
     }
@@ -87,5 +87,53 @@ public class MemberServiceImpl implements MemberService {
     public void deleteMember(Long id) {
         memberRepository.deleteById(id);
     }
+
+    @Override
+    public Member dtoToEntity(MemberDTO memberDTO) {
+        if (memberDTO == null) {
+            return null;
+        }
+
+        Member member = Member.builder()
+                .id(memberDTO.getId())
+                .username(memberDTO.getUsername())
+                .nickName(memberDTO.getNickName())
+                .email(memberDTO.getEmail())
+                .tel(memberDTO.getTel())
+                .point(memberDTO.getPoint())
+                .build();
+
+        if (memberDTO.getMemberRoles() != null) {
+            Set<Role> roles = memberDTO.getMemberRoles().stream()
+                    .map(roleName -> roleRepository.findByRoleName(roleName))
+                    .collect(Collectors.toSet());
+            member.setMemberRoles(roles);
+        }
+
+        return member;
+    }
+
+    @Override
+    public MemberDTO entityToDTO(Member member) {
+        if (member == null) {
+            return null;
+        }
+
+        Set<String> roles = member.getMemberRoles()
+                .stream()
+                .map(Role::getRoleName)
+                .collect(Collectors.toSet());
+
+        return MemberDTO.builder()
+                .id(member.getId())
+                .username(member.getUsername())
+                .nickName(member.getNickName())
+                .email(member.getEmail())
+                .tel(member.getTel())
+                .point(member.getPoint())
+                .memberRoles(roles)
+                .build();
+    }
+
 
 }

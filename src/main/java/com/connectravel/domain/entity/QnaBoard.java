@@ -3,6 +3,8 @@ package com.connectravel.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -11,9 +13,10 @@ import javax.persistence.*;
 @Getter
 @ToString(exclude = "member")
 public class QnaBoard extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bno;
+    private Long qbno;
 
     @Column(length = 100, nullable = false)
     private String title;
@@ -21,16 +24,20 @@ public class QnaBoard extends BaseEntity {
     @Column(length = 1500, nullable = false)
     private String content;
 
+    /* 연관 관계 */
     @ManyToOne(fetch = FetchType.LAZY) //지연 로딩 지정
-    private Member member; // id
+    private Member member;
 
-    //grade, photo, bad 기능 추가 필요
+    @Builder.Default
+    @OneToMany(mappedBy = "qnaBoard", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<QnaReply> replies = new ArrayList<>();
 
-    public void changeTitle(String title){
+    /* 도메인 로직 */
+    public void changeTitle(String title) {
         this.title = title;
     }
-
-    public void changeContent(String content){
+    public void changeContent(String content) {
         this.content = content;
     }
+
 }

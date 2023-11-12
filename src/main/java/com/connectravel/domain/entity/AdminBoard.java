@@ -14,7 +14,7 @@ public class AdminBoard extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bno;
+    private Long abno;
 
     @Column(length = 100, nullable = false)
     private String title;
@@ -22,19 +22,19 @@ public class AdminBoard extends BaseEntity {
     @Column(length = 2000, nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY) //지연 로딩 지정
-    @JoinColumn // // 조인할 칼럼의 이름
-    private Member member; // id
-
     @Column(length = 30, nullable = false)
     private String category;
 
+    /* 연관 관계 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
+
     //grade, photo, bad 기능 추가 필요
 
+    /* 도메인 로직 */
     public void changeTitle(String title) {
         this.title = title;
     }
-
     public void changeContent(String content) {
         this.content = content;
     }

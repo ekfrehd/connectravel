@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MemberDTO {
 
-    private String id;
+    private Long id;
 
     private String username;
 
@@ -34,6 +34,6 @@ public class MemberDTO {
 
     private boolean social;
 
-    private List<String> roles;
+    private Set<String> memberRoles;
 
 }

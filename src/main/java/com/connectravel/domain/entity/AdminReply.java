@@ -14,16 +14,14 @@ public class AdminReply extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rno;
+    private Long arno;
+    private String content;
 
-    private String text;
+    /* 연관 관계 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bno")
     private AdminBoard adminBoard;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    Member member; // id
 
 }

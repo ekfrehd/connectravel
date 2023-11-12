@@ -1,8 +1,6 @@
 package com.connectravel.domain.entity;
 
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,17 +11,19 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = "member")
+@ToString
 public class ReviewBoard extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rbno;
 
-    private double grade;
-
     @Column(length = 1500, nullable = false)
     private String content;
+    private double grade;
 
+    /* 연관 관계 */
+    @Builder.Default
     @OneToMany(mappedBy = "reviewBoard", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ReviewReply> replies = new ArrayList<>();
 
@@ -31,18 +31,11 @@ public class ReviewBoard extends BaseEntity {
     private Reservation reservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Accommodation accommodation;
-
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Room room;
-
+    /* 도메인 로직 */
     public void changeContent(String content){
         this.content = content;
     }
+
 }
