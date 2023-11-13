@@ -67,6 +67,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(id).orElse(new Member());
         ModelMapper modelMapper = new ModelMapper();
         MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
+        System.out.println(memberDTO);
 
         Set<String> roles = member.getMemberRoles()
                 .stream()

@@ -4,6 +4,7 @@ import com.connectravel.domain.dto.MemberDTO;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.repository.RoleRepository;
 import com.connectravel.service.MemberService;
+import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -16,8 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/member")
@@ -57,6 +56,7 @@ public class MemberController {
     public String myPage(@AuthenticationPrincipal Member member, Principal principal, Model model) throws Exception {
 
         String username = principal.getName();
+        System.out.println(username);
         MemberDTO memberDTO = memberService.getMember(member.getId());
 
         model.addAttribute("username", memberDTO);

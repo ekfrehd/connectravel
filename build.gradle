@@ -40,6 +40,7 @@ dependencies {
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1' // JWT
     implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time', version: '3.0.4.RELEASE'
     implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -52,6 +53,12 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+    //웹소켓
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'javax.websocket:javax.websocket-all:1.1'
+
 }
 
 tasks.named('test') {
