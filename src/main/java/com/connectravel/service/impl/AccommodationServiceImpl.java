@@ -71,34 +71,42 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public AccommodationDTO modifyAccommodationDetails(AccommodationDTO accommodationDTO) {
-        // 숙소 정보 수정을 위해 DTO에서 필요한 정보 추출
-        Long accommodationId = accommodationDTO.getAno();
-        String newName = accommodationDTO.getAccommodationName();
-        String newAddress = accommodationDTO.getAddress();
-        // 이름, 주소 외 다른 것도 수정할 수 있게 할거면 여기에 추가
-
-        // 숙소 정보 유효성 검사 및 엔티티 조회
-        Accommodation accommodation = accommodationRepository.findById(accommodationId)
+        log.info("Modifying accommodation details for ID: {}", accommodationDTO.getAno());
+        Accommodation accommodation = accommodationRepository.findById(accommodationDTO.getAno())
                 .orElseThrow(() -> new EntityNotFoundException("Accommodation not found"));
 
+        log.info("Found accommodation for update: {}", accommodation);
+
         // 엔티티에 수정된 정보 적용
-        accommodation.setAccommodationName(newName);
-        accommodation.setAddress(newAddress);
+        accommodation.setAccommodationName(accommodationDTO.getAccommodationName());
+        accommodation.setAccommodationType(accommodationDTO.getAccommodationType());
+        accommodation.setAddress(accommodationDTO.getAddress());
+        accommodation.setTel(accommodationDTO.getTel());
+        accommodation.setIntro(accommodationDTO.getIntro());
+        accommodation.setContent(accommodationDTO.getContent());
+        accommodation.setPostal(accommodationDTO.getPostal());
+        accommodation.setRegion(accommodationDTO.getRegion());
+        // 추가적으로 수정하고 싶은 속성들을 여기에 추가
+
+        log.info("Updated accommodation entity: {}", accommodation);
 
         // 변경사항을 데이터베이스에 저장
         accommodationRepository.save(accommodation);
 
+        AccommodationDTO updatedDTO = entityToDto(accommodation);
+        log.info("Converted to DTO: {}", updatedDTO);
         // 수정된 숙소 정보를 다시 DTO로 변환하여 반환
         return entityToDto(accommodation);
     }
 
-    @Override
-    public AccommodationDTO getAccommodationDetails(Long accommodationAno) {
-        Accommodation accommodation = accommodationRepository.findById(accommodationAno)
-                .orElseThrow(() -> new EntityNotFoundException("Accommodation not found"));
 
+    @Override
+    public AccommodationDTO findAccommodationByMemberId(Long memberId) {
+        Accommodation accommodation = accommodationRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Accommodation not found for member ID: " + memberId));
         return entityToDto(accommodation);
     }
+
 
     @Override
     public PageResultDTO<AccommodationDTO, Object[]> searchAccommodationList(

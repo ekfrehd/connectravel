@@ -1,6 +1,7 @@
 package com.connectravel.controller;
 
 import com.connectravel.domain.dto.AccommodationDTO;
+import com.connectravel.domain.dto.ImgDTO;
 import com.connectravel.domain.dto.OptionDTO;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.repository.AccommodationRepository;
@@ -13,10 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -97,52 +95,68 @@ public class AccommodationController {
         return "redirect:/seller/list";
     }
 
-  /*
-
- @GetMapping("read")
-    public String read(Model model, @AuthenticationPrincipal Member member)  {
-
+    @GetMapping("read")
+    public String read(Model model, @AuthenticationPrincipal Member member) {
         if (member == null) {
             model.addAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/member/login";
         }
+
         AccommodationDTO accommodationDTO = accommodationService.findAccommodationByMemberId(member.getId());
 
-        if(accommodationDTO == null){
+        if (accommodationDTO == null) {
             return "redirect:/accommodation/register";
         }
 
-        List<AccommodationImgDTO> accommodationImgDTOS = accommodationService.findAccommodationWithImages();
+        List<ImgDTO> imgDTOS = accommodationService.getImgList(accommodationDTO.getAno());
         model.addAttribute("dto", accommodationDTO);
-        model.addAttribute("accommodationImgDTOS", accommodationImgDTOS);
+        model.addAttribute("images", imgDTOS);
+
         return "accommodation/read";
     }
 
-
     @GetMapping("update")
-    public String update(Model model, Authentication authentication) {
-        String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email);
-
-        if(member == null){
+    public String update(Model model, @AuthenticationPrincipal Member member) {
+        if (member == null) {
+            log.warn("Member is null, redirecting to login");
             model.addAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/member/login";
         }
 
-        Accommodation accommodation = accommodationRepository.findAccommodationByMemberId(member.getId());
-        model.addAttribute("dto", accommodation);
+        log.info("Updating accommodation for member: {}", member.getEmail());
+        AccommodationDTO accommodationDTO = accommodationService.findAccommodationByMemberId(member.getId());
 
+        if (accommodationDTO == null) {
+            log.warn("No accommodation found for member ID: {}", member.getId());
+            model.addAttribute("errorMessage", "숙박업소 정보가 없습니다.");
+            return "redirect:/seller/accommodation/register";
+        }
+
+        model.addAttribute("dto", accommodationDTO);
         return "accommodation/update";
     }
 
     @PostMapping("update")
-    public String update(AccommodationDTO dto, Authentication authentication){
-        String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email);
+    public String update(@ModelAttribute AccommodationDTO dto, RedirectAttributes redirectAttributes,
+                         @AuthenticationPrincipal Member member) {
+        log.info("Submitting update for accommodation: {}", dto);
+        if (member == null || !member.getEmail().equals(dto.getSellerEmail())) {
+            log.warn("Unauthorized attempt to update accommodation by: {}", member != null ? member.getEmail() : "null");
+            redirectAttributes.addFlashAttribute("errorMessage", "수정 권한이 없습니다.");
+            return "redirect:/seller/accommodation";
+        }
 
-        dto.setSellerEmail(member.getEmail());
-        accommodationService.modifyAccommodationDetails(dto);
+        try {
+            accommodationService.modifyAccommodationDetails(dto);
+            redirectAttributes.addFlashAttribute("successMessage", "숙박업소 정보가 성공적으로 업데이트되었습니다.");
+            log.info("Successfully updated accommodation");
+        } catch (Exception e) {
+            log.error("Error updating accommodation: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("errorMessage", "정보 업데이트 중 오류가 발생했습니다.");
+        }
+
         return "redirect:/seller/accommodation/read";
-    }*/
+    }
+
 
 }
