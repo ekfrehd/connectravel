@@ -14,6 +14,12 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     List<Room> findByAccommodationAno(Long ano);
 
-    @Query("SELECT r, i, rv FROM Room r LEFT JOIN r.images i LEFT JOIN r.reservations rv WHERE r.accommodation.ano = :accommodationId AND rv.startDate >= :startDate AND rv.endDate <= :endDate")
+    @Query("SELECT r, i, rv " +
+            "FROM Room r " +
+            "LEFT JOIN r.images i " +
+            "LEFT JOIN r.reservations rv ON rv.room = r AND rv.startDate >= :startDate AND rv.endDate <= :endDate AND rv.status = 'ACTIVE' " +
+            "WHERE r.accommodation.ano = :accommodationId")
     List<Object[]> findRoomsByAccommodationAndDate(Long accommodationId, LocalDate startDate, LocalDate endDate);
+
+
 }

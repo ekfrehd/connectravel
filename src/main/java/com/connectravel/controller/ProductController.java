@@ -105,6 +105,8 @@ public class ProductController {
                 datedto.getStartDate(),
                 datedto.getEndDate()
         );
+        log.info("Room list for accommodation {}: {}", ano, list);
+
 
         // 모델에 데이터 추가
         model.addAttribute("R_list", list);

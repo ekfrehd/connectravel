@@ -11,6 +11,7 @@ import com.connectravel.repository.RoomImgRepository;
 import com.connectravel.repository.RoomRepository;
 import com.connectravel.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
@@ -107,6 +109,8 @@ public class RoomServiceImpl implements RoomService {
     @Transactional(readOnly = true)
     public List<Object[]> findRoomsAndReservationsByAccommodationAndDate(Long accommodationId, LocalDate startDate, LocalDate endDate) {
         List<Object[]> rawList = roomRepository.findRoomsByAccommodationAndDate(accommodationId, startDate, endDate);
+        log.info("Raw list from DB for accommodationId {}: {}", accommodationId, rawList);
+
         List<Object[]> resultList = new ArrayList<>();
 
         for (Object[] rawItem : rawList) {
@@ -119,6 +123,7 @@ public class RoomServiceImpl implements RoomService {
             resultList.add(resultItem);
         }
 
+        log.info("Processed result list for accommodationId {}: {}", accommodationId, resultList);
         return resultList;
     }
 
