@@ -1,11 +1,15 @@
 package com.connectravel.domain.entity;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Builder
@@ -43,4 +47,10 @@ public class Member extends BaseEntity implements Serializable {
     @JoinTable(name = "member_roles", joinColumns = { @JoinColumn(name = "member_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
     private Set<Role> memberRoles = new HashSet<>();
 
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.memberRoles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                .collect(Collectors.toSet());
+    }
 }

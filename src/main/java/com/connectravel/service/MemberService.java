@@ -18,6 +18,8 @@ public interface MemberService {
 
   void deleteMember(Long idx);
 
+  Member changeSellerByEmail(String email);
+
   MemberDTO entityToDTO(Member member);
 
   Member dtoToEntity(MemberDTO memberDTO);

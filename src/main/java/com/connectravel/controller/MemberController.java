@@ -9,7 +9,11 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,6 +68,36 @@ public class MemberController {
         return "member/mypage";
     }
 
+
+    @PostMapping(value = "/seller")
+    public String changeSellerToROLE_SELLER(Principal principal) {
+        // 현재 로그인한 사용자의 이메일을 가져옴
+        String email = principal.getName();
+
+        // 이메일을 사용하여 사용자의 권한을 SELLER로 변경
+        Member updatedMember = memberService.changeSellerByEmail(email);
+
+        // 변경된 Member 정보로 CustomUserDetails 생성
+        if (updatedMember != null) {
+            // SecurityContext에 새로운 Authentication 정보를 설정
+            UserDetails userDetails = User.withUsername(updatedMember.getUsername())
+                    .password(updatedMember.getPassword())
+                    .authorities(updatedMember.getAuthorities())
+                    .build();
+
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            userDetails.getPassword(),
+                            userDetails.getAuthorities()
+                    )
+            );
+
+        }
+
+        // 숙박 시설 등록 페이지로 리디렉션
+        return "redirect:/seller/accommodation/register";
+    }
 
 
 }

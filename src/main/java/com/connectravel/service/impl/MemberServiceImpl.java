@@ -89,6 +89,24 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member changeSellerByEmail(String email) {
+        Member member = memberRepository.findByEmail(email);
+        if (member == null) {
+            // 회원이 존재하지 않는 경우의 처리
+            return null;
+        }
+        // 'seller' 역할 설정
+        Role sellerRole = roleRepository.findByRoleName("ROLE_SELLER");
+        Set<Role> roles = new HashSet<>();
+        roles.add(sellerRole);
+        member.setMemberRoles(roles);
+
+        // 변경된 Member 정보를 저장
+        return memberRepository.save(member);
+    }
+
+
+    @Override
     public Member dtoToEntity(MemberDTO memberDTO) {
         if (memberDTO == null) {
             return null;
