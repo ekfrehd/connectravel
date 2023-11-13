@@ -191,7 +191,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         AccommodationDTO accommodationDTO = AccommodationDTO.builder()
                 .ano(accommodation.getAno())
                 .accommodationName(accommodation.getAccommodationName())
-                .sellerName(accommodation.getMember().getNickName()) // 관리자 이름
+                .sellerName(accommodation.getMember().getUsername()) // 관리자 이름
                 .sellerEmail(accommodation.getMember().getEmail()) // 관리자 이메일
                 .address(accommodation.getAddress())
                 .postal(accommodation.getPostal())
@@ -217,7 +217,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         AccommodationDTO accommodationDTO = AccommodationDTO.builder()
                 .ano(accommodation.getAno())
                 .accommodationName(accommodation.getAccommodationName())
-                .sellerName(accommodation.getMember().getNickName()) // 관리자 이름
+                .sellerName(accommodation.getMember().getUsername()) // 관리자 이름
                 .sellerEmail(accommodation.getMember().getEmail()) // 관리자 이메일
                 .address(accommodation.getAddress())
                 .postal(accommodation.getPostal())
