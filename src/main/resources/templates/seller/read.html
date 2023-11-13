@@ -11,14 +11,14 @@
 <div layout:fragment="content">
     <div style="padding: 15px;">
         <div class="white-box">
-            <button class="btn btn-primary" type="button" onclick="'location.href=\'/seller/room/update?rno=\' + ${dto.rno}'">수정하기</button>
+            <button class="btn btn-primary" type="button" onclick="'location.href=\'/seller/update?rno=\' + ${dto.rno}'">수정하기</button>
             <button class="btn btn-danger" type="button" onclick="deleteRoom(${dto.rno})">삭제하기</button><br/></br>
 
             <script th:inline="javascript">
                 function deleteRoom(rno) {
                     if (confirm('정말 삭제하시겠습니까?')) {
                         $.ajax({
-                            url: '/seller/room/delete?rno=' + rno,
+                            url: '/seller/delete?rno=' + rno,
                             type: 'get',
                             success: function(result) {
                                 if (result === 'success') {

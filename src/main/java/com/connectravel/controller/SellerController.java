@@ -1,14 +1,22 @@
 package com.connectravel.controller;
 
+import com.connectravel.domain.dto.AccommodationDTO;
+import com.connectravel.domain.dto.RoomDTO;
+import com.connectravel.domain.entity.Accommodation;
+import com.connectravel.domain.entity.Member;
 import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.repository.RoomRepository;
 import com.connectravel.service.ImgService;
 import com.connectravel.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("seller")
@@ -17,7 +25,7 @@ public class SellerController {
 
     private final RoomService roomService;
     private final ImgService imgService;
-    private final AccommodationRepository accrepository;
+    private final AccommodationRepository accommodationRepository;
     private final RoomRepository roomRepository;
 
 /*    @Autowired
@@ -37,26 +45,42 @@ public class SellerController {
         return "seller/main";
     }
     //어드민 컨트롤러는 맴버정보확인해서 필터링 적용 필수
-    @GetMapping("register")
-    public void register(){}
+
     //방 리스트*/
     @GetMapping("list")
-    public void list(Model model){
-        model.addAttribute("list", roomService.listAllRooms() );
+    public String list(@AuthenticationPrincipal Member member, Model model) {
+        Optional<Accommodation> accommodationOpt = accommodationRepository.findBySellerEmail(member.getEmail());
+        accommodationOpt.ifPresent(accommodation -> {
+            List<RoomDTO> rooms = roomService.listRoomsByAccommodation(accommodation.getAno());
+            model.addAttribute("list", rooms);
+        });
+        return "seller/list"; // 뷰 이름을 반환
     }
 
-   /* @PostMapping("register")
-    public String register(@RequestParam("images") List<MultipartFile> images, RoomDTO dto, Authentication authentication){ //여기에 사용자가 입력한 정보들이 매핑됨.
-        Long rno = roomService.register(authentication,dto); //방 등록을 하고 rno에 방 번호를 넣는다.(리턴된 값)
-        //그 이유는 이미지가 방 번호를 참조하는 구조를 가져서 이미지를 생성할때 방이 필요하기 때문이다
-        //이미지를 컴퓨터(서버)에 저장하고 DB에 저장하는 코드
-        //foeEach를 사용하는 이유는 images가 리스트 형태로 들어와서 하나씩 하나씩 저장하려고
-        images.forEach(i -> {
-            imgService.RoomRegister(i,rno);
+    @GetMapping("register")
+    public void register(@AuthenticationPrincipal Member member, Model model) {
+        Optional<Accommodation> accommodationOpt = accommodationRepository.findBySellerEmail(member.getEmail());
+        accommodationOpt.ifPresent(accommodation -> {
+            AccommodationDTO accommodationDTO = new AccommodationDTO();
+            accommodationDTO.setAno(accommodation.getAno());
+            model.addAttribute("dto", accommodationDTO);
         });
-        return "redirect:/seller/room/list";
+    }
 
-    } //방 생성
+
+    @PostMapping("register")
+    public String register(@RequestParam("images") List<MultipartFile> images,
+                           RoomDTO dto, // 폼에서 받은 데이터
+                           @ModelAttribute("accommodationDTO") AccommodationDTO accommodationDTO) {
+        dto.setAccommodationDTO(accommodationDTO);
+
+        Long rno = roomService.registerRoom(dto);
+        images.forEach(i -> imgService.addRoomImg(i, rno));
+        return "redirect:/seller/list";
+    }
+
+
+   /*
     //방 수정
     @GetMapping("update")
     public void update(Long rno,Model model){

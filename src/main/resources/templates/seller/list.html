@@ -18,7 +18,7 @@
       </ol>
       <div class="row">
 
-        <a th:href="@{/seller/room/register}">
+        <a th:href="@{/seller/register}">
           <button type="button" class="btn btn-outline-primary">방 등록하기
           </button>
         </a>
@@ -37,11 +37,11 @@
           <tbody>
           <tr th:each="dto, iterStat : ${list}">
             <td th:text="${iterStat.count}"></td>
-            <td><a th:text="${dto.room.room_name}" th:href="@{/seller/room/read(rno=${dto.room.rno})}"></a></td>
-            <td><h5 th:text="${dto.room.price}"></h5></td>
-            <td><h5 th:text="${dto.room.operating == true ? '영업중' : '영업안함'}"></h5></td>
-            <td><a th:href="@{/seller/room/update(rno=${dto.room.rno})}">수정하기</a></td>
-            <td><a th:href="@{/seller/room/delete(rno=${dto.room.rno})}">삭제하기</a></td>
+            <td><a th:text="${dto.roomName}" th:href="@{/seller/read(rno=${dto.rno})}"></a></td>
+            <td><h5 th:text="${dto.price}"></h5></td>
+            <td><h5 th:text="${dto.operating == true ? '영업중' : '영업안함'}"></h5></td>
+            <td><a th:href="@{/seller/update(rno=${dto.rno})}">수정하기</a></td>
+            <td><a th:href="@{/seller/delete(rno=${dto.rno})}">삭제하기</a></td>
           </tr>
           </tbody>
         </table>

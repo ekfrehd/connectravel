@@ -7,7 +7,6 @@ import com.connectravel.domain.entity.Accommodation;
 import com.connectravel.domain.entity.Room;
 import com.connectravel.domain.entity.RoomImg;
 import com.connectravel.repository.AccommodationRepository;
-import com.connectravel.repository.RoomImgRepository;
 import com.connectravel.repository.RoomRepository;
 import com.connectravel.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -24,51 +23,23 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
     private final AccommodationRepository accommodationRepository;
-    private final RoomImgRepository roomImgRepository;
 
     @Override
     @Transactional
-    public RoomDTO registerRoom(RoomDTO roomDTO) {
-
-        // 숙소 ID로 숙소 정보 조회
+    public Long registerRoom(RoomDTO roomDTO) {
         Accommodation accommodation = accommodationRepository.findById(roomDTO.getAccommodationDTO().getAno())
                 .orElseThrow(() -> new EntityNotFoundException("숙소를 찾을 수 없습니다."));
 
-        // RoomDTO로부터 Room 엔티티 생성
         Room room = dtoToEntity(roomDTO);
 
-        // Accommodation에 Room 추가
         accommodation.addRoom(room);
 
-        // accommodation 객체에 변경사항을 저장
         accommodationRepository.save(accommodation);
 
-        // Room 저장 (JPA가 자동으로 생성한 ID를 포함하여)
         Room savedRoom = roomRepository.save(room);
 
-        // Room 엔티티를 RoomDTO로 변환하여 반환
-        return entityToDTO(savedRoom);
-    }
-
-    @Override
-    @Transactional
-    public ImgDTO addRoomImage(Long roomId, ImgDTO imgDTO) {
-
-        // 방 정보 조회
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("방을 찾을 수 없습니다."));
-
-        // 이미지 객체 생성
-        RoomImg roomImg = RoomImg.builder()
-                .imgFile(imgDTO.getImgFile())
-                .room(room)
-                .build();
-
-        // 이미지 저장
-        RoomImg savedImg = roomImgRepository.save(roomImg);
-
-        // 저장된 이미지를 DTO로 변환하여 반환
-        return imgToDTO(savedImg);
+        // 저장된 Room의 ID 반환
+        return savedRoom.getRno();
     }
 
     @Override
@@ -105,13 +76,13 @@ public class RoomServiceImpl implements RoomService {
         return entityToDTO(room);
     }
 
-    @Override
     @Transactional(readOnly = true)
-    public List<RoomDTO> listAllRooms() {
-        return roomRepository.findAll().stream()
+    public List<RoomDTO> listRoomsByAccommodation(Long ano) {
+        return roomRepository.findByAccommodationAno(ano).stream()
                 .map(this::entityToDTO)
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public RoomDTO entityToDTO(Room room) {

@@ -17,12 +17,14 @@
     <div style="padding: 15px;">
         <div class="white-box">
 
-            <form class="row g-3" action="/seller/room/register" method="post" enctype="multipart/form-data">
+            <form class="row g-3" action="/seller/register" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="ano" th:value="${dto.ano}" />
+
                 <h5 class="col-12 mb-3">방 정보를 입력하세요.</h5>
 
                 <div class="col-12 col-md-6">
                     <label class="form-label">방 이름</label>
-                    <input class="form-control" type="text" name="room_name">
+                    <input class="form-control" type="text" name="roomName">
                 </div>
 
                 <div class="col-12 col-md-6">
@@ -58,8 +60,6 @@
                     <label class="form-label">이미지</label>
                     <input class="form-control" type="file" name="images">
                 </div>
-
-                <!-- 이미지 수만큼 위와 같은 코드를 반복해서 작성합니다. -->
 
                 <div class="col-12">
                     <button class="btn btn-primary" type="submit">생성</button>
