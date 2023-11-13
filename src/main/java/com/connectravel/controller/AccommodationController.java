@@ -59,7 +59,7 @@ public class AccommodationController {
 
         if (!accommodationRepository.existsByMemberId(member.getId())) {
             // 'ROLE_SELLER' 권한이 있지만 숙소를 등록하지 않았으면 등록 유도
-            model.addAttribute("message", "숙소등록을 하지 않으셨습니다. 등록이 필요합니다.");
+            model.addAttribute("message", "숙소 등록을 하지 않았습니다. 등록이 필요합니다.");
 
             // 옵션 목록을 가져와 모델에 추가
             List<OptionDTO> options = optionService.getAllOptions();
@@ -87,6 +87,7 @@ public class AccommodationController {
 
         // 숙박업소 등록 시 옵션 아이디 리스트를 DTO에 설정
         dto.setOptionIds(optionIds);
+        dto.setSellerEmail(member.getEmail());
 
         Long ano = accommodationService.registerAccommodation(dto); // 새로 추가된 엔티티의 번호(dto)
 
@@ -99,9 +100,9 @@ public class AccommodationController {
         return "redirect:/seller/list";
     }
 
-
   /*
-  @GetMapping("read")
+
+ @GetMapping("read")
     public String read(Model model, @AuthenticationPrincipal Member member)  {
 
         if (member == null) {
@@ -119,6 +120,8 @@ public class AccommodationController {
         model.addAttribute("accommodationImgDTOS", accommodationImgDTOS);
         return "accommodation/read";
     }
+
+
     @GetMapping("update")
     public String update(Model model, Authentication authentication) {
         String email = authentication.getName();
