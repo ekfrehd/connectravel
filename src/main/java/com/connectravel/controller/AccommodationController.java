@@ -10,7 +10,6 @@ import com.connectravel.service.ImgService;
 import com.connectravel.service.OptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -77,9 +76,7 @@ public class AccommodationController {
     public String registerAccommodation(@RequestParam("images") List<MultipartFile> images,
                                         @RequestParam("optionIds") List<Long> optionIds, // 옵션 아이디 리스트 추가
                                         AccommodationDTO dto, RedirectAttributes redirectAttributes,
-                                        Authentication authentication) {
-        String email = authentication.getName();
-        Member member = memberRepository.findByEmail(email);
+                                        @AuthenticationPrincipal Member member) {
 
         int firstSpaceIndex = dto.getAddress().indexOf(" ");
         int secondSpaceIndex = dto.getAddress().indexOf(" ", firstSpaceIndex + 1);
