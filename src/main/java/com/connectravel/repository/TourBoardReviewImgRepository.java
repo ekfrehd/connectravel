@@ -1,7 +1,7 @@
 package com.connectravel.repository;
 
-import com.connectravel.entity.TourBoardReview;
-import com.connectravel.entity.TourBoardReviewImg;
+import com.connectravel.domain.entity.TourBoardReview;
+import com.connectravel.domain.entity.TourBoardReviewImg;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,4 +12,5 @@ public interface TourBoardReviewImgRepository extends JpaRepository<TourBoardRev
 
     @Query("SELECT t from TourBoardReviewImg t where t.tourBoardReview = :tbrno")
     List<TourBoardReviewImg> getImgByTourBoardReviewTbrno(@Param("tbrno") TourBoardReview tbrno);
+
 }

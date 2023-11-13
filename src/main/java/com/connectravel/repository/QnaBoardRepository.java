@@ -1,6 +1,6 @@
 package com.connectravel.repository;
 
-import com.connectravel.entity.QnaBoard;
+import com.connectravel.domain.entity.QnaBoard;
 import com.connectravel.repository.search.SearchBoardRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

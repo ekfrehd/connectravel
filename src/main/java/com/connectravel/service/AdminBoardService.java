@@ -1,9 +1,9 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.AdminBoardDTO;
-import com.connectravel.dto.ImgDTO;
-import com.connectravel.dto.PageRequestDTO;
-import com.connectravel.dto.PageResultDTO;
+import com.connectravel.domain.dto.AdminBoardDTO;
+import com.connectravel.domain.dto.ImgDTO;
+import com.connectravel.domain.dto.PageRequestDTO;
+import com.connectravel.domain.dto.PageResultDTO;
 
 import java.util.List;
 
@@ -20,6 +20,5 @@ public interface AdminBoardService {
     PageResultDTO<AdminBoardDTO, Object[]> getPaginatedAdminBoardList(PageRequestDTO pageRequestDTO, String category); // 리스트 출력
 
     List<ImgDTO> getAdminBoardImgList(Long abno);
-
 
 }

@@ -1,9 +1,9 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.ImgDTO;
-import com.connectravel.dto.PageRequestDTO;
-import com.connectravel.dto.PageResultDTO;
-import com.connectravel.dto.TourBoardDTO;
+import com.connectravel.domain.dto.ImgDTO;
+import com.connectravel.domain.dto.PageRequestDTO;
+import com.connectravel.domain.dto.PageResultDTO;
+import com.connectravel.domain.dto.TourBoardDTO;
 
 import java.util.List;
 

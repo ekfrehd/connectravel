@@ -38,21 +38,21 @@
                                     <div th:each="img, i : ${accommodationImgDTOS}">
                                         <div th:if="${i.index == 0}"
                                              class="details-contents-header-thumb">
-                                            <img th:src="|/imgtest/${img.imgfile}|" th:alt="${img.imgfile}"
+                                            <img th:src="|/imgtest/${img.imgFile}|" th:alt="${img.imgFile}"
                                                  width="816px" height="356px"/>
-                                            <a th:href="|/imgtest/${img.imgfile}|"
+                                            <a th:href="|/imgtest/${img.imgFile}|"
                                                class="more-photos gallery-popup-two"> <i class="las la-plus"></i> 더 많은
                                                 이미지 보기 </a>
                                         </div>
                                         <div th:if="${i.index > 0}" style="display: none;">
-                                            <a th:href="|/imgtest/${img.imgfile}|" class="gallery-popup-two"></a>
+                                            <a th:href="|/imgtest/${img.imgFile}|" class="gallery-popup-two"></a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-5">
                                     <span class="hotel-view-contents-review"> <i class="las la-star"></i> [[${accommodation.grade}]] <span
-                                            class="hotel-view-contents-review-count"> ([[${accommodation.reviewcount}]]) </span> </span>
-                                    <h3 class="hotel-view-contents-title"> [[${accommodation.name}]] </h3>
+                                            class="hotel-view-contents-review-count"> ([[${accommodation.reviewCount}]]) </span> </span>
+                                    <h3 class="hotel-view-contents-title"> [[${accommodation.accommodationName}]] </h3>
                                     <span class="hotel-view-contents-location-icon"> <i
                                             class="las la-map-marker-alt"></i> </span>
                                     <span class="hotel-view-contents-location-para"> [[${accommodation.address}]]  </span>
@@ -99,7 +99,7 @@
                                                 map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
                                                 var accommodationAddress = /*[[${accommodation.address}]]*/ "";
-                                                var accommodationName = /*[[${accommodation.name}]]*/ "";
+                                                var accommodationName = /*[[${accommodation.accommodationName}]]*/ "";
 
                                                 var geocoder = new kakao.maps.services.Geocoder();
 
@@ -140,7 +140,7 @@
                                         <div class="review-tab-contents">
                                             <div class="review-tab-contents-single">
                                                 <span class="hotel-view-contents-review"> <i class="las la-star"></i> [[${accommodation.grade}]]</span>
-                                                <span class="hotel-view-contents-review-count"> 총 [[${accommodation.reviewcount}]]건의 리뷰 </span>
+                                                <span class="hotel-view-contents-review-count"> 총 [[${accommodation.reviewCount}]]건의 리뷰 </span>
                                             </div>
                                             <div th:each="dto : ${pageResultDTO.dtoList}"
                                                  th:if="dto != null" class="border-bottom">
@@ -162,18 +162,18 @@
                                                 <div th:each="imgEntry : ${reviewBoardImgMap.entrySet()}"
                                                      th:if="${imgEntry.key == dto.rbno}">
                                                     <div th:each="img, iterStat : ${imgEntry.value}"
-                                                         th:if="${img != null and img.imgfile != null}">
+                                                         th:if="${img != null and img.imgFile != null}">
                                                         <div th:if="${iterStat.index == 0}">
                                                             <div th:id="'gallery-' + ${dto.rbno}">
-                                                                <a th:href="|/imgtest/${img.imgfile}|">
-                                                                    <img th:src="|/imgtest/${img.imgfile}|"
+                                                                <a th:href="|/imgtest/${img.imgFile}|">
+                                                                    <img th:src="|/imgtest/${img.imgFile}|"
                                                                          class="img-fluid"
                                                                          style="width:150px; height: auto;"/>
                                                                 </a>
                                                             </div>
                                                         </div>
                                                         <div th:if="${iterStat.index > 0}">
-                                                            <a href="#" th:href="|/imgtest/${img.imgfile}|"
+                                                            <a href="#" th:href="|/imgtest/${img.imgFile}|"
                                                                th:attr="data-gallery-id='gallery-' + ${dto.rbno}"
                                                                style="display: none;"></a>
                                                         </div>
@@ -231,8 +231,8 @@
                             <div class="row-cols-md-4" style="margin-left: 20px;">
                                 <form id="daterange" onsubmit="disableDaterangeInput()"
                                       class="single-shop-left-inner mt-4">
-                                    <input type="hidden" name="StartDate" th:value="${date.StartDate}"/>
-                                    <input type="hidden" name="EndDate" th:value="${date.EndDate}"/>
+                                    <input type="hidden" name="startDate" th:value="${date.startDate}"/>
+                                    <input type="hidden" name="endDate" th:value="${date.endDate}"/>
                                     <ul class="single-shop-left-list active-list list-style-none">
                                         <li class="item-search">
                                             <input type="text" class="form--control" name="daterange"/>
@@ -253,10 +253,10 @@
                                     <div class="hotel-view-contents-header">
                                         <div class="hotel-view-contents-header-flex d-flex flex-wrap gap-3 align-items-center justify-content-between">
                                             <h3 class="hotel-view-contents-title">
-                                                [[${dto[0].room_name}]]
+                                                [[${dto[0].roomName}]]
                                             </h3>
                                             <div class="btn-wrapper" th:if="${dto[2] == null}">
-                                                <a th:href="@{/reservation/register(rno=${dto[0].rno},StartDate=${date.StartDate},EndDate=${date.EndDate})}"
+                                                <a th:href="@{/reservation/register(rno=${dto[0].rno},startDate=${date.startDate},endDate=${date.endDate})}"
                                                    class="cmn-btn btn-bg-1 btn-small"> 예약하기 </a>
                                             </div>
                                             <div class="cmn-btn btn-wrapper" th:if="${dto[2] != null}">
@@ -318,8 +318,8 @@
 
     <script>
         $(function () {
-            let startDate = $('input[name="StartDate"]').val();
-            let endDate = $('input[name="EndDate"]').val();
+            let startDate = $('input[name="startDate"]').val();
+            let endDate = $('input[name="endDate"]').val();
 
             // Check if the dates are valid
             if (!moment(startDate, 'YYYY-MM-DD', true).isValid()) {
@@ -337,8 +337,8 @@
                 startDate = start.format('YYYY-MM-DD');
                 endDate = end.format('YYYY-MM-DD');
 
-                $('input[name="StartDate"]').val(startDate);
-                $('input[name="EndDate"]').val(endDate);
+                $('input[name="startDate"]').val(startDate);
+                $('input[name="endDate"]').val(endDate);
             });
         });
 

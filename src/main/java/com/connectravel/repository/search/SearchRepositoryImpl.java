@@ -1,6 +1,6 @@
 package com.connectravel.repository.search;
 
-import com.connectravel.entity.Accommodation;
+import com.connectravel.domain.entity.Accommodation;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Repository
 public class SearchRepositoryImpl implements SearchRepository {
+
     @PersistenceContext
     private EntityManager em;
 
@@ -36,6 +37,5 @@ public class SearchRepositoryImpl implements SearchRepository {
                 .setParameter("operating", operating)
                 .getResultList();
     }
-
 
 }

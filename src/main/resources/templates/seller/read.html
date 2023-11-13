@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragmentsAdmin/layout}">
+
+<head>
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div style="padding: 15px;">
+        <div class="white-box">
+            <script th:inline="javascript">
+                function deleteRoom(rno) {
+                    if (confirm('정말 삭제하시겠습니까?')) {
+                        $.ajax({
+                            url: '/seller/delete?rno=' + rno,
+                            type: 'get',
+                            success: function(result) {
+                                if (result === 'success') {
+                                    location.reload();
+                                }
+                            }
+                        });
+                    }
+                }
+            </script>
+
+
+            <h5 class="card-title" th:text="'방 이름 : ' + ${roomDTO.roomName}"></h5><br/><br/>
+            <h5 class="card-text" th:text="'방 가격 : ' + ${roomDTO.price}"></h5><br/></div>
+        <h5 class="card-text">내용</h5>
+        <h5 class="card-text" th:utext="${roomDTO.content}"></h5>
+
+        <div th:each="img : ${imgs}">
+            <img th:src="@{${img.imgFile}}" />
+        </div>
+
+    </div>
+</div>
+</div>
+</body>
+
+</html>

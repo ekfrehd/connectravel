@@ -1,6 +1,6 @@
 package com.connectravel.repository;
 
-import com.connectravel.entity.AdminBoard;
+import com.connectravel.domain.entity.AdminBoard;
 import com.connectravel.repository.search.SearchBoardRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +14,7 @@ public interface AdminBoardRepository extends JpaRepository<AdminBoard, Long>, Q
             "left outer join AdminReply r on r.adminBoard = b " +
             "where b.abno = :abno")
     Object getBoardByAbno(@Param("abno") Long abno);
+
     long countByCategory(String category);
 
 }

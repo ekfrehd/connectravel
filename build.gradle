@@ -8,10 +8,17 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.10'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+<<<<<<< HEAD
     id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10' //쿼리 dsl추가 플러그인
 }
 
 group = 'org.ezone'
+=======
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10' // Querydsl
+}
+
+group = 'com.connectravel'
+>>>>>>> 235ebe1e56a464c2dadcd72af3bad53a4b06ea34
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
@@ -26,6 +33,7 @@ repositories {
 }
 
 dependencies {
+<<<<<<< HEAD
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -58,13 +66,45 @@ dependencies {
     // modelmapper
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0'
 
+=======
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}" // Querydsl
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}" // Querydsl
+
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0' // ModelMapper
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1' // JWT
+    implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time', version: '3.0.4.RELEASE'
+    implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.1.0'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    compileOnly 'org.projectlombok:lombok'
+
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+>>>>>>> 235ebe1e56a464c2dadcd72af3bad53a4b06ea34
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
 
+<<<<<<< HEAD
 //쿼리 dsl 관련 설정 추가
+=======
+// Querydsl
+>>>>>>> 235ebe1e56a464c2dadcd72af3bad53a4b06ea34
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl{
