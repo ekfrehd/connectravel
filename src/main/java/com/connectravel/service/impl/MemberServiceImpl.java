@@ -135,5 +135,48 @@ public class MemberServiceImpl implements MemberService {
                 .build();
     }
 
+    public void vaildateDuplicateMember(Member member) {
+        Member findMember = memberRepository.findByEmail(member.getEmail());
+        if (findMember != null) {
+            throw new IllegalStateException("이미 가입된 회원입니다.");
+        }
+    }
+
+    public Member editMember(MemberDTO memberDTO) {
+
+        Member member = memberRepository.findByEmail(memberDTO.getEmail());
+        member.setEmail(memberDTO.getEmail());
+        member.setNickName(memberDTO.getNickName());
+        member.setTel(memberDTO.getTel());
+        memberRepository.save(member);
+
+        return member;
+    }
+
+    public Member changePassword(MemberDTO memberDTO) {
+
+        Member member = memberRepository.findByEmail(memberDTO.getEmail());
+        member.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+        memberRepository.save(member);
+
+        return member;
+    }
+
+    public Member changeSeller(MemberDTO memberDTO) {
+
+        Member member = memberRepository.findByEmail(memberDTO.getEmail());
+
+        Set<Role> roles = memberDTO.getMemberRoles().stream()
+                .map(roleName -> Role.createRole(roleName))
+                .collect(Collectors.toSet());
+
+        member.setMemberRoles(roles);
+        member.setUsername(memberDTO.getUsername());
+        member.setTel(memberDTO.getTel());
+        memberRepository.save(member);
+
+        return member;
+    }
+
 
 }
