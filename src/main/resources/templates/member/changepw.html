@@ -48,9 +48,9 @@
                                     <a href="/reservation/list"> <i class="las la-briefcase"></i> 예약현황 </a>
                                 </li>
                                 <li class="list has-children active open show">
-                                    <a href="/member/memberinfo"> <i class="las la-user-circle"></i> 프로필 </a>
+                                    <a href="/member/mypage"> <i class="las la-user-circle"></i> 프로필 </a>
                                     <ul class="submenu list-style-none">
-                                        <li class="list"><a href="/member/memberinfo"> 프로필 </a></li>
+                                        <li class="list"><a href="/member/mypage"> 프로필 </a></li>
                                         <li class="list"><a href="/member/update"> 프로필 수정 </a></li>
                                         <li class="list selected"><a href="/member/changepw"> 비밀번호 변경 </a></li>
                                     </ul>
@@ -62,24 +62,24 @@
                 <div class="dashboard-right-contents mt-4 mt-lg-0">
                     <div class="dashboard-reservation">
                         <div class="single-reservation bg-white base-padding">
-                            <h3 class="single-reservation-title"> 비밀번호 변경 </h3>
+                            <h3 class="single-reservation-title">비밀번호 변경</h3>
                             <div class="custom--form dashboard-form">
                                 <form action="/member/changepw" id="changepw" method="post">
                                     <div class="dashboard-input mt-4">
-                                        <label class="label-title" th:for="password"> 현재 패밀번호 </label>
+                                        <label class="label-title" th:for="currentPassword">현재 패스워드</label>
                                         <input type="password" id="currentPassword" name="currentPassword" class="form--control" placeholder="현재 비밀번호" required>
-                                        <div class="toggle-password"><span class="eye-icon"> </span></div>
+                                        <div class="toggle-password"><span class="eye-icon"></span></div>
                                         <p class="text-danger" th:text="${errorMessage}" th:if="${errorMessage}"></p>
                                     </div>
                                     <div class="dashboard-input mt-4">
-                                        <label class="label-title" th> 새 비밀번호 </label>
-                                        <input type="password" id="password" name="password" class="form--control" placeholder="새 비밀번호" required>
-                                        <div class="toggle-password"><span class="eye-icon"> </span></div>
+                                        <label class="label-title" th:for="password">새 비밀번호</label>
+                                        <input type="password" id="password" name="newPassword" class="form--control" placeholder="새 비밀번호" required>
+                                        <div class="toggle-password"><span class="eye-icon"></span></div>
                                     </div>
                                     <div class="dashboard-input mt-4">
-                                        <label class="label-title"> 비밀번호 확인 </label>
-                                        <input type="password" id="passwordConfirm" class="form--control" placeholder="새 비밀번호 확인" required>
-                                        <div class="toggle-password"><span class="eye-icon"> </span></div>
+                                        <label class="label-title" th:for="passwordConfirm">비밀번호 확인</label>
+                                        <input type="password" id="passwordConfirm" name="passwordConfirm" class="form--control" placeholder="새 비밀번호 확인" required>
+                                        <div class="toggle-password"><span class="eye-icon"></span></div>
                                         <p id="passwordError" class="text-danger"></p>
                                     </div>
                                     <div class="btn-wrapper mt-4">
@@ -90,6 +90,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -115,7 +116,6 @@
             });
         });
     </script>
-
 </div>
 
 </html>

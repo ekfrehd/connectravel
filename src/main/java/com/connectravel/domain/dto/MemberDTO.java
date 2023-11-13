@@ -26,6 +26,7 @@ public class MemberDTO {
     private String nickName;
 
     private String tel;
+    private String tel1, tel2, tel3; // 전화번호 sprit
 
     @Column(scale = 0)
     private int point;
