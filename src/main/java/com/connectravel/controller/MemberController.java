@@ -36,7 +36,6 @@ public class MemberController {
 
     @GetMapping(value="/join")
     public String createMember() throws Exception {
-
         return "member/join";
     }
 
@@ -44,6 +43,7 @@ public class MemberController {
     public String createMember(MemberDTO memberDTO) throws Exception {
 
         ModelMapper modelMapper = new ModelMapper();
+
         Member member = modelMapper.map(memberDTO, Member.class);
         member.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
 

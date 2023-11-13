@@ -22,8 +22,10 @@ public class LoginController {
     @RequestMapping(value="/member/login")
     public String login(@RequestParam(value = "error", required = false) String error,
                         @RequestParam(value = "exception", required = false) String exception, Model model){
+
         model.addAttribute("error",error);
         model.addAttribute("exception",exception);
+
         return "member/login";
     }
 
@@ -31,7 +33,8 @@ public class LoginController {
     public String logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null){
+
+        if (authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
 
