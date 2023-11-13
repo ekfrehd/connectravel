@@ -7,6 +7,7 @@ import com.connectravel.domain.entity.Accommodation;
 import com.connectravel.domain.entity.Room;
 import com.connectravel.domain.entity.RoomImg;
 import com.connectravel.repository.AccommodationRepository;
+import com.connectravel.repository.RoomImgRepository;
 import com.connectravel.repository.RoomRepository;
 import com.connectravel.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
+    private final RoomImgRepository roomImgRepository;
     private final AccommodationRepository accommodationRepository;
 
     @Override
@@ -81,6 +84,22 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.findByAccommodationAno(ano).stream()
                 .map(this::entityToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ImgDTO> getImgList(Long rno) {
+        List<ImgDTO> imgDTOList = new ArrayList<>();
+
+        List<RoomImg> roomImgList = roomImgRepository.findByRoomRno(rno); // 방 ID를 기준으로 이미지 검색
+        for (RoomImg roomImg : roomImgList) {
+            ImgDTO imgDTO = new ImgDTO();
+            imgDTO.setIno(roomImg.getIno());
+            imgDTO.setImgFile(roomImg.getImgFile());
+            // 필요한 경우 여기에 추가 필드 설정
+            imgDTOList.add(imgDTO);
+        }
+
+        return imgDTOList;
     }
 
 

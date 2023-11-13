@@ -1,6 +1,7 @@
 package com.connectravel.controller;
 
 import com.connectravel.domain.dto.AccommodationDTO;
+import com.connectravel.domain.dto.ImgDTO;
 import com.connectravel.domain.dto.RoomDTO;
 import com.connectravel.domain.entity.Accommodation;
 import com.connectravel.domain.entity.Member;
@@ -102,29 +103,31 @@ public class SellerController {
         return "redirect:/seller/list";
     }
 
-   /*
+    // 방 정보 읽기
+    @GetMapping("read")
+    public String read(@RequestParam("rno") Long rno, Model model) {
+        RoomDTO roomDTO = roomService.getRoom(rno);
+        if (roomDTO == null) {
+            return "redirect:/seller/list"; // 방 정보가 없으면 목록으로 리다이렉트
+        }
+
+        List<ImgDTO> imgs = roomService.getImgList(rno);
+        model.addAttribute("imgs", imgs);
+        model.addAttribute("roomDTO", roomDTO);
+
+        return "seller/read";
+    }
 
     //방 삭제
     @GetMapping("delete")
     public String delete(Long rno) {
-        roomService.remove(rno);
-        return "redirect:/seller/room/list";
+        roomService.removeRoom(rno);
+        return "redirect:/seller/list";
     }
 
-    //방 read
-    @GetMapping("read")
-    public void read(Long rno,Model model){
-        //룸 정보 하나와 옵션 리스트를 보여주는 read
-        //조인을 해버리면 코드도 길어지고 더 복잡해지기때문에 조인의 필요성을 못느낌! 같은 rno에서 따로 따로 처리함
+   /*
 
-        RoomDTO roomDTO = roomService.get(rno); //rno로 room select
-        //List<OptionDTO> options = optionService.getList(rno); //rno와 연관 관계를 맺는 모든 option을 list화된것
-        List<ImgDTO> imgs = roomService.getImgList(rno);
-        //
-        model.addAttribute("imgs",imgs);
-        model.addAttribute("dto",roomDTO);
-        //model.addAttribute("options",options); //프론트로 보낸다
-    } //read end
+
 
     @GetMapping("sales")
     public void sales(ReservationDTO datedto, Authentication authentication, Model model){

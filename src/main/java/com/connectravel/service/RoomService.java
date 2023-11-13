@@ -1,5 +1,6 @@
 package com.connectravel.service;
 
+import com.connectravel.domain.dto.ImgDTO;
 import com.connectravel.domain.dto.RoomDTO;
 import com.connectravel.domain.entity.Room;
 
@@ -16,6 +17,8 @@ public interface RoomService {
     RoomDTO getRoom(Long rno);
 
     List<RoomDTO> listRoomsByAccommodation(Long ano);
+
+    List<ImgDTO> getImgList(Long rno);
 
     RoomDTO entityToDTO(Room room);
 
