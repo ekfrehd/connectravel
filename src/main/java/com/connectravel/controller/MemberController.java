@@ -2,6 +2,7 @@ package com.connectravel.controller;
 
 import com.connectravel.domain.dto.MemberDTO;
 import com.connectravel.domain.entity.Member;
+import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.RoleRepository;
 import com.connectravel.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +30,15 @@ import java.security.Principal;
 @Log4j2
 public class MemberController {
 
+    private final MemberService memberService;
+    private final RoleRepository roleRepository;
+    private final MemberRepository memberRepository;
+
     @Autowired
-    private MemberService memberService;
+    private ModelMapper modelMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @GetMapping(value="/join")
     public String createMember() throws Exception {
@@ -68,6 +70,26 @@ public class MemberController {
         return "member/mypage";
     }
 
+    @GetMapping(value = "/seller")
+    public String showSellerForm(Model model, Principal principal) {
+        if (principal == null) {
+            model.addAttribute("errorMessage", "로그인이 필요합니다.");
+            return "redirect:/member/login";
+        }
+
+        String email = principal.getName();
+        Member member = memberRepository.findByEmail(email);
+
+        if (member == null) {
+            model.addAttribute("errorMessage", "회원 정보를 찾을 수 없습니다.");
+            return "redirect:/member/login";
+        }
+
+        MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
+        model.addAttribute("memberDTO", memberDTO);
+
+        return "member/seller";
+    }
 
     @PostMapping(value = "/seller")
     public String changeSellerToROLE_SELLER(Principal principal) {

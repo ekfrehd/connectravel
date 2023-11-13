@@ -1,8 +1,8 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.AccommodationDTO;
-import com.connectravel.dto.OptionDTO;
-import com.connectravel.entity.*;
+import com.connectravel.domain.dto.AccommodationDTO;
+import com.connectravel.domain.dto.OptionDTO;
+import com.connectravel.domain.entity.*;
 import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.OptionRepository;
@@ -16,7 +16,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest

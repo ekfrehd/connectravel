@@ -4,14 +4,13 @@ import com.connectravel.domain.dto.AccommodationDTO;
 import com.connectravel.domain.dto.ImgDTO;
 import com.connectravel.domain.dto.PageRequestDTO;
 import com.connectravel.domain.dto.PageResultDTO;
-import com.connectravel.domain.entity.Accommodation;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface AccommodationService {
 
-    Accommodation registerAccommodation(AccommodationDTO accommodationDTO); // Test에서 setUp() 대신 사용 중
+    Long registerAccommodation(AccommodationDTO accommodationDTO); // Test에서 setUp() 대신 사용 중
 
     AccommodationDTO modifyAccommodationDetails(AccommodationDTO accommodationDTO); // 숙소의 상세 정보를 수정(현재는 이름, 주소만 수정 가능)
 

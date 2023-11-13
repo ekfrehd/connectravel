@@ -7,12 +7,13 @@ import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.RoleRepository;
 import com.connectravel.service.MemberService;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -89,22 +90,26 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Member changeSellerByEmail(String email) {
         Member member = memberRepository.findByEmail(email);
         if (member == null) {
-            // 회원이 존재하지 않는 경우의 처리
-            return null;
+            throw new EntityNotFoundException("Member not found with email: " + email);
         }
-        // 'seller' 역할 설정
+
         Role sellerRole = roleRepository.findByRoleName("ROLE_SELLER");
+        if (sellerRole == null) {
+            throw new EntityNotFoundException("Role ROLE_SELLER not found");
+        }
+
         Set<Role> roles = new HashSet<>();
         roles.add(sellerRole);
         member.setMemberRoles(roles);
 
-        // 변경된 Member 정보를 저장
-        return memberRepository.save(member);
-    }
+        memberRepository.save(member);
 
+        return member;
+    }
 
     @Override
     public Member dtoToEntity(MemberDTO memberDTO) {
