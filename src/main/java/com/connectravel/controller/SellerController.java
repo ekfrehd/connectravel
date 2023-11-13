@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +68,6 @@ public class SellerController {
         });
     }
 
-
     @PostMapping("register")
     public String register(@RequestParam("images") List<MultipartFile> images,
                            RoomDTO dto, // 폼에서 받은 데이터
@@ -79,20 +79,31 @@ public class SellerController {
         return "redirect:/seller/list";
     }
 
-
-   /*
     //방 수정
     @GetMapping("update")
-    public void update(Long rno,Model model){
-        RoomDTO dto = roomService.get(rno);
-        model.addAttribute("dto",dto);
+    public String updateRoomForm(@RequestParam("rno") Long rno, Model model) {
+        RoomDTO roomDTO = roomService.getRoom(rno);
+        if (roomDTO == null) {
+            return "redirect:/seller/list";
+        }
+        model.addAttribute("roomDTO", roomDTO);
+        return "seller/update";
     }
+
     //방 수정
     @PostMapping("update")
-    public String update(RoomDTO dto){
-        roomService.modify(dto);
-        return "redirect:/seller/room/list";
+    public String updateRoom(@ModelAttribute("roomDTO") RoomDTO roomDTO, RedirectAttributes redirectAttributes) {
+        try {
+            roomService.modifyRoom(roomDTO.getRno(), roomDTO);
+            redirectAttributes.addFlashAttribute("successMessage", "방 정보가 성공적으로 업데이트되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "정보 업데이트 중 오류가 발생했습니다.");
+        }
+        return "redirect:/seller/list";
     }
+
+   /*
+
     //방 삭제
     @GetMapping("delete")
     public String delete(Long rno) {
