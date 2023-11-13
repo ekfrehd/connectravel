@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long>, SearchRepository, SearchBoardRepository {
 
+    Accommodation findByAno(Long ano);
+
     // 이메일을 사용하여 숙박업소 조회
     Optional<Accommodation> findBySellerEmail(String sellerEmail);
 

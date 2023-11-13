@@ -86,8 +86,8 @@
                                     <div class="hotel-view bg-white radius-20">
                                         <div class="hotel-view-flex" th:if="${not #lists.isEmpty(dto.imgDTOList)}">
                                             <a th:href="@{/product/{ano}(ano=${dto.ano},StartDate=${date.StartDate},EndDate=${date.EndDate})}">
-                                                <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}"
-                                                     th:alt="${dto.name}"
+                                                <img th:src="'/imgtest/' + ${dto.imgFiles[0]}"
+                                                     th:alt="${dto.accommodationName}"
                                                      class="hotel-view-thumb hotel-view-list-thumb bg-image"
                                                      width="300px" height="326px"/>
                                             </a>
@@ -174,8 +174,8 @@
 
     <script>
         $(function () {
-            let startDate = $('input[name="StartDate"]').val();
-            let endDate = $('input[name="EndDate"]').val();
+            let startDate = $('input[name="startDate"]').val();
+            let endDate = $('input[name="endDate"]').val();
 
             // Check if the dates are valid
             if (!moment(startDate, 'YYYY-MM-DD', true).isValid()) {
@@ -193,8 +193,8 @@
                 startDate = start.format('YYYY-MM-DD');
                 endDate = end.format('YYYY-MM-DD');
 
-                $('input[name="StartDate"]').val(startDate);
-                $('input[name="EndDate"]').val(endDate);
+                $('input[name="startDate"]').val(startDate);
+                $('input[name="endDate"]').val(endDate);
             });
         });
 

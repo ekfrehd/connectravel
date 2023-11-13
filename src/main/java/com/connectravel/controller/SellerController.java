@@ -2,12 +2,13 @@ package com.connectravel.controller;
 
 import com.connectravel.domain.dto.AccommodationDTO;
 import com.connectravel.domain.dto.ImgDTO;
+import com.connectravel.domain.dto.OptionDTO;
 import com.connectravel.domain.dto.RoomDTO;
 import com.connectravel.domain.entity.Accommodation;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.repository.AccommodationRepository;
-import com.connectravel.repository.RoomRepository;
 import com.connectravel.service.ImgService;
+import com.connectravel.service.OptionService;
 import com.connectravel.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,27 +29,35 @@ public class SellerController {
     private final RoomService roomService;
     private final ImgService imgService;
     private final AccommodationRepository accommodationRepository;
-    private final RoomRepository roomRepository;
-
-/*    @Autowired
-    DateManager dateManager;
+    private final OptionService optionService;
 
     @GetMapping("")
-    public String main(Authentication authentication, Model model){
-        AccommodationEntity entity = accrepository.findByEmail(authentication.getName());
-        //acc-member 조인을 한다 on . / url 조작이 가능하니까
-        //먼저 Seller만 들어올 수 있게 권한을 설정하고 Seller중에도 조작을 할 수 있으니까
-        //ano 방식이 아닌 repository에서 끌고오는 방식으로 설정하는게 좋은듯.
-        // accommodation register는 무조건 autjentication읉 통해 인증해야만함
+    public String main(@AuthenticationPrincipal Member member, Model model){
+        if (member == null) {
+            // 인증된 사용자가 없으면 로그인 페이지로 리다이렉트
+            return "redirect:/login";
+        }
 
-        //roomregister -> authentication -> select * from acc where member_id = ?
-        //숙소 번호 불러오기
-        model.addAttribute("entity",entity); //test
+        // 인증된 사용자의 이메일로 숙소 정보 조회
+        Optional<Accommodation> optionalAccommodation = accommodationRepository.findBySellerEmail(member.getEmail());
+        if (!optionalAccommodation.isPresent()) {
+            // 해당 판매자의 숙소 정보가 없으면 적절한 메시지를 담아 뷰에 전달
+            model.addAttribute("message", "등록된 숙소가 없습니다. 숙소를 등록해주세요.");
+            return "seller/main";
+        }
+
+        // 옵션 목록을 가져와 모델에 추가
+        List<OptionDTO> options = optionService.getAllOptions();
+        model.addAttribute("options", options);
+
+        // 숙소 정보가 있으면 모델에 추가
+        Accommodation accommodation = optionalAccommodation.get();
+        model.addAttribute("accommodation", accommodation);
+
+
         return "seller/main";
     }
-    //어드민 컨트롤러는 맴버정보확인해서 필터링 적용 필수
 
-    //방 리스트*/
     @GetMapping("list")
     public String list(@AuthenticationPrincipal Member member, Model model) {
         Optional<Accommodation> accommodationOpt = accommodationRepository.findBySellerEmail(member.getEmail());
@@ -126,9 +135,6 @@ public class SellerController {
     }
 
    /*
-
-
-
     @GetMapping("sales")
     public void sales(ReservationDTO datedto, Authentication authentication, Model model){
         Long ano = accrepository.findByEmail(authentication.getName()).getAno();

@@ -99,6 +99,29 @@ public class AccommodationServiceImpl implements AccommodationService {
         return entityToDto(accommodation);
     }
 
+    @Override // 숙소번호 찾기
+    public AccommodationDTO findByAno(Long ano){
+        Accommodation accommodation = accommodationRepository.findByAno(ano);
+        AccommodationDTO accommodationDTO = AccommodationDTO
+                .builder()
+                .accommodationName(accommodation.getAccommodationName())
+                .accommodationType(accommodation.getAccommodationType())
+                .sellerName(accommodation.getSellerName())
+                .sellerEmail(accommodation.getSellerEmail())
+                .address(accommodation.getAddress())
+                .tel(accommodation.getTel())
+                .intro(accommodation.getIntro())
+                .postal(accommodation.getPostal())
+                .ano(accommodation.getAno())
+                .region(accommodation.getRegion())
+                .grade(accommodation.getGrade())
+                .content(accommodation.getContent())
+                .reviewCount(accommodation.getReviewCount())
+                .count(accommodation.getCount())
+                .build();
+        return accommodationDTO;
+    }
+
 
     @Override
     public AccommodationDTO findAccommodationByMemberId(Long memberId) {
