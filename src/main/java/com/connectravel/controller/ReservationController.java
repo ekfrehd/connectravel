@@ -1,9 +1,6 @@
 package com.connectravel.controller;
 
-import com.connectravel.domain.dto.AccommodationDTO;
-import com.connectravel.domain.dto.MemberDTO;
-import com.connectravel.domain.dto.ReservationDTO;
-import com.connectravel.domain.dto.RoomDTO;
+import com.connectravel.domain.dto.*;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.ReservationRepository;
@@ -28,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -131,17 +129,26 @@ public class ReservationController {
         // MemberDTO로 변환
         MemberDTO memberDTO = memberService.entityToDTO(member);
 
-        // 사용자의 예약 목록을 조회
-        List<ReservationDTO> reservations = reservationService.listUserRoomBookings(memberDTO.getUsername());
+        List<ReservationDTO> reservations = reservationService.listUserRoomBookings(member.getUsername());
 
-        // 예약 목록을 모델에 추가
+        List<AccommodationDTO> accommodationList = new ArrayList<>();
+        List<List<ImgDTO>> accommodationImgLists = new ArrayList<>();
+        for (ReservationDTO reservation : reservations) {
+            RoomDTO roomDTO = roomService.getRoom(reservation.getRoomDTO().getRno());
+            AccommodationDTO accommodationDTO = accommodationService.findByAno(roomDTO.getAccommodationDTO().getAno());
+            accommodationList.add(accommodationDTO);
+
+            List<ImgDTO> imgList = accommodationService.getImgList(accommodationDTO.getAno());
+            accommodationImgLists.add(imgList);
+        }
+
         model.addAttribute("reservations", reservations);
+        model.addAttribute("accommodationList", accommodationList);
+        model.addAttribute("accommodationImgLists", accommodationImgLists);
         model.addAttribute("today", LocalDate.now());
 
         return "reservation/list";
     }
-
-
 
 }
 

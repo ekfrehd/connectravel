@@ -50,11 +50,15 @@ public class ReservationServiceImpl implements ReservationService {
             throw new EntityNotAvailableException("선택한 날짜에 방이 이용 불가능합니다.");
         }
 
+        // 예약 객체 생성 전 상태를 ACTIVE로 설정
+        reservationDTO.setStatus(ReservationStatus.ACTIVE);
+
         Reservation reservation = dtoToEntity(reservationDTO);
         Reservation savedReservation = reservationRepository.save(reservation);
 
         return entityToDTO(savedReservation);
     }
+
 
     @Override
     @Transactional(readOnly = true)
