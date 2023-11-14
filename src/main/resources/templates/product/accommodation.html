@@ -245,9 +245,11 @@
                                 </form>
                             </div>
                             <div class="hotel-view-flex" th:each="dto : ${R_list}">
-                                <img th:src="'/imgtest/' + ${dto[1]}" th:width="280px" th:height="150px"
-                                     th:if="${dto[1] != null}">
-                                <div class="no-image" th:if="${dto[1] == null}">No Image</div>
+                                <!-- 이미지 표시 부분 수정 -->
+                                <div th:if="${not #lists.isEmpty(dto[0].imgFiles)}">
+                                    <img th:src="@{'/imgtest/' + ${dto[0].imgFiles[0]}}" th:alt="'Room Image'" th:width="280px" th:height="150px"/>
+                                </div>
+                                <div th:if="${#lists.isEmpty(dto[0].imgFiles)}">No Image</div>
 
                                 <div class="hotel-view-contents">
                                     <div class="hotel-view-contents-header">

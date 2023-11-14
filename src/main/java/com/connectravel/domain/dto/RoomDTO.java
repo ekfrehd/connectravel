@@ -29,6 +29,6 @@ public class RoomDTO {
 
     private AccommodationDTO accommodationDTO;
 
-    private List<ImgDTO> imgFiles;
+    private List<String> imgFiles;
 
 }
