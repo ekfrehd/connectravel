@@ -109,8 +109,6 @@ public class RoomServiceImpl implements RoomService {
     @Transactional(readOnly = true)
     public List<Object[]> findRoomsAndReservationsByAccommodationAndDate(Long accommodationId, LocalDate startDate, LocalDate endDate) {
         List<Object[]> rawList = roomRepository.findRoomsByAccommodationAndDate(accommodationId, startDate, endDate);
-        log.info("Raw list from DB for accommodationId {}: {}", accommodationId, rawList);
-
         List<Object[]> resultList = new ArrayList<>();
 
         for (Object[] rawItem : rawList) {
@@ -123,7 +121,6 @@ public class RoomServiceImpl implements RoomService {
             resultList.add(resultItem);
         }
 
-        log.info("Processed result list for accommodationId {}: {}", accommodationId, resultList);
         return resultList;
     }
 
