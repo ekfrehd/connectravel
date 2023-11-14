@@ -37,8 +37,8 @@
                                            th:value="${param.category}">
                                     <input th:if="${param.region != null}" type="hidden" name="region"
                                            th:value="${param.region}"/>
-                                    <input type="hidden" name="StartDate" th:value="${date.StartDate}"/>
-                                    <input type="hidden" name="EndDate" th:value="${date.EndDate}"/>
+                                    <input type="hidden" name="startDate" th:value="${date.startDate}"/>
+                                    <input type="hidden" name="endDate" th:value="${date.endDate}"/>
                                     <ul class="single-shop-left-list active-list list-style-none">
                                         <li class="item-search">
                                             <input type="text" class="form--control" name="daterange"/>
@@ -84,10 +84,10 @@
                             <th:block th:each="dto : ${pageResult.dtoList}">
                                 <div class="col-12">
                                     <div class="hotel-view bg-white radius-20">
-                                        <div class="hotel-view-flex" th:if="${not #lists.isEmpty(dto.imgDTOList)}">
-                                            <a th:href="@{/product/{ano}(ano=${dto.ano},StartDate=${date.StartDate},EndDate=${date.EndDate})}">
-                                                <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}"
-                                                     th:alt="${dto.name}"
+                                        <div class="hotel-view-flex" th:if="${not #lists.isEmpty(dto.imgFiles)}">
+                                            <a th:href="@{/product/{ano}(ano=${dto.ano},startDate=${date.startDate},endDate=${date.endDate})}">
+                                                <img th:src="'/imgtest/' + ${dto.imgFiles[0]}"
+                                                     th:alt="${dto.accommodationName}"
                                                      class="hotel-view-thumb hotel-view-list-thumb bg-image"
                                                      width="300px" height="326px"/>
                                             </a>
@@ -96,16 +96,16 @@
                                                     <div class="hotel-view-contents-header-flex d-flex flex-wrap gap-3 align-items-center justify-content-between">
                                                     <span class="hotel-view-contents-review"> <i
                                                             class="las la-star"></i> [[${dto.grade}]] <span
-                                                            class="hotel-view-contents-review-count"> ([[${dto.reviewcount}]]) </span> </span>
+                                                            class="hotel-view-contents-review-count"> ([[${dto.reviewCount}]]) </span> </span>
                                                         <div class="btn-wrapper">
-                                                            <a th:href="@{/product/{ano}(ano=${dto.ano},StartDate=${date.StartDate},EndDate=${date.EndDate})}"
+                                                            <a th:href="@{/product/{ano}(ano=${dto.ano},startDate=${date.startDate},endDate=${date.endDate})}"
                                                                class="cmn-btn btn-bg-1 btn-small">
                                                                 예약하기 </a>
                                                         </div>
                                                     </div>
                                                     <h3 class="hotel-view-contents-title"><a
-                                                            th:href="@{/product/{ano}(ano=${dto.ano},StartDate=${date.StartDate},EndDate=${date.EndDate})}">
-                                                        [[${dto.name}]] </a></h3>
+                                                            th:href="@{/product/{ano}(ano=${dto.ano},startDate=${date.startDate},endDate=${date.endDate})}">
+                                                        [[${dto.accommodationName}]] </a></h3>
                                                     <div class="hotel-view-contents-location mt-2">
                                                     <span class="hotel-view-contents-location-icon"> <i
                                                             class="las la-map-marker-alt"></i> </span>
@@ -174,8 +174,8 @@
 
     <script>
         $(function () {
-            let startDate = $('input[name="StartDate"]').val();
-            let endDate = $('input[name="EndDate"]').val();
+            let startDate = $('input[name="startDate"]').val();
+            let endDate = $('input[name="endDate"]').val();
 
             // Check if the dates are valid
             if (!moment(startDate, 'YYYY-MM-DD', true).isValid()) {
@@ -193,8 +193,8 @@
                 startDate = start.format('YYYY-MM-DD');
                 endDate = end.format('YYYY-MM-DD');
 
-                $('input[name="StartDate"]').val(startDate);
-                $('input[name="EndDate"]').val(endDate);
+                $('input[name="startDate"]').val(startDate);
+                $('input[name="endDate"]').val(endDate);
             });
         });
 

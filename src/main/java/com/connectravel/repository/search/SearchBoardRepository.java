@@ -20,4 +20,5 @@ public interface SearchBoardRepository {
                                            Pageable pageable);
 
     Page<Object[]> searchTourBoard(String[] type, String keyword, String category, String region, Pageable pageable);
+
 }

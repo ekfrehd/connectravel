@@ -93,17 +93,19 @@
                 </div>
 
                 <form th:action="@{/seller/accommodation/update}" th:method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="sellerEmail" th:value="${dto.sellerEmail}" />
+                    <input type="hidden" name="ano" th:value="${dto.ano}" />
                     <table class="table table-bordered">
                         <tr>
                             <th>숙박업소 명</th>
                             <td>
-                                <input type="text" class="form-control" name="name" th:value="${dto.name}" placeholder="숙박업소 명을 입력하세요.">
+                                <input type="text" class="form-control" name="accommodationName" th:value="${dto.accommodationName}" placeholder="숙박업소 명을 입력하세요.">
                             </td>
                         </tr>
                         <tr>
                             <th>숙박업소 종류</th>
                             <td>
-                                <select class="form-select" name="category" th:value="${dto.category}">
+                                <select class="form-select" name="accommodationType" th:value="${dto.accommodationType}">
                                     <option value="motel">모텔</option>
                                     <option value="hotel">호텔&리조트</option>
                                     <option value="pension">팬션</option>
@@ -115,8 +117,8 @@
                         <tr>
                             <th>사업주 명</th>
                             <td>
-                                <input type="text" class="form-control" name="adminname"
-                                       th:value="${dto.adminname}" placeholder="숙박업소를 운영하는 분의 성함을 입력하세요.">
+                                <input type="text" class="form-control" name="sellerName"
+                                       th:value="${dto.sellerName}" placeholder="숙박업소를 운영하는 분의 성함을 입력하세요.">
                             </td>
                         </tr>
                         <tr>

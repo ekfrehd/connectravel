@@ -1,7 +1,7 @@
 package com.connectravel.repository.search;
 
 import com.connectravel.constant.ReservationStatus;
-import com.connectravel.entity.*;
+import com.connectravel.domain.entity.*;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
@@ -28,7 +28,8 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         super(QnaBoard.class);
     }
 
-/*    // 검색 조건이 없는 게시판
+    /*
+    // 검색 조건이 없는 게시판
     @Override
     public QnaBoard search1() {
         log.info("search1.....");
@@ -43,7 +44,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
         return null;
     }
-*/
+    */
 
 
     @Override
@@ -317,4 +318,5 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
         return new PageImpl<>(result, pageable, count);
     }
+
 }

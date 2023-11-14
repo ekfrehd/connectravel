@@ -1,10 +1,10 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.ImgDTO;
-import com.connectravel.dto.PageRequestDTO;
-import com.connectravel.dto.PageResultDTO;
-import com.connectravel.dto.TourBoardReviewDTO;
-import com.connectravel.entity.TourBoardReview;
+import com.connectravel.domain.dto.ImgDTO;
+import com.connectravel.domain.dto.PageRequestDTO;
+import com.connectravel.domain.dto.PageResultDTO;
+import com.connectravel.domain.dto.TourBoardReviewDTO;
+import com.connectravel.domain.entity.TourBoardReview;
 
 import java.util.List;
 
@@ -21,6 +21,5 @@ public interface TourBoardReviewService {
     PageResultDTO<TourBoardReviewDTO, TourBoardReview> getPaginatedTourBoardReviews(Long trbno, PageRequestDTO pageRequestDTO); // 리스트 출력
 
     List<ImgDTO> listTourBoardReviewImages(Long tbrno);
-
 
 }

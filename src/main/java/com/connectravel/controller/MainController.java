@@ -1,9 +1,9 @@
 package com.connectravel.controller;
 
-import com.connectravel.dto.AccommodationDTO;
-import com.connectravel.dto.PageRequestDTO;
-import com.connectravel.dto.PageResultDTO;
-import com.connectravel.dto.TourBoardDTO;
+import com.connectravel.domain.dto.AccommodationDTO;
+import com.connectravel.domain.dto.PageRequestDTO;
+import com.connectravel.domain.dto.PageResultDTO;
+import com.connectravel.domain.dto.TourBoardDTO;
 import com.connectravel.service.AccommodationService;
 import com.connectravel.service.TourBoardService;
 import lombok.RequiredArgsConstructor;
@@ -16,18 +16,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 
 @Controller
-@Log4j2
 @RequiredArgsConstructor
+@Log4j2
 public class MainController {
 
     private final TourBoardService tourBoardService;
+
     private final AccommodationService accommodationService;
 
-
     @GetMapping(value = "/")
-    public String main(Model model){
+    public String main(Model model) {
+
         int page = 1;
         int pageSize=10;
+
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, pageSize);
         PageResultDTO<TourBoardDTO, Object[]> tourBoard = tourBoardService.getPaginatedTourBoardList(pageRequestDTO,
                 pageRequestDTO.getType(), pageRequestDTO.getKeyword(), pageRequestDTO.getCategory(), pageRequestDTO.getRegion());
@@ -39,10 +41,12 @@ public class MainController {
 
     @GetMapping(value = "search")
     public String search(@RequestParam("keyword") String keyword,
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model){
+                         @RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model) {
 
         int pageSize = 10;
+
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, pageSize);
+
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
 
@@ -58,4 +62,5 @@ public class MainController {
 
         return "search";
     }
+
 }
