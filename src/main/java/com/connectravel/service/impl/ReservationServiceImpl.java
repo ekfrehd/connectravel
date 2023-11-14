@@ -200,9 +200,6 @@ public class ReservationServiceImpl implements ReservationService {
             throw new EntityNotFoundException("회원을 찾을 수 없습니다.");
         }
 
-// Continue with the rest of your code using the 'member' object.
-
-
         return Reservation.builder()
                 .rvno(reservationDTO.getRvno()) // 예약 번호 추가
                 .message(reservationDTO.getMessage())
