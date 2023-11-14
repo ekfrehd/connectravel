@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="header">
+
+    <script type="text/javascript">
+
+        function goToLoginPage() {
+            localStorage.setItem('prevPage', window.location.href);
+            window.location.href = "/member/login";
+        }
+
+        // 헤더에서 토큰 정보를 가져와서 HTTP 요청 헤더에 추가하는 함수
+        function getHeaders() {
+            var headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            var token = localStorage.getItem('token');
+            if (token) {
+                headers.append('Authorization', 'Bearer ' + token);
+            }
+            return headers;
+        }
+
+        //인증이 필요한 요청을 보내는 함수
+        function authenticatedRequest() {
+            fetch('/', {
+                method: 'GET',
+                headers: getHeaders()
+            }).then(function (response) {
+                if (response.ok) {
+                    console.log("인증 성공");
+                } else {
+                    console.log("인증 실패");
+                }
+            });
+        }
+
+        authenticatedRequest(); // 인증이 필요한 요청함수 바로 보내기
+
+        // 로그아웃 시 토큰을 제거
+        function logout() {
+            localStorage.removeItem('token');
+            location.href = "/logout";
+        }
+
+    </script>
+
+    <header class="header-style-01">
+        <!-- Menu area Starts -->
+        <nav class="navbar navbar-area navbar-border navbar-padding navbar-expand-lg">
+            <div class="container custom-container-one nav-container">
+                <div class="logo-wrapper">
+                    <a href="/" class="logo">
+                        TODAYTONIGHT
+                    </a>
+                </div>
+                <div class="responsive-mobile-menu d-lg-none">
+                    <a href="javascript:void(0)" class="click-nav-right-icon">
+                        <i class="las la-ellipsis-v"></i>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#hotel_booking_menu">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="hotel_booking_menu">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a href="/">메인</a></li>
+                        <li class="nav-item"><a href="/product/list">숙소찾기</a></li>
+                        <li class="nav-item"><a href="/reservation/list">예약현황</a></li>
+                        <li class="nav-item"><a href="/tour/list">가이드</a></li>
+                        <li class="menu-item-has-children current-menu-item">
+                            <a href="javascript:void(0)">더보기</a>
+                            <ul class="sub-menu">
+                                <li><a href="/qna/list">1:1문의</a></li>
+                                <li><a href="/adminboard/notice">공지사항</a></li>
+                                <li><a href="/adminboard/event">이벤트</a></li>
+                                <li><a href="/adminboard/faq">자주묻는질문</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="search-click-icon btn btn-primary mar-30">
+                    <i class="las la-search"></i>
+                </div>
+                <div class="search-show">
+                    <div class="search-show-inner">
+                        <form action="/search" method="get">
+                            <div class="search-show-form">
+                                <input autocomplete="off" class="form--control" id="search_form_input" type="text"
+                                       name="keyword" placeholder="검색어를 입력하세요">
+                                <button type="submit"><i class="las la-search"></i></button>
+                                <span class="suggestions-icon-close"> <i class="las la-times"></i> </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="navbar-right-content show-nav-content">
+                    <div class="single-right-content">
+                        <div class="navbar-right-flex">
+                            <div class="navbar-right-btn">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item" sec:authorize="isAnonymous()">
+                                        <a class="nav-link" onclick="goToLoginPage()">로그인</a>
+                                    </li>
+                                    <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_SELLER')">
+                                        <a class="nav-link" href="/seller/list">숙소관리</a>
+                                    </li>
+                                    <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                                        <a class="nav-link" href="/admin/">회원관리</a>
+                                    </li>
+                                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                                        <a class="nav-link" href="/member/mypage">회원정보</a>
+                                    </li>
+                                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                                        <a class="nav-link" onclick="logout()">로그아웃</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Menu area end -->
+    </header>
+
+</div>
+
+</html>

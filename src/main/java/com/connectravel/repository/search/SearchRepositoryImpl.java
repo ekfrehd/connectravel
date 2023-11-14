@@ -1,16 +1,16 @@
 package com.connectravel.repository.search;
 
-import com.connectravel.entity.Accommodation;
+import com.connectravel.domain.entity.Accommodation;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
 @Repository
 public class SearchRepositoryImpl implements SearchRepository {
+
     @PersistenceContext
     private EntityManager em;
 

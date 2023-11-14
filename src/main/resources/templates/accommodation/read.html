@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragmentsAdmin/layout}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            margin: 0 10px;
+        }
+    </style>
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            var errorMessage = [[${errorMessage}]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+        });
+    </script>
+
+</th:block>
+
+<div layout:fragment="content">
+
+    <div class="card" style="max-width: 800px; margin: 0 auto; margin-top: 75px; padding: 30px;">
+        <div class="card-body">
+            <table>
+                <tr>
+                    <th>숙박업소 명</th>
+                    <td th:text="${dto.accommodationName}"></td>
+                </tr>
+                <tr>
+                    <th>사업주 명</th>
+                    <td th:text="${dto.sellerName}"></td>
+                </tr>
+                <tr>
+                    <th>숙박업소  종류</th>
+                    <td th:text="${dto.accommodationType}"></td>
+                </tr>
+                <tr>
+                    <th>숙박업소 전화번호</th>
+                    <td th:text="${dto.tel}"></td>
+                </tr>
+                <tr>
+                    <th>우편번호</th>
+                    <td th:text="${dto.postal}"></td>
+                </tr>
+                <tr>
+                    <th>숙박업소 주소</th>
+                    <td th:text="${dto.address}"></td>
+                </tr>
+                <tr>
+                    <th>숙박업소 소개</th>
+                    <td th:text="${dto.intro}"></td>
+                </tr>
+                <tr>
+                    <th>숙박업소 설명</th>
+                    <td th:utext="${dto.content}"></td>
+                </tr>
+                <tr>
+                    <th>숙박업소 평점</th>
+                    <td th:text="${dto.grade}"></td>
+                </tr>
+                <tr>
+                    <th>숙박업소 예약횟수</th>
+                    <td th:text="${dto.count}"></td>
+                </tr>
+            </table>
+            <div th:each="img : ${accommodationImgDTOS}">
+                 <span th:if="${img.accommodation.ano == dto.ano}">
+                    <br>
+                  <img th:src="'/imgtest/' + ${img.imgFile}" th:alt="${img.imgFile}"/>
+                    <br>
+              </span>
+            </div>
+            <div class="button-container">
+                <button type="button" class="btn btn-dark" onclick="location.href='/seller/accommodation/update'">숙박정보수정</button>
+                <button type="button" class="btn btn-dark" onclick="location.href='/seller/accommodation/delete'">삭제
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+</html>

@@ -1,8 +1,8 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.PageRequestDTO;
-import com.connectravel.dto.PageResultDTO;
-import com.connectravel.dto.QnaBoardDTO;
+import com.connectravel.domain.dto.PageRequestDTO;
+import com.connectravel.domain.dto.PageResultDTO;
+import com.connectravel.domain.dto.QnaBoardDTO;
 
 public interface QnaBoardService {
 
@@ -15,6 +15,5 @@ public interface QnaBoardService {
     void deleteQnaWithReplies(Long qbno);
 
     PageResultDTO<QnaBoardDTO, Object[]> getPaginatedQnas(PageRequestDTO pageRequestDTO);
-
 
 }

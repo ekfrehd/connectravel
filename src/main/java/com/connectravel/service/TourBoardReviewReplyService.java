@@ -1,6 +1,6 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.TourBoardReviewReplyDTO;
+import com.connectravel.domain.dto.TourBoardReviewReplyDTO;
 
 public interface TourBoardReviewReplyService {
 

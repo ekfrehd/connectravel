@@ -1,5 +1,6 @@
 package com.connectravel.entity;
 
+import com.connectravel.constant.Role;
 import com.connectravel.entity.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,15 +17,16 @@ public class MemberTest {
     @BeforeEach
     public void setUp() {
         member = new Member();
-        member.setName("John");
-        member.setEmail("john@example.com");
+        member.setName("admin");
+        member.setEmail("admin@example.com");
+        member.setRole(Role.ADMIN);
         member.setPassword("password");
     }
 
     @Test
     public void testMemberCreation() {
-        assertEquals("John", member.getName());
-        assertEquals("john@example.com", member.getEmail());
+        assertEquals("admin", member.getName());
+        assertEquals("admin@example.com", member.getEmail());
         log.debug("Member created: {}", member);
     }
 }
