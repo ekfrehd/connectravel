@@ -33,8 +33,8 @@
         <h5 class="card-text">내용</h5>
         <h5 class="card-text" th:utext="${roomDTO.content}"></h5>
 
-        <div th:each="img : ${imgs}">
-            <img th:src="@{${img.imgFile}}" />
+        <div th:each="imgFileName : ${roomDTO.imgFiles}">
+            <img th:src="@{'/imgtest/' + ${imgFileName}}" th:alt="'Room Image'" />
         </div>
 
     </div>
