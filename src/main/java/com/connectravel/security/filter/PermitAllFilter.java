@@ -14,16 +14,16 @@ import java.util.List;
 
 public class PermitAllFilter extends FilterSecurityInterceptor {
 
-    private static final String FILTER_APPLIED = "__spring_security_filterSecurityInterceptor_filterApplied";
+    private static final String FILTER_APPLIED = "__spring_security_filterSecurityInterceptor_filterApplied"; // 필터 적용 확인 키
 
-    private List<RequestMatcher> permitAllRequestMatcher = new ArrayList<>();
+    private List<RequestMatcher> permitAllRequestMatcher = new ArrayList<>(); // 추가 보안 검사 없이 허용되야 하는 패턴 목록
 
     public PermitAllFilter(String... permitAllPattern) {
         createPermitAllPattern(permitAllPattern);
     }
 
     @Override
-    protected InterceptorStatusToken beforeInvocation(Object object) {
+    protected InterceptorStatusToken beforeInvocation(Object object) { // permitAllRequestMatcher 패턴과 일치하는지 확인
         boolean permitAll = false;
         HttpServletRequest request = ((FilterInvocation) object).getRequest();
         for (RequestMatcher requestMatcher : permitAllRequestMatcher) {

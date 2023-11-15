@@ -25,9 +25,9 @@ public class QnaReplyController {
     private final QnaReplyService qnaReplyService; //의존성 자동주입
     private final MemberService memberService;
 
-    @GetMapping(value = "qnareply/{bno}")
-    public ResponseEntity<List<QnaReplyDTO>> getListByBoard(@PathVariable("bno") Long bno) {
-        return new ResponseEntity<>(qnaReplyService.getQnaRepliesByQbno(bno), HttpStatus.OK);
+    @GetMapping(value = "qnareply/{qbno}")
+    public ResponseEntity<List<QnaReplyDTO>> getListByBoard(@PathVariable("qbno") Long qbno) {
+        return new ResponseEntity<>(qnaReplyService.getQnaRepliesByQbno(qbno), HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -35,6 +35,9 @@ public class QnaReplyController {
 
         String username = principal.getName();
         MemberDTO memberDTO = memberService.getMember(member.getId());
+        qnaReplyDTO.setReplyer(memberDTO.getEmail());
+        log.info("확인용 : " + username);
+        log.info("확인용 : " + memberDTO);
 
        /* try {
             // Code to fetch Member entity using email
@@ -62,7 +65,7 @@ public class QnaReplyController {
 
     @PutMapping("{qrno}")
     public ResponseEntity<String> modify(@RequestBody QnaReplyDTO qnaReplyDTO) {
-        log.info(qnaReplyDTO);
+        log.info("수정실행 : " + qnaReplyDTO);
 
         qnaReplyService.updateQnaReply(qnaReplyDTO);
 

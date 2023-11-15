@@ -86,11 +86,8 @@ public class QnaBoardController {
 
 
     @GetMapping({"read", "modify"})
-    public void read(@AuthenticationPrincipal Member member, Principal principal, @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long qbno, Model model) {
+    public void read(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long qbno, Model model) {
         log.info("■■■■■■■■■■ QnA 게시글 조회 or 수정 출력");
-
-        String username = principal.getName();
-        MemberDTO memberDTO = memberService.getMember(member.getId());
 
         QnaBoardDTO qnaBoardDTO = qnaBoardService.getQnaByQbno(qbno);
 

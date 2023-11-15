@@ -55,7 +55,7 @@
                             <p class="card-text" style="margin-top: 20px;" th:utext="${dto.content}"></p>
                             <div th:each="img : ${adminBoardImgs}">
                                 <br/>
-                                <img th:alt="${img.imgfile}" th:src="'/imgtest/' + ${img.imgfile}"/>
+                                <img th:alt="${img.imgFile}" th:src="'/imgtest/' + ${img.imgFile}"/>
                                 <br/>
                             </div>
                             <p style="margin-top: 20px; text-align: right;">작성일 : [[${#temporals.format(dto.regDate,

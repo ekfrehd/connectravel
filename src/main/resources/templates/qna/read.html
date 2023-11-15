@@ -92,7 +92,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <input class="form-control" type="text" name="replyText"
+                                                <input class="form-control" type="text" name="modal_replyText"
                                                        placeholder="Reply Text...">
                                             </div>
                                             <div class="form-group">
@@ -149,7 +149,7 @@
 
                     $.each(arr, function (idx, qnaReply) {
                         var replyItem = $("<div>").addClass("list-group-item d-flex justify-content-between align-items-center").data("qrno", qnaReply.qrno);
-                        var replyText = $("<span>").addClass("replyText").text(qnaReply.text);
+                        var replyText = $("<span>").addClass("replyText").text(qnaReply.content);
                         var replyTextEnd = $("</span>")
                         var replyer = $("<span>").addClass("replyer").text(qnaReply.replyer);
                         var replyerEnd = $("</span>")
@@ -167,8 +167,8 @@
             $(".addReply").on("click", function (e) {
                 var qnaReply = {
                     qbno: qbno,
-                    text: $('input[name="replyText"]').val(),
-                    replyer: $('input[name="replyer"]').val()
+                    content: $('input[name="replyText"]').val(),
+                    replyer: $('input[name="replyer"]').val(),
                 }
                 console.log(qnaReply);
                 $.ajax({
@@ -198,7 +198,7 @@
 
                 var qnaReply = {
                     qbno: qbno,
-                    text: $('input[name="replyText"]').val(),
+                    content: $('input[name="replyText"]').val(),
                     replyer: $('input[name="replyer"]').val()
                 }
                 console.log(qnaReply);
@@ -258,7 +258,7 @@
                 var qnaReply = {
                     qrno: qrno,
                     qbno: qbno,
-                    text: $('input[name="replyText"]').val(),
+                    content: $('input[name="modal_replyText"]').val(),
                     replyer: $('input[name="replyer"]').val()
                 }
 

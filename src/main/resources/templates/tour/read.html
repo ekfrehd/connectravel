@@ -237,20 +237,20 @@
                                                         <div th:each="imgEntry : ${tourBoardReviewImgDTOsImgMap.entrySet()}"
                                                              th:if="${imgEntry.key == dto.tbrno}">
                                                             <div th:each="img, iterStat : ${imgEntry.value}"
-                                                                 th:if="${img != null and img.imgfile != null}">
+                                                                 th:if="${img != null and img.imgFile != null}">
                                                                 <div th:if="${iterStat.index == 0}">
                                                                     <div th:id="'gallery-' + ${dto.tbrno}">
-                                                                        <a th:href="|/imgtest/${img.imgfile}|">
+                                                                        <a th:href="|/imgtest/${img.imgFile}|">
                                                                             <img class="img-fluid"
                                                                                  style="width:150px; height: auto;"
-                                                                                 th:src="|/imgtest/${img.imgfile}|"/>
+                                                                                 th:src="|/imgtest/${img.imgFile}|"/>
                                                                         </a>
                                                                     </div>
                                                                 </div>
                                                                 <div th:if="${iterStat.index > 0}">
                                                                     <a href="#" style="display: none;"
                                                                        th:attr="data-gallery-id='gallery-' + ${dto.tbrno}"
-                                                                       th:href="|/imgtest/${img.imgfile}|"></a>
+                                                                       th:href="|/imgtest/${img.imgFile}|"></a>
                                                                 </div>
                                                             </div>
                                                         </div>
