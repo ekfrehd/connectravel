@@ -103,7 +103,7 @@ public class ReservationController {
         rvDTO.setMemberDTO(memberDTO);
 
         // 예약 서비스를 호출하여 예약 진행
-        ReservationDTO savedRvDTO = reservationService.bookRoom(rvDTO);
+        ReservationDTO savedRvDTO = reservationService.registerReservation(rvDTO);
 
         // 예약 번호와 성공 메시지를 리다이렉트 속성에 추가
         redirectAttributes.addFlashAttribute("rvno", savedRvDTO.getRvno());
@@ -126,29 +126,20 @@ public class ReservationController {
             return "redirect:/member/login";
         }
 
-        // MemberDTO로 변환
-        MemberDTO memberDTO = memberService.entityToDTO(member);
-
         List<ReservationDTO> reservations = reservationService.listUserRoomBookings(member.getUsername());
 
         List<AccommodationDTO> accommodationList = new ArrayList<>();
-        List<List<ImgDTO>> accommodationImgLists = new ArrayList<>();
         for (ReservationDTO reservation : reservations) {
             RoomDTO roomDTO = roomService.getRoom(reservation.getRoomDTO().getRno());
             AccommodationDTO accommodationDTO = accommodationService.findByAno(roomDTO.getAccommodationDTO().getAno());
             accommodationList.add(accommodationDTO);
-
-            List<ImgDTO> imgList = accommodationService.getImgList(accommodationDTO.getAno());
-            accommodationImgLists.add(imgList);
         }
 
         model.addAttribute("reservations", reservations);
         model.addAttribute("accommodationList", accommodationList);
-        model.addAttribute("accommodationImgLists", accommodationImgLists);
         model.addAttribute("today", LocalDate.now());
 
         return "reservation/list";
     }
 
 }
-
