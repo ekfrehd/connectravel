@@ -39,7 +39,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional
-    public ReservationDTO bookRoom(ReservationDTO reservationDTO) {
+    public ReservationDTO registerReservation(ReservationDTO reservationDTO) {
 
         // 예약하기 전에 원하는 날짜에 방이 이용 가능한지 확인합니다.
         if (!checkRoomAvailability(
@@ -189,8 +189,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .startDate(reservation.getStartDate())
                 .endDate(reservation.getEndDate())
                 .status(reservation.getStatus()) // 상태 변환
-                .roomDTO(roomDTO) // Room 엔티티를 DTO로 변환
-                .memberDTO(memberDTO) // Member 엔티티를 DTO로 변환
+                .roomDTO(roomDTO)
+                .memberDTO(memberDTO)
                 .build();
     }
 
@@ -212,8 +212,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .startDate(reservationDTO.getStartDate())
                 .endDate(reservationDTO.getEndDate())
                 .status(reservationDTO.getStatus()) // 상태 변환
-                .room(room) // 여기서 Room 엔티티를 설정합니다.
-                .member(member) // 여기서 Member 엔티티를 설정합니다.
+                .room(room)
+                .member(member)
                 .build();
     }
 
