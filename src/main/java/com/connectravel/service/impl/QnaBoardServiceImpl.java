@@ -94,7 +94,12 @@ public class QnaBoardServiceImpl implements QnaBoardService {
             throw new EntityNotFoundException("Member with email " + dto.getWriterEmail() + " not found");
         }
 
-        QnaBoard qnaBoard = QnaBoard.builder().qbno(dto.getQbno()).title(dto.getTitle()).content(dto.getContent()).member(member).build();
+        QnaBoard qnaBoard = QnaBoard.builder()
+                .qbno(dto.getQbno())
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .member(member)
+                .build();
 
         return qnaBoard;
     }

@@ -18,10 +18,16 @@ public interface MemberService {
 
   void deleteMember(Long idx);
 
-  Member changeSellerByEmail(String email);
-
   MemberDTO entityToDTO(Member member);
 
   Member dtoToEntity(MemberDTO memberDTO);
+
+  void vaildateDuplicateMember(Member member);
+
+  Member editMember(MemberDTO memberDTO);
+
+  Member changePassword(MemberDTO memberDTO);
+
+  Member changeSeller(MemberDTO memberDTO);
 
 }

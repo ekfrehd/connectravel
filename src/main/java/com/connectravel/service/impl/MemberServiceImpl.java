@@ -6,14 +6,14 @@ import com.connectravel.domain.entity.Role;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.RoleRepository;
 import com.connectravel.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,16 +21,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -90,28 +86,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    @Transactional
-    public Member changeSellerByEmail(String email) {
-        Member member = memberRepository.findByEmail(email);
-        if (member == null) {
-            throw new EntityNotFoundException("Member not found with email: " + email);
-        }
-
-        Role sellerRole = roleRepository.findByRoleName("ROLE_SELLER");
-        if (sellerRole == null) {
-            throw new EntityNotFoundException("Role ROLE_SELLER not found");
-        }
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(sellerRole);
-        member.setMemberRoles(roles);
-
-        memberRepository.save(member);
-
-        return member;
-    }
-
-    @Override
     public Member dtoToEntity(MemberDTO memberDTO) {
         if (memberDTO == null) {
             return null;
@@ -156,6 +130,47 @@ public class MemberServiceImpl implements MemberService {
                 .point(member.getPoint())
                 .memberRoles(roles)
                 .build();
+    }
+
+    @Override
+    public void vaildateDuplicateMember(Member member) {
+        Member findMember = memberRepository.findByEmail(member.getEmail());
+        if (findMember != null) {
+            throw new IllegalStateException("이미 가입된 회원입니다.");
+        }
+    }
+
+    public Member editMember(MemberDTO memberDTO) {
+
+        Member member = memberRepository.findByEmail(memberDTO.getEmail());
+        member.setEmail(memberDTO.getEmail());
+        member.setNickName(memberDTO.getNickName());
+        member.setTel(memberDTO.getTel());
+        memberRepository.save(member);
+
+        return member;
+    }
+
+    public Member changePassword(MemberDTO memberDTO) {
+
+        Member member = memberRepository.findByEmail(memberDTO.getEmail());
+        member.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+        memberRepository.save(member);
+
+        return member;
+    }
+
+    @Override
+    public Member changeSeller(MemberDTO memberDTO) {
+
+        Member member = memberRepository.findByEmail(memberDTO.getEmail());
+
+        member.setMemberRoles(Collections.singleton(roleRepository.findByRoleName("ROLE_SELLER")));
+        member.setUsername(memberDTO.getUsername());
+        member.setTel(memberDTO.getTel());
+        memberRepository.save(member);
+
+        return member;
     }
 
 

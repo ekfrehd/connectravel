@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -58,27 +58,27 @@
                             <div class="row justify-content-between">
                                 <div class="col-md-2">
                                     <a th:href="@{/qna/register}">
-                                        <button type="button" class="btn btn-primary">REGISTER</button>
+                                        <button class="btn btn-primary" type="button">REGISTER</button>
                                     </a>
                                 </div>
                                 <div class="col-md-10">
-                                    <form action="/qna/list" method="get" id="searchForm">
+                                    <form action="/qna/list" id="searchForm" method="get">
                                         <div class="input-group">
-                                            <input type="hidden" name="page" value="1">
+                                            <input name="page" type="hidden" value="1">
                                             <div class="input-group-prepend">
                                                 <select class="form-select" id="exampleSelect1" name="type">
                                                     <option th:selected="${pageRequestDTO.type == null}">-------
                                                     </option>
-                                                    <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목
+                                                    <option th:selected="${pageRequestDTO.type =='t'}" value="t">제목
                                                     </option>
-                                                    <option value="c" th:selected="${pageRequestDTO.type =='c'}">내용
+                                                    <option th:selected="${pageRequestDTO.type =='c'}" value="c">내용
                                                     </option>
-                                                    <option value="w" th:selected="${pageRequestDTO.type =='w'}">작성자
+                                                    <option th:selected="${pageRequestDTO.type =='w'}" value="w">작성자
                                                     </option>
-                                                    <option value="tc" th:selected="${pageRequestDTO.type =='tc'}">제목 +
+                                                    <option th:selected="${pageRequestDTO.type =='tc'}" value="tc">제목 +
                                                         내용
                                                     </option>
-                                                    <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}">제목
+                                                    <option th:selected="${pageRequestDTO.type =='tcw'}" value="tcw">제목
                                                         + 내용 + 작성자
                                                     </option>
                                                 </select>
@@ -99,17 +99,17 @@
                                 <table class="table table-hover">
                                     <thead>
                                     <tr class="table-primary">
-                                        <th scope="col" class="col-md-1">#</th>
-                                        <th scope="col" class="col-md-4">Title</th>
-                                        <th scope="col" class="col-md-4">Writer</th>
-                                        <th scope="col" class="col-md-3">Regdate</th>
+                                        <th class="col-md-1" scope="col">#</th>
+                                        <th class="col-md-4" scope="col">Title</th>
+                                        <th class="col-md-4" scope="col">Writer</th>
+                                        <th class="col-md-3" scope="col">Regdate</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="dto : ${result.dtoList}" class="table-light">
-                                        <td th:text="${dto.bno}"></td>
+                                    <tr class="table-light" th:each="dto : ${result.dtoList}">
+                                        <td th:text="${dto.qbno}"></td>
                                         <td>
-                                            <a class="text-dark" th:href="@{/qna/read(bno = ${dto.bno},
+                                            <a class="text-dark" th:href="@{/qna/read(qbno = ${dto.qbno},
                     page= ${result.page},
                     type=${pageRequestDTO.type} ,
                     keyword = ${pageRequestDTO.keyword})}" th:text="${dto.title}">[[${dto.title}]]</a>
@@ -139,9 +139,9 @@
                                     <th:block th:with="startPage=${result.page - 5}, endPage=${result.page + 5}">
 
                                         <!-- 시작 페이지부터 끝 페이지까지 페이지 목록 생성 -->
-                                        <li th:each="page: ${#numbers.sequence(1, result.totalPage)}"
-                                            th:if="${page >= startPage and page <= endPage}"
-                                            th:class="${result.page == page} ? 'page-item active' : 'page-item'">
+                                        <li th:class="${result.page == page} ? 'page-item active' : 'page-item'"
+                                            th:each="page: ${#numbers.sequence(1, result.totalPage)}"
+                                            th:if="${page >= startPage and page <= endPage}">
                                             <a class="page-link"
                                                th:href="@{/qna/list(page=${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">
                                                 [[${page}]]
