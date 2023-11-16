@@ -36,6 +36,7 @@
           </thead>
           <tbody>
           <tr th:each="dto, iterStat : ${list}">
+            <input hidden="hidden" id="check" />
             <td th:text="${iterStat.count}"></td>
             <td><a th:text="${dto.roomName}" th:href="@{/seller/read(rno=${dto.rno})}"></a></td>
             <td><h5 th:text="${dto.price}"></h5></td>

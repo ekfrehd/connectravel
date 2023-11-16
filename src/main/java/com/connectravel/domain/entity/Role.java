@@ -37,4 +37,14 @@ public class Role implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "memberRoles")
     private Set<Member> members = new HashSet<>();
 
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public static Role createRole(String roleName) {
+        Role role = new Role();
+        role.setRoleName(roleName);
+        return role;
+    }
+
 }
