@@ -24,6 +24,8 @@ public class PageRequestDTO {
 
     private String region; // 지역
 
+    private String address; // 주소
+
     public String[] getType() {
         if (type == null || type.isEmpty()) {
             return null;

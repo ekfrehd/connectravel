@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.tiny.cloud/1/3sfksqzu5vmtem6z88d0gi61nmmvqmyx39n9tokdq3jkwkkj/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script referrerpolicy="origin" src="https://cdn.tiny.cloud/1/3sfksqzu5vmtem6z88d0gi61nmmvqmyx39n9tokdq3jkwkkj/tinymce/6/tinymce.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@2/dist/tinymce-jquery.min.js"></script>
 </head>
 
@@ -53,21 +53,21 @@
                 <div class="dashboard-right-contents mt-4 mt-lg-0">
                     <div class="dashboard-reservation">
                         <div class="single-reservation bg-white base-padding">
-                            <form th:action="@{/adminboard/register}" th:method="post" enctype="multipart/form-data">
+                            <form enctype="multipart/form-data" th:action="@{/adminboard/register}" th:method="post">
                                 <table class="table table-bordered">
                                     <tr>
                                         <th>Title</th>
                                         <td>
-                                            <input type="text" class="form-control" name="title" placeholder="Enter Title">
+                                            <input class="form-control" name="title" placeholder="Enter Title" type="text">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Category</th>
                                         <td>
                                             <select name="category">
-                                                <option value="" selected="selected">카테고리</option>
+                                                <option selected="selected" value="">카테고리</option>
                                                 <option value="notice">공지사항</option>
-                                                <option value="faq">자주 묻는 질문</option>
+                                                <option value="faq">자주묻는질문</option>
                                                 <option value="event">이벤트</option>
                                             </select>
                                         </td>
@@ -83,21 +83,20 @@
                                         <td>
                                             <div class="col-12 col-md-6">
                                                 <label class="form-label">이미지</label>
-                                                <input class="form-control" type="file" name="images">
+                                                <input class="form-control" name="images" type="file">
                                             </div>
 
                                             <div class="col-12 col-md-6">
                                                 <label class="form-label">이미지</label>
-                                                <input class="form-control" type="file" name="images">
-                                            </div></textarea>
+                                                <input class="form-control" name="images" type="file">
+                                            </div>
+                                            </textarea>
                                         </td>
                                     </tr>
 
                                     <tr>
-                                        <td colspan="2" class="text-center">
-                                            <button type="submit" class="btn btn-dark">
-                                                Submit
-                                            </button>
+                                        <td class="text-center" colspan="2">
+                                            <button class="btn btn-dark" type="submit">Submit</button>
                                         </td>
                                     </tr>
                                 </table>

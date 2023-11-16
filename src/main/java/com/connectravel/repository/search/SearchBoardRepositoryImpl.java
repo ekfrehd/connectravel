@@ -173,7 +173,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public Page<Object[]> searchTourBoard(String[] type, String keyword, String category, String region, Pageable pageable) {
+    public Page<Object[]> searchTourBoard(String[] type, String keyword, String category, String region, Pageable pageable, String address) {
 
         QTourBoard qTourBoard = QTourBoard.tourBoard;
 

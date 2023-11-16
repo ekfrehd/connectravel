@@ -1,0 +1,88 @@
+/* Breadcrumb area */
+
+.breadcrumb-area {
+  position: relative;
+  background-color: var(--input-color);
+}
+
+.breadcrumb-padding {
+  padding: 30px 0;
+}
+
+.breadcrumb-border {
+  border-top: 2px solid rgba($steam-color, .4);
+}
+
+.breadcrumb-contents {
+  background: $white;
+  padding: 20px 20px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-radius: 8px;
+
+  &-title {
+    font-size: 24px;
+    line-height: 32px;
+    color: var(--heading-color);
+    flex: 1;
+    @include responsive(xs) {
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
+
+  &-list {
+    display: flex;
+    align-items: center;
+    margin-bottom: -5px;
+
+    &-item {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--paragraph-color);
+      position: relative;
+      @include transition(200ms);
+      @include responsive(allPhone) {
+        font-size: 15px;
+      }
+
+      &:hover {
+        color: var(--main-color-one);
+      }
+
+      &:not(:last-child) {
+        padding-right: 20px;
+        @include responsive(xxs) {
+          padding-right: 15px;
+        }
+        @include responsive(vxxs) {
+          padding-right: 10px;
+        }
+
+        &::after {
+          position: absolute;
+          right: -8px;
+          top: 50%;
+          @include transform(translateY(-50%));
+          @include lineAwesome("\f105");
+        }
+      }
+
+      &:not(:first-child) {
+        padding-left: 20px;
+        @include responsive(xxs) {
+          padding-left: 15px;
+        }
+        @include responsive(vxxs) {
+          padding-left: 10px;
+        }
+      }
+
+      &-link {
+      }
+    }
+  }
+}
