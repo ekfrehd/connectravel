@@ -34,6 +34,6 @@ public class TourBoardDTO {
 
     private LocalDateTime regDate, modDate;
 
-    private List<String> imgFiles;
+    private List<ImgDTO> imgFiles;
 
 }

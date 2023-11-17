@@ -21,16 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TourBoardServiceImpl implements TourBoardService {
 
     private final ModelMapper modelMapper;
-
     private final TourBoardRepository tourBoardRepository;
-
     private final TourBoardImgRepository tourBoardImgRepository;
 
     @Override
@@ -74,30 +71,23 @@ public class TourBoardServiceImpl implements TourBoardService {
     }
 
     @Override
-    public PageResultDTO<TourBoardDTO, Object[]> getPaginatedTourBoardList(PageRequestDTO pageRequestDTO, String[] type, String keyword, String category, String region) {
-
+    public PageResultDTO<TourBoardDTO, Object[]> getPaginatedTourBoardList(PageRequestDTO pageRequestDTO, String[] type, String keyword, String category, String region, String address) {
         Sort sort = Sort.by(Sort.Direction.DESC, "tbno");
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), sort);
 
         Page<Object[]> result;
         if (pageRequestDTO.getKeyword() != null) {
-            result = tourBoardRepository.searchTourBoard(type, pageRequestDTO.getKeyword(), category, region, pageable);
+            result = tourBoardRepository.searchTourBoard(type, pageRequestDTO.getKeyword(), category, region, pageable, address);
         }
         else {
-            result = tourBoardRepository.searchTourBoard(type, keyword, category, region, pageable);
+            result = tourBoardRepository.searchTourBoard(type, keyword, category, region, pageable, address);
         }
 
         Function<Object[], TourBoardDTO> fn = (objectArr -> {
             TourBoard tourBoard = (TourBoard) objectArr[0];
-            List<ImgDTO> imgDTOList = listTourBoardImages(tourBoard.getTbno()); // 이미지 DTO 리스트화
-
-            // ImgDTO의 리스트에서 이미지 파일 이름만 추출하여 리스트 생성
-            List<String> imgFileNames = imgDTOList.stream()
-                    .map(ImgDTO::getImgFile)
-                    .collect(Collectors.toList());
-
-            TourBoardDTO tourBoardDTO = entityToDto(tourBoard); // TourBoard를 TourBoardDTO로 변환
-            tourBoardDTO.setImgFiles(imgFileNames); // TourBoardDTO에 이미지 파일 이름 리스트 설정
+            List<ImgDTO> imgDTOList = listTourBoardImages(tourBoard.getTbno()); // 이미지 리스트화 게시물 번호별 -
+            TourBoardDTO tourBoardDTO = entityToDto(tourBoard); // 게시물 변화
+            tourBoardDTO.setImgFiles(imgDTOList); // 게시물 리스트화
 
             return tourBoardDTO;
         });
@@ -107,15 +97,12 @@ public class TourBoardServiceImpl implements TourBoardService {
 
     @Override
     public List<ImgDTO> listTourBoardImages(Long tbno) {
-
         List<ImgDTO> list = new ArrayList<>();
-
         TourBoard entity = tourBoardRepository.findById(tbno).get();
         tourBoardImgRepository.getImgByTourBoardTbno(entity).forEach(i -> {
             ImgDTO imgDTO = modelMapper.map(i, ImgDTO.class);
             list.add(imgDTO); // list화
         });
-
         return list;
     }
 

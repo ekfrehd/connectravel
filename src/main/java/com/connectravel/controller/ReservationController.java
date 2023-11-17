@@ -1,9 +1,6 @@
 package com.connectravel.controller;
 
-import com.connectravel.domain.dto.AccommodationDTO;
-import com.connectravel.domain.dto.MemberDTO;
-import com.connectravel.domain.dto.ReservationDTO;
-import com.connectravel.domain.dto.RoomDTO;
+import com.connectravel.domain.dto.*;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.ReservationRepository;
@@ -28,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -105,7 +103,7 @@ public class ReservationController {
         rvDTO.setMemberDTO(memberDTO);
 
         // 예약 서비스를 호출하여 예약 진행
-        ReservationDTO savedRvDTO = reservationService.bookRoom(rvDTO);
+        ReservationDTO savedRvDTO = reservationService.registerReservation(rvDTO);
 
         // 예약 번호와 성공 메시지를 리다이렉트 속성에 추가
         redirectAttributes.addFlashAttribute("rvno", savedRvDTO.getRvno());
@@ -128,20 +126,20 @@ public class ReservationController {
             return "redirect:/member/login";
         }
 
-        // MemberDTO로 변환
-        MemberDTO memberDTO = memberService.entityToDTO(member);
+        List<ReservationDTO> reservations = reservationService.listUserRoomBookings(member.getUsername());
 
-        // 사용자의 예약 목록을 조회
-        List<ReservationDTO> reservations = reservationService.listUserRoomBookings(memberDTO.getUsername());
+        List<AccommodationDTO> accommodationList = new ArrayList<>();
+        for (ReservationDTO reservation : reservations) {
+            RoomDTO roomDTO = roomService.getRoom(reservation.getRoomDTO().getRno());
+            AccommodationDTO accommodationDTO = accommodationService.findByAno(roomDTO.getAccommodationDTO().getAno());
+            accommodationList.add(accommodationDTO);
+        }
 
-        // 예약 목록을 모델에 추가
         model.addAttribute("reservations", reservations);
+        model.addAttribute("accommodationList", accommodationList);
         model.addAttribute("today", LocalDate.now());
 
         return "reservation/list";
     }
 
-
-
 }
-

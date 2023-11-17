@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{fragments/layout1}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorate="~{fragments/layout1}">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -59,9 +58,8 @@
                             <div class="row justify-content-between">
                                 <div class="col-md-4 col-lg-3">
                                     <a th:href="@{/adminboard/{category}/register(category=${category})}">
-                                        <button type="button" class="btn btn-primary"
-                                                sec:authorize="hasAnyAuthority('ROLE_ADMIN')">REGISTER
-                                        </button>
+                                        <button type="button" class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">REGISTER</button>
+                                        <!--<button class="btn btn-primary" type="button">REGISTER</button>-->
                                     </a>
                                 </div>
                             </div>
@@ -70,14 +68,14 @@
                                 <table class="table table-hover">
                                     <thead>
                                     <tr class="table-primary">
-                                        <th scope="col" class="col-md-9">Title</th>
-                                        <th scope="col" class="col-md-3">Regdate</th>
+                                        <th class="col-md-9" scope="col">Title</th>
+                                        <th class="col-md-3" scope="col">Regdate</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="dto : ${result.dtoList}" class="table-light">
+                                    <tr class="table-light" th:each="dto : ${result.dtoList}">
                                         <td>
-                                            <a class="text-dark" th:href="@{/adminboard/read(bno = ${dto.bno},
+                                            <a class="text-dark" th:href="@{/adminboard/read(abno = ${dto.abno},
                     page= ${result.page},
                     type=${pageRequestDTO.type} ,
                     keyword = ${pageRequestDTO.keyword})}" th:text="${dto.title}">[[${dto.title}]]</a>
@@ -102,9 +100,9 @@
                                     <th:block th:with="startPage=${result.page - 5}, endPage=${result.page + 5}">
 
                                         <!-- 시작 페이지부터 끝 페이지까지 페이지 목록 생성 -->
-                                        <li th:each="page: ${#numbers.sequence(1, result.totalPage)}"
-                                            th:if="${page >= startPage and page <= endPage}"
-                                            th:class="${result.page == page} ? 'page-item active' : 'page-item'">
+                                        <li th:class="${result.page == page} ? 'page-item active' : 'page-item'"
+                                            th:each="page: ${#numbers.sequence(1, result.totalPage)}"
+                                            th:if="${page >= startPage and page <= endPage}">
                                             <a class="page-link"
                                                th:href="@{/adminboard/{category}(category=${category}, page=${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">
                                                 [[${page}]]

@@ -93,12 +93,11 @@ public class RoomServiceImpl implements RoomService {
     public List<ImgDTO> getImgList(Long rno) {
         List<ImgDTO> imgDTOList = new ArrayList<>();
 
-        List<RoomImg> roomImgList = roomImgRepository.findByRoomRno(rno); // 방 ID를 기준으로 이미지 검색
+        List<RoomImg> roomImgList = roomImgRepository.findByRoomRno(rno);
         for (RoomImg roomImg : roomImgList) {
             ImgDTO imgDTO = new ImgDTO();
             imgDTO.setIno(roomImg.getIno());
-            imgDTO.setImgFile(roomImg.getImgFile());
-            // 필요한 경우 여기에 추가 필드 설정
+            imgDTO.setImgFile(roomImg.getImgFile()); // 직접 이미지 파일 경로를 설정
             imgDTOList.add(imgDTO);
         }
 
@@ -127,10 +126,14 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomDTO entityToDTO(Room room) {
+        // 이미지 정보를 가져오는 메서드 호출
+        List<ImgDTO> imgList = getImgList(room.getRno());
+        List<String> imgFiles = imgList.stream().map(ImgDTO::getImgFile).collect(Collectors.toList());
 
         AccommodationDTO accommodationDTO = new AccommodationDTO();
         accommodationDTO.setAno(room.getAccommodation().getAno());
 
+        // RoomDTO 생성 시 이미지 정보 추가
         return RoomDTO.builder()
                 .rno(room.getRno())
                 .roomName(room.getRoomName())
@@ -140,8 +143,10 @@ public class RoomServiceImpl implements RoomService {
                 .operating(room.isOperating())
                 .content(room.getContent())
                 .accommodationDTO(accommodationDTO)
+                .imgFiles(imgFiles) // 이미지 파일 목록 설정
                 .build();
     }
+
 
     @Override
     public Room dtoToEntity(RoomDTO roomDTO) {
@@ -156,14 +161,6 @@ public class RoomServiceImpl implements RoomService {
                 .operating(roomDTO.isOperating())
                 .content(roomDTO.getContent())
                 .accommodation(accommodation)
-                .build();
-    }
-
-    private ImgDTO imgToDTO(RoomImg roomImg) {
-        return ImgDTO.builder()
-                .ino(roomImg.getIno())
-                .imgFile(roomImg.getImgFile())
-                .room(entityToDTO(roomImg.getRoom())) // Room 정보를 RoomDTO로 변환하여 설정
                 .build();
     }
 

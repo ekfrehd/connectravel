@@ -19,6 +19,7 @@ public interface RoomService {
 
     List<RoomDTO> listRoomsByAccommodation(Long ano);
 
+
     List<ImgDTO> getImgList(Long rno);
 
     List<Object[]> findRoomsAndReservationsByAccommodationAndDate(Long accommodationId, LocalDate startDate, LocalDate endDate);

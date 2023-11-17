@@ -86,10 +86,10 @@
                                     <div class="hotel-view bg-white radius-20">
                                         <div class="hotel-view-flex" th:if="${not #lists.isEmpty(dto.imgFiles)}">
                                             <a th:href="@{/product/{ano}(ano=${dto.ano},startDate=${date.startDate},endDate=${date.endDate})}">
-                                                <img th:src="'/imgtest/' + ${dto.imgFiles[0]}"
-                                                     th:alt="${dto.accommodationName}"
-                                                     class="hotel-view-thumb hotel-view-list-thumb bg-image"
-                                                     width="300px" height="326px"/>
+                                                <img th:src="@{'/imgtest/' + ${dto.imgFiles[0]}}"
+                                                th:alt="${dto.accommodationName}"
+                                                class="hotel-view-thumb hotel-view-list-thumb bg-image"
+                                                width="300px" height="326px"/>
                                             </a>
                                             <div class="hotel-view-contents">
                                                 <div class="hotel-view-contents-header">

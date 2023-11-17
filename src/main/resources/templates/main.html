@@ -47,10 +47,15 @@
                          data-responsive='[{"breakpoint": 1400,"settings": {"slidesToShow": 4}},{"breakpoint": 1200,"settings": {"slidesToShow": 3}},{"breakpoint": 992,"settings": {"slidesToShow": 2}},{"breakpoint": 480, "settings": {"slidesToShow": 1} }]'>
                         <div class="attraction-item" th:each="dto : ${tourBoard.dtoList}">
                             <div class="single-attraction radius-20">
-                                <div class="single-attraction-thumb" th:if="${not #lists.isEmpty(dto.imgDTOList)}">
+                                <div class="single-attraction-thumb" th:if="${not #lists.isEmpty(dto.imgFiles)}">
                                     <a th:href="@{/tour/read(tbno=${dto.tbno})}">
-                                        <img th:src="'/imgtest/' + ${dto.imgDTOList[0].imgfile}"
+                                        <img th:src="'/imgtest/' + ${dto.imgFiles[0].imgFile}"
                                              th:alt="${dto.title}">
+                                    </a>
+                                </div>
+                                <div th:unless="${not #lists.isEmpty(dto.imgFiles)}" class="alternative-content">
+                                    <a th:href="@{/tour/read(tbno=${dto.tbno})}">
+                                        <div style="width: 170px; height: 170px;"></div>
                                     </a>
                                 </div>
                                 <div class="single-attraction-contents">

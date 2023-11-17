@@ -102,10 +102,11 @@
 
                         <!-- 이용전 탭 -->
                         <div id="prev" class="tab-content-item active">
-                            <th:block th:each="rv : ${reservations}">
+                            <th:block th:each="rv, iterStat : ${reservations}">
+                                <th:block th:with="acc=${accommodationList[iterStat.index]}">
                                 <th:block th:if="${rv.status == T(com.connectravel.constant.ReservationStatus).ACTIVE}">
                                     <div class="single-reservation bg-white base-padding show open mat-25">
-                                        <div class="row" th:if="${rv.startDate} > ${Today} and ${rv.state} == true">
+                                        <div class="row" th:if="${rv.startDate} > ${today}">
                                             <div class="single-reservation-expandIcon"><i
                                                     class="las la-angle-down"></i>
                                             </div>
@@ -121,16 +122,6 @@
                                                 <div class="single-reservation-item">
                                                     <div class="single-reservation-name">
                                                         <div class="row">
-                                                            <div class="col-md-4">
-                                                                <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
-                                                                <div th:each="img : ${accommodationImgDTOS}">
-                                                            <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
-                                                                     th:alt="${acc.accommodationName}"
-                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
-                                                             </span>
-                                                                </div>
-                                                            </div>
                                                             <div class="col-md-8">
                                                                 <div class="single-reservation-name">
                                                                     <h5 class="single-reservation-name-title">
@@ -139,6 +130,7 @@
                                                                         ([[${acc.postal}]]) [[${acc.address}]] </p>
                                                                 </div>
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -157,14 +149,14 @@
                                                         <div class="single-reservation-details-item">
                                                             <span class="single-reservation-details-subtitle"> 방이름 </span>
                                                             <h5 class="single-reservation-details-title">
-                                                                [[${rv.rno.roomName}]] </h5>
+                                                                [[${rv.roomDTO.roomName}]] </h5>
                                                         </div>
                                                         <div class="single-reservation-details-item">
                                                             <span class="single-reservation-details-subtitle"> 예약날짜 </span>
                                                             <h5 class="single-reservation-details-title">
-                                                                [[${#temporals.format(rv.regTime,
-                                                                'yyyy-MM-dd')}]] </h5>
+                                                                [[${#temporals.format(rv.regTime, 'yyyy-MM-dd')}]] </h5>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                                 <div class="single-reservation-item">
@@ -208,12 +200,14 @@
                                         </div>
                                     </div>
                                 </th:block>
+                                </th:block>
                             </th:block>
                         </div>
 
                         <!-- 이용완료 탭 -->
                         <div id="end" class="tab-content-item">
-                            <th:block th:each="rv : ${reservations}">
+                            <th:block th:each="rv, iterStat : ${reservations}">
+                                <th:block th:with="acc=${accommodationList[iterStat.index]}">
                                 <th:block th:if="${rv.status == T(com.connectravel.constant.ReservationStatus).COMPLETED}">
                                     <div class="single-reservation bg-white base-padding show open mat-25">
                                         <div class="row">
@@ -232,16 +226,6 @@
                                                 <div class="single-reservation-item">
                                                     <div class="single-reservation-name">
                                                         <div class="row">
-                                                            <div class="col-md-4">
-                                                                <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
-                                                                <div th:each="img : ${accommodationImgDTOS}">
-                                                            <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
-                                                                     th:alt="${acc.accommodationName}"
-                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
-                                                             </span>
-                                                                </div>
-                                                            </div>
                                                             <div class="col-md-8">
                                                                 <div class="single-reservation-name">
                                                                     <h5 class="single-reservation-name-title">
@@ -268,14 +252,14 @@
                                                         <div class="single-reservation-details-item">
                                                             <span class="single-reservation-details-subtitle"> 방이름 </span>
                                                             <h5 class="single-reservation-details-title">
-                                                                [[${rv.rno.roomName}]] </h5>
+                                                                [[${rv.roomDTO.roomName}]] </h5>
                                                         </div>
                                                         <div class="single-reservation-details-item">
                                                             <span class="single-reservation-details-subtitle"> 예약날짜 </span>
                                                             <h5 class="single-reservation-details-title">
-                                                                [[${#temporals.format(rv.regTime,
-                                                                'yyyy-MM-dd')}]] </h5>
+                                                                [[${#temporals.format(rv.regTime, 'yyyy-MM-dd')}]] </h5>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                                 <div class="single-reservation-item">
@@ -293,25 +277,20 @@
                                                             <h5 class="single-reservation-content-title"> 총 비용 </h5>
                                                             <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
                                                         </div>
-                                                        <div class="single-reservation-btn" th:if="${rv.existReview}==false">
-                                                            <form style="display: inline"
-                                                                  th:action="@{/review/register/{rvno}(rvno=${rv.rvno})}"
-                                                                  method="get">
-                                                                <button type="submit" class="btn btn-outline-primary">리뷰쓰기</button>
-                                                            </form>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </th:block>
+                                </th:block>
                             </th:block>
                         </div>
 
                         <!-- 취소됨 탭 -->
                         <div id="cancel" class="tab-content-item">
-                            <th:block th:each="rv : ${reservations}">
+                            <th:block th:each="rv, iterStat : ${reservations}">
+                                <th:block th:with="acc=${accommodationList[iterStat.index]}">
                                 <th:block th:if="${rv.status == T(com.connectravel.constant.ReservationStatus).CANCELLED}">
                                     <div class="single-reservation bg-white base-padding show open mat-25">
                                         <div class="row">
@@ -330,22 +309,13 @@
                                                 <div class="single-reservation-item">
                                                     <div class="single-reservation-name">
                                                         <div class="row">
-                                                            <div class="col-md-4">
-                                                                <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
-                                                                <div th:each="img : ${accommodationImgDTOS}">
-                                                            <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
-                                                                     th:alt="${acc.accommodationName}"
-                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
-                                                             </span>
-                                                                </div>
-                                                            </div>
                                                             <div class="col-md-8">
                                                                 <div class="single-reservation-name">
                                                                     <h5 class="single-reservation-name-title">
                                                                         [[${acc.accommodationName}]] </h5>
                                                                     <p class="single-reservation-name-para">
-                                                                        ([[${acc.postal}]]) [[${acc.address}]] </p>
+                                                                        ([[${acc.postal}]])
+                                                                        [[${acc.address}]] </p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -366,14 +336,14 @@
                                                         <div class="single-reservation-details-item">
                                                             <span class="single-reservation-details-subtitle"> 방이름 </span>
                                                             <h5 class="single-reservation-details-title">
-                                                                [[${rv.rno.roomName}]] </h5>
+                                                                [[${rv.roomDTO.roomName}]] </h5>
                                                         </div>
                                                         <div class="single-reservation-details-item">
                                                             <span class="single-reservation-details-subtitle"> 예약날짜 </span>
                                                             <h5 class="single-reservation-details-title">
-                                                                [[${#temporals.format(rv.regTime,
-                                                                'yyyy-MM-dd')}]] </h5>
+                                                                [[${#temporals.format(rv.regTime, 'yyyy-MM-dd')}]] </h5>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                                 <div class="single-reservation-item">
@@ -387,6 +357,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                </th:block>
                                 </th:block>
                             </th:block>
                         </div>

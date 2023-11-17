@@ -1,0 +1,64 @@
+/* Mouse Cursor Css */
+
+.mouse-move {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  visibility: hidden;
+}
+
+.mouse-inner {
+  margin-left: -3px;
+  margin-top: -3px;
+  width: 6px;
+  height: 6px;
+  z-index: 10000001;
+  background-color: var(--main-color-one);
+  -webkit-transition: width .3s ease-in-out, height .3s ease-in-out, margin .3s ease-in-out, opacity .3s ease-in-out;
+  transition: width .3s ease-in-out, height .3s ease-in-out, margin .3s ease-in-out, opacity .3s ease-in-out;
+
+  &.mouse-hover {
+    margin-left: -30px;
+    margin-top: -30px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--main-color-one);
+    opacity: .1;
+  }
+}
+
+.mouse-outer {
+  margin-left: -15px;
+  margin-top: -15px;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--main-color-one);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index: 10000000;
+  opacity: .5;
+  -webkit-transition: all .08s ease-out;
+  transition: all .08s ease-out;
+
+  &.mouse-hover {
+    opacity: 0
+  }
+}
+
+.mouse-cursor-two {
+  .mouse-inner {
+    background-color: var(--secondary-color);
+
+    &.mouse-hover {
+      background-color: var(--secondary-color);
+    }
+  }
+
+  .mouse-outer {
+    border-color: var(--secondary-color);
+  }
+}
