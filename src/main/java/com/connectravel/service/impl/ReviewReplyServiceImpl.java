@@ -28,8 +28,9 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
 
     @Override
     public Long createReviewReply(ReviewReplyDTO reviewReplyDTO) {
-
+        System.out.println("createReviewReply!!!!!!!!!!!!!!!!!!!!!!!!!"+reviewReplyDTO);
         ReviewReply reviewReply = dtoToEntity(reviewReplyDTO);
+        reviewBoardRepository.save(reviewReply.getReviewBoard());
         reviewReplyRepository.save(reviewReply);
 
         return reviewReply.getRrno();

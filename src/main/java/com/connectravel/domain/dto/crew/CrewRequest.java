@@ -1,6 +1,7 @@
 package com.connectravel.domain.dto.crew;
 
 import com.connectravel.domain.entity.Crew;
+import com.connectravel.domain.entity.Member;
 import com.connectravel.domain.entity.chat.ChatRoom;
 import lombok.*;
 
@@ -29,7 +30,7 @@ public class CrewRequest {
     }
 
 
-    public Crew toEntity(User user) {
+    public Crew toEntity(Member user) {
         return Crew.builder()
                 .strict(this.strict)
                 .title(this.title)
@@ -42,20 +43,20 @@ public class CrewRequest {
                 .user(user)
                 .imagePath(this.imagePath)
                 .chatRoom(ChatRoom.builder().name(title).user(user).build())
-                .sportEnum(of(chooseSport))
+//                .sportEnum(of(chooseSport))
                 .user(user)
                 .finish(0)
                 .build();
     }
 
-    public SportEnum of(String value){
-        for(SportEnum sportEnum : SportEnum.values()){
-            if(sportEnum.getValue().equals(value)){
-                return sportEnum;
-            }
-        }
-        return null;
-    }
+//    public SportEnum of(String value){
+//        for(SportEnum sportEnum : SportEnum.values()){
+//            if(sportEnum.getValue().equals(value)){
+//                return sportEnum;
+//            }
+//        }
+//        return null;
+//    }
 
 
 }

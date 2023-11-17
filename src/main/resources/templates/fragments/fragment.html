@@ -148,7 +148,7 @@
                 <button type="button" class="btn btn-warning" sec:authorize="!isAuthenticated()"
                         onclick="location.href='/view/v1/start'">Sign-up
                 </button>
-                <span class="userName" sec:authorize="isAuthenticated()" sec:authentication="name" id="myName" th:text="${#authentication.name}">사용자</span>
+                <span class="userName" sec:authorize="isAuthenticated()" sec:authentication="name" id="myName" th:text="${#authentication.principal.nickName}">사용자</span>
 
                 <span class="text-white" sec:authorize="isAuthenticated()" >님 환영합니다✨</span>
                 <a type="button" class="btn btn-warning" th:href="@{/view/v1/logout}" sec:authorize="isAuthenticated()">Logout</a>

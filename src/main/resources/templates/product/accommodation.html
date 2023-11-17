@@ -4,6 +4,11 @@
       layout:decorate="~{fragments/layout1}">
 
 <head>
+    <!-- 추가된 라이브러리 -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI/tZ1iU5A6vjM6EXA9js9HAdw1l9hBzh1P3cEE="
+            crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
           integrity="sha512-F2E+YYE1gkt0T5TVajAslgDfTEUQKtlu4ralVq78ViNxhKXQLrgQLLie8u1tVdG2vWnB3ute4hcdbiBtvJQh0g=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -11,6 +16,7 @@
             integrity="sha512-dSI4QnNeaXiNEjX2N8bkb16B7aMu/8SI5/rE6NIa3Hr/HnWUO+EAZpizN2JQJrXuvU7z0HTgpBVk/sfGd0oW+w=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
+
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -180,6 +186,66 @@
                                                     </div>
                                                 </div>
                                                 <p class="about-review-para mt-3" th:utext="${dto.content}"/></br>
+
+                                                <!-- 답글 작성 폼 -->
+                                                <div th:if="${#authentication != null}">
+                                                    <form th:attr="id='replyForm-' + ${dto.rbno}" class="replyForm" th:data-rbno="${dto.rbno}">
+                                                        <div class="form-group">
+                                                            <textarea name="content" class="form-control" placeholder="답글을 작성해주세요"></textarea>
+                                                        </div>
+                                                        <script th:inline="javascript">
+                                                            function createReviewReply(form) {
+                                                                const rbno = $(form).attr('th:data-rbno');
+                                                                const content = $('textarea[name="content"]', form).val();
+
+                                                                console.log(rbno);
+                                                                console.log(content);
+
+                                                                // 서버로 Ajax 요청 보내기
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: '/product/review-reply/create',
+                                                                    contentType: 'application/json',
+                                                                    data: JSON.stringify({rbno: rbno, content: content}),
+                                                                    success: function (data) {
+                                                                        // 서버 응답에 따른 처리
+                                                                        if (data.success) {
+                                                                            // 새로운 답글을 목록에 추가
+                                                                            const newReply = `<div class="border-bottom"><p>${content}</p></div>`;
+                                                                            $('#repliesContainer').append(newReply);
+                                                                            console.log(data);
+
+                                                                            // 성공 메시지 등의 처리
+                                                                            alert('답글이 성공적으로 작성되었습니다.');
+                                                                        } else {
+                                                                            // 실패한 경우에 대한 처리
+                                                                            alert('답글 작성에 실패했습니다.');
+                                                                        }
+                                                                    },
+                                                                    error: function (error) {
+                                                                        console.error('Error creating review reply:', error);
+                                                                    }
+                                                                });
+                                                            }
+                                                        </script>
+                                                        <button type="button" onclick="createReviewReply(this.form)">Create Reply</button>
+                                                    </form>
+                                                </div>
+
+
+
+
+                                                <!-- 답글 목록 -->
+                                                <div id="repliesContainer-${dto.rbno}" class="repliesContainer">
+                                                    <div th:each="reply : ${dto.replies}" class="border-bottom">
+                                                        <h5 th:value=" ${dto.rbno}"></h5>
+                                                        <div class="review-tab-contents-author mt-4">
+                                                            <h4 class="review-tab-contents-author-name" th:text="${reply.replyer}"></h4>
+                                                        </div>
+                                                        <p class="about-review-para mt-3" th:utext="${reply.content}"></p>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                             <div class="review-tab-contents-single"
                                                  th:each="dto : ${pageResultDTO.dtoList}"
@@ -348,7 +414,7 @@
             $('input[name="daterange"]').prop('disabled', true);
         }
     </script>
-    <script>
+    <script th:inline="javascript">
         document.addEventListener("DOMContentLoaded", function () {
             const galleryElements = document.querySelectorAll("[id^='gallery-']");
 
@@ -365,6 +431,26 @@
                 });
             });
         });
+
+        // 이미지 갤러리 초기화 함수
+        function initializeGallery() {
+            const galleryElements = document.querySelectorAll("[id^='gallery-']");
+
+            galleryElements.forEach(function (element) {
+                const galleryId = element.id;
+                const hiddenLinks = document.querySelectorAll(`[data-gallery-id='${galleryId}']`);
+
+                hiddenLinks.forEach(function (link) {
+                    element.appendChild(link.cloneNode(true));
+                });
+
+                lightGallery(element, {
+                    selector: "a"
+                });
+            });
+        }
+
+
     </script>
 
 </div>

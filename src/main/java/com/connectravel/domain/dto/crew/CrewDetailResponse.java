@@ -1,11 +1,10 @@
 package com.connectravel.domain.dto.crew;
 
+import com.connectravel.domain.entity.Crew;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import teamproject.pocoapoco.domain.entity.Crew;
-import teamproject.pocoapoco.enums.SportEnum;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +23,7 @@ public class CrewDetailResponse {
     private String nickName;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
-    private SportEnum sportEnum;
+//    private SportEnum sportEnum;
     private Long chatRoomId;
     private String imagePath;
     private String profileImagePath;
@@ -40,12 +39,12 @@ public class CrewDetailResponse {
                 .userId(crew.getUser().getId())
                 .nickName(crew.getUser().getNickName())
                 .userName(crew.getUser().getUsername())
-                .createdAt(crew.getCreatedAt())
-                .lastModifiedAt(crew.getLastModifiedAt())
+                .createdAt(crew.getRegTime())
+                .lastModifiedAt(crew.getModTime())
                 .imagePath(crew.getImagePath())
-                .profileImagePath(crew.getUser().getImagePath())
+//                .profileImagePath(crew.getUser().getImagePath())
                 .chatRoomId(crew.getChatRoom().getRoomId())
-                .sportEnum(crew.getSportEnum())
+//                .sportEnum(crew.getSportEnum())
                 .date(crew.getDatepick()+" "+crew.getTimepick())
                 .finish(crew.getFinish())
                 .build();

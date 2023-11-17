@@ -88,6 +88,8 @@ public class ProductController {
         PageResultDTO<ReviewBoardDTO, ReviewBoard> pageResultDTO = reviewBoardService.getPaginatedReviewsByAccommodation(ano, pageRequestDTO);
         if(pageResultDTO.getTotalPage() == 0) { pageResultDTO.setTotalPage(1); } // 글이 하나도 없을 때 0으로 인식하므로
 
+        System.out.println(pageResultDTO);
+
         Map<Long, List<ImgDTO>> reviewBoardImgMap = new HashMap<>();
         for (ReviewBoardDTO reviewBoardDTO : pageResultDTO.getDtoList()) {
             List<ImgDTO> reviewBoardImgDTOS = reviewBoardService.getImgList(reviewBoardDTO.getRbno());
