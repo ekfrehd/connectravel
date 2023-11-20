@@ -1,6 +1,5 @@
-package com.connectravel.domain.dto.crew;
+package com.connectravel.domain.dto;
 
-import com.connectravel.domain.entity.Accommodation;
 import com.connectravel.domain.entity.Crew;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.domain.entity.chat.ChatRoom;
@@ -11,9 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class CrewRequest {
-
-
+public class CrewRequestDTO {
     private Long id;
     private String strict;
     private String title;
@@ -23,9 +20,8 @@ public class CrewRequest {
     private String timepick;
     private String chooseSport;
     private String imagePath;
-    private Long accommodationAno;
 
-    public CrewRequest(String strict, String title, String content, Integer crewLimit){
+    public CrewRequestDTO(String strict, String title, String content, Integer crewLimit){
         this.strict = strict;
         this.title = title;
         this.content = content;
@@ -34,22 +30,20 @@ public class CrewRequest {
     }
 
 
-
-
-    public Crew toEntity(Member user, Accommodation accommodation) {
-
-
+    public Crew toEntity(Member user) {
         return Crew.builder()
                 .strict(this.strict)
                 .title(this.title)
                 .content(this.content)
                 .crewLimit(this.crewLimit)
+
                 .datepick(this.datepick)
                 .timepick(this.timepick)
-                .accommodation(accommodation)
+
                 .user(user)
                 .imagePath(this.imagePath)
                 .chatRoom(ChatRoom.builder().name(title).user(user).build())
+//                .sportEnum(of(chooseSport))
                 .user(user)
                 .finish(0)
                 .build();

@@ -100,6 +100,17 @@
     <div class="row">
         <div class="col">
             <h4 class="mb-3 text-center">운동메 모집 양식</h4>
+            <!-- 숙소 선택 드롭다운 목록 -->
+            <div class="col-12">
+                <label for="accommodation" class="form-label text-center">숙소 선택</label>
+                <select class="form-select" id="accommodation" name="accommodationAno">
+                    <option value="" selected disabled>숙소를 선택하세요</option>
+                    <!-- 숙소 목록을 Thymeleaf로 루프하며 옵션을 생성 -->
+                    <th:block th:each="accommodation : ${accommodations}">
+                        <option th:value="${accommodation.ano}" th:text="${accommodation.accommodationName}"></option>
+                    </th:block>
+                </select>
+            </div>
 
             <div class="row g-3">
                 <div>

@@ -1,6 +1,5 @@
 package com.connectravel.domain.dto;
 
-import com.nimbusds.oauth2.sdk.ErrorResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

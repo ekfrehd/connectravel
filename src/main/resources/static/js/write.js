@@ -47,7 +47,8 @@ async function crewMake() {
             datepick: document.getElementById("datepicker").value,
             timepick: document.getElementById("timepicker").value,
             imagePath: document.getElementById("imagePath").value,
-            chooseSport: choose
+            chooseSport: choose,
+            accommodationAno: document.getElementById("accommodation").value
         })
 
     })

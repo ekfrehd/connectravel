@@ -3,19 +3,17 @@ package com.connectravel.service;
 
 import com.connectravel.domain.dto.crew.CrewRequest;
 import com.connectravel.domain.dto.crew.CrewResponse;
+import com.connectravel.domain.entity.Accommodation;
 import com.connectravel.domain.entity.Crew;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.exception.AppException;
 import com.connectravel.exception.ErrorCode;
-import com.connectravel.repository.CrewRepository;
-import com.connectravel.repository.MemberRepository;
-import com.connectravel.repository.ParticipationRepository;
+import com.connectravel.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
 
 
 @Service
@@ -27,6 +25,8 @@ public class CrewService {
     private final CrewRepository crewRepository;
     private final MemberRepository userRepository;
     private final ParticipationRepository participationRepository;
+    private final ReservationRepository reservationRepository;
+    private final AccommodationRepository accommodationRepository;
 //    private final AlarmRepository alarmRepository;
 
 
@@ -38,7 +38,10 @@ public class CrewService {
 
         Member user = findByUserName(userName);
 
-        Crew crew = crewRepository.save(crewRequest.toEntity(user));
+
+
+        Accommodation accommodation = accommodationRepository.findByAno(crewRequest.getAccommodationAno());
+        Crew crew = crewRepository.save(crewRequest.toEntity(user,accommodation));
 
         return new CrewResponse("Crew 등록 완료", crew.getId());
     }

@@ -21,6 +21,10 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "잘못된 토큰입니다."),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
     /**
+     *  예약 로직 예외
+     */
+    RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약내역이 존재하지 않습니다."),
+    /**
      *  모임관련 로직 예외
      */
     CREW_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 모임이 없습니다."),
