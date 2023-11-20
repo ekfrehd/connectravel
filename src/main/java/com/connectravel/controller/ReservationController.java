@@ -1,18 +1,16 @@
 package com.connectravel.controller;
 
-import com.connectravel.domain.dto.*;
+import com.connectravel.domain.dto.AccommodationDTO;
+import com.connectravel.domain.dto.MemberDTO;
+import com.connectravel.domain.dto.ReservationDTO;
+import com.connectravel.domain.dto.RoomDTO;
 import com.connectravel.domain.entity.Member;
-import com.connectravel.repository.MemberRepository;
-import com.connectravel.repository.ReservationRepository;
-import com.connectravel.repository.ReviewBoardRepository;
-import com.connectravel.repository.RoomRepository;
 import com.connectravel.service.AccommodationService;
 import com.connectravel.service.MemberService;
 import com.connectravel.service.ReservationService;
 import com.connectravel.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -35,16 +33,10 @@ import java.util.List;
 @Log4j2
 @EnableJpaAuditing
 public class ReservationController {
-    private final ReservationRepository reservationRepository;
-    private final RoomRepository roomRepository;
-    private final ReviewBoardRepository reviewBoardRepository;
-    private final MemberRepository memberRepository;
     private final AccommodationService accommodationService;
     private final RoomService roomService;
     private final MemberService memberService;
     private final ReservationService reservationService;
-
-    ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping("register")
     public String register(@RequestParam("rno") Long rno,
@@ -86,6 +78,7 @@ public class ReservationController {
 
     @PostMapping("register")
     public String register(ReservationDTO rvDTO, @RequestParam("rno") Long rno,
+                           @RequestParam("price") int price,
                            @AuthenticationPrincipal Member member,
                            RedirectAttributes redirectAttributes) {
 
@@ -100,6 +93,7 @@ public class ReservationController {
         MemberDTO memberDTO = memberService.entityToDTO(member);
         rvDTO.setRoomDTO(roomDTO);
         rvDTO.setMemberDTO(memberDTO);
+        rvDTO.setMoney(price);
 
         // 예약 서비스를 호출하여 예약 진행
         ReservationDTO savedRvDTO = reservationService.registerReservation(rvDTO);

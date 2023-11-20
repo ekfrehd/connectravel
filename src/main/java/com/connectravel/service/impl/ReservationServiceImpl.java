@@ -51,8 +51,7 @@ public class ReservationServiceImpl implements ReservationService {
         if (!checkRoomAvailability(
                 reservationDTO.getRoomDTO().getRno(),
                 reservationDTO.getStartDate(),
-                reservationDTO.getEndDate())) {
-
+                reservationDTO.getEndDate())){
             throw new EntityNotAvailableException("선택한 날짜에 방이 이용 불가능합니다.");
         }
 
