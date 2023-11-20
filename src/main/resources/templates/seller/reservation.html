@@ -33,42 +33,57 @@
 
 <body>
 <div layout:fragment="content">
-    <main>
-        <div class="container-fluid px-4">
-            <h1 class="mt-4">예약자 목록</h1>
-            <ol class="breadcrumb mb-4">
-                <div class="row mat-25">
-                    <table class="table mb-5">
-                        <thead>
-                        <tr>
-                            <th scope="col">예약상태</th>
-                            <th scope="col">예약번호</th>
-                            <th scope="col">이름</th>
-                            <th scope="col">전화번호</th>
-                            <th scope="col">예약날짜</th>
-                            <th scope="col">체크인</th>
-                            <th scope="col">체크아웃</th>
-                            <th scope="col">요청사항</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="reservation : ${list}" th:class="${reservation.status.name()}">
-                            <td th:text="${reservation.status.name()}"></td>
-                            <td th:text="${reservation.rvno}"></td>
-                            <td th:text="${reservation.memberDTO.username}"></td>
-                            <td th:text="${reservation.memberDTO.tel}"></td>
-                            <td th:text="${#temporals.format(reservation.regTime, 'yyyy/MM/dd')}"></td>
-                            <td th:text="${#temporals.format(reservation.startDate, 'yyyy/MM/dd')}"></td>
-                            <td th:text="${#temporals.format(reservation.endDate, 'yyyy/MM/dd')}"></td>
-                            <td th:text="${reservation.message}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </ol>
-        </div>
-    </main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">예약자 목록</h1>
+        <ol class="breadcrumb mb-4">
+            <div class="row mat-25">
+                <table class="table mb-5">
+                    <thead>
+                    <tr>
+                        <th scope="col">예약상태</th>
+                        <th scope="col">예약번호</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">전화번호</th>
+                        <th scope="col">예약날짜</th>
+                        <th scope="col">체크인</th>
+                        <th scope="col">체크아웃</th>
+                        <th scope="col">요청사항</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="reservation : ${list}" th:class="${reservation.status.name()}">
+                        <td th:text="${reservation.status.name()}"></td>
+                        <td th:text="${reservation.rvno}"></td>
+                        <td th:text="${reservation.memberDTO.username}"></td>
+                        <td th:text="${reservation.memberDTO.tel}"></td>
+                        <td th:text="${#temporals.format(reservation.regTime, 'yyyy/MM/dd')}"></td>
+                        <td th:text="${#temporals.format(reservation.startDate, 'yyyy/MM/dd')}"></td>
+                        <td th:text="${#temporals.format(reservation.endDate, 'yyyy/MM/dd')}"></td>
+                        <td th:text="${reservation.message}"></td>
+                        <td>
+                            <div th:if="${reservation.status.name() == 'CANCELLATION_REQUESTED'}">
+                                <button type="button" th:onclick="'confirmCancellation(' + ${reservation.rvno} + ');'">취소 승인</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ol>
+    </div>
+
+    <script>
+        function confirmCancellation(rvno) {
+            console.log("confirmCancellation 호출됨, rvno: " + rvno); // 로그 찍기
+            if (confirm("이 예약을 취소하시겠습니까?")) {
+                // 서버에 취소 승인 요청을 보냄
+                console.log("취소 승인 요청, rvno: " + rvno); // 로그 찍기
+                window.location.href = '/seller/cancellation/approval/' + rvno;
+            }
+        }
+    </script>
 </div>
+
 </body>
 
 </html>

@@ -115,6 +115,14 @@ public class SellerController {
         model.addAttribute("list",list);
     }
 
+    @GetMapping("/cancellation/approval/{rvno}")
+    public String approveCancellation(@PathVariable Long rvno) {
+        // 예약 상태를 CANCELLED로 업데이트하는 로직
+        reservationService.approveCancellation(rvno);
+        return "redirect:/seller/reservation";
+    }
+
+
    /*
     @GetMapping("sales")
     public void sales(ReservationDTO datedto, Authentication authentication, Model model){
