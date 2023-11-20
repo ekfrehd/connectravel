@@ -46,6 +46,10 @@ public class Crew extends BaseEntity{
     @JoinColumn(name = "user_id")
     private Member user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accommodation_ano")
+    private Accommodation accommodation;
+
 
     //참여중인사람 조회
     @OneToMany(mappedBy = "crew")

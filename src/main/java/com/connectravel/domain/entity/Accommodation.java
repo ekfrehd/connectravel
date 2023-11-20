@@ -60,6 +60,11 @@ public class Accommodation {
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Room> rooms = new ArrayList<>();
 
+
+    @Builder.Default
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Crew> crews = new ArrayList<>();
+
     /* 도메인 로직 - 이미지 */
     public void addImage(AccommodationImg img) {
         images.add(img);

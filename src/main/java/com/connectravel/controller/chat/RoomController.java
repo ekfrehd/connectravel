@@ -2,6 +2,7 @@ package com.connectravel.controller.chat;
 
 import com.connectravel.domain.dto.chat.ChatRoomDTO;
 import com.connectravel.domain.entity.Crew;
+import com.connectravel.domain.entity.Member;
 import com.connectravel.domain.entity.chat.ChatRoom;
 import com.connectravel.exception.AppException;
 import com.connectravel.exception.ErrorCode;
@@ -13,7 +14,7 @@ import com.connectravel.service.ChatRoomService;
 import com.connectravel.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,9 +56,10 @@ public class RoomController {
 
     //채팅방 목록 조회
     @GetMapping(value = "/rooms")
-    public String rooms(Model model, Authentication authentication){
+    public String rooms(Model model, @AuthenticationPrincipal Member member){
+        System.out.println("Au.name: " +member.getUsername());
         log.info("# All Chat Rooms");
-        model.addAttribute("list",chatRoomService.findByParticipation(authentication.getName()));
+        model.addAttribute("list",chatRoomService.findByParticipation(member.getUsername()));
         return "chat/rooms";
     }
 
@@ -69,10 +71,32 @@ public class RoomController {
     }
 
     //채팅방 개설
+//    @PostMapping(value = "/room")
+//    public String create(@RequestParam ChatRoomDTO chatRoomDTO, RedirectAttributes rttr, @AuthenticationPrincipal Member member){
+//        log.info("# Create Chat Room , name: " + chatRoomDTO.getName());
+//        rttr.addFlashAttribute("roomName", chatRoomService.createChatRoomDTO(chatRoomDTO, member.getUsername()));
+//        return "redirect:/view/v1/rooms";
+//    }
+
     @PostMapping(value = "/room")
-    public String create(@RequestParam ChatRoomDTO chatRoomDTO, RedirectAttributes rttr, Authentication authentication){
-        log.info("# Create Chat Room , name: " + chatRoomDTO.getName());
-        rttr.addFlashAttribute("roomName", chatRoomService.createChatRoomDTO(chatRoomDTO, authentication.getName()));
+    public String create(@RequestParam String name, RedirectAttributes rttr, @AuthenticationPrincipal Member member){
+        if (name == null || name.isEmpty()) {
+            // 'name' 매개변수가 누락되거나 비어있는 경우 처리
+            // 예를 들어 오류 페이지로 리다이렉트하거나 오류 메시지를 반환할 수 있습니다.
+            // 예:
+            rttr.addFlashAttribute("error", "유효한 방 이름을 입력하세요.");
+            return "redirect:/view/v1/rooms";
+        }
+
+        ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
+        chatRoomDTO.setName(name);
+        Crew crew = new Crew();
+        crew = crewRepository.findByUser(member);
+        chatRoomDTO.setCrewId(crew.getId());
+
+
+        log.info("# 채팅 방 생성, 이름: " + name);
+        rttr.addFlashAttribute("roomName", chatRoomService.createChatRoomDTO(chatRoomDTO, member.getUsername()));
         return "redirect:/view/v1/rooms";
     }
 

@@ -1,62 +1,52 @@
-//package com.connectravel.service;
-//
-//
-//import com.connectravel.domain.dto.crew.CrewDetailResponse;
-//import com.connectravel.domain.dto.crew.CrewRequest;
-//import com.connectravel.domain.dto.crew.CrewResponse;
-//import com.connectravel.domain.entity.Crew;
-//import com.connectravel.domain.entity.Participation;
-//import com.connectravel.exception.AppException;
-//import com.connectravel.exception.ErrorCode;
-//import com.connectravel.repository.CrewRepository;
-//import com.connectravel.repository.MemberRepository;
-//import com.connectravel.repository.ParticipationRepository;
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.Pageable;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.stereotype.Service;
-//import org.springframework.util.CollectionUtils;
-//import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-//
-//import javax.transaction.Transactional;
-//import java.time.LocalDateTime;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Optional;
-//
-//
-//
-//@Service
-//@RequiredArgsConstructor
-//@Transactional
-//@Slf4j
-//public class CrewService {
-//
-//    private final CrewRepository crewRepository;
-//    private final MemberRepository userRepository;
-//    private final ParticipationRepository participationRepository;
+package com.connectravel.service;
+
+
+import com.connectravel.domain.dto.crew.CrewRequest;
+import com.connectravel.domain.dto.crew.CrewResponse;
+import com.connectravel.domain.entity.Crew;
+import com.connectravel.domain.entity.Member;
+import com.connectravel.exception.AppException;
+import com.connectravel.exception.ErrorCode;
+import com.connectravel.repository.CrewRepository;
+import com.connectravel.repository.MemberRepository;
+import com.connectravel.repository.ParticipationRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+
+
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
+public class CrewService {
+
+    private final CrewRepository crewRepository;
+    private final MemberRepository userRepository;
+    private final ParticipationRepository participationRepository;
 //    private final AlarmRepository alarmRepository;
-//
-//
-//    // 크루 게시글 등록
-//    public CrewResponse addCrew(CrewRequest crewRequest, String userName) {
-//
-//        log.info("imagePath: {} ", crewRequest.getImagePath());
-//        log.info("datePick: {}", crewRequest.getDatepick());
-//
-//        User user = findByUserName(userName);
-//
-//        Crew crew = crewRepository.save(crewRequest.toEntity(user));
-//
-//        return new CrewResponse("Crew 등록 완료", crew.getId());
-//    }
+
+
+    // 크루 게시글 등록
+    public CrewResponse addCrew(CrewRequest crewRequest, String userName) {
+
+        log.info("imagePath: {} ", crewRequest.getImagePath());
+        log.info("datePick: {}", crewRequest.getDatepick());
+
+        Member user = findByUserName(userName);
+
+        Crew crew = crewRepository.save(crewRequest.toEntity(user));
+
+        return new CrewResponse("Crew 등록 완료", crew.getId());
+    }
 //
 //    // 크루 게시글 수정
 //    public CrewResponse modifyCrew(Long crewId, CrewRequest crewRequest, String userName) {
 //
-//        User user = findByUserName(userName);
+//        Member user = findByUserName(userName);
 //        Crew crew = findByCrewId(crewId);
 //        findByUserAndCrewContaining(user, crew);
 //
@@ -70,7 +60,7 @@
 //    @Transactional
 //    public CrewResponse deleteCrew(Long crewId, String userName) {
 //
-//        User user = findByUserName(userName);
+//        Member user = findByUserName(userName);
 //        Crew crew = findByCrewId(crewId);
 //        findByUserAndCrewContaining(user, crew);
 //
@@ -82,7 +72,7 @@
 //
 //    @Transactional
 //    public CrewResponse finishCrew(Long crewId, String userName) {
-//        User user = findByUserName(userName);
+//        Member user = findByUserName(userName);
 //        Crew crew = findByCrewId(crewId);
 //        findByUserAndCrewContaining(user, crew);
 //
@@ -115,7 +105,7 @@
 //    // 크루 게시물 상세 조회
 //    public CrewDetailResponse detailCrew(Long crewId) {
 //
-////        User user = findByUserName(userName);
+////        Member user = findByUserName(userName);
 //        Crew crew = findByCrewId(crewId);
 //
 //        return CrewDetailResponse.of(crew);
@@ -193,11 +183,11 @@
 //        return crews.map(CrewDetailResponse::of);
 //    }
 //
-//    // User 존재 확인
-//    public User findByUserName(String userName) {
-//        return userRepository.findByUserName(userName)
-//                .orElseThrow(() -> new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage()));
-//    }
+    // User 존재 확인
+    public Member findByUserName(String userName) {
+        return userRepository.findByUsername(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage()));
+    }
 //
 //    // 크루 게시글 존재 확인
 //    public Crew findByCrewId(Long crewId) {
@@ -207,7 +197,7 @@
 //
 //    // 해당 게시글 작성자 확인
 //    @Transactional
-//    public void findByUserAndCrewContaining(User user, Crew crew) {
+//    public void findByUserAndCrewContaining(Member user, Crew crew) {
 //
 //        if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
 //            if (!user.getCrews().contains(crew)) {
@@ -226,7 +216,7 @@
 //
 //        if (authentication != null && sportsListIsEmpty) {
 //
-//            User user = findByUserName(authentication.getName());
+//            Member user = findByUserName(authentication.getName());
 //
 //            if (user.getSport().getSport1() != null) {
 //                userSportsList.add(String.valueOf(user.getSport().getSport1()));
@@ -257,7 +247,7 @@
 //
 //    @Transactional
 //    public void readAlarms(Long crewId, String username) {
-//        User user = userRepository.findByUserName(username).orElseThrow(() -> new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage()));
+//        Member user = userRepository.findByUserName(username).orElseThrow(() -> new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage()));
 //        List<Alarm> alarms = user.getAlarms();
 //        for (Alarm alarm : alarms) {
 //            boolean readOrNot = alarm.getReadOrNot();
@@ -270,7 +260,7 @@
 //
 //    @Transactional
 //    public void readAlarmsReview(Long reviewId, String username) {
-//        User user = userRepository.findByUserName(username).orElseThrow(() -> new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage()));
+//        Member user = userRepository.findByUserName(username).orElseThrow(() -> new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage()));
 //        List<Alarm> alarms = user.getAlarms();
 //        for (Alarm alarm : alarms) {
 //            boolean readOrNot = alarm.getReadOrNot();
@@ -284,7 +274,7 @@
 //
 //    // 내가 참여한 crew list
 //    public Page<CrewDetailResponse> findAllCrew(Integer status, String userName, Pageable pageable) {
-//        User user = userRepository.findByUserName(userName).orElse(null);
+//        Member user = userRepository.findByUserName(userName).orElse(null);
 //        List<Participation> participations = participationRepository.findByStatusAndUser(status, user);
 //        Page<Crew> crewList = crewRepository.findByDeletedAtIsNullAndParticipationsIn(participations, pageable);
 //        return crewList.map(CrewDetailResponse::of);
@@ -292,7 +282,7 @@
 //
 //    // 내가 참여한 crew list
 //    public long getCrewByUserAndStatus(Integer status, String userName) {
-//        User user = userRepository.findByUserName(userName).orElse(null);
+//        Member user = userRepository.findByUserName(userName).orElse(null);
 //        List<Participation> participations = participationRepository.findByStatusAndUser(status, user);
 //        return crewRepository.countByDeletedAtNullAndParticipationsIn(participations);
 //    }
@@ -301,11 +291,11 @@
 //    @Transactional
 //    public void deleteUserAtCrew(Long userId, Long crewId, String authenticationName) {
 //
-//        Optional<User> actingUserOptional = userRepository.findByUserName(authenticationName);
+//        Optional<Member> actingUserOptional = userRepository.findByUserName(authenticationName);
 //
 //        Optional<Crew> crewOptional = crewRepository.findById(crewId);
 //
-//        Optional<User> userOptional = userRepository.findById(userId);
+//        Optional<Member> userOptional = userRepository.findById(userId);
 //
 //        if (actingUserOptional.isEmpty()) {
 //            throw new AppException(ErrorCode.FORBIDDEN_REQUEST, ErrorCode.FORBIDDEN_REQUEST.getMessage());
@@ -319,9 +309,9 @@
 //            throw new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage());
 //        }
 //
-//        User user = userOptional.get();
+//        Member user = userOptional.get();
 //
-//        User actingUser = actingUserOptional.get();
+//        Member actingUser = actingUserOptional.get();
 //
 //        Crew crew = crewOptional.get();
 //
@@ -364,7 +354,7 @@
 ////            throw new AppException(ErrorCode.NOT_AUTHORIZED, ErrorCode.NOT_AUTHORIZED.getMessage());
 ////        }
 //
-//    }
+    }
 //
 //
 //}

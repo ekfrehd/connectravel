@@ -1,12 +1,14 @@
 package com.connectravel.repository;
 
 import com.connectravel.domain.entity.Crew;
+import com.connectravel.domain.entity.Member;
 import com.connectravel.domain.entity.chat.ChatRoom;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface CrewRepository extends JpaRepository<Crew, Long> {
 
@@ -39,6 +41,8 @@ public interface CrewRepository extends JpaRepository<Crew, Long> {
 
 
     Optional<Crew> findByChatRoom(ChatRoom room);
+
+    Crew findByUser(Member user);
 
 //    Page<Crew> findByDeletedAtNull(Pageable pageable);
 }
