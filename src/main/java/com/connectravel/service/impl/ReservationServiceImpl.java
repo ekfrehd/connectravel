@@ -51,8 +51,7 @@ public class ReservationServiceImpl implements ReservationService {
         if (!checkRoomAvailability(
                 reservationDTO.getRoomDTO().getRno(),
                 reservationDTO.getStartDate(),
-                reservationDTO.getEndDate())) {
-
+                reservationDTO.getEndDate())){
             throw new EntityNotAvailableException("선택한 날짜에 방이 이용 불가능합니다.");
         }
 
@@ -63,47 +62,6 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation savedReservation = reservationRepository.save(reservation);
 
         return entityToDTO(savedReservation);
-    }
-
-
-    @Override
-    @Transactional(readOnly = true)
-    public ReservationDTO getRoomBookingDetails(Long rvno) {
-
-        // 예약 엔티티를 ID를 이용해 조회
-        Reservation reservation = reservationRepository.findById(rvno)
-                .orElseThrow(() -> new EntityNotFoundException("해당 예약을 찾을 수 없습니다. 예약 번호: " + rvno));
-
-        // 조회된 엔티티를 DTO로 변환하여 반환
-        return entityToDTO(reservation);
-    }
-
-    @Override
-    @Transactional
-    public ReservationDTO modifyRoomBooking(Long rvno, ReservationDTO reservationDTO) {
-
-        Reservation reservation = reservationRepository.findById(rvno)
-                .orElseThrow(() -> new EntityNotFoundException("해당 예약을 찾을 수 없습니다. 예약 번호: " + rvno));
-
-        if (!reservation.getStartDate().isEqual(reservationDTO.getStartDate()) ||
-                !reservation.getEndDate().isEqual(reservationDTO.getEndDate())) {
-            if (!checkRoomAvailability(reservation.getRoom().getRno(), reservationDTO.getStartDate(), reservationDTO.getEndDate())) {
-                throw new EntityNotAvailableException("새로운 날짜에 방이 이용 불가능합니다.");
-            }
-        }
-
-        reservation.setMessage(reservationDTO.getMessage());
-        reservation.setMoney(reservationDTO.getMoney());
-        reservation.setNumberOfGuests(reservationDTO.getNumberOfGuests());
-        reservation.setStartDate(reservationDTO.getStartDate());
-        reservation.setEndDate(reservationDTO.getEndDate());
-        reservation.setStatus(reservationDTO.getStatus()); // 상태 업데이트 부분 변경
-
-        // 업데이트된 예약 저장
-        Reservation updatedReservation = reservationRepository.save(reservation);
-
-        // 업데이트된 예약을 DTO로 변환하여 반환
-        return entityToDTO(updatedReservation);
     }
 
     @Override
@@ -149,26 +107,44 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ReservationDTO> listUserRoomBookings(String username) {
         List<Reservation> reservations = reservationRepository.findByMember_Username(username);
+
+        // 예약 상태 업데이트 로직
+        reservations.forEach(reservation -> {
+            if (reservation.getEndDate().isBefore(LocalDate.now()) &&
+                    reservation.getStatus() == ReservationStatus.ACTIVE) {
+                reservation.setStatus(ReservationStatus.COMPLETED);
+                reservationRepository.save(reservation);
+            }
+        });
+
         return reservations.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ReservationDTO> listRoomBookings(Long memberId) {
-        // 판매자의 숙박시설 찾기
         Optional<Accommodation> accommodationOpt = accommodationRepository.findByMemberId(memberId);
         if (accommodationOpt.isPresent()) {
             Long ano = accommodationOpt.get().getAno();
-            // 숙박시설에 해당하는 예약 목록 조회
             List<Reservation> reservations = reservationRepository.findByRoomAccommodationAno(ano);
-            // 예약 목록을 DTO로 변환
+
+            // 예약 상태 업데이트 로직
+            reservations.forEach(reservation -> {
+                if (reservation.getEndDate().isBefore(LocalDate.now()) &&
+                        reservation.getStatus() == ReservationStatus.ACTIVE) {
+                    reservation.setStatus(ReservationStatus.COMPLETED);
+                    reservationRepository.save(reservation);
+                }
+            });
+
             return reservations.stream().map(this::entityToDTO).collect(Collectors.toList());
         }
         return Collections.emptyList();
     }
+
 
     @Override
     @Transactional(readOnly = true)

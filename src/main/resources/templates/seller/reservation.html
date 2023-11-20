@@ -52,7 +52,13 @@
                     </thead>
                     <tbody>
                     <tr th:each="reservation : ${list}" th:class="${reservation.status.name()}">
-                        <td th:text="${reservation.status.name()}"></td>
+                        <td>
+                            <span th:if="${reservation.status.name() == 'AVAILABLE'}">예약 가능</span>
+                            <span th:if="${reservation.status.name() == 'ACTIVE'}">이용 전</span>
+                            <span th:if="${reservation.status.name() == 'COMPLETED'}">이용 완료</span>
+                            <span th:if="${reservation.status.name() == 'CANCELLATION_REQUESTED'}">취소 요청됨</span>
+                            <span th:if="${reservation.status.name() == 'CANCELLED'}">취소됨</span>
+                        </td>
                         <td th:text="${reservation.rvno}"></td>
                         <td th:text="${reservation.memberDTO.username}"></td>
                         <td th:text="${reservation.memberDTO.tel}"></td>
