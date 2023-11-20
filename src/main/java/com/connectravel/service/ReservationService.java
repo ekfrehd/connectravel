@@ -20,11 +20,10 @@ public interface ReservationService {
     boolean approveCancellation(Long rvno);
 
     /* 예약 목록 조회 */
-    List<ReservationDTO> listUserRoomBookings(String userEmail); // 사용자 별
+    List<ReservationDTO> listUserRoomBookings(String userEmail);
 
-    List<ReservationDTO> listAccommodationRoomBookings(Long ano); // 숙소 별
+    List<ReservationDTO> listRoomBookings(Long memberId);
 
-    List<ReservationDTO> listRoomBookings(Long rno); // 방 별
 
     /* 예약 가능 여부를 확인용 */
     boolean checkRoomAvailability(Long rno, LocalDate startDate, LocalDate endDate);

@@ -9,7 +9,6 @@ import com.connectravel.repository.OptionRepository;
 import com.connectravel.service.AccommodationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,8 +33,6 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationImgRepository accommodationImgRepository;
     private final MemberRepository memberRepository;
     private final OptionRepository optionRepository;
-
-    private final ModelMapper modelMapper;
 
     @Override
     @Transactional
@@ -171,6 +168,39 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         return imgDTOList;
     }
+
+   /* @Override
+    public PageResultDTO<AccommodationDTO, Object[]> searchAccommodations
+            (AccommodationSearchDTO searchDTO, PageRequestDTO pageRequestDTO) {
+
+        // 페이지네이션 및 정렬 정보 생성
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("someField").descending() // 'someField'는 실제 정렬 기준 필드로 교체해야 합니다.
+        );
+
+        // 검색 조건에 따라 숙소 정보 검색
+        Page<Accommodation> accommodations;
+        if (searchDTO.getRegion() != null) {
+            accommodations = accommodationRepository.findByRegion(searchDTO.getRegion(), pageable);
+        } else if (searchDTO.getOptionIds() != null && !searchDTO.getOptionIds().isEmpty()) {
+            accommodations = accommodationRepository.findByOptions(searchDTO.getOptionIds(), pageable);
+        } else if (searchDTO.getPriceRange() != null) {
+            // priceRange를 처리하는 로직 구현
+            // 예: accommodationRepository.findByPriceRange(minPrice, maxPrice, pageable);
+        } else {
+            // 기타 검색 조건 처리
+            // Default 검색 로직이 필요한 경우 여기에 구현
+        }
+
+        // 결과를 AccommodationDTO로 변환
+        Page<AccommodationDTO> dtoPage = accommodations.map(this::entityToDto);
+
+        // PageResultDTO 객체 생성 및 반환
+        return new PageResultDTO<>(dtoPage, pageable);
+    }*/
+
 
     /* 변환 메서드 */
     private Accommodation dtoToEntity(AccommodationDTO dto, MemberRepository memberRepository) {

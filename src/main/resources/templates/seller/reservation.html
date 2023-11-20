@@ -6,6 +6,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
+
+    <style>
+        /* 이용 전 (ACTIVE) - 초록색 */
+        .ACTIVE {
+            background-color: lightgreen;
+        }
+
+        /* 이용 완료 (COMPLETED) - 회색 */
+        .COMPLETED {
+            background-color: lightgray;
+        }
+
+        /* 취소 요청 (CANCELLATION_REQUESTED) - 빨간색 */
+        .CANCELLATION_REQUESTED {
+            background-color: red;
+            color: white;
+        }
+
+        /* 취소됨 (CANCELLED) - 가로줄 */
+        .CANCELLED {
+            text-decoration: line-through;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,6 +41,7 @@
                     <table class="table mb-5">
                         <thead>
                         <tr>
+                            <th scope="col">예약상태</th>
                             <th scope="col">예약번호</th>
                             <th scope="col">이름</th>
                             <th scope="col">전화번호</th>
@@ -28,14 +52,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="obj : ${list}" th:if="${obj[1]==true}">
-                            <td th:text="${obj[0]}"></td>
-                            <td th:text="${obj[5].name}"></td>
-                            <td th:text="${obj[5].tel}"></td>
-                            <td th:text="${#temporals.format(obj[2], 'yyyy/MM/dd')}"><</td>
-                            <td th:text="${#temporals.format(obj[3], 'yyyy/MM/dd')}"></td>
-                            <td th:text="${#temporals.format(obj[4], 'yyyy/MM/dd')}"></td>
-                            <td th:text="${obj[6]}"></td>
+                        <tr th:each="reservation : ${list}" th:class="${reservation.status.name()}">
+                            <td th:text="${reservation.status.name()}"></td>
+                            <td th:text="${reservation.rvno}"></td>
+                            <td th:text="${reservation.memberDTO.username}"></td>
+                            <td th:text="${reservation.memberDTO.tel}"></td>
+                            <td th:text="${#temporals.format(reservation.regTime, 'yyyy/MM/dd')}"></td>
+                            <td th:text="${#temporals.format(reservation.startDate, 'yyyy/MM/dd')}"></td>
+                            <td th:text="${#temporals.format(reservation.endDate, 'yyyy/MM/dd')}"></td>
+                            <td th:text="${reservation.message}"></td>
                         </tr>
                         </tbody>
                     </table>

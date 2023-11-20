@@ -4,10 +4,12 @@ import com.connectravel.constant.ReservationStatus;
 import com.connectravel.domain.dto.MemberDTO;
 import com.connectravel.domain.dto.ReservationDTO;
 import com.connectravel.domain.dto.RoomDTO;
+import com.connectravel.domain.entity.Accommodation;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.domain.entity.Reservation;
 import com.connectravel.domain.entity.Room;
 import com.connectravel.exception.EntityNotAvailableException;
+import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.ReservationRepository;
 import com.connectravel.repository.RoomRepository;
@@ -20,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +36,8 @@ public class ReservationServiceImpl implements ReservationService {
     private final RoomRepository roomRepository;
 
     private final MemberRepository memberRepository;
+
+    private final AccommodationRepository accommodationRepository;
 
     private final RoomService roomService;
 
@@ -151,16 +157,17 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReservationDTO> listAccommodationRoomBookings(Long ano) {
-        List<Reservation> reservations = reservationRepository.findByRoomAccommodationAno(ano);
-        return reservations.stream().map(this::entityToDTO).collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ReservationDTO> listRoomBookings(Long rno) {
-        List<Reservation> reservations = reservationRepository.findByRoomRno(rno);
-        return reservations.stream().map(this::entityToDTO).collect(Collectors.toList());
+    public List<ReservationDTO> listRoomBookings(Long memberId) {
+        // 판매자의 숙박시설 찾기
+        Optional<Accommodation> accommodationOpt = accommodationRepository.findByMemberId(memberId);
+        if (accommodationOpt.isPresent()) {
+            Long ano = accommodationOpt.get().getAno();
+            // 숙박시설에 해당하는 예약 목록 조회
+            List<Reservation> reservations = reservationRepository.findByRoomAccommodationAno(ano);
+            // 예약 목록을 DTO로 변환
+            return reservations.stream().map(this::entityToDTO).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     @Override
