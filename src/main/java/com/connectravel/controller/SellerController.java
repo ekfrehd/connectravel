@@ -2,13 +2,13 @@ package com.connectravel.controller;
 
 import com.connectravel.domain.dto.AccommodationDTO;
 import com.connectravel.domain.dto.ImgDTO;
-import com.connectravel.domain.dto.OptionDTO;
+import com.connectravel.domain.dto.ReservationDTO;
 import com.connectravel.domain.dto.RoomDTO;
 import com.connectravel.domain.entity.Accommodation;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.service.ImgService;
-import com.connectravel.service.OptionService;
+import com.connectravel.service.ReservationService;
 import com.connectravel.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,34 +29,8 @@ public class SellerController {
     private final RoomService roomService;
     private final ImgService imgService;
     private final AccommodationRepository accommodationRepository;
-    private final OptionService optionService;
+    private final ReservationService reservationService;
 
-    @GetMapping("")
-    public String main(@AuthenticationPrincipal Member member, Model model){
-        if (member == null) {
-            // 인증된 사용자가 없으면 로그인 페이지로 리다이렉트
-            return "redirect:/login";
-        }
-
-        // 인증된 사용자의 이메일로 숙소 정보 조회
-        Optional<Accommodation> optionalAccommodation = accommodationRepository.findBySellerEmail(member.getEmail());
-        if (!optionalAccommodation.isPresent()) {
-            // 해당 판매자의 숙소 정보가 없으면 적절한 메시지를 담아 뷰에 전달
-            model.addAttribute("message", "등록된 숙소가 없습니다. 숙소를 등록해주세요.");
-            return "seller/main";
-        }
-
-        // 옵션 목록을 가져와 모델에 추가
-        List<OptionDTO> options = optionService.getAllOptions();
-        model.addAttribute("options", options);
-
-        // 숙소 정보가 있으면 모델에 추가
-        Accommodation accommodation = optionalAccommodation.get();
-        model.addAttribute("accommodation", accommodation);
-
-
-        return "seller/main";
-    }
 
     @GetMapping("list")
     public String list(@AuthenticationPrincipal Member member, Model model) {
@@ -134,6 +108,21 @@ public class SellerController {
         return "redirect:/seller/list";
     }
 
+    @GetMapping("reservation")
+    public void reservation(@AuthenticationPrincipal Member member ,Model model){
+        List<ReservationDTO> list = reservationService.listRoomBookings(member.getId());
+
+        model.addAttribute("list",list);
+    }
+
+    @GetMapping("/cancellation/approval/{rvno}")
+    public String approveCancellation(@PathVariable Long rvno) {
+        // 예약 상태를 CANCELLED로 업데이트하는 로직
+        reservationService.approveCancellation(rvno);
+        return "redirect:/seller/reservation";
+    }
+
+
    /*
     @GetMapping("sales")
     public void sales(ReservationDTO datedto, Authentication authentication, Model model){
@@ -143,20 +132,6 @@ public class SellerController {
         model.addAttribute("sales",roomService.get_salesByDate(Date.valueOf(datedto.getStartDate()),Date.valueOf(datedto.getEndDate()),ano));
         model.addAttribute("StartDate",datedto.getStartDate());
         model.addAttribute("EndDate",datedto.getEndDate());
-    }
-
-    @GetMapping("reservation")
-    public void reservation(Authentication authentication,Model model){
-        List<Object[]> list = roomRepository.SellersfindReservation(authentication.getName());
-        list.forEach(i -> {
-            System.out.println("rvno : " + i[0]);
-            System.out.println("state : " + i[1]);
-            System.out.println("regdate : " + i[2]);
-            System.out.println("StartDate : " + i[3]);
-            System.out.println("EndDate : " + i[4]);
-            Member reserver = (Member) i[5];
-        });
-        model.addAttribute("list",list);
     }
 
 */

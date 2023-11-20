@@ -42,7 +42,6 @@ public class ReservationController {
     private final AccommodationService accommodationService;
     private final RoomService roomService;
     private final MemberService memberService;
-
     private final ReservationService reservationService;
 
     ModelMapper modelMapper = new ModelMapper();
@@ -140,6 +139,13 @@ public class ReservationController {
         model.addAttribute("today", LocalDate.now());
 
         return "reservation/list";
+    }
+
+    @GetMapping("cancel")
+    public String cancel(Long rvno, @AuthenticationPrincipal Member member, RedirectAttributes rtts){
+
+        rtts.addAttribute("IsCancel",reservationService.requestCancel(rvno, member.getEmail()));
+        return "redirect:/reservation/list";
     }
 
 }

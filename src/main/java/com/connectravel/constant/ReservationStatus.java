@@ -8,5 +8,4 @@ public enum ReservationStatus {
     CANCELLATION_REQUESTED, // 취소 요청됨
     CANCELLED // 취소됨
 
-
 }

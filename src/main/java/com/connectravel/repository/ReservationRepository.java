@@ -18,7 +18,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByRoomAccommodationAno(Long ano);
 
-    List<Reservation> findByRoomRno(Long rno);
 
     @Query("select r from Reservation r where r.room.rno = :rno and r.startDate <= :endDate and r.endDate >= :startDate")
     List<Reservation> findAvailableReservations(@Param("rno") Long rno, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
