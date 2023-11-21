@@ -4,7 +4,7 @@ import com.connectravel.domain.dto.AccommodationDTO;
 import com.connectravel.domain.dto.PageRequestDTO;
 import com.connectravel.domain.dto.PageResultDTO;
 import com.connectravel.domain.dto.TourBoardDTO;
-import com.connectravel.service.AccommodationService;
+import com.connectravel.service.SearchService;
 import com.connectravel.service.TourBoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,7 +22,7 @@ public class MainController {
 
     private final TourBoardService tourBoardService;
 
-    private final AccommodationService accommodationService;
+    private final SearchService searchService;
 
     @GetMapping(value = "/")
     public String main(Model model) {
@@ -54,7 +54,7 @@ public class MainController {
 
         PageResultDTO<TourBoardDTO, Object[]> tourBoard = tourBoardService.getPaginatedTourBoardList(pageRequestDTO,
                 pageRequestDTO.getType(), keyword, pageRequestDTO.getCategory(), pageRequestDTO.getRegion(), pageRequestDTO.getAddress());
-        PageResultDTO<AccommodationDTO, Object[]> accommodation = accommodationService.searchAccommodationList(pageRequestDTO,
+        PageResultDTO<AccommodationDTO, Object[]> accommodation = searchService.searchAccommodationList(pageRequestDTO,
                 keyword, pageRequestDTO.getCategory(), pageRequestDTO.getRegion(),  startDate, endDate, min, max);
 
         model.addAttribute("tourBoard", tourBoard);

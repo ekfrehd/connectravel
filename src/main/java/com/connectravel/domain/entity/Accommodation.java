@@ -75,10 +75,6 @@ public class Accommodation {
         accommodationOptions.add(accommodationOption);
         accommodationOption.setAccommodation(this);
     }
-    public void removeAccommodationOption(AccommodationOption accommodationOption) {
-        accommodationOptions.remove(accommodationOption);
-        accommodationOption.setAccommodation(null);
-    }
 
     /* 도메인 로직 - 방 */
     public void addRoom(Room room) {

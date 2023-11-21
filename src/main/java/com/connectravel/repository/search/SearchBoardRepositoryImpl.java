@@ -28,25 +28,6 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         super(QnaBoard.class);
     }
 
-    /*
-    // 검색 조건이 없는 게시판
-    @Override
-    public QnaBoard search1() {
-        log.info("search1.....");
-
-        QQnaBoard qnaBoard = QQnaBoard.qnaBoard;
-        QQnaReply reply = QQnaReply.qnaReply;
-        QMember member = QMember.member;
-
-        JPQLQuery<Tuple> tuple = from(qnaBoard).leftJoin(member).on(qnaBoard.member.eq(member)).leftJoin(reply).on(reply.qnaBoard.eq(qnaBoard)).select(qnaBoard, member.email, reply.count()).groupBy(qnaBoard);
-
-        List<Tuple> result = tuple.fetch();
-
-        return null;
-    }
-    */
-
-
     @Override
     public Page<Object[]> searchPage(String[] type, String keyword, Pageable pageable) {
         QQnaBoard qnaBoard = QQnaBoard.qnaBoard;

@@ -3,10 +3,7 @@ package com.connectravel.controller;
 import com.connectravel.domain.dto.*;
 import com.connectravel.domain.entity.ReviewBoard;
 import com.connectravel.manager.DateManager;
-import com.connectravel.service.AccommodationService;
-import com.connectravel.service.OptionService;
-import com.connectravel.service.ReviewBoardService;
-import com.connectravel.service.RoomService;
+import com.connectravel.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +26,7 @@ import java.util.Map;
 public class ProductController {
 
     private final AccommodationService accommodationService;
+    private final SearchService searchService;
     private final ReviewBoardService reviewBoardService;
     private final RoomService roomService;
     private final OptionService optionService;
@@ -60,7 +58,7 @@ public class ProductController {
                 .size(pageSize)
                 .build();
 
-        PageResultDTO<AccommodationDTO, Object[]> pageResult = accommodationService.searchAccommodationList
+        PageResultDTO<AccommodationDTO, Object[]> pageResult = searchService.searchAccommodationList
                 (pageRequestDTO, pageRequestDTO.getKeyword(), category, region,
                         datedto.getStartDate(), datedto.getEndDate(), inputedMinprice, inputedMaxprice);
         if(pageResult.getTotalPage()==0){ pageResult.setTotalPage(1);}

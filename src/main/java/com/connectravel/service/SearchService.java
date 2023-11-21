@@ -1,18 +1,15 @@
 package com.connectravel.service;
 
-import com.connectravel.domain.dto.AccommodationSearchDTO;
+import com.connectravel.domain.dto.AccommodationDTO;
+import com.connectravel.domain.dto.PageRequestDTO;
+import com.connectravel.domain.dto.PageResultDTO;
 
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
 
 public interface SearchService {
 
-    List<AccommodationSearchDTO> searchByRegion(String region);
-
-    List<AccommodationSearchDTO> searchByOptions(String region, Set<Long> optionIds);
-
-    List<AccommodationSearchDTO> searchByRoomCriteria(String region, int price, int minimumOccupancy, int maximumOccupancy, boolean operating);
-
-    List<AccommodationSearchDTO> searchByRegionOptionsAndRoomCriteria(String region, Set<Long> optionIds, int price, int minimumOccupancy, int maximumOccupancy, boolean operating);
+    PageResultDTO<AccommodationDTO, Object[]> searchAccommodationList(
+            PageRequestDTO pageRequestDTO, String keyword, String category, String region,
+            LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice);
 
 }
