@@ -1,4 +1,4 @@
-package com.connectravel.dto.check;
+package com.connectravel.domain.dto.crew;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class CheckResponse {
-    private Integer index;
+public class CrewStrictRequest {
+    private String strict;
 }

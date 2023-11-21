@@ -1,19 +1,28 @@
 package com.connectravel.service;
 
 
+import com.connectravel.constant.SportEnum;
+import com.connectravel.domain.dto.crew.CrewDetailResponse;
 import com.connectravel.domain.dto.crew.CrewRequest;
 import com.connectravel.domain.dto.crew.CrewResponse;
+import com.connectravel.domain.dto.crew.CrewSportRequest;
 import com.connectravel.domain.entity.Accommodation;
 import com.connectravel.domain.entity.Crew;
 import com.connectravel.domain.entity.Member;
+import com.connectravel.domain.entity.Participation;
 import com.connectravel.exception.AppException;
 import com.connectravel.exception.ErrorCode;
 import com.connectravel.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -46,47 +55,47 @@ public class CrewService {
         return new CrewResponse("Crew 등록 완료", crew.getId());
     }
 //
-//    // 크루 게시글 수정
-//    public CrewResponse modifyCrew(Long crewId, CrewRequest crewRequest, String userName) {
-//
-//        Member user = findByUserName(userName);
-//        Crew crew = findByCrewId(crewId);
-//        findByUserAndCrewContaining(user, crew);
-//
-//        crew.of(crewRequest);
-//        crewRepository.save(crew);
-//
-//        return new CrewResponse("Crew 수정 완료", crewId);
-//    }
-//
-//    // 크루 게시글 삭제
-//    @Transactional
-//    public CrewResponse deleteCrew(Long crewId, String userName) {
-//
-//        Member user = findByUserName(userName);
-//        Crew crew = findByCrewId(crewId);
-//        findByUserAndCrewContaining(user, crew);
-//
+    // 크루 게시글 수정
+    public CrewResponse modifyCrew(Long crewId, CrewRequest crewRequest, String userName) {
+
+        Member user = findByUserName(userName);
+        Crew crew = findByCrewId(crewId);
+        findByUserAndCrewContaining(user, crew);
+
+        crew.of(crewRequest);
+        crewRepository.save(crew);
+
+        return new CrewResponse("Crew 수정 완료", crewId);
+    }
+
+    // 크루 게시글 삭제
+    @Transactional
+    public CrewResponse deleteCrew(Long crewId, String userName) {
+
+        Member user = findByUserName(userName);
+        Crew crew = findByCrewId(crewId);
+        findByUserAndCrewContaining(user, crew);
+
 //        crew.deleteSoftly(LocalDateTime.now());
-//        crewRepository.save(crew);
-//
-//        return new CrewResponse("Crew 삭제 완료", crewId);
-//    }
-//
-//    @Transactional
-//    public CrewResponse finishCrew(Long crewId, String userName) {
-//        Member user = findByUserName(userName);
-//        Crew crew = findByCrewId(crewId);
-//        findByUserAndCrewContaining(user, crew);
-//
-//        List<Participation> participations = crew.getParticipations();
-//        List<String> userList = new ArrayList<>();
-//        for (Participation participation : participations) {
-//            userList.add(participation.getUser().getUsername());
+        crewRepository.delete(crew);
+
+        return new CrewResponse("Crew 삭제 완료", crewId);
+    }
+
+    @Transactional
+    public CrewResponse finishCrew(Long crewId, String userName) {
+        Member user = findByUserName(userName);
+        Crew crew = findByCrewId(crewId);
+        findByUserAndCrewContaining(user, crew);
+
+        List<Participation> participations = crew.getParticipations();
+        List<String> userList = new ArrayList<>();
+        for (Participation participation : participations) {
+            userList.add(participation.getUser().getUsername());
 //            alarmRepository.save(Alarm.toEntityFromFinishCrew(participation.getUser(), crew, AlarmType.LIKE_COMMENT, "모임이 종료되었습니다."));
-//            log.info("모임 종류 후 username입니다 = {}",participation.getUser().getUsername());
-//        }
-//        //sse 로직
+            log.info("모임 종류 후 username입니다 = {}",participation.getUser().getUsername());
+        }
+        //sse 로직
 //        for (int i = 0; i < userList.size(); i++) {
 //            if (sseEmitters.containsKey(userList.get(i))) {
 //                log.info("모임 종료 후 작동");
@@ -99,92 +108,92 @@ public class CrewService {
 //                }
 //            }
 //        }
+
+        crew.setFinish(1);
+        return new CrewResponse("Crew 상태변경 완료", crewId);
+    }
 //
-//        crew.setFinish(1);
-//        return new CrewResponse("Crew 상태변경 완료", crewId);
-//    }
 //
-//
-//    // 크루 게시물 상세 조회
-//    public CrewDetailResponse detailCrew(Long crewId) {
-//
-////        Member user = findByUserName(userName);
-//        Crew crew = findByCrewId(crewId);
-//
-//        return CrewDetailResponse.of(crew);
-//    }
-//
-//    // 크루 게시물 전체조회, 지역조회, 운동종목 조회
+    // 크루 게시물 상세 조회
+    public CrewDetailResponse detailCrew(Long crewId) {
+
+//        Member user = findByUserName(userName);
+        Crew crew = findByCrewId(crewId);
+
+        return CrewDetailResponse.of(crew);
+    }
+
+    // 크루 게시물 전체조회, 지역조회, 운동종목 조회
 //    @Transactional
-//    public Page<CrewDetailResponse> findAllCrewsByStrictAndSportEnum2(CrewSportRequest crewSportRequest, boolean sportsListIsEmpty, Pageable pageable) {
-//
-//        //지역검색 null 확인
-//        if (crewSportRequest.getStrict() != null) log.info("!!!!!!!!!!!!!!!!!InService strict is not null");
-//        else crewSportRequest.setStrict("");
-//        log.info("!!!!!!!!!!!!!!!!!InService strict2 : {}", crewSportRequest.getStrict());
-//
-//        // 운동종목 비선택
-//        if (CollectionUtils.isEmpty(crewSportRequest.getSportsList())) {
-//            return findByDeletedAtIsNullAndStrictContaining(crewSportRequest, pageable);
-//        }
-//        // 운동종목 선택
-//        else {
-//            List<SportEnum> sportEnums = new ArrayList<>();
-//            for (String s : crewSportRequest.getSportsList()) sportEnums.add(SportEnum.valueOf(s));
-//
-//            log.info("!!!!!!!!!!!!!!!!!SportEnums : {}", sportEnums);
-//            return crewRepository.findByDeletedAtIsNullAndStrictContainsAndSportEnumIn(crewSportRequest.getStrict(), sportEnums, pageable).map(CrewDetailResponse::of);
-//        }
-//
-//    }
-//
-//
-//    // 크루 게시물 전체 조회
-//    @Transactional
-//    public Page<CrewDetailResponse> findAllCrews(Pageable pageable) {
-//
-//        Page<Crew> crews = crewRepository.findAll(pageable);
-//
-//        return crews.map(CrewDetailResponse::of);
-//    }
-//
-//    // 크루 게시물 조회 By 지역 검색어
-//    @Transactional
-//    public Page<CrewDetailResponse> findByDeletedAtIsNullAndStrictContaining(CrewSportRequest crewSportRequest, Pageable pageable) {
-//
-//        Page<Crew> crews = crewRepository.findByDeletedAtIsNullAndStrictContaining(pageable, crewSportRequest.getStrict());
-//
-//        return crews.map(CrewDetailResponse::of);
-//    }
-//    @Transactional
-//    public Page<CrewDetailResponse> findAllCrewsByStrict(CrewSportRequest crewSportRequest, Pageable pageable) {
-//
-//        Page<Crew> crews = crewRepository.findByStrictContaining(pageable, crewSportRequest.getStrict());
-//
-//        return crews.map(CrewDetailResponse::of);
-//    }
+    public Page<CrewDetailResponse> findAllCrewsByStrictAndSportEnum2(CrewSportRequest crewSportRequest,  Pageable pageable) {
+
+        //지역검색 null 확인
+        if (crewSportRequest.getStrict() != null) log.info("!!!!!!!!!!!!!!!!!InService strict is not null");
+        else crewSportRequest.setStrict("");
+        log.info("!!!!!!!!!!!!!!!!!InService strict2 : {}", crewSportRequest.getStrict());
+
+        // 운동종목 비선택
+        if (CollectionUtils.isEmpty(crewSportRequest.getSportsList())) {
+            return findAllCrewsByStrict(crewSportRequest, pageable);
+        }
+        // 운동종목 선택
+        else {
+            List<SportEnum> sportEnums = new ArrayList<>();
+            for (String s : crewSportRequest.getSportsList()) sportEnums.add(SportEnum.valueOf(s));
+
+            log.info("!!!!!!!!!!!!!!!!!SportEnums : {}", sportEnums);
+            return crewRepository.findByStrictContainsAndSportEnumIn(crewSportRequest.getStrict(), sportEnums, pageable).map(CrewDetailResponse::of);
+        }
+
+    }
 //
 //
-//    // 크루 게시물 조회 By 운동종목
-//    @Transactional
-//    public Page<CrewDetailResponse> findAllCrewsBySport(List<String> sportsList, Pageable pageable) {
+    // 크루 게시물 전체 조회
+    @Transactional
+    public Page<CrewDetailResponse> findAllCrews(Pageable pageable) {
+
+        Page<Crew> crews = crewRepository.findAll(pageable);
+
+        return crews.map(CrewDetailResponse::of);
+    }
 //
-//        Page<Crew> crews;
+    // 크루 게시물 조회 By 지역 검색어
+    @Transactional
+    public Page<CrewDetailResponse> findByDeletedAtIsNullAndStrictContaining(CrewSportRequest crewSportRequest, Pageable pageable) {
+
+        Page<Crew> crews = crewRepository.findByStrictContaining(pageable, crewSportRequest.getStrict());
+
+        return crews.map(CrewDetailResponse::of);
+    }
+    @Transactional
+    public Page<CrewDetailResponse> findAllCrewsByStrict(CrewSportRequest crewSportRequest, Pageable pageable) {
+
+        Page<Crew> crews = crewRepository.findByStrictContaining(pageable, crewSportRequest.getStrict());
+
+        return crews.map(CrewDetailResponse::of);
+    }
 //
-//        if (CollectionUtils.isEmpty(sportsList)) {
-//            crews = crewRepository.findAll(pageable);
-//        } else {
-//            SportEnum[] sports = new SportEnum[3];
 //
-//            for (int i = 0; i < sportsList.size(); i++) {
-//                sports[i] = SportEnum.valueOf(sportsList.get(i)); // null
-//                log.info("Service sports List : {}", sports[i]);
-//            }
-//
-//            crews = crewRepository.findBySportEnum(pageable, sports[0], sports[1], sports[2]);
-//        }
-//        return crews.map(CrewDetailResponse::of);
-//    }
+    // 크루 게시물 조회 By 운동종목
+    @Transactional
+    public Page<CrewDetailResponse> findAllCrewsBySport(List<String> sportsList, Pageable pageable) {
+
+        Page<Crew> crews;
+
+        if (CollectionUtils.isEmpty(sportsList)) {
+            crews = crewRepository.findAll(pageable);
+        } else {
+            SportEnum[] sports = new SportEnum[3];
+
+            for (int i = 0; i < sportsList.size(); i++) {
+                sports[i] = SportEnum.valueOf(sportsList.get(i)); // null
+                log.info("Service sports List : {}", sports[i]);
+            }
+
+            crews = crewRepository.findBySportEnum(pageable, sports[0], sports[1], sports[2]);
+        }
+        return crews.map(CrewDetailResponse::of);
+    }
 //
     // User 존재 확인
     public Member findByUserName(String userName) {
@@ -192,24 +201,24 @@ public class CrewService {
                 .orElseThrow(() -> new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage()));
     }
 //
-//    // 크루 게시글 존재 확인
-//    public Crew findByCrewId(Long crewId) {
-//        return crewRepository.findById(crewId)
-//                .orElseThrow(() -> new AppException(ErrorCode.CREW_NOT_FOUND, ErrorCode.CREW_NOT_FOUND.getMessage()));
-//    }
+    // 크루 게시글 존재 확인
+    public Crew findByCrewId(Long crewId) {
+        return crewRepository.findById(crewId)
+                .orElseThrow(() -> new AppException(ErrorCode.CREW_NOT_FOUND, ErrorCode.CREW_NOT_FOUND.getMessage()));
+    }
 //
-//    // 해당 게시글 작성자 확인
-//    @Transactional
-//    public void findByUserAndCrewContaining(Member user, Crew crew) {
-//
-//        if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
-//            if (!user.getCrews().contains(crew)) {
-//                throw new AppException(ErrorCode.INVALID_PERMISSION, "해당 게시글에 접근 권한이 없습니다.");
-//            }
-//
-//        }
-//
-//    }
+    // 해당 게시글 작성자 확인
+    @Transactional
+    public void findByUserAndCrewContaining(Member user, Crew crew) {
+
+
+            if (!crew.getUser().equals(user)) {
+                throw new AppException(ErrorCode.INVALID_PERMISSION, "해당 게시글에 접근 권한이 없습니다.");
+            }
+
+
+
+    }
 //
 //    // 유저 선호 운동종목 확인
 //    @Transactional
@@ -275,20 +284,20 @@ public class CrewService {
 //    }
 //
 //
-//    // 내가 참여한 crew list
-//    public Page<CrewDetailResponse> findAllCrew(Integer status, String userName, Pageable pageable) {
-//        Member user = userRepository.findByUserName(userName).orElse(null);
-//        List<Participation> participations = participationRepository.findByStatusAndUser(status, user);
-//        Page<Crew> crewList = crewRepository.findByDeletedAtIsNullAndParticipationsIn(participations, pageable);
-//        return crewList.map(CrewDetailResponse::of);
-//    }
+    // 내가 참여한 crew list
+    public Page<CrewDetailResponse> findAllCrew(Integer status, String userName, Pageable pageable) {
+        Member user = userRepository.findByUsername(userName).orElse(null);
+        List<Participation> participations = participationRepository.findByStatusAndUser(status, user);
+        Page<Crew> crewList = crewRepository.findByAndParticipationsIn(participations, pageable);
+        return crewList.map(CrewDetailResponse::of);
+    }
 //
-//    // 내가 참여한 crew list
-//    public long getCrewByUserAndStatus(Integer status, String userName) {
-//        Member user = userRepository.findByUserName(userName).orElse(null);
-//        List<Participation> participations = participationRepository.findByStatusAndUser(status, user);
-//        return crewRepository.countByDeletedAtNullAndParticipationsIn(participations);
-//    }
+    // 내가 참여한 crew list
+    public long getCrewByUserAndStatus(Integer status, String userName) {
+        Member user = userRepository.findByUsername(userName).orElse(null);
+        List<Participation> participations = participationRepository.findByStatusAndUser(status, user);
+        return crewRepository.countByAndParticipationsIn(participations);
+    }
 //
 //    // 강퇴하면 Participation을 지우는 방법 이용
 //    @Transactional

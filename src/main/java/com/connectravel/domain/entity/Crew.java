@@ -1,6 +1,7 @@
 package com.connectravel.domain.entity;
 
-import com.connectravel.domain.dto.crew.CrewRequestDTO;
+import com.connectravel.constant.SportEnum;
+import com.connectravel.domain.dto.crew.CrewRequest;
 import com.connectravel.domain.entity.chat.ChatRoom;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,8 +40,8 @@ public class Crew extends BaseEntity{
     @JoinColumn(name="room_id")
     private ChatRoom chatRoom;
 
-//    @Enumerated(value = EnumType.STRING)
-//    private SportEnum sportEnum;
+    @Enumerated(value = EnumType.STRING)
+    private SportEnum sportEnum;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -67,7 +68,7 @@ public class Crew extends BaseEntity{
         this.participations = participations;
     }
 
-    public void of(CrewRequestDTO request) {
+    public void of(CrewRequest request) {
         this.strict = request.getStrict();
         this.title = request.getTitle();
         this.content = request.getContent();
