@@ -34,7 +34,7 @@ public class AdminController {
         model.addAttribute("userId", username);
 
 
-        return "admin/home";
+        return "/admin/home";
     }
 
     @PreAuthorize("isAuthenticated() and (( #member.username == principal.username ) or hasRole('ROLE_ADMIN'))")

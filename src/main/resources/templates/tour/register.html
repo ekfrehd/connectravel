@@ -3,6 +3,16 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 
+<script>
+    var alertMessage = "${alertMessage}";
+
+    function check() {
+        if (alertMessage) {
+            alert("게시글 제목, 내용을 입력해주세요.");
+        }
+    }
+</script>
+
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
@@ -151,7 +161,7 @@
 
                         <tr>
                             <td class="text-center" colspan="2">
-                                <button class="btn btn-dark" type="submit">Submit</button>
+                                <button class="btn btn-dark" type="submit">등록</button>
                             </td>
                         </tr>
                     </table>

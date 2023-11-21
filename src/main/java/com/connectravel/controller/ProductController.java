@@ -3,9 +3,7 @@ package com.connectravel.controller;
 import com.connectravel.domain.dto.*;
 import com.connectravel.domain.entity.ReviewBoard;
 import com.connectravel.manager.DateManager;
-import com.connectravel.service.AccommodationService;
-import com.connectravel.service.ReviewBoardService;
-import com.connectravel.service.RoomService;
+import com.connectravel.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("product")
@@ -28,21 +23,31 @@ import java.util.Map;
 public class ProductController {
 
     private final AccommodationService accommodationService;
+    private final SearchService searchService;
     private final ReviewBoardService reviewBoardService;
     private final RoomService roomService;
+    private final OptionService optionService;
 
     @Autowired
     private DateManager dateManager;
 
     @GetMapping("list")
-    public void list(@RequestParam(value = "category", required = false) String category,
+    public void list(@RequestParam(value = "accommodationType", required = false) String accommodationType,
                      @RequestParam(value = "region", required = false) String region,
                      @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                      @RequestParam(value = "inputedMinprice", required = false) Integer inputedMinprice,
                      @RequestParam(value = "inputedMaxprice", required = false) Integer inputedMaxprice,
+                     @RequestParam(value = "optionIds", required = false) Set<Long> optionIds, // 옵션 ID들을 받아오는 부분
                      PageRequestDTO pageRequestDTO, ReservationDTO datedto, Model model) {
 
+        log.info("List Method Called: accommodationType={}, region={}, page={}, inputedMinprice={}, inputedMaxprice={}, optionIds={}",
+                accommodationType, region, page, inputedMinprice, inputedMaxprice, optionIds);
+
         int pageSize = 5;
+
+        // 옵션 목록을 가져와 모델에 추가
+        List<OptionDTO> options = optionService.getAllOptions();
+        model.addAttribute("options", options);
 
         // DateManager를 통한 날짜 체크
         dateManager.checkDate(datedto.getStartDate(), datedto.getEndDate());
@@ -54,9 +59,10 @@ public class ProductController {
                 .size(pageSize)
                 .build();
 
-        PageResultDTO<AccommodationDTO, Object[]> pageResult = accommodationService.searchAccommodationList
-                (pageRequestDTO, pageRequestDTO.getKeyword(), category, region,
-                        datedto.getStartDate(), datedto.getEndDate(), inputedMinprice, inputedMaxprice);
+        PageResultDTO<AccommodationDTO, Object[]> pageResult = searchService.searchAccommodationList
+                (pageRequestDTO, pageRequestDTO.getKeyword(), accommodationType, region,
+                        datedto.getStartDate(), datedto.getEndDate(), inputedMinprice, inputedMaxprice, optionIds);
+
         if(pageResult.getTotalPage()==0){ pageResult.setTotalPage(1);}
 
         List<AccommodationDTO> updatedList = new ArrayList<>();

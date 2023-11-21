@@ -1,6 +1,7 @@
 package com.connectravel.service.impl;
 
-import com.connectravel.domain.dto.*;
+import com.connectravel.domain.dto.AccommodationDTO;
+import com.connectravel.domain.dto.ImgDTO;
 import com.connectravel.domain.entity.*;
 import com.connectravel.repository.AccommodationImgRepository;
 import com.connectravel.repository.AccommodationRepository;
@@ -9,18 +10,12 @@ import com.connectravel.repository.OptionRepository;
 import com.connectravel.service.AccommodationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -128,33 +123,6 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
-    @Override
-    public PageResultDTO<AccommodationDTO, Object[]> searchAccommodationList(
-            PageRequestDTO pageRequestDTO, String keyword, String category, String region,
-            LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice) {
-
-        Sort sort = Sort.by(Sort.Direction.DESC, "ano");
-        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), sort);
-
-        Page<Object[]> result = accommodationRepository.searchPageAccommodation(
-                pageRequestDTO.getType(), keyword, category, region, startDate, endDate,
-                inputedMinPrice, inputedMaxPrice, pageable);
-
-        Function<Object[], AccommodationDTO> fn = (objectArr -> {
-            Accommodation accommodation = (Accommodation) objectArr[0];
-            Room room = (Room) objectArr[1];
-            Integer minPrice = (Integer) objectArr[2];
-            AccommodationDTO accommodationDTO = entityToDtoSearch(accommodation, room, minPrice);
-            List<ImgDTO> imgDTOList = getImgList(accommodation.getAno());
-            List<String> imgFiles = imgDTOList.stream().map(ImgDTO::getImgFile).collect(Collectors.toList());
-            accommodationDTO.setImgFiles(imgFiles); // 올바른 메서드를 사용하여 이미지 파일 경로 설정
-            return accommodationDTO;
-        });
-
-        return new PageResultDTO<>(result, fn);
-    }
-
-
     public List<ImgDTO> getImgList(Long ano) {
         List<ImgDTO> imgDTOList = new ArrayList<>();
 
@@ -168,38 +136,6 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         return imgDTOList;
     }
-
-   /* @Override
-    public PageResultDTO<AccommodationDTO, Object[]> searchAccommodations
-            (AccommodationSearchDTO searchDTO, PageRequestDTO pageRequestDTO) {
-
-        // 페이지네이션 및 정렬 정보 생성
-        Pageable pageable = PageRequest.of(
-                pageRequestDTO.getPage() - 1,
-                pageRequestDTO.getSize(),
-                Sort.by("someField").descending() // 'someField'는 실제 정렬 기준 필드로 교체해야 합니다.
-        );
-
-        // 검색 조건에 따라 숙소 정보 검색
-        Page<Accommodation> accommodations;
-        if (searchDTO.getRegion() != null) {
-            accommodations = accommodationRepository.findByRegion(searchDTO.getRegion(), pageable);
-        } else if (searchDTO.getOptionIds() != null && !searchDTO.getOptionIds().isEmpty()) {
-            accommodations = accommodationRepository.findByOptions(searchDTO.getOptionIds(), pageable);
-        } else if (searchDTO.getPriceRange() != null) {
-            // priceRange를 처리하는 로직 구현
-            // 예: accommodationRepository.findByPriceRange(minPrice, maxPrice, pageable);
-        } else {
-            // 기타 검색 조건 처리
-            // Default 검색 로직이 필요한 경우 여기에 구현
-        }
-
-        // 결과를 AccommodationDTO로 변환
-        Page<AccommodationDTO> dtoPage = accommodations.map(this::entityToDto);
-
-        // PageResultDTO 객체 생성 및 반환
-        return new PageResultDTO<>(dtoPage, pageable);
-    }*/
 
 
     /* 변환 메서드 */
@@ -261,30 +197,5 @@ public class AccommodationServiceImpl implements AccommodationService {
         return accommodationDTO;
     }
 
-    private AccommodationDTO entityToDtoSearch(Accommodation accommodation, Room room, Integer minPrice) {
-
-        RoomDTO roomDTO = RoomDTO.builder().roomName(room.getRoomName()).build();
-        List<RoomDTO> roomDTOList = new ArrayList<>();
-        roomDTOList.add(roomDTO);
-
-        AccommodationDTO accommodationDTO = AccommodationDTO.builder()
-                .ano(accommodation.getAno())
-                .accommodationName(accommodation.getAccommodationName())
-                .sellerName(accommodation.getMember().getUsername()) // 관리자 이름
-                .sellerEmail(accommodation.getMember().getEmail()) // 관리자 이메일
-                .address(accommodation.getAddress())
-                .postal(accommodation.getPostal())
-                .accommodationType(accommodation.getAccommodationType())
-                .region(accommodation.getRegion())
-                .tel(accommodation.getTel())
-                .intro(accommodation.getIntro())
-                .count(accommodation.getCount())
-                .content(accommodation.getContent())
-                .minPrice(minPrice)
-                .roomDTO(roomDTOList)
-                .build();
-
-        return accommodationDTO;
-    }
 
 }

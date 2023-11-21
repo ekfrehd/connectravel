@@ -9,18 +9,141 @@
         .fieldError {
             color: #bd2130;
         }
-
         .badge-info, .badge-secondary {
             color: #000;
         }
     </style>
 </th:block>
+<head>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c7a803e4f5e6440b0235c7fa6922d495&libraries=services,clusterer" type="text/javascript"></script>
+
+    <style>
+        /*모달*/
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .modal {
+            width: 950px;
+            height: 750px;
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .modal-btn {
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        /*모달*/
+        function openModal() {
+            var modal = document.getElementById("myModal");
+            var overlay = document.getElementById("overlay");
+
+            modal.style.display = "block";
+            overlay.style.display = "block";
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            var overlay = document.getElementById("overlay");
+
+            modal.style.display = "none";
+            overlay.style.display = "none";
+        }
+    </script>
+</head>
+
+<body>
 <div layout:fragment="content">
 
     <!-- Hotel List area start -->
     <div class="responsive-overlay"></div>
     <section class="hotel-list-area section-bg-2 pat-50 pab-100">
         <div class="container">
+            <button aria-expanded="false" aria-haspopup="true" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button"
+                    style="width: 330px; margin-bottom: -80px;">지역</button>
+            <div class="dropdown-menu" style="position: absolute;
+    will-change: transform;
+    width: 330px;
+    top: 0px;
+    left: 0px;
+    transform: translate3d(160px, 179px, 0px);">
+                <a class="dropdown-item" href="#" onclick="navigateToSeoul()" style="display: inline-block; width: 49%;">서울</a>
+                <a class="dropdown-item" href="#" onclick="navigateToBusan()" style="display: inline-block; width: 49%;">부산</a>
+                <a class="dropdown-item" href="#" onclick="navigateToJeju()" style="display: inline-block; width: 49%;">제주</a>
+                <a class="dropdown-item" href="#" onclick="navigateToGangwon()" style="display: inline-block; width: 49%;">강원</a>
+                <a class="dropdown-item" href="#" onclick="navigateToGyeonggi()" style="display: inline-block; width: 49%;">경기</a>
+                <a class="dropdown-item" href="#" onclick="navigateToIncheon()" style="display: inline-block; width: 49%;">인천</a>
+                <a class="dropdown-item" href="#" onclick="navigateToGyeongsang()" style="display: inline-block; width: 49%;">경상</a>
+                <a class="dropdown-item" href="#" onclick="navigateToJeolla()" style="display: inline-block; width: 49%;">전라</a>
+                <a class="dropdown-item" href="#" onclick="navigateToChungcheong()" style="display: inline-block; width: 49%;">충청</a>
+                <!-- Add more regions as needed -->
+            </div>
+            <script>
+                // 페이지 이동
+                function navigateToSeoul() {
+                    window.location.href = "/product/list?page=1&type=r&keyword=서울";
+                }
+
+                function navigateToBusan() {
+                    window.location.href = "/product/list?page=1&type=r&keyword=부산";
+                }
+
+                function navigateToJeju() {
+                    window.location.href = "/product/list?page=1&type=r&keyword=제주";
+                }
+
+                function navigateToGangwon() {
+                    window.location.href = "/product/list?page=1&type=r&keyword=강원";
+                }
+
+                function navigateToGyeonggi() {
+                    window.location.href = "/product/list?page=1&type=r&keyword=경기";
+                }
+
+                function navigateToIncheon() {
+                    window.location.href = "/product/list?page=1&type=r&keyword=인천";
+                }
+
+                function navigateToGyeongsang() {
+                    window.location.href = "/product/list?page=1&type=r&keyword=경상";
+                }
+
+                function navigateToJeolla() {
+                    window.location.href = "/product/list?page=1&type=r&keyword=전라";
+                }
+
+                function navigateToChungcheong() {
+                    window.location.href = "/product/list?page=1&type=r&keyword=충청";
+                }
+            </script>
+            <button class="btn btn-primary" id="mapButton" onclick="openModal()" style="float: right; margin-top: 34px;">지도</button>
             <div class="shop-contents-wrapper mt-5">
                 <div class="shop-sidebar-content">
                     <div class="shop-close-content">
@@ -33,8 +156,8 @@
                                 </div>
                                 <div class="single-shop-left-title open">
                                     <h5 class="title"> 숙박기간 </h5>
-                                    <input th:if="${param.category != null}" type="hidden" name="category"
-                                           th:value="${param.category}">
+                                    <input th:if="${param.accommodationType != null}" type="hidden" name="accommodationType"
+                                           th:value="${param.accommodationType}">
                                     <input th:if="${param.region != null}" type="hidden" name="region"
                                            th:value="${param.region}"/>
                                     <input type="hidden" name="startDate" th:value="${date.startDate}"/>
@@ -45,7 +168,43 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="single-shop-left-title open">
+
+                                <!--인원 설정-->
+                                <div>
+                                    <input id="persons" name="persons" type="hidden" value="1">
+                                    <div style="width: 100%;">
+                                        <h5 class="title" style="float: left;"> 인원 </h5>
+                                        <input class="btn btn-outline-primary" onclick='count("minus")' style="float: left; margin-left: 15%;" type='button' value='-'/>
+                                        <div id='result' style="float: left; margin-left: 12%; color: #1e84fe; font-size: 18px; font-weight: 900;">1</div>
+                                        <input class="btn btn-outline-primary" onclick='count("plus")' style="float: left; margin-left: 12%;" type='button' value='+'/>
+                                    </div>
+                                    <script>
+                                        function count(type) {
+                                            // 결과를 표시할 element
+                                            const resultElement = document.getElementById('result');
+
+                                            // 현재 화면에 표시된 값
+                                            let number = resultElement.innerText;
+
+                                            // 최소값 및 최대값 설정
+                                            const minValue = 1;
+                                            const maxValue = 20;
+
+                                            // 더하기/빼기
+                                            if (type === 'plus' && number < maxValue) {
+                                                number++;
+                                            } else if (type === 'minus' && number > minValue) {
+                                                number--;
+                                            }
+
+                                            // 결과 출력
+                                            resultElement.innerText = number;
+                                            document.getElementById('persons').value = number;
+                                        }
+                                    </script>
+                                </div>
+
+                                <div class="single-shop-left-title open" style="clear: both; margin-bottom: 20px;">
                                     <h5 class="title"> 가격 </h5>
                                     <div class="single-shop-left-inner mt-4">
                                         <div class="price-range-slider" data-min="0" data-max="1000000"
@@ -74,6 +233,17 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!--옵션 설정-->
+                                <div class="single-shop-left-title">
+                                    <h5 style="cursor: pointer; position: relative; font-size: 20px; line-height: 36px; margin: -4px 0 15px;"> 옵션 </h5>
+                                    <div style="margin-bottom: 55px;">
+                                        <div style="width: 50%; float: left;" th:each="option : ${options}">
+                                            <input class="customInputProduct" name="optionIds" style=" width: 50px; height: 20px; margin-left: -15px;" th:text="${option.optionName}" th:value="${option.ono}" type="checkbox">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="single-shop-left-title"><br></div>
                             </form>
                         </div>
                     </div>
@@ -87,9 +257,9 @@
                                         <div class="hotel-view-flex" th:if="${not #lists.isEmpty(dto.imgFiles)}">
                                             <a th:href="@{/product/{ano}(ano=${dto.ano},startDate=${date.startDate},endDate=${date.endDate})}">
                                                 <img th:src="@{'/imgtest/' + ${dto.imgFiles[0]}}"
-                                                th:alt="${dto.accommodationName}"
-                                                class="hotel-view-thumb hotel-view-list-thumb bg-image"
-                                                width="300px" height="326px"/>
+                                                     th:alt="${dto.accommodationName}"
+                                                     class="hotel-view-thumb hotel-view-list-thumb bg-image"
+                                                     width="300px" height="326px"/>
                                             </a>
                                             <div class="hotel-view-contents">
                                                 <div class="hotel-view-contents-header">
@@ -133,10 +303,10 @@
                                     <ul class="pagination-list list-style-none">
                                         <!-- 'Previous' 버튼 수정 -->
                                         <li th:class="${pageResult.prev} ? 'pagination-list-item-prev' : 'pagination-list-item-prev disabled'">
-                                            <a th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${pageResult.page - 1},
+                                            <a th:href="@{/product/list(accommodationType=${param.accommodationType}? ${param.accommodationType} : null, page=${pageResult.page - 1},
                                             inputedMinprice=${param.inputedMinprice}? ${param.inputedMinprice} : 0,
                                                 inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000)}"
-                                               class="pagination-list-item-button"> Prev </a>
+                                               class="pagination-list-item-button"> 이전 </a>
                                         </li>
 
                                         <!-- 페이지네이션 시작 페이지 및 끝 페이지 계산 -->
@@ -147,7 +317,7 @@
                                             <li th:each="page: ${#numbers.sequence(1, pageResult.totalPage)}"
                                                 th:if="${page >= startPage and page <= endPage}"
                                                 th:class="${pageResult.page == page} ? 'pagination-list-item active' : 'pagination-list-item'">
-                                                <a th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${page},
+                                                <a th:href="@{/product/list(accommodationType=${param.accommodationType}? ${param.accommodationType} : null, page=${page},
                                                 inputedMinprice=${param.inputedMinprice}? ${param.inputedMinprice} : 0,
                                                 inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000 )}"
                                                    class="pagination-list-item-link"> [[${page}]] </a>
@@ -157,10 +327,10 @@
 
                                         <!-- 'Next' 버튼 수정 -->
                                         <li th:class="${pageResult.next} ? 'pagination-list-item-next' : 'pagination-list-item-next disabled'">
-                                            <a th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${pageResult.page + 1},
+                                            <a th:href="@{/product/list(accommodationType=${param.accommodationType}? ${param.accommodationType} : null, page=${pageResult.page + 1},
                                             inputedMinprice=${param.inputedMinprice}? ${param.inputedMinprice} : 0,
                                             inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000)}"
-                                               class="pagination-list-item-button"> Next </a>
+                                               class="pagination-list-item-button"> 다음 </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -170,6 +340,89 @@
                 </div>
             </div>
         </div>
+
+        <!--모달-->
+        <div id="myModal" class="modal">
+            <span onclick="closeModal()" style="cursor: pointer; float: right;">&times;</span>
+            <div id="map" style="width:100%;height: 97%;"></div>
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+
+                document.getElementById("mapButton").addEventListener("click", function () {
+                    relayout(); // 지도 짤림 방지
+                });
+
+                var dtoAddresses = /*[[${pageResult.dtoList.![address]}]]*/ []; // dto 주소
+                var dtoName = /*[[${pageResult.dtoList.![accommodationName]}]]*/ []; // dto 숙소명
+                var dtoType = /*[[${pageResult.dtoList.![accommodationType]}]]*/ []; // dto 타입
+                var dtoTel = /*[[${pageResult.dtoList.![tel]}]]*/ []; // dto 연락처
+                var links = /*[[${pageResult.dtoList.![ano]}]]*/ []; // dto 게시글 번호
+                var minPrice =   /*[[${pageResult.dtoList.![minPrice]}]]*/ []; // dto 최저가
+                var imgFiles =   /*[[${pageResult.dtoList.![imgFiles]}]]*/ []; // dto 이미지명
+
+                var geocoder = new kakao.maps.services.Geocoder(); // 지오코더 서비스 생성
+                var mapContainer = document.getElementById('map'); // 지도 생성
+                var mapOption = { // 지도 옵션 설정
+                    center: new kakao.maps.LatLng(40, 121.5),
+                    level: 13
+                };
+
+                var map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성, 지도 옵션
+
+                // 각 주소에 대한 좌표를 가져와서 지도에 마커 표시
+                dtoAddresses.forEach(function (address, index) { // index 매개변수 추가
+                    // 주소를 좌표로 변환하는 지오코더 함수
+                    geocoder.addressSearch(address, function (result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                            // 주소별로 마커 생성하여 지도에 추가
+                            var marker = new kakao.maps.Marker({
+                                map: map,
+                                position: coords,
+                                title: "여기에 제목을 입력하세요", // 원하는 제목 입력
+                            });
+
+                            // Check if the array has elements
+                            if (imgFiles.length > 0) {
+                                // Access the value in the 0th index
+                                var firstImgFile = imgFiles[0]
+                                console.log(firstImgFile)
+
+                                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                                var infowindow = new kakao.maps.InfoWindow({
+                                    content: '<div><img src="/imgtest/' + firstImgFile + '" alt="Image" width="100px" height="100px" style="float: left; margin-right: 10px;"></div>' + '<div style="width:300px;text-align:center; margin-bottom: 0; font-size: 12px;"><b>' + dtoName[index] + '</b><br><p style="font-size: 12px; text-align: left">' + "타입 : " + dtoType[index] + '<br>' + '연락처 : ' + dtoTel[index] + '<br>' + '최저가 : ' + minPrice[index] + '원' + '</p></div>' + '<div style="text-align: center"><a href="http://localhost/product/' + links[index] + '" target="_blank">보러가기</a><div>',
+                                });
+                            } else {
+                                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                                var infowindow = new kakao.maps.InfoWindow({
+                                    content: '<div style="width:215px;text-align:center;"><b>' + dtoName[index] + '</b><br>' + "타입 : " + dtoType[index]
+                                        + '<br>' + '연락처 : ' + dtoTel[index] + '<br>' + '최저가 : ' + minPrice[index] + '원' + '<br><a href="http://localhost/product/' + links[index] + '" target="_blank">보러가기</a></div>',
+                                });
+                            }
+
+                            var markerClicked = false; // 마커 클릭 상태를 나타내는 변수
+
+                            // 마커에 클릭 이벤트를 등록합니다
+                            kakao.maps.event.addListener(marker, 'click', function () {
+                                if (markerClicked) {
+                                    infowindow.close(); // 이미 클릭된 상태이면 인포윈도우를 닫습니다
+                                } else {
+                                    infowindow.open(map, marker); // 클릭되지 않은 상태이면 인포윈도우를 엽니다
+                                }
+                                markerClicked = !markerClicked; // 마커 클릭 상태를 토글합니다
+                            });
+                        }
+                    });
+                });
+                /*]]>*/
+                function relayout() {
+                    map.relayout();
+                }
+            </script>
+        </div>
+
+        <div id="overlay" class="overlay" onclick="closeModal()"></div>
     </section>
 
     <script>
@@ -208,7 +461,6 @@
         $('#clear').click(function (e) {
 
             searchForm.empty().submit();
-
         });
 
 
@@ -221,7 +473,6 @@
         priceRangeSlider.dataset.startMin = (inputedMinprice !== null) ? inputedMinprice.toString() : '0';
         priceRangeSlider.dataset.startMax = (inputedMaxprice !== null) ? inputedMaxprice.toString() : '1000000';
     </script>
-
 </div>
-
+</body>
 </html>

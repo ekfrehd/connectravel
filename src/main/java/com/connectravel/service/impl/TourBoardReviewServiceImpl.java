@@ -90,13 +90,33 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
     @Override
     @Transactional
     public void deleteTourBoardReviewWithReplies(Long tbrno) {
+
+
         // TourBoardReview 조회
-        TourBoardReview tourBoardReview = tourBoardReviewRepository.findById(tbrno)
+        TourBoardReview tourBoardReview = tourBoardReviewRepository.findById(tbrno) // 삭제할 가이드 게시글 리뷰 번호를 찾는다.
                 .orElseThrow(() -> new EntityNotFoundException("TourBoardReview not found"));
+
+        // TourBoard 조회
+        TourBoard tourBoard = tourBoardReview.getTourBoard();
+
+        double currentGrade = tourBoard.getGrade();
+        double newGrade = tourBoardReview.getGrade();
+        int currentCount = tourBoard.getReviewCount();
+
+        if (currentCount > 1) {
+            double averageGrade = ((currentGrade * currentCount) - newGrade) / (currentCount - 1);
+            tourBoard.setGrade(averageGrade);
+            tourBoard.setReviewCount(currentCount - 1);
+        } else {
+            tourBoardReviewRepository.deleteById(tbrno);
+            tourBoard.setGrade(0);
+            tourBoard.setReviewCount(0);
+            tourBoardRepository.save(tourBoard); // 수정된 TourBoard를 저장
+            return;
+        }
 
         // TourBoardReview 삭제
         tourBoardReviewRepository.deleteById(tbrno);
-
     }
 
 

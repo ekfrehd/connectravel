@@ -38,7 +38,7 @@
         // 로그아웃 시 토큰을 제거합니다.
         function logout() {
             localStorage.removeItem('token');
-            location.href = "/member/logout";
+            location.href = "/logout";
         }
 
         authenticatedRequest(); // 인증이 필요한 요청함수 바로 보내기

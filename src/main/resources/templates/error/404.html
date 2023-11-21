@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout1}">
+
+<body>
+<div layout:fragment="content" style="display: flex;
+    flex-direction: column;
+    align-items: center;">
+    <img th:src="@{/assets/img/error/404.jpg}" style="margin: 50px 0;">
+    <div class="errorText">
+        <h1>페이지를 찾을 수 없습니다.</h1>
+        <br>
+        <h3>경로를 확인해주세요.</h3>
+        <br>
+        <div>
+            CODE: <span th:text="${code}"></span><br>
+            MSG: <span th:text="${msg}"></span><br>
+            TIMESTAMP: <span th:text="${timestamp}"></span><br>
+        </div>
+    </div>
+</div>
+</body>
+</html>

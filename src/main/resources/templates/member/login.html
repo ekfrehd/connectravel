@@ -8,12 +8,12 @@
 <meta name="csrf-header-name" th:content="${_csrf.headerName}">
 <meta name="csrf-token" th:content="${_csrf.token}">
 
-<div layout:fragment="content">
+<div layout:fragment="content" style=" height: 45vh;">
     <div class="container text-center">
         <div class="login-form d-flex justify-content-center">
             <div class="col-sm-5" style="margin-top: 30px;">
                 <div class="panel">
-                    <p>아이디와 비밀번호를 입력해주세요</p>
+                    <p>이메일과 비밀번호를 입력해주세요</p>
                 </div>
                 <div th:if="${param.error}" class="form-group">
                     <span th:text="${exception}" class="alert alert-danger">잘못된 아이디나 암호입니다</span>

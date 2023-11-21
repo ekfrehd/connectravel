@@ -1,8 +1,8 @@
 package com.connectravel.service;
 
-import com.connectravel.domain.dto.*;
+import com.connectravel.domain.dto.AccommodationDTO;
+import com.connectravel.domain.dto.ImgDTO;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface AccommodationService {
@@ -17,13 +17,4 @@ public interface AccommodationService {
 
     List<ImgDTO> getImgList(Long ano);
 
-    PageResultDTO<AccommodationDTO, Object[]> searchAccommodationList
-            (PageRequestDTO pageRequestDTO, String keyword, String category, String region,
-             LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice);
-
-
-    /* 숙소 검색 기능 */
-  /*  PageResultDTO<AccommodationDTO, Object[]> searchAccommodations
-            (AccommodationSearchDTO searchDTO, PageRequestDTO pageRequestDTO);
-*/
 }

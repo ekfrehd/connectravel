@@ -103,9 +103,9 @@
                             <input name="keyword" th:value="${requestDTO.keyword}" type="hidden">
 
                             <div class="form-group">
-                                <label>Tbno</label>
+                                <label hidden="hidden">Tbno</label>
                                 <input class="form--control" name="tbno" readonly th:value="${tourboard.tbno}"
-                                       type="text">
+                                       type="text" hidden="hidden">
                             </div>
 
                             <div class="form-group">
@@ -151,25 +151,25 @@
                                 </script>
                             </div>
                             <div class="form-group">
-                                <label>RegDate</label>
+                                <label hidden="hidden">RegDate</label>
                                 <input class="form--control" readonly
                                        th:value="${#temporals.format(tourboard.regDate, 'yyyy/MM/dd HH:mm:ss')}"
-                                       type="text">
+                                       type="text" hidden="hidden">
                             </div>
                             <div class="form-group">
-                                <label>ModDate</label>
+                                <label hidden="hidden">ModDate</label>
                                 <input class="form--control" readonly
                                        th:value="${#temporals.format(tourboard.modDate, 'yyyy/MM/dd HH:mm:ss')}"
-                                       type="text">
+                                       type="text" hidden="hidden">
                             </div>
 
                         </form>
 
-                        <button class="btn btn-primary modifyBtn" type="button">Modify</button>
+                        <button class="btn btn-primary modifyBtn" type="button">수정</button>
 
-                        <button class="btn btn-info listBtn" type="button">List</button>
+                        <button class="btn btn-info listBtn" type="button">목록</button>
 
-                        <button class="btn btn-danger removeBtn" type="button">Remove</button>
+                        <button class="btn btn-danger removeBtn" type="button">삭제</button>
 
                         <script th:inline="javascript">
 

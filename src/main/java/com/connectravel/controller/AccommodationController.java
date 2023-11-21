@@ -5,7 +5,6 @@ import com.connectravel.domain.dto.ImgDTO;
 import com.connectravel.domain.dto.OptionDTO;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.repository.AccommodationRepository;
-import com.connectravel.repository.MemberRepository;
 import com.connectravel.service.AccommodationService;
 import com.connectravel.service.ImgService;
 import com.connectravel.service.OptionService;
@@ -33,8 +32,6 @@ public class AccommodationController {
     private final AccommodationRepository accommodationRepository;
 
     private final ImgService imgService;
-
-    private final MemberRepository memberRepository;
 
     @GetMapping("register")
     public String register(Model model, @AuthenticationPrincipal Member member) {

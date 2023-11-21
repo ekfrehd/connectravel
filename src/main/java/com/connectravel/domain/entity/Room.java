@@ -63,11 +63,6 @@ public class Room {
         reservation.setRoom(this);
     }
 
-    public void removeReservation(Reservation reservation) {
-        reservations.remove(reservation);
-        reservation.setRoom(null);
-    }
-
     public void updateRoomDetails(RoomDTO roomDTO) {
         this.roomName = roomDTO.getRoomName();
         this.price = roomDTO.getPrice();
