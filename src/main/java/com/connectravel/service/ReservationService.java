@@ -9,7 +9,7 @@ import java.util.List;
 public interface ReservationService {
 
     /* 예약 생성, 조회, 수정, 취소(요청,승인) */
-    ReservationDTO bookRoom(ReservationDTO reservationDTO);
+    ReservationDTO registerReservation(ReservationDTO reservationDTO);
 
     ReservationDTO getRoomBookingDetails(Long rvno);
 

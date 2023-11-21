@@ -11,14 +11,11 @@
 <div layout:fragment="content">
     <div style="padding: 15px;">
         <div class="white-box">
-            <button class="btn btn-primary" type="button" onclick="'location.href=\'/seller/room/update?rno=\' + ${dto.rno}'">수정하기</button>
-            <button class="btn btn-danger" type="button" onclick="deleteRoom(${dto.rno})">삭제하기</button><br/></br>
-
             <script th:inline="javascript">
                 function deleteRoom(rno) {
                     if (confirm('정말 삭제하시겠습니까?')) {
                         $.ajax({
-                            url: '/seller/room/delete?rno=' + rno,
+                            url: '/seller/delete?rno=' + rno,
                             type: 'get',
                             success: function(result) {
                                 if (result === 'success') {
@@ -31,17 +28,15 @@
             </script>
 
 
-            <h5 class="card-title" th:text="'방 이름 : ' + ${dto.room_name}"></h5><br/><br/>
-            <h5 class="card-text" th:text="'방 가격 : ' + ${dto.price}"></h5><br/></div>
+            <h5 class="card-title" th:text="'방 이름 : ' + ${roomDTO.roomName}"></h5><br/><br/>
+            <h5 class="card-text" th:text="'방 가격 : ' + ${roomDTO.price}"></h5><br/></div>
         <h5 class="card-text">내용</h5>
-        <h5 class="card-text" th:utext="${dto.content}"></h5>
+        <h5 class="card-text" th:utext="${roomDTO.content}"></h5>
 
-        <!--<img  th:src="${'/imgtest/rw.png'}">-->
-        <div th:each="img : ${imgs}">
-            <br>
-            <img th:src="'/imgtest/' + ${img.Imgfile}">
-            <br>
+        <div th:each="imgFileName : ${roomDTO.imgFiles}">
+            <img th:src="@{'/imgtest/' + ${imgFileName}}" th:alt="'Room Image'" />
         </div>
+
     </div>
 </div>
 </div>

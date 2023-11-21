@@ -4,6 +4,11 @@
       layout:decorate="~{fragments/layout1}">
 
 <head>
+    <!-- 추가된 라이브러리 -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI/tZ1iU5A6vjM6EXA9js9HAdw1l9hBzh1P3cEE="
+            crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"
           integrity="sha512-F2E+YYE1gkt0T5TVajAslgDfTEUQKtlu4ralVq78ViNxhKXQLrgQLLie8u1tVdG2vWnB3ute4hcdbiBtvJQh0g=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -11,6 +16,7 @@
             integrity="sha512-dSI4QnNeaXiNEjX2N8bkb16B7aMu/8SI5/rE6NIa3Hr/HnWUO+EAZpizN2JQJrXuvU7z0HTgpBVk/sfGd0oW+w=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
+
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -38,21 +44,21 @@
                                     <div th:each="img, i : ${accommodationImgDTOS}">
                                         <div th:if="${i.index == 0}"
                                              class="details-contents-header-thumb">
-                                            <img th:src="|/imgtest/${img.imgfile}|" th:alt="${img.imgfile}"
+                                            <img th:src="|/imgtest/${img.imgFile}|" th:alt="${img.imgFile}"
                                                  width="816px" height="356px"/>
-                                            <a th:href="|/imgtest/${img.imgfile}|"
+                                            <a th:href="|/imgtest/${img.imgFile}|"
                                                class="more-photos gallery-popup-two"> <i class="las la-plus"></i> 더 많은
                                                 이미지 보기 </a>
                                         </div>
                                         <div th:if="${i.index > 0}" style="display: none;">
-                                            <a th:href="|/imgtest/${img.imgfile}|" class="gallery-popup-two"></a>
+                                            <a th:href="|/imgtest/${img.imgFile}|" class="gallery-popup-two"></a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-5">
                                     <span class="hotel-view-contents-review"> <i class="las la-star"></i> [[${accommodation.grade}]] <span
-                                            class="hotel-view-contents-review-count"> ([[${accommodation.reviewcount}]]) </span> </span>
-                                    <h3 class="hotel-view-contents-title"> [[${accommodation.name}]] </h3>
+                                            class="hotel-view-contents-review-count"> ([[${accommodation.reviewCount}]]) </span> </span>
+                                    <h3 class="hotel-view-contents-title"> [[${accommodation.accommodationName}]] </h3>
                                     <span class="hotel-view-contents-location-icon"> <i
                                             class="las la-map-marker-alt"></i> </span>
                                     <span class="hotel-view-contents-location-para"> [[${accommodation.address}]]  </span>
@@ -99,7 +105,7 @@
                                                 map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
                                                 var accommodationAddress = /*[[${accommodation.address}]]*/ "";
-                                                var accommodationName = /*[[${accommodation.name}]]*/ "";
+                                                var accommodationName = /*[[${accommodation.accommodationName}]]*/ "";
 
                                                 var geocoder = new kakao.maps.services.Geocoder();
 
@@ -140,7 +146,7 @@
                                         <div class="review-tab-contents">
                                             <div class="review-tab-contents-single">
                                                 <span class="hotel-view-contents-review"> <i class="las la-star"></i> [[${accommodation.grade}]]</span>
-                                                <span class="hotel-view-contents-review-count"> 총 [[${accommodation.reviewcount}]]건의 리뷰 </span>
+                                                <span class="hotel-view-contents-review-count"> 총 [[${accommodation.reviewCount}]]건의 리뷰 </span>
                                             </div>
                                             <div th:each="dto : ${pageResultDTO.dtoList}"
                                                  th:if="dto != null" class="border-bottom">
@@ -162,24 +168,84 @@
                                                 <div th:each="imgEntry : ${reviewBoardImgMap.entrySet()}"
                                                      th:if="${imgEntry.key == dto.rbno}">
                                                     <div th:each="img, iterStat : ${imgEntry.value}"
-                                                         th:if="${img != null and img.imgfile != null}">
+                                                         th:if="${img != null and img.imgFile != null}">
                                                         <div th:if="${iterStat.index == 0}">
                                                             <div th:id="'gallery-' + ${dto.rbno}">
-                                                                <a th:href="|/imgtest/${img.imgfile}|">
-                                                                    <img th:src="|/imgtest/${img.imgfile}|"
+                                                                <a th:href="|/imgtest/${img.imgFile}|">
+                                                                    <img th:src="|/imgtest/${img.imgFile}|"
                                                                          class="img-fluid"
                                                                          style="width:150px; height: auto;"/>
                                                                 </a>
                                                             </div>
                                                         </div>
                                                         <div th:if="${iterStat.index > 0}">
-                                                            <a href="#" th:href="|/imgtest/${img.imgfile}|"
+                                                            <a href="#" th:href="|/imgtest/${img.imgFile}|"
                                                                th:attr="data-gallery-id='gallery-' + ${dto.rbno}"
                                                                style="display: none;"></a>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <p class="about-review-para mt-3" th:utext="${dto.content}"/></br>
+
+                                                <!-- 답글 작성 폼 -->
+                                                <div th:if="${#authentication != null}">
+                                                    <form th:attr="id='replyForm-' + ${dto.rbno}" class="replyForm" th:data-rbno="${dto.rbno}">
+                                                        <div class="form-group">
+                                                            <textarea name="content" class="form-control" placeholder="답글을 작성해주세요"></textarea>
+                                                        </div>
+                                                        <script th:inline="javascript">
+                                                            function createReviewReply(form) {
+                                                                const rbno = $(form).attr('th:data-rbno');
+                                                                const content = $('textarea[name="content"]', form).val();
+
+                                                                console.log(rbno);
+                                                                console.log(content);
+
+                                                                // 서버로 Ajax 요청 보내기
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    url: '/product/review-reply/create',
+                                                                    contentType: 'application/json',
+                                                                    data: JSON.stringify({rbno: rbno, content: content}),
+                                                                    success: function (data) {
+                                                                        // 서버 응답에 따른 처리
+                                                                        if (data.success) {
+                                                                            // 새로운 답글을 목록에 추가
+                                                                            const newReply = `<div class="border-bottom"><p>${content}</p></div>`;
+                                                                            $('#repliesContainer').append(newReply);
+                                                                            console.log(data);
+
+                                                                            // 성공 메시지 등의 처리
+                                                                            alert('답글이 성공적으로 작성되었습니다.');
+                                                                        } else {
+                                                                            // 실패한 경우에 대한 처리
+                                                                            alert('답글 작성에 실패했습니다.');
+                                                                        }
+                                                                    },
+                                                                    error: function (error) {
+                                                                        console.error('Error creating review reply:', error);
+                                                                    }
+                                                                });
+                                                            }
+                                                        </script>
+                                                        <button type="button" onclick="createReviewReply(this.form)">Create Reply</button>
+                                                    </form>
+                                                </div>
+
+
+
+
+                                                <!-- 답글 목록 -->
+                                                <div id="repliesContainer-${dto.rbno}" class="repliesContainer">
+                                                    <div th:each="reply : ${dto.replies}" class="border-bottom">
+                                                        <h5 th:value=" ${dto.rbno}"></h5>
+                                                        <div class="review-tab-contents-author mt-4">
+                                                            <h4 class="review-tab-contents-author-name" th:text="${reply.replyer}"></h4>
+                                                        </div>
+                                                        <p class="about-review-para mt-3" th:utext="${reply.content}"></p>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                             <div class="review-tab-contents-single"
                                                  th:each="dto : ${pageResultDTO.dtoList}"
@@ -231,8 +297,8 @@
                             <div class="row-cols-md-4" style="margin-left: 20px;">
                                 <form id="daterange" onsubmit="disableDaterangeInput()"
                                       class="single-shop-left-inner mt-4">
-                                    <input type="hidden" name="StartDate" th:value="${date.StartDate}"/>
-                                    <input type="hidden" name="EndDate" th:value="${date.EndDate}"/>
+                                    <input type="hidden" name="startDate" th:value="${date.startDate}"/>
+                                    <input type="hidden" name="endDate" th:value="${date.endDate}"/>
                                     <ul class="single-shop-left-list active-list list-style-none">
                                         <li class="item-search">
                                             <input type="text" class="form--control" name="daterange"/>
@@ -245,18 +311,20 @@
                                 </form>
                             </div>
                             <div class="hotel-view-flex" th:each="dto : ${R_list}">
-                                <img th:src="'/imgtest/' + ${dto[1]}" th:width="280px" th:height="150px"
-                                     th:if="${dto[1] != null}">
-                                <div class="no-image" th:if="${dto[1] == null}">No Image</div>
+                                <!-- 이미지 표시 부분 수정 -->
+                                <div th:if="${not #lists.isEmpty(dto[0].imgFiles)}">
+                                    <img th:src="@{'/imgtest/' + ${dto[0].imgFiles[0]}}" th:alt="'Room Image'" th:width="280px" th:height="150px"/>
+                                </div>
+                                <div th:if="${#lists.isEmpty(dto[0].imgFiles)}">No Image</div>
 
                                 <div class="hotel-view-contents">
                                     <div class="hotel-view-contents-header">
                                         <div class="hotel-view-contents-header-flex d-flex flex-wrap gap-3 align-items-center justify-content-between">
                                             <h3 class="hotel-view-contents-title">
-                                                [[${dto[0].room_name}]]
+                                                [[${dto[0].roomName}]]
                                             </h3>
                                             <div class="btn-wrapper" th:if="${dto[2] == null}">
-                                                <a th:href="@{/reservation/register(rno=${dto[0].rno},StartDate=${date.StartDate},EndDate=${date.EndDate})}"
+                                                <a th:href="@{/reservation/register(rno=${dto[0].rno},startDate=${date.startDate},endDate=${date.endDate})}"
                                                    class="cmn-btn btn-bg-1 btn-small"> 예약하기 </a>
                                             </div>
                                             <div class="cmn-btn btn-wrapper" th:if="${dto[2] != null}">
@@ -318,8 +386,8 @@
 
     <script>
         $(function () {
-            let startDate = $('input[name="StartDate"]').val();
-            let endDate = $('input[name="EndDate"]').val();
+            let startDate = $('input[name="startDate"]').val();
+            let endDate = $('input[name="endDate"]').val();
 
             // Check if the dates are valid
             if (!moment(startDate, 'YYYY-MM-DD', true).isValid()) {
@@ -337,8 +405,8 @@
                 startDate = start.format('YYYY-MM-DD');
                 endDate = end.format('YYYY-MM-DD');
 
-                $('input[name="StartDate"]').val(startDate);
-                $('input[name="EndDate"]').val(endDate);
+                $('input[name="startDate"]').val(startDate);
+                $('input[name="endDate"]').val(endDate);
             });
         });
 
@@ -346,7 +414,7 @@
             $('input[name="daterange"]').prop('disabled', true);
         }
     </script>
-    <script>
+    <script th:inline="javascript">
         document.addEventListener("DOMContentLoaded", function () {
             const galleryElements = document.querySelectorAll("[id^='gallery-']");
 
@@ -363,6 +431,26 @@
                 });
             });
         });
+
+        // 이미지 갤러리 초기화 함수
+        function initializeGallery() {
+            const galleryElements = document.querySelectorAll("[id^='gallery-']");
+
+            galleryElements.forEach(function (element) {
+                const galleryId = element.id;
+                const hiddenLinks = document.querySelectorAll(`[data-gallery-id='${galleryId}']`);
+
+                hiddenLinks.forEach(function (link) {
+                    element.appendChild(link.cloneNode(true));
+                });
+
+                lightGallery(element, {
+                    selector: "a"
+                });
+            });
+        }
+
+
     </script>
 
 </div>

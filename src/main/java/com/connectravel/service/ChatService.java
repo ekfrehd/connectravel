@@ -1,7 +1,7 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.Response;
-import com.connectravel.dto.chat.ChatMessageDTO;
+import com.connectravel.domain.dto.Response;
+import com.connectravel.domain.dto.chat.ChatMessageDTO;
 import com.connectravel.domain.entity.chat.Chat;
 import com.connectravel.domain.entity.chat.ChatRoom;
 import com.connectravel.exception.AppException;

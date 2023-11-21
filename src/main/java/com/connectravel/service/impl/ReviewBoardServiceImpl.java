@@ -153,6 +153,21 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
         return list;
     } // 사용자가 남긴 숙소 리뷰의 이미지들을 가져오는 메서드
 
+    @Override
+    public List<ImgDTO> getImgList(Long rbno) {
+        List<ImgDTO> imgDTOList = new ArrayList<>();
+
+        List<ReviewBoardImg> reviewBoardImgList = reviewBoardImgRepository.findByReviewBoardRbno(rbno);
+        for (ReviewBoardImg reviewBoardImg : reviewBoardImgList) {
+            ImgDTO imgDTO = new ImgDTO();
+            imgDTO.setIno(reviewBoardImg.getIno());
+            imgDTO.setImgFile(reviewBoardImg.getImgFile());
+            // 필요한 경우 여기에 추가 필드 설정
+            imgDTOList.add(imgDTO);
+        }
+
+        return imgDTOList;
+    }
 
     /* 변환 메서드 */
     private ReviewBoard dtoToEntity(ReviewBoardDTO dto, Member member, Reservation reservation) {

@@ -27,6 +27,7 @@ public class QnaReplyServiceImpl implements QnaReplyService {
     @Override
     public Long createQnaReply(QnaReplyDTO qnaReplyDTO) {
 
+
         QnaReply qnaReply = dtoToEntity(qnaReplyDTO, memberRepository);
 
         qnaReplyRepository.save(qnaReply);

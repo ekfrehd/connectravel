@@ -98,13 +98,13 @@
                         <tr>
                             <th>숙박업소 명</th>
                             <td>
-                                <input type="text" class="form-control" name="name" placeholder="숙박업소 명을 입력하세요.">
+                                <input type="text" class="form-control" name="accommodationName" placeholder="숙박업소 명을 입력하세요.">
                             </td>
                         </tr>
                         <tr>
                             <th>숙박업소 종류</th>
                             <td>
-                                <select class="form-select" name="category">
+                                <select class="form-select" name="accommodationType">
                                     <option value="motel">모텔</option>
                                     <option value="hotel">호텔&리조트</option>
                                     <option value="pension">팬션</option>
@@ -116,7 +116,7 @@
                         <tr>
                             <th>사업주 명</th>
                             <td>
-                                <input type="text" class="form-control" name="adminname"
+                                <input type="text" class="form-control" name="sellerName"
                                        placeholder="숙박업소를 운영하는 분의 성함을 입력하세요.">
                             </td>
                         </tr>
@@ -144,6 +144,14 @@
                             <th>숙박업소 소개</th>
                             <td>
                                 <textarea class="form-control" rows="5" name="intro"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>옵션</th>
+                            <td>
+                                <div th:each="option : ${options}">
+                                    <input type="checkbox" th:value="${option.ono}" name="optionIds" th:text="${option.optionName}">
+                                </div>
                             </td>
                         </tr>
                         <tr>

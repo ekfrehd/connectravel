@@ -22,4 +22,12 @@ public interface MemberService {
 
   Member dtoToEntity(MemberDTO memberDTO);
 
+  void vaildateDuplicateMember(Member member);
+
+  Member editMember(MemberDTO memberDTO);
+
+  Member changePassword(MemberDTO memberDTO);
+
+  Member changeSeller(MemberDTO memberDTO);
+
 }

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<head>
+
+    <!--    <link rel="canonical" href="https://getbootstrap.kr/docs/5.1/examples/checkout/">-->
+    <!--    &lt;!&ndash; Bootstrap core CSS &ndash;&gt;-->
+    <!--    <link href="/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!-- Favicons -->
+    <!--    달력-->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <!--   sweetalert2 알림 커스텀    -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+
+    <!--  알림 js  -->
+    <script type="text/javascript" src="/js/swal.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.891.0.min.js"></script>
+
+
+    <meta name="theme-color" content="#7952b3">
+
+    <link href="https://webfontworld.github.io/goodchoice/Jalnan.css" rel="stylesheet">
+    <style>
+
+        * {
+            font-family: 'Jalnan';
+        }
+
+    </style>
+
+</head>
+<body class="bg-light">
+
+
+<script type="text/javascript" src="/js/write.js"></script>
+
+<div class="container">
+
+    <div class="py-5 text-center">
+
+        <h2 class="maintext">🎉 운동메 모집하기</h2>
+        <!--            <script>-->
+        <!--                const $text = document.querySelector(".maintext");-->
+
+        <!--                // 글자 모음-->
+        <!--                const letters = [-->
+        <!--                    "🎉 운동메 모집하기"-->
+        <!--                ];-->
+
+        <!--                // 글자 입력 속도-->
+        <!--                const speed = 500;-->
+        <!--                let i = 0;-->
+
+        <!--                // 타이핑 효과-->
+        <!--                const typing = async () => {-->
+        <!--                    const letter = letters[i].split("");-->
+        <!--                    while (letter.length) {-->
+        <!--                        await wait(speed);-->
+        <!--                        $text.innerHTML += letter.shift();-->
+        <!--                    }-->
+        <!--                    // 잠시 대기-->
+        <!--                    await wait(800);-->
+        <!--                    // 지우는 효과-->
+        <!--                    remove();-->
+        <!--                }-->
+
+        <!--                // 글자 지우는 효과-->
+        <!--                const remove = async () => {-->
+        <!--                    const letter = letters[i].split("");-->
+        <!--                    while (letter.length) {-->
+        <!--                        await wait(speed);-->
+        <!--                        letter.pop();-->
+        <!--                        $text.innerHTML = letter.join("");-->
+        <!--                    }-->
+        <!--                    // 다음 순서의 글자로 지정, 타이핑 함수 다시 실행-->
+        <!--                    i = !letters[i+1] ? 0 : i + 1;-->
+        <!--                    typing();-->
+        <!--                }-->
+
+        <!--                // 딜레이 기능 ( 마이크로초 )-->
+        <!--                function wait(ms) {-->
+        <!--                    return new Promise(res => setTimeout(res, ms))-->
+        <!--                }-->
+
+        <!--                // 초기 실행-->
+        <!--                setTimeout(typing, 1500);-->
+        <!--            </script>-->
+
+        <p>간단한 모임을 이루어 다양한 사람들과 운동하기</p>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4 class="mb-3 text-center">운동메 모집 양식</h4>
+            <!-- 숙소 선택 드롭다운 목록 -->
+            <div class="col-12">
+                <label for="accommodation" class="form-label text-center">숙소 선택</label>
+                <select class="form-select" id="accommodation" name="accommodationAno">
+                    <option value="" selected disabled>숙소를 선택하세요</option>
+                    <!-- 숙소 목록을 Thymeleaf로 루프하며 옵션을 생성 -->
+                    <th:block th:each="accommodation : ${accommodations}">
+                        <option th:value="${accommodation.ano}" th:text="${accommodation.accommodationName}"></option>
+                    </th:block>
+                </select>
+            </div>
+
+            <div class="row g-3">
+                <div>
+                    <th:block th:each="sport : ${sportEnums}">
+                        <label class="btn btn-outline-secondary"> <input name="sportradio" type="radio"
+                                                                         th:value="${sport.value}"
+                                                                         th:text="${sport.value}">
+
+                        </label>
+                    </th:block>
+                </div>
+
+                <div class="col-12">
+                    <label for="title" class="form-label text-center">운동메 제목</label>
+                    <input type="text" class="form-control" id="title" placeholder="모임하고싶은 이름" required>
+                    <div class="invalid-feedback">
+                        제목을 입력하세요!
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="content" class="form-label text-center">세부 내용입력<span
+                            class="text-muted">(Optional)</span></label>
+                    <textarea class="form-control" id="content" placeholder="모임의 세부내용"></textarea>
+                </div>
+
+            </div>
+
+            <hr class="my-4">
+            <!--                    달력 캘린더 -->
+            <div class="row">
+                <div class="col">
+                    <label class="form-label" for="datepicker">날짜</label>
+                    <input type="date" class="form-control" id="datepicker" dataformatas="yyyy-mm-dd">
+                </div>
+                <div class="col">
+                    <label class="form-label" for="datepicker">시간</label>
+                    <input type="time" class="form-control" id="timepicker">
+                </div>
+            </div>
+
+            <script>
+                $('#datepicker')
+                    .datepicker({
+                        dateFormat: 'yy-mm-dd'//데이터 포맷 형식(yyyy : 년 mm : 월 dd : 일 )
+                    })
+                    .on('changeDate', function (e) {
+                        console.log(e);
+                        // e.date를 찍어보면 Thu Jun 27 2019 00:00:00 GMT+0900 (한국 표준시) 위와 같은 형태로 보인다.
+                    });
+            </script>
+
+            <hr class="my-4">
+
+
+            <div class="col-12">
+                <!-- 카카오 지도 api -->
+                <div id="map" class="col" style="width:1100px;height:500px;"></div>
+                <script type="text/javascript"
+                        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=99a93a891ef6fc1b81b324cfbe0ba2c0&libraries=services"></script>
+                <script>
+                    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                        mapOption = {
+                            center: new kakao.maps.LatLng(37.570986845248676, 126.97889161410725), // 지도의 중심좌표
+                            level: 3 // 지도의 확대 레벨
+                        };
+                    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+
+                    var lionPosition =  new kakao.maps.LatLng(37.570986845248676, 126.97889161410725);
+
+                    // 마커를 생성합니다
+                    var lionMarker = new kakao.maps.Marker({
+                        position: lionPosition
+                    });
+                    // 마커를 지도에 표시합니다.
+                    lionMarker.setMap(map);
+
+                    // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
+                    var iwContent = '<div class="alert alert-primary" role="alert" style="align-content: center">멋쟁이사자처럼🦁 </div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                    // 인포윈도우를 생성합니다
+                    var infowindows = new kakao.maps.InfoWindow({
+                        content : iwContent
+                    });
+
+                    // 마커에 마우스오버 이벤트를 등록합니다
+                    kakao.maps.event.addListener(lionMarker, 'mouseover', function() {
+                        // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                        infowindows.open(map, lionMarker);
+                    });
+
+                    // 마커에 마우스아웃 이벤트를 등록합니다
+                    kakao.maps.event.addListener(lionMarker, 'mouseout', function() {
+                        // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+                        infowindows.close();
+                    });
+
+                    // 주소-좌표 변환 객체를 생성합니다
+                    var geocoder = new kakao.maps.services.Geocoder();
+
+                    var marker = new kakao.maps.Marker(), // 클릭한 위치를 표시할 마커입니다
+                        infowindow = new kakao.maps.InfoWindow({zindex: 1}); // 클릭한 위치에 대한 주소를 표시할 인포윈도우입니다
+
+                    // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
+                    searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+
+                    // 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
+                    kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+                        searchDetailAddrFromCoords(mouseEvent.latLng, function (result, status) {
+                            if (status === kakao.maps.services.Status.OK) {
+                                // var detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
+                                var detailAddrValue = !!result[0].road_address ? result[0].road_address.address_name + " " : "";
+                                var detailAddr = result[0].address.address_name;
+                                document.getElementById("address_detail").value = result[0].address.address_name + " ";
+
+
+                                var content = '<div class="bAddr alert alert-primary">' +
+                                    '<span class="title">주소정보<br></span>' +
+                                    '<span style="text-align: center">'+
+                                    detailAddr +
+                                    '</span>' +
+                                    '</div>';
+
+                                // 마커를 클릭한 위치에 표시합니다
+                                marker.setPosition(mouseEvent.latLng);
+                                marker.setMap(map);
+
+                                // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
+                                infowindow.setContent(content);
+                                infowindow.open(map, marker);
+                            }
+                        });
+                    });
+
+                    // 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
+                    kakao.maps.event.addListener(map, 'idle', function () {
+                        searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+                    });
+
+                    function searchAddrFromCoords(coords, callback) {
+                        // 좌표로 행정동 주소 정보를 요청합니다
+                        geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+                    }
+
+                    function searchDetailAddrFromCoords(coords, callback) {
+                        // 좌표로 법정동 상세 주소 정보를 요청합니다
+                        geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+                    }
+
+                    // 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
+                    function displayCenterInfo(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            var infoDiv = document.getElementById('centerAddr');
+
+                            for (var i = 0; i < result.length; i++) {
+                                // 행정동의 region_type 값은 'H' 이므로
+                                if (result[i].region_type === 'H') {
+                                    infoDiv.innerHTML = result[i].address_name;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                </script>
+
+            </div>
+
+
+            <hr class="my-4">
+            <div class="row">
+                <div class="col text-center">
+                    <input type="file" accept="image/*" id="imageFile"/>
+                    <button type="button" onclick="profileUpload()"> 업로드</button>
+                    <input type="hidden" value="" name="imagePath" id="imagePath"/>
+                </div>
+            </div>
+
+
+            <hr class="my-4">
+            <div class="row">
+                <div class="col">
+                    <label for="address_detail" class="form-label">지번 주소</label>
+                    <input type="text" class="form-control" id="address_detail" placeholder="지번 주소" required>
+                </div>
+            </div>
+
+
+            <!--
+                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+                <script>
+                    window.onload = function(){
+                        document.getElementById("address_kakao").addEventListener("click", function(){ //주소입력칸을 클릭하면
+                            //카카오 지도 발생
+                            new daum.Postcode({
+                                oncomplete: function(data) { //선택시 입력값 세팅
+                                    document.getElementById("address_kakao").value = data.address; // 주소 넣기
+                                    document.querySelector("input[name=address_detail]").focus(); //상세입력 포커싱
+                                }
+                            }).open();
+                        });
+                    }
+                </script>
+            -->
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col">
+                    <label for="rangeHuman" id="rangeHuman" class="form-label">모집 인원 수</label>
+                    <input style="width:80%;" type="range" class="form-range" min="2" max="20" step="1" id="myRange">
+                </div>
+                <script>
+                    var slider = document.getElementById("myRange");
+                    var output = document.getElementById("rangeHuman");
+
+                    slider.oninput = function () {
+                        output.innerHTML = slider.value;
+                        output.innerHTML = "모집 인원 수 : " + this.value;
+                    }
+                </script>
+
+                <hr class="my-4">
+
+
+                <button class="w-100 btn btn-primary btn-lg" id="writeBtn" onclick="crewMake()">💪모임 시작하기</button>
+                <br>
+                <button class="w-100 btn btn-primary btn-lg mb3" id="backBtn">조금 더 둘러보기</button>
+                <br>
+            </div>
+
+            <div>
+
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+
+    </div>
+
+    <script>
+        document.getElementById('backBtn').addEventListener('click', back);
+
+        function back() {
+            location.href = "/view/v1/crews";
+        }
+    </script>
+</body>
+</html>

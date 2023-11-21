@@ -1,7 +1,7 @@
 package com.connectravel.controller.chat;
 
-import com.connectravel.dto.Response;
-import com.connectravel.dto.chat.ChatRoomDTO;
+import com.connectravel.domain.dto.Response;
+import com.connectravel.domain.dto.chat.ChatRoomDTO;
 import com.connectravel.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

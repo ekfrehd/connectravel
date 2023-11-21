@@ -1,10 +1,10 @@
 package com.connectravel.service;
 
+import com.connectravel.domain.dto.Response;
+import com.connectravel.domain.dto.check.CheckRequest;
+import com.connectravel.domain.dto.check.CheckResponse;
 import com.connectravel.domain.entity.Member;
 
-import com.connectravel.dto.Response;
-import com.connectravel.dto.check.CheckRequest;
-import com.connectravel.dto.check.CheckResponse;
 import com.connectravel.domain.entity.chat.Chat;
 import com.connectravel.domain.entity.chat.ChatRoom;
 import com.connectravel.domain.entity.check.ChatConfigEntity;

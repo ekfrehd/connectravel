@@ -7,8 +7,8 @@ import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.OptionRepository;
 import com.connectravel.service.AccommodationService;
-import groovy.util.logging.Log4j2;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,80 +39,97 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     @Transactional
-    public Accommodation registerAccommodation(AccommodationDTO accommodationDTO) {
+    public Long registerAccommodation(AccommodationDTO dto) {
 
-        String sellerEmail = accommodationDTO.getSellerEmail();
-        Member member = memberRepository.findByEmail(sellerEmail);
+        Accommodation accommodation = dtoToEntity(dto, memberRepository);
 
+        Member member = memberRepository.findByEmail(dto.getSellerEmail());
         if (member == null) {
-            throw new EntityNotFoundException("Member not found or not authorized");
+            throw new EntityNotFoundException("Member not found with email: " + dto.getSellerEmail());
+        } else {
         }
+        accommodation.setMember(member);
 
-        // Accommodation 엔티티 생성
-        Accommodation accommodation = Accommodation.builder()
-                .accommodationName(accommodationDTO.getAccommodationName())
-                .postal(accommodationDTO.getPostal())
-                .sellerName(member.getNickName())
-                .address(accommodationDTO.getAddress())
-                .count(accommodationDTO.getCount())
-                .region(accommodationDTO.getRegion())
-                .tel(accommodationDTO.getTel())
-                .content(accommodationDTO.getContent())
-                .intro(accommodationDTO.getIntro())
-                .accommodationType(accommodationDTO.getAccommodationType())
-                .member(member)
-                .build();
+        // 옵션 처리
+        if (dto.getOptionIds() != null) {
+            for (Long optionId : dto.getOptionIds()) {
+                Option option = optionRepository.findById(optionId)
+                        .orElseThrow(() -> new EntityNotFoundException("Option not found"));
+                AccommodationOption accommodationOption = AccommodationOption.builder()
+                        .accommodation(accommodation)
+                        .option(option)
+                        .build();
 
-        // 이미지 추가
-        for (String imgFile : accommodationDTO.getImgFiles()) {
-            AccommodationImg img = new AccommodationImg();
-            img.setImgFile(imgFile);
-            accommodation.addImage(img);
+                accommodation.addAccommodationOption(accommodationOption);
+            }
         }
+        accommodationRepository.save(accommodation);
 
-        // 옵션 추가
-        for (OptionDTO optionDTO : accommodationDTO.getOptionDTO()) {
-            Option option = optionRepository.findByOptionName(optionDTO.getOptionName())
-                    .orElseThrow(() -> new EntityNotFoundException("Option not found"));
-            AccommodationOption accommodationOption = new AccommodationOption();
-            accommodationOption.setOption(option);
-            accommodation.addAccommodationOption(accommodationOption);
-        }
-
-        // Accommodation 저장
-        return accommodationRepository.save(accommodation);
+        return accommodation.getAno();
     }
+
 
     @Override
     public AccommodationDTO modifyAccommodationDetails(AccommodationDTO accommodationDTO) {
-        // 숙소 정보 수정을 위해 DTO에서 필요한 정보 추출
-        Long accommodationId = accommodationDTO.getAno();
-        String newName = accommodationDTO.getAccommodationName();
-        String newAddress = accommodationDTO.getAddress();
-        // 이름, 주소 외 다른 것도 수정할 수 있게 할거면 여기에 추가
-
-        // 숙소 정보 유효성 검사 및 엔티티 조회
-        Accommodation accommodation = accommodationRepository.findById(accommodationId)
+        log.info("Modifying accommodation details for ID: {}", accommodationDTO.getAno());
+        Accommodation accommodation = accommodationRepository.findById(accommodationDTO.getAno())
                 .orElseThrow(() -> new EntityNotFoundException("Accommodation not found"));
 
+        log.info("Found accommodation for update: {}", accommodation);
+
         // 엔티티에 수정된 정보 적용
-        accommodation.setAccommodationName(newName);
-        accommodation.setAddress(newAddress);
+        accommodation.setAccommodationName(accommodationDTO.getAccommodationName());
+        accommodation.setAccommodationType(accommodationDTO.getAccommodationType());
+        accommodation.setAddress(accommodationDTO.getAddress());
+        accommodation.setTel(accommodationDTO.getTel());
+        accommodation.setIntro(accommodationDTO.getIntro());
+        accommodation.setContent(accommodationDTO.getContent());
+        accommodation.setPostal(accommodationDTO.getPostal());
+        accommodation.setRegion(accommodationDTO.getRegion());
+        // 추가적으로 수정하고 싶은 속성들을 여기에 추가
+
+        log.info("Updated accommodation entity: {}", accommodation);
 
         // 변경사항을 데이터베이스에 저장
         accommodationRepository.save(accommodation);
 
+        AccommodationDTO updatedDTO = entityToDto(accommodation);
+        log.info("Converted to DTO: {}", updatedDTO);
         // 수정된 숙소 정보를 다시 DTO로 변환하여 반환
         return entityToDto(accommodation);
     }
 
-    @Override
-    public AccommodationDTO getAccommodationDetails(Long accommodationAno) {
-        Accommodation accommodation = accommodationRepository.findById(accommodationAno)
-                .orElseThrow(() -> new EntityNotFoundException("Accommodation not found"));
+    @Override // 숙소번호 찾기
+    public AccommodationDTO findByAno(Long ano){
+        Accommodation accommodation = accommodationRepository.findByAno(ano);
+        AccommodationDTO accommodationDTO = AccommodationDTO
+                .builder()
+                .accommodationName(accommodation.getAccommodationName())
+                .accommodationType(accommodation.getAccommodationType())
+                .sellerName(accommodation.getSellerName())
+                .sellerEmail(accommodation.getSellerEmail())
+                .address(accommodation.getAddress())
+                .tel(accommodation.getTel())
+                .intro(accommodation.getIntro())
+                .postal(accommodation.getPostal())
+                .ano(accommodation.getAno())
+                .region(accommodation.getRegion())
+                .grade(accommodation.getGrade())
+                .content(accommodation.getContent())
+                .reviewCount(accommodation.getReviewCount())
+                .count(accommodation.getCount())
+                .build();
+        return accommodationDTO;
+    }
 
+
+    @Override
+    public AccommodationDTO findAccommodationByMemberId(Long memberId) {
+        Accommodation accommodation = accommodationRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Accommodation not found for member ID: " + memberId));
         return entityToDto(accommodation);
     }
+
 
     @Override
     public PageResultDTO<AccommodationDTO, Object[]> searchAccommodationList(
@@ -156,6 +173,31 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     /* 변환 메서드 */
+    private Accommodation dtoToEntity(AccommodationDTO dto, MemberRepository memberRepository) {
+        // 이메일로 멤버 조회
+        Member member = memberRepository.findByEmail(dto.getSellerEmail());
+
+        // Accommodation 엔티티 생성
+        Accommodation accommodation = Accommodation.builder()
+                .accommodationName(dto.getAccommodationName())
+                .accommodationType(dto.getAccommodationType())
+                .sellerName(dto.getSellerName())
+                .sellerEmail(dto.getSellerEmail())
+                .postal(dto.getPostal())
+                .region(dto.getRegion())
+                .address(dto.getAddress())
+                .tel(dto.getTel())
+                .content(dto.getContent())
+                .intro(dto.getIntro())
+                .count(dto.getCount())
+                .reviewCount(0) // 초기 리뷰 카운트는 0
+                .grade(0.0) // 초기 평점은 0.0
+                .member(member) // 관계 설정
+                .build();
+
+        return accommodation;
+    }
+
     private AccommodationDTO entityToDto(Accommodation accommodation) {
 
         // 숙박 업소에 대한 이미지 정보만 변환
@@ -165,14 +207,14 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .collect(Collectors.toList());
 
         // 옵션 정보 변환
-        List<OptionDTO> optionList = accommodation.getAccommodationOptions().stream()
-                .map(option -> new OptionDTO(option.getAono(), option.getOption().getOptionName()))
+        List<Long> optionIds = accommodation.getAccommodationOptions().stream()
+                .map(option -> option.getOption().getOno())
                 .collect(Collectors.toList());
 
         AccommodationDTO accommodationDTO = AccommodationDTO.builder()
                 .ano(accommodation.getAno())
                 .accommodationName(accommodation.getAccommodationName())
-                .sellerName(accommodation.getMember().getNickName()) // 관리자 이름
+                .sellerName(accommodation.getMember().getUsername()) // 관리자 이름
                 .sellerEmail(accommodation.getMember().getEmail()) // 관리자 이메일
                 .address(accommodation.getAddress())
                 .postal(accommodation.getPostal())
@@ -183,7 +225,7 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .count(accommodation.getCount())
                 .content(accommodation.getContent())
                 .imgFiles(imageFiles)
-                .optionDTO(optionList)
+                .optionIds(optionIds)
                 .build();
 
         return accommodationDTO;
@@ -198,7 +240,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         AccommodationDTO accommodationDTO = AccommodationDTO.builder()
                 .ano(accommodation.getAno())
                 .accommodationName(accommodation.getAccommodationName())
-                .sellerName(accommodation.getMember().getNickName()) // 관리자 이름
+                .sellerName(accommodation.getMember().getUsername()) // 관리자 이름
                 .sellerEmail(accommodation.getMember().getEmail()) // 관리자 이메일
                 .address(accommodation.getAddress())
                 .postal(accommodation.getPostal())

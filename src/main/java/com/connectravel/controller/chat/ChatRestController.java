@@ -1,8 +1,8 @@
 package com.connectravel.controller.chat;
 
-import com.connectravel.dto.Response;
-import com.connectravel.dto.chat.ChatMessageDTO;
-import com.connectravel.dto.check.CheckRequest;
+import com.connectravel.domain.dto.Response;
+import com.connectravel.domain.dto.chat.ChatMessageDTO;
+import com.connectravel.domain.dto.check.CheckRequest;
 import com.connectravel.service.ChatConfigService;
 import com.connectravel.service.ChatService;
 import lombok.RequiredArgsConstructor;

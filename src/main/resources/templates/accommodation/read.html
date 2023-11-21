@@ -59,15 +59,15 @@
             <table>
                 <tr>
                     <th>숙박업소 명</th>
-                    <td th:text="${dto.name}"></td>
+                    <td th:text="${dto.accommodationName}"></td>
                 </tr>
                 <tr>
                     <th>사업주 명</th>
-                    <td th:text="${dto.adminname}"></td>
+                    <td th:text="${dto.sellerName}"></td>
                 </tr>
                 <tr>
                     <th>숙박업소  종류</th>
-                    <td th:text="${dto.category}"></td>
+                    <td th:text="${dto.accommodationType}"></td>
                 </tr>
                 <tr>
                     <th>숙박업소 전화번호</th>
@@ -99,9 +99,9 @@
                 </tr>
             </table>
             <div th:each="img : ${accommodationImgDTOS}">
-                 <span th:if="${img.accommodationDTO.ano == dto.ano}">
+                 <span th:if="${img.accommodation.ano == dto.ano}">
                     <br>
-                  <img th:src="'/imgtest/' + ${img.img.imgfile}" th:alt="${img.img.imgfile}"/>
+                  <img th:src="'/imgtest/' + ${img.imgFile}" th:alt="${img.imgFile}"/>
                     <br>
               </span>
             </div>

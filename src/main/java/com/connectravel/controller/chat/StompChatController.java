@@ -1,14 +1,15 @@
 package com.connectravel.controller.chat;
 
-import com.connectravel.dto.chat.ChatMessageDTO;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.connectravel.domain.dto.chat.ChatMessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor

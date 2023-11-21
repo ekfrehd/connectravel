@@ -1,6 +1,6 @@
 package com.connectravel.service;
 
-import com.connectravel.dto.chat.ChatRoomDTO;
+import com.connectravel.domain.dto.chat.ChatRoomDTO;
 import com.connectravel.domain.entity.Crew;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.domain.entity.Participation;
@@ -11,11 +11,12 @@ import com.connectravel.repository.CrewRepository;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.ParticipationRepository;
 import com.connectravel.repository.chat.ChatRoomRepository;
-import java.util.ArrayList;
-import java.util.List;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

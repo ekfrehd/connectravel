@@ -1,23 +1,15 @@
 package com.connectravel.domain.entity;
 
+import com.connectravel.domain.dto.crew.CrewRequestDTO;
 import com.connectravel.domain.entity.chat.ChatRoom;
-import com.connectravel.dto.CrewRequestDTO;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -53,6 +45,10 @@ public class Crew extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Member user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accommodation_ano")
+    private Accommodation accommodation;
 
 
     //참여중인사람 조회

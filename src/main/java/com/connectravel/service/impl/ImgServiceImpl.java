@@ -14,17 +14,24 @@ import java.util.function.BiConsumer;
 @Service
 public class ImgServiceImpl implements ImgService {
 
+    private final AccommodationImgRepository accommodationImgRepository;
     private final RoomImgRepository roomImgRepository;
-
     private final ReviewBoardImgRepository reviewBoardImgRepository;
-
     private final AdminBoardImgRepository adminBoardImgRepository;
-
     private final TourBoardImgRepository tourBoardImgRepository;
-
     private final TourBoardReviewImgRepository tourBoardReviewImgRepository;
 
     private final FileManager fileManager;
+
+    @Override
+    public void AccommodationRegister(MultipartFile file, Long ano) {
+        addImage(file, ano, (realName, id) -> {
+            Accommodation accommodation = Accommodation.builder().ano(id).build();
+            AccommodationImg accommodationImg = AccommodationImg
+                    .builder().imgFile(realName).accommodation(accommodation).build();
+            accommodationImgRepository.save(accommodationImg);
+        });
+    }
 
     public void addRoomImg(MultipartFile file, Long rno) {
         addImage(file, rno, (realName, id) -> {
