@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -136,7 +135,7 @@ public class CrewViewController {
 
 
     @GetMapping("/detail/{crewId}")
-    public String detailCrew2(@PathVariable Long crewId, Model model, Authentication authentication) {
+    public String detailCrew2(@PathVariable Long crewId, Model model, @AuthenticationPrincipal Member user) {
 
 //        model.addAttribute("AWS_ACCESS_KEY", AWS_ACCESS_KEY);
 //        model.addAttribute("AWS_SECRET_ACCESS_KEY", AWS_SECRET_ACCESS_KEY);
@@ -167,7 +166,7 @@ public class CrewViewController {
 
 
             // 후기 작성여부 파악
-            Member nowUser = crewService.findByUserName(authentication.getName());
+            Member nowUser = crewService.findByUserName(user.getUsername());
 //            boolean userReviewed = crewReviewService.findReviewedUser(crewId, nowUser);
 //            model.addAttribute("userReviewed", userReviewed);
 
@@ -186,20 +185,20 @@ public class CrewViewController {
 
     // 크루 게시글 수정
     @PutMapping("/{crewId}")
-    public String modifyCrew(@PathVariable Long crewId, @ModelAttribute CrewRequest crewRequest, Authentication authentication) {
-        if(authentication == null){
+    public String modifyCrew(@PathVariable Long crewId, @ModelAttribute CrewRequest crewRequest, @AuthenticationPrincipal Member user) {
+        if(user == null){
             log.error("null error");
             return "redirect:/";
         }
-        crewService.modifyCrew(crewId, crewRequest, authentication.getName());
+        crewService.modifyCrew(crewId, crewRequest, user.getUsername());
         return "redirect:/view/v1/crews/{crewId}";
     }
 
     // 크루 게시글 수정화면
     @GetMapping("/update/{crewId}")
-    public String updateCrew(@PathVariable Long crewId, Model model, Authentication authentication) {
+    public String updateCrew(@PathVariable Long crewId, Model model, @AuthenticationPrincipal Member user) {
         Crew crew = crewRepository.findById(crewId).orElse(null);
-        if (crew == null || !crew.getUser().getUsername().equals(authentication.getName())) {
+        if (crew == null || !crew.getUser().getUsername().equals(user.getUsername())) {
             return "error/404";
         }
         CrewRequest crewRequest = new CrewRequest();
@@ -214,22 +213,22 @@ public class CrewViewController {
 
     // 크루 게시글 삭제
     @DeleteMapping("/{crewId}")
-    public String deleteCrew(@PathVariable Long crewId, Model model, Authentication authentication) {
+    public String deleteCrew(@PathVariable Long crewId, Model model, @AuthenticationPrincipal Member user) {
         Crew crew = crewRepository.findById(crewId).orElse(null);
-        Member user = userRepository.findById(crew.getUser().getId()).orElse(null);
+        Member cuser = userRepository.findById(crew.getUser().getId()).orElse(null);
         log.info("삭제 조회 중");
 
-        if (crew == null || user == null) {
+        if (crew == null || cuser == null) {
             return "error/404";
         }
-        CrewResponse crewResponse = crewService.deleteCrew(crewId, authentication.getName());
+        CrewResponse crewResponse = crewService.deleteCrew(crewId, user.getUsername());
         model.addAttribute("response", crewResponse);
         return "redirect:/";
     }
 
     // 크루 좋아요 누르기
 //    @PostMapping("/{crewId}/like")
-//    public ResponseEntity likeCrew(@PathVariable Long crewId, Authentication authentication) {
+//    public ResponseEntity likeCrew(@PathVariable Long crewId, @AuthenticationPrincipal Member user) {
 //        LikeViewResponse likeViewResponse = likeViewService.pressLike(crewId, authentication.getName());
 //        return new ResponseEntity<>(likeViewResponse, HttpStatus.OK);
 //    }
@@ -237,7 +236,7 @@ public class CrewViewController {
     // 크루 게시물 전체 조회, 검색 조회, 운동 종목 조회
     @GetMapping()
     @ApiOperation(value = "크루 게시글 전체조회", notes = "")
-    public String findAllCrew(Model model, Authentication authentication,
+    public String findAllCrew(Model model, @AuthenticationPrincipal Member user,
                               @ModelAttribute("sportRequest") CrewSportRequest crewSportRequest,
                               @PageableDefault(page = 0, size = 9, sort = "modTime", direction = Sort.Direction.DESC) Pageable pageable) {
 
@@ -295,7 +294,7 @@ public class CrewViewController {
 
     // 크루 리뷰 작성
 //    @GetMapping("/review/{crewId}")
-//    public String reviewCrew(@PathVariable Long crewId, Authentication authentication, Model model) {
+//    public String reviewCrew(@PathVariable Long crewId, @AuthenticationPrincipal Member user, Model model) {
 //
 //        if(authentication == null){
 //            log.error("null pointer Error");
@@ -362,7 +361,7 @@ public class CrewViewController {
 //
 //    // 리뷰 detail
 //    @GetMapping("/{userName}/reviewList/{reviewId}")
-//    public String findReview(@PathVariable String userName, @PathVariable Long reviewId, Model model, Authentication authentication) {
+//    public String findReview(@PathVariable String userName, @PathVariable Long reviewId, Model model, @AuthenticationPrincipal Member user) {
 //
 //        if(authentication == null){
 //            log.error("null pointer Error");

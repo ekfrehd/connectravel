@@ -1,5 +1,6 @@
 package com.connectravel.domain.dto.crew;
 
+import com.connectravel.constant.SportEnum;
 import com.connectravel.domain.entity.Crew;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,7 @@ public class CrewDetailResponse {
     private String nickName;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
-//    private SportEnum sportEnum;
+    private SportEnum sportEnum;
     private Long chatRoomId;
     private String imagePath;
     private String profileImagePath;
@@ -44,7 +45,7 @@ public class CrewDetailResponse {
                 .imagePath(crew.getImagePath())
 //                .profileImagePath(crew.getUser().getImagePath())
                 .chatRoomId(crew.getChatRoom().getRoomId())
-//                .sportEnum(crew.getSportEnum())
+                .sportEnum(crew.getSportEnum())
                 .date(crew.getDatepick()+" "+crew.getTimepick())
                 .finish(crew.getFinish())
                 .build();

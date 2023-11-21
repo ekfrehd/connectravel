@@ -96,14 +96,14 @@
                         </div>
                     </a>
                     <!-- 생성자인 경우 다른 참여자 강퇴 기능 -->
-                    <div th:if="${details.getUserName == #authentication.getName()}">
+                    <div th:if="${details.getUserName == #authentication.principal.username()}">
                        <button th:if="${member.getUserName != details.getUserName}" type="button" class="btn btn-outline-secondary btn-sm" th:crewId="${crewId}" th:userId="${member.joinUserId}"
                                th:onclick="deleteUserFromCrew(this.getAttribute('crewId'),this.getAttribute('userId'))">
                            강퇴하기
                        </button>
                     </div>
                     <!-- 일반 참여자인 경우 자기 자신만 나가기 기능-->
-                    <div th:if="${member.getUserName() == #authentication.getName() and details.getUserName != #authentication.getName()}">
+                    <div th:if="${member.getUserName() == #authentication.principal.username() and details.getUserName != #authentication.principal.username()}">
                         <button type="button" class="btn btn-outline-danger btn-sm" th:crewId="${crewId}" th:userId="${member.joinUserId}"
                                 th:onclick="deleteUserFromCrew(this.getAttribute('crewId'),this.getAttribute('userId'))">
                             나가기
@@ -160,12 +160,12 @@
                                 <input id="_method" type="hidden" name="_method" value="delete"/>
                                 <div class="form-group" align="center">
                                     <a th:href="@{'/view/v1/crews/'}" class="btn btn-success" aria-describedby="submitHelp">목록으로</a>
-                                    <a th:href="@{'/view/v1/crews/update/' + ${crewId}}" th:if="${#authentication.name} == ${details.userName}"  class="btn btn-primary " aria-describedby="submitHelp">글 수정</a>
-                                    <button th:if="${#authentication.name} == ${details.userName}" id="btn-post-delete" class="btn btn-danger " type="button" onclick="confirmDelete()">글 삭제</button>
+                                    <a th:href="@{'/view/v1/crews/update/' + ${crewId}}" th:if="${#authentication.principal.username} == ${details.userName}"  class="btn btn-primary " aria-describedby="submitHelp">글 수정</a>
+                                    <button th:if="${#authentication.principal.username} == ${details.userName}" id="btn-post-delete" class="btn btn-danger " type="button" onclick="confirmDelete()">글 삭제</button>
                                 </div>
                             </form>
                         </div>
-                        <button id="finishCrew" th:if="${#authentication.name} == ${details.userName} and ${userReviewed} == false"  class="btn btn-info" aria-describedby="submitHelp" onclick="finishCrew()">모임 종료</button>
+                        <button id="finishCrew" th:if="${#authentication.principal.username} == ${details.userName} "  class="btn btn-info" aria-describedby="submitHelp" onclick="finishCrew()">모임 종료</button>
 
                         <!-- Begin Like
                         ================================================== -->
@@ -185,7 +185,7 @@
                                 <label class="form-label mt-4" hidden>댓글 작성</label>
                                 <input type="text"  class="form-control" id="commentContent" name="commentContent" required minlength="2" maxlength="100"placeholder="댓글을 입력해주세요">
                                 <input type="text" hidden th:value="${crewId}" id="crewIdComment">
-                                <input type="text" hidden th:value="${#authentication.getName()}" id="principal">
+                                <input type="text" hidden th:value="${#authentication.principal.getUsername()}" id="principal">
                                 <button type="button" id="commentBtn"  onclick="commentCheck()" class="btn btn-light">작성</button>
                                 <div>
                                 </div>
