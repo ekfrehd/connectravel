@@ -92,8 +92,8 @@
                                 <div class="single-reservation-author">
                                     <div class="single-reservation-author-flex">
                                         <div class="single-reservation-author-contents">
-                                            <h5 class="single-reservation-author-contents-title"> [[${username.username}]]님 </h5>
-                                            <p class="single-reservation-author-contents-para"> 닉네임 : [[${username.nickName}]] </p>
+                                            <h5 class="single-reservation-author-contents-title"> [[${#authentication.principal.username}]] 님 </h5>
+                                            <p class="single-reservation-author-contents-para"> 닉네임 : [[${#authentication.principal.nickName}]] </p>
                                         </div>
                                     </div>
                                 </div>
@@ -104,10 +104,10 @@
                             <div class="single-reservation-item">
                                 <div class="single-reservation-contact">
                                     <div class="single-reservation-contact-item">
-                                        <span class="single-reservation-contact-list"> <span> <i class="las la-phone-alt"></i> </span> [[${username.tel}]] </span>
+                                        <span class="single-reservation-contact-list"> <span> <i class="las la-phone-alt"></i> </span> [[${#authentication.principal.tel}]] </span>
                                     </div>
                                     <div class="single-reservation-contact-item">
-                                        <a th:href="'mailto:' + ${username.email}" class="single-reservation-contact-list"><span> <i class="las la-envelope"></i> </span> [[${username.email}]] </a>
+                                        <a th:href="'mailto:' + ${#authentication.principal.email}" class="single-reservation-contact-list"><span> <i class="las la-envelope"></i> </span> [[${#authentication.principal.email}]] </a>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="single-reservation bg-white base-padding" sec:authorize="hasAnyAuthority('ROLE_SELLER')">
+                        <div class="single-reservation bg-white base-padding" sec:authorize="hasAnyAuthority('ROLE_USER')">
                             <div class="single-reservation-flex">
                                 <div class="single-reservation-author">
                                     <div class="single-reservation-author-flex">

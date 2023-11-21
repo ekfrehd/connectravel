@@ -2,6 +2,7 @@ package com.connectravel.controller;
 
 import com.connectravel.domain.entity.Member;
 import com.connectravel.security.token.AjaxAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,11 @@ import java.security.Principal;
 
 @Controller
 public class LoginController {
+
+    private AuthenticationManager authenticationManager;
+
+    private AjaxAuthenticationToken ajaxAuthenticationToken;
+
 
     @RequestMapping(value="/member/login")
     public String login(@RequestParam(value = "error", required = false) String error,

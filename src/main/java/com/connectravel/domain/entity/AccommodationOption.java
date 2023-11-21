@@ -7,6 +7,9 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString(exclude = "accommodation")
 public class AccommodationOption {
 

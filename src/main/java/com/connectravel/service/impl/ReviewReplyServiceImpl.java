@@ -59,12 +59,12 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
 
     /* 변환 메서드 */
     private ReviewReply dtoToEntity(ReviewReplyDTO reviewReplyDTO) {
+
         ReviewBoard reviewBoard = ReviewBoard.builder().rbno(reviewReplyDTO.getRbno()).build();
 
-        Member member = memberRepository.findByEmail(reviewReplyDTO.getReplyer());
-        if (member == null) {
-            throw new RuntimeException("해당 이메일을 가진 회원을 찾을 수 없습니다: " + reviewReplyDTO.getReplyer());
-        }
+        // Optional에서 실제 Member 객체를 가져옴
+        Member member = memberRepository.findByEmail(reviewReplyDTO.getReplyer())
+                .orElseThrow(() -> new RuntimeException("해당 이메일을 가진 회원을 찾을 수 없습니다: " + reviewReplyDTO.getReplyer()));
 
         return ReviewReply.builder()
                 .rrno(reviewReplyDTO.getRrno())
@@ -73,6 +73,7 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
                 .reviewBoard(reviewBoard)
                 .build();
     }
+
 
     private ReviewReplyDTO entityToDTO(ReviewReply reviewReply) {
         return ReviewReplyDTO.builder()

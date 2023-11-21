@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface MemberService {
 
+  MemberDTO entityToDTO(Member member);
+
   void createMember(Member member);
 
   void modifyMember(MemberDTO memberDTO);
@@ -16,18 +18,10 @@ public interface MemberService {
 
   MemberDTO getMember(Long id);
 
+  MemberDTO getMember(String email);
+
   void deleteMember(Long idx);
 
-  MemberDTO entityToDTO(Member member);
-
-  Member dtoToEntity(MemberDTO memberDTO);
-
-  public void vaildateDuplicateMember(Member member);
-
-  public Member editMember(MemberDTO memberDTO);
-
-  public Member changePassword(MemberDTO memberDTO);
-
-  public Member changeSeller(MemberDTO memberDTO);
+  Member updateSeller(MemberDTO memberDTO);
 
 }

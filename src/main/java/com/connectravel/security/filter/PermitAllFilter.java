@@ -24,6 +24,7 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
 
     @Override
     protected InterceptorStatusToken beforeInvocation(Object object) {
+
         boolean permitAll = false;
         HttpServletRequest request = ((FilterInvocation) object).getRequest();
         for (RequestMatcher requestMatcher : permitAllRequestMatcher) {
@@ -45,7 +46,8 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
         if ((fi.getRequest() != null) && (fi.getRequest().getAttribute(FILTER_APPLIED) != null)
                 && super.isObserveOncePerRequest()) {
             fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
-        } else {
+        }
+        else {
             if (fi.getRequest() != null) {
                 fi.getRequest().setAttribute(FILTER_APPLIED, Boolean.TRUE);
             }
@@ -54,7 +56,8 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
 
             try {
                 fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
-            } finally {
+            }
+            finally {
                 super.finallyInvocation(token);
             }
 
@@ -66,6 +69,6 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
         for (String pattern : permitAllPattern) {
             permitAllRequestMatcher.add(new AntPathRequestMatcher(pattern));
         }
-
     }
+
 }

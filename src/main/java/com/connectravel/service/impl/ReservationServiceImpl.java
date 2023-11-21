@@ -39,7 +39,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional
-    public ReservationDTO bookRoom(ReservationDTO reservationDTO) {
+    public ReservationDTO registerReservation(ReservationDTO reservationDTO) {
 
         // 예약하기 전에 원하는 날짜에 방이 이용 가능한지 확인합니다.
         if (!checkRoomAvailability(
@@ -50,11 +50,15 @@ public class ReservationServiceImpl implements ReservationService {
             throw new EntityNotAvailableException("선택한 날짜에 방이 이용 불가능합니다.");
         }
 
+        // 예약 객체 생성 전 상태를 ACTIVE로 설정
+        reservationDTO.setStatus(ReservationStatus.ACTIVE);
+
         Reservation reservation = dtoToEntity(reservationDTO);
         Reservation savedReservation = reservationRepository.save(reservation);
 
         return entityToDTO(savedReservation);
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -185,34 +189,29 @@ public class ReservationServiceImpl implements ReservationService {
                 .startDate(reservation.getStartDate())
                 .endDate(reservation.getEndDate())
                 .status(reservation.getStatus()) // 상태 변환
-                .roomDTO(roomDTO) // Room 엔티티를 DTO로 변환
-                .memberDTO(memberDTO) // Member 엔티티를 DTO로 변환
+                .roomDTO(roomDTO)
+                .memberDTO(memberDTO)
                 .build();
     }
 
     private Reservation dtoToEntity(ReservationDTO reservationDTO) {
-
         Room room = roomRepository.findById(reservationDTO.getRoomDTO().getRno())
                 .orElseThrow(() -> new EntityNotFoundException("방을 찾을 수 없습니다."));
 
-        Member member = memberRepository.findByEmail(reservationDTO.getMemberDTO().getEmail());
-        if (member == null) {
-            throw new EntityNotFoundException("회원을 찾을 수 없습니다.");
-        }
-
-// Continue with the rest of your code using the 'member' object.
-
+        // Optional에서 실제 Member 객체를 가져옴
+        Member member = memberRepository.findByEmail(reservationDTO.getMemberDTO().getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
         return Reservation.builder()
-                .rvno(reservationDTO.getRvno()) // 예약 번호 추가
+                .rvno(reservationDTO.getRvno())
                 .message(reservationDTO.getMessage())
                 .money(reservationDTO.getMoney())
                 .numberOfGuests(reservationDTO.getNumberOfGuests())
                 .startDate(reservationDTO.getStartDate())
                 .endDate(reservationDTO.getEndDate())
-                .status(reservationDTO.getStatus()) // 상태 변환
-                .room(room) // 여기서 Room 엔티티를 설정합니다.
-                .member(member) // 여기서 Member 엔티티를 설정합니다.
+                .status(reservationDTO.getStatus())
+                .room(room)
+                .member(member)
                 .build();
     }
 

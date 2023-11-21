@@ -3,24 +3,19 @@ package com.connectravel.controller;
 import com.connectravel.domain.dto.MemberDTO;
 import com.connectravel.domain.entity.Member;
 import com.connectravel.repository.MemberRepository;
-import com.connectravel.repository.RoleRepository;
 import com.connectravel.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.validation.Valid;
-import java.security.Principal;
-import java.util.Collections;
 
 @Controller
 @RequestMapping("/member")
@@ -35,10 +30,10 @@ public class MemberController {
     private MemberRepository memberRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserDetailsService userDetailsService;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;;
 
     @GetMapping(value="/join")
     public String createMember() throws Exception {
@@ -58,50 +53,38 @@ public class MemberController {
         return "redirect:login";
     }
 
-    @GetMapping(value="/mypage")
-    @PreAuthorize("isAuthenticated() and (#member.username == principal.username)")
-    public String myPage(@AuthenticationPrincipal Member member, Principal principal, Model model) throws Exception {
-
-        String username = principal.getName();
-        MemberDTO memberDTO = memberService.getMember(member.getId());
-
-        if(memberDTO == null){
-            model.addAttribute("errorMessage", "로그인이 필요합니다.");
-            return "redirect:/member/login";
-        }
-
-        model.addAttribute("username", memberDTO);
-
-        return "member/mypage";
-    }
+    @GetMapping("/mypage")
+    public String getMember(@AuthenticationPrincipal Member member) { return "member/mypage"; }
 
     @GetMapping(value = "update")
-    @PreAuthorize("isAuthenticated() and (#member.username == principal.username)")
-    public String mypageUpdate(@AuthenticationPrincipal Member member, Principal principal, Model model) {
+    public String getMember(@AuthenticationPrincipal Member member, Model model) throws Exception {
 
-        String username = principal.getName();
-        MemberDTO memberDTO = memberService.getMember(member.getId());
-
-        if(member == null){
-            model.addAttribute("errorMessage", "로그인이 필요합니다.");
+        if (member == null) {
             return "redirect:/member/login";
         }
+
+        MemberDTO memberDTO = new MemberDTO();
 
         memberDTO.setEmail(member.getEmail());
         memberDTO.setUsername(member.getUsername());
         memberDTO.setNickName(member.getNickName());
 
-        if (member != null) {
-            String tel = member.getTel();
-            if (tel != null) {
-                String[] parts = tel.split("-");
-                if (parts.length == 3) {
-                    memberDTO.setTel1(parts[0]);
-                    memberDTO.setTel2(parts[1]);
-                    memberDTO.setTel3(parts[2]);
-                } else {
-                }
+        // 전화번호 split
+        String tel = member.getTel();
+        if (tel != null) {
+            String[] parts = tel.split("-");
+            if (parts.length == 3) {
+                String tel1 = parts[0];
+                String tel2 = parts[1];
+                String tel3 = parts[2];
+                memberDTO.setTel1(tel1);
+                memberDTO.setTel2(tel2);
+                memberDTO.setTel3(tel3);
+            } else {
+                // 적절한 처리를 수행 (예: 오류 메시지를 설정하거나 기본값을 지정)
             }
+        } else {
+            // 적절한 처리를 수행 (예: 오류 메시지를 설정하거나 기본값을 지정)
         }
 
         model.addAttribute("memberDTO", memberDTO);
@@ -110,28 +93,33 @@ public class MemberController {
     }
 
     @PostMapping(value = "update")
-    public String editProfile(@AuthenticationPrincipal Member member, Principal principal,
-                              @Valid MemberDTO memberDTO, BindingResult bindingResult,
-                              @RequestParam String tel1, @RequestParam String tel2, @RequestParam String tel3,
-                              RedirectAttributes redirectAttributes, Model model) {
+    public String updateMember(@AuthenticationPrincipal Member member, MemberDTO memberDTO,
+                               RedirectAttributes redirectAttributes, Model model) {
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("memberDTO", memberDTO);
-            return "member/update";
+        if (member == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Member not found");
+            return "redirect:/error";
         }
 
-        String tel = tel1 + "-" + tel2 + "-" + tel3;
-        memberDTO.setTel(tel);
+        // 사용자 정보 업데이트
+        member.setEmail(memberDTO.getEmail());
+        member.setUsername(memberDTO.getUsername());
+        member.setNickName(memberDTO.getNickName());
+        member.setTel(memberDTO.getTel1() + "-" + memberDTO.getTel2() + "-" + memberDTO.getTel3());
 
-        memberService.editMember(memberDTO);
+        // 데이터베이스에 변경된 정보 저장
+        memberRepository.save(member);
+
+        // 변경된 정보로 다시 인증 토큰을 생성하여 설정합니다.
+        UserDetails userDetails = userDetailsService.loadUserByUsername(memberDTO.getEmail());
 
         return "redirect:/member/mypage";
     }
 
-    @GetMapping(value = "seller")
-    public String CheckSeller(@AuthenticationPrincipal Member member, Principal principal, Model model) {
 
-        String username = principal.getName();
+    @GetMapping(value = "seller")
+    public String updateSeller(@AuthenticationPrincipal Member member, Model model) {
+
         MemberDTO memberDTO = memberService.getMember(member.getId());
 
         if (member == null) {
@@ -154,39 +142,35 @@ public class MemberController {
                 memberDTO.setTel2(tel2);
                 memberDTO.setTel3(tel3);
             } else {
-                // 예외 처리: 올바르지 않은 전화번호 형식
+                // 적절한 처리를 수행 (예: 오류 메시지를 설정하거나 기본값을 지정)
             }
         } else {
-            // 예외 처리: 전화번호가 null인 경우
+            // 적절한 처리를 수행 (예: 오류 메시지를 설정하거나 기본값을 지정)
         }
-
         model.addAttribute("memberDTO", memberDTO);
 
         return "member/seller";
     }
 
     @PostMapping(value ="seller")
-    public String CheckSeller(@AuthenticationPrincipal Member member, Principal principal, @RequestParam String tel1, @RequestParam String tel2, @RequestParam String tel3) {
+    public String updateSeller(@AuthenticationPrincipal Member member,
+                              @RequestParam String tel1,
+                              @RequestParam String tel2,
+                              @RequestParam String tel3) {
 
-        String username = principal.getName();
         MemberDTO memberDTO = memberService.getMember(member.getId());
 
         String tel = tel1 + "-" + tel2 + "-" + tel3;
         memberDTO.setTel(tel);
 
-        Member updatedMember = memberService.dtoToEntity(memberDTO);
-        updatedMember.setMemberRoles(Collections.singleton(roleRepository.findByRoleName("ROLE_SELLER")));
-        MemberDTO updatedMemberDTO = memberService.entityToDTO(updatedMember);
+        Member updatedMember = memberService.updateSeller(memberDTO);
 
-        memberRepository.save(updatedMember);
-
-        return "redirect:/member/mypage";
+        return "redirect:/seller/list";
     }
 
     @GetMapping(value = "changepw")
-    public String changePassword(@AuthenticationPrincipal Member member, Principal principal, Model model) {
+    public String updatePassword(@AuthenticationPrincipal Member member, Model model) {
 
-        String username = principal.getName();
         MemberDTO memberDTO = memberService.getMember(member.getId());
 
         if (member == null) {
@@ -198,12 +182,10 @@ public class MemberController {
     }
 
     @PostMapping(value = "changepw")
-    public String changePassword(@AuthenticationPrincipal Member member, Principal principal,
-                                 Model model, @ModelAttribute("currentPassword") String currentPassword,
-                                 @ModelAttribute("newPassword") String newPassword,
-                                 RedirectAttributes redirectAttributes) {
+    public String updatePassword(@AuthenticationPrincipal Member member,
+                                 @ModelAttribute("currentPassword") String currentPassword, @ModelAttribute("newPassword") String newPassword,
+                                 RedirectAttributes redirectAttributes, Model model) {
 
-        String username = principal.getName();
         MemberDTO memberDTO = memberService.getMember(member.getId());
 
         if (member == null) {
@@ -221,16 +203,16 @@ public class MemberController {
         member.setPassword(passwordEncoder.encode(newPassword));
         memberRepository.save(member);
 
-        return "redirect:/member/mypage";
+        return "redirect:/member/login";
     }
 
     @GetMapping(value = "/point")
-    public String point(@AuthenticationPrincipal Member member, Principal principal, Model model) {
+    public String point(@AuthenticationPrincipal Member member, Model model) {
 
-        String username = principal.getName();
         MemberDTO memberDTO = memberService.getMember(member.getId());
 
-        model.addAttribute("mypage", member);
+        model.addAttribute("member", member);
+
         return "member/point";
     }
 

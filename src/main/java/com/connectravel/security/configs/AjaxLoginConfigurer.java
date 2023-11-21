@@ -31,9 +31,10 @@ public class AjaxLoginConfigurer <H extends HttpSecurityBuilder<H>> extends
     @Override
     public void configure(H http) {
 
-        if(authenticationManager == null){
+        if (authenticationManager == null) {
             authenticationManager = http.getSharedObject(AuthenticationManager.class);
         }
+
         getAuthenticationFilter().setAuthenticationManager(authenticationManager);
         getAuthenticationFilter().setAuthenticationSuccessHandler(successHandler);
         getAuthenticationFilter().setAuthenticationFailureHandler(failureHandler);

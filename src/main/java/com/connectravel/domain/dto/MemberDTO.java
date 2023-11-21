@@ -37,4 +37,8 @@ public class MemberDTO {
 
     private Set<String> memberRoles;
 
+    public MemberDTO(String password) {
+        this.password = password;
+    }
+
 }

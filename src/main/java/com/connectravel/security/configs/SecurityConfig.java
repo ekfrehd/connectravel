@@ -9,14 +9,13 @@ import com.connectravel.security.provider.AjaxAuthenticationProvider;
 import com.connectravel.security.provider.FormAuthenticationProvider;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -34,24 +33,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private FormWebAuthenticationDetailsSource formWebAuthenticationDetailsSource;
+
     @Autowired
     private AuthenticationSuccessHandler formAuthenticationSuccessHandler;
+
     @Autowired
     private AuthenticationFailureHandler formAuthenticationFailureHandler;
+
     @Autowired
     private PermitAllFilter permitAllFilter;
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
         auth.authenticationProvider(ajaxAuthenticationProvider());
     }
-
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -78,6 +75,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAt(permitAllFilter, FilterSecurityInterceptor.class);
 
+        http
+                .sessionManagement()
+                .sessionFixation().none()
+                .maximumSessions(1).maxSessionsPreventsLogin(true);
+
         http.csrf().disable();
 
         customConfigurer(http);
@@ -90,7 +92,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandlerAjax(ajaxAuthenticationFailureHandler())
                 .loginProcessingUrl("/api/member/login")
                 .setAuthenticationManager(authenticationManagerBean());
+
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

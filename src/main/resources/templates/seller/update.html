@@ -16,18 +16,18 @@
 <div layout:fragment="content">
     <div style="padding: 15px;">
         <div class="white-box">
-            <form class="row g-3" action="/seller/room/update" method="post" enctype="multipart/form-data">
-                <input hidden="hidden" name="rno" th:value="${dto.rno}">
+            <form class="row g-3" action="/seller/update" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="rno" th:value="${roomDTO.rno}">
                 <h5 class="col-12 mb-3">방 정보를 수정하세요.</h5>
 
                 <div class="col-12 col-md-6">
                     <label class="form-label">방 이름</label>
-                    <input class="form-control" type="text" name="room_name" th:value="${dto.room_name}">
+                    <input class="form-control" type="text" name="roomName" th:value="${roomDTO.roomName}">
                 </div>
 
                 <div class="col-12 col-md-6">
                     <label class="form-label">방 가격</label>
-                    <input class="form-control" type="number" name="price" th:value="${dto.price}">
+                    <input class="form-control" type="number" name="price" th:value="${roomDTO.price}">
                 </div>
 
                 <div class="col-12">
@@ -36,18 +36,18 @@
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="operating" id="operating-yes" value="true"
-                               th:checked="${dto.operating == true}">
+                               th:checked="${roomDTO.operating == true}">
                         <label class="form-check-label" for="operating-yes">영업중</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="operating" id="operating-no" value="false"
-                               th:checked="${dto.operating == false}">
+                               th:checked="${roomDTO.operating == false}">
                         <label class="form-check-label" for="operating-no">영업안함</label>
                     </div>
                 </div>
                 <div class="col-12">
                     <label class="form-label">내용 입력</label>
-                    <textarea id="tiny" name="content" th:utext="${dto.content}"></textarea>
+                    <textarea id="tiny" name="content" th:utext="${roomDTO.content}"></textarea>
                 </div>
 
                 <div class="col-12 col-md-6">

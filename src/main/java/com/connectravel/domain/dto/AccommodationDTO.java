@@ -37,6 +37,6 @@ public class AccommodationDTO {
 
     private List<RoomDTO> roomDTO;
     private List<String> imgFiles;
-    private List<OptionDTO> optionDTO;
+    private List<Long> optionIds;
 
 }

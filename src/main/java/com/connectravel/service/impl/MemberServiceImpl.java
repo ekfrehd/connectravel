@@ -6,13 +6,14 @@ import com.connectravel.domain.entity.Role;
 import com.connectravel.repository.MemberRepository;
 import com.connectravel.repository.RoleRepository;
 import com.connectravel.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,24 +21,45 @@ import java.util.stream.Collectors;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    @Override
+    public MemberDTO entityToDTO(Member member) {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+        if (member == null) {
+            return null;
+        }
+
+        Set<String> roles = member.getMemberRoles()
+                .stream()
+                .map(Role::getRoleName)
+                .collect(Collectors.toSet());
+
+        return MemberDTO.builder()
+                .id(member.getId())
+                .username(member.getUsername())
+                .nickName(member.getNickName())
+                .email(member.getEmail())
+                .tel(member.getTel())
+                .point(member.getPoint())
+                .memberRoles(roles)
+                .build();
+    }
 
     @Transactional
     @Override
     public void createMember(Member member) {
+
         Role role = roleRepository.findByRoleName("ROLE_USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         member.setMemberRoles(roles);
+
         memberRepository.save(member);
     }
 
@@ -48,6 +70,10 @@ public class MemberServiceImpl implements MemberService {
         ModelMapper modelMapper = new ModelMapper();
         Member account = modelMapper.map(memberDTO, Member.class);
 
+        account.setEmail(memberDTO.getEmail());
+        account.setNickName(memberDTO.getNickName());
+        account.setTel(memberDTO.getTel());
+
         if (memberDTO.getMemberRoles() != null) {
             Set<Role> roles = new HashSet<>();
             memberDTO.getMemberRoles().forEach(role -> {
@@ -56,6 +82,7 @@ public class MemberServiceImpl implements MemberService {
             });
             account.setMemberRoles(roles);
         }
+
         account.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
         memberRepository.save(account);
 
@@ -79,104 +106,46 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
+    public MemberDTO getMember(String email) {
+
+        Member member = memberRepository.findByEmail(email).orElse(new Member());
+        ModelMapper modelMapper = new ModelMapper();
+        MemberDTO memberDTO = modelMapper.map(member, MemberDTO.class);
+
+        Set<String> roles = member.getMemberRoles()
+                .stream()
+                .map(role -> role.getRoleName())
+                .collect(Collectors.toSet());
+
+        memberDTO.setMemberRoles(roles);
+
+        return memberDTO;
+    }
+
+    @Transactional
     public List<Member> getMembers() {
         return memberRepository.findAll();
     }
 
     @Override
-    public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
-    }
+    public void deleteMember(Long id) { memberRepository.deleteById(id); }
 
     @Override
-    public Member dtoToEntity(MemberDTO memberDTO) {
-        if (memberDTO == null) {
-            return null;
-        }
+    public Member updateSeller(MemberDTO memberDTO) {
 
-        Member member = Member.builder()
-                .id(memberDTO.getId())
-                .username(memberDTO.getUsername())
-                .nickName(memberDTO.getNickName())
-                .email(memberDTO.getEmail())
-                .tel(memberDTO.getTel())
-                .point(memberDTO.getPoint())
-                .build();
+        Member member = memberRepository.findByEmail(memberDTO.getEmail()).orElse(new Member());
+        ModelMapper modelMapper = new ModelMapper();
+        Member account = modelMapper.map(memberDTO, Member.class);
 
-        if (memberDTO.getMemberRoles() != null) {
-            Set<Role> roles = memberDTO.getMemberRoles().stream()
-                    .map(roleName -> roleRepository.findByRoleName(roleName))
-                    .collect(Collectors.toSet());
-            member.setMemberRoles(roles);
-        }
+        account.setMemberRoles(Collections.singleton(roleRepository.findByRoleName("ROLE_SELLER")));
+        account.setUsername(memberDTO.getUsername());
+        account.setEmail(memberDTO.getEmail());
+        account.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+        account.setTel(memberDTO.getTel());
 
-        return member;
+        memberRepository.save(account);
+
+        return account;
     }
-
-    @Override
-    public MemberDTO entityToDTO(Member member) {
-        if (member == null) {
-            return null;
-        }
-
-        Set<String> roles = member.getMemberRoles()
-                .stream()
-                .map(Role::getRoleName)
-                .collect(Collectors.toSet());
-
-        return MemberDTO.builder()
-                .id(member.getId())
-                .username(member.getUsername())
-                .nickName(member.getNickName())
-                .email(member.getEmail())
-                .tel(member.getTel())
-                .point(member.getPoint())
-                .memberRoles(roles)
-                .build();
-    }
-
-    public void vaildateDuplicateMember(Member member) {
-        Member findMember = memberRepository.findByEmail(member.getEmail());
-        if (findMember != null) {
-            throw new IllegalStateException("이미 가입된 회원입니다.");
-        }
-    }
-
-    public Member editMember(MemberDTO memberDTO) {
-
-        Member member = memberRepository.findByEmail(memberDTO.getEmail());
-        member.setEmail(memberDTO.getEmail());
-        member.setNickName(memberDTO.getNickName());
-        member.setTel(memberDTO.getTel());
-        memberRepository.save(member);
-
-        return member;
-    }
-
-    public Member changePassword(MemberDTO memberDTO) {
-
-        Member member = memberRepository.findByEmail(memberDTO.getEmail());
-        member.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
-        memberRepository.save(member);
-
-        return member;
-    }
-
-    public Member changeSeller(MemberDTO memberDTO) {
-
-        Member member = memberRepository.findByEmail(memberDTO.getEmail());
-
-        Set<Role> roles = memberDTO.getMemberRoles().stream()
-                .map(roleName -> Role.createRole(roleName))
-                .collect(Collectors.toSet());
-
-        member.setMemberRoles(roles);
-        member.setUsername(memberDTO.getUsername());
-        member.setTel(memberDTO.getTel());
-        memberRepository.save(member);
-
-        return member;
-    }
-
 
 }

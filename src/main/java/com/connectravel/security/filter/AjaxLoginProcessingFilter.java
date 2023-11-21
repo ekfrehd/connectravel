@@ -39,11 +39,13 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
 
         MemberDTO memberDTO = objectMapper.readValue(request.getReader(), MemberDTO.class);
 
-        if (StringUtils.isEmpty(memberDTO.getUsername()) || StringUtils.isEmpty(memberDTO.getPassword())) {
+        if (StringUtils.isEmpty(memberDTO.getEmail()) || StringUtils.isEmpty(memberDTO.getPassword())) {
             throw new AuthenticationServiceException("Username or Password not provided");
         }
-        AjaxAuthenticationToken token = new AjaxAuthenticationToken(memberDTO.getUsername(),memberDTO.getPassword());
+
+        AjaxAuthenticationToken token = new AjaxAuthenticationToken(memberDTO.getEmail(), memberDTO.getPassword());
 
         return this.getAuthenticationManager().authenticate(token);
     }
+
 }

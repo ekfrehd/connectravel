@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -88,16 +89,21 @@ public class QnaBoardServiceImpl implements QnaBoardService {
     }
     private QnaBoard dtoToEntity(QnaBoardDTO dto, MemberRepository memberRepository) {
 
-        Member member = memberRepository.findByEmail(dto.getWriterEmail());
+        Optional<Member> memberOptional = memberRepository.findByEmail(dto.getWriterEmail());
 
-        if (member == null) {
-            throw new EntityNotFoundException("Member with email " + dto.getWriterEmail() + " not found");
-        }
+        Member member = memberOptional.orElseThrow(() ->
+                new EntityNotFoundException("Member with email " + dto.getWriterEmail() + " not found"));
 
-        QnaBoard qnaBoard = QnaBoard.builder().qbno(dto.getQbno()).title(dto.getTitle()).content(dto.getContent()).member(member).build();
+        QnaBoard qnaBoard = QnaBoard.builder()
+                .qbno(dto.getQbno())
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .member(member)
+                .build();
 
         return qnaBoard;
     }
+
 
     private QnaBoardDTO entityToDTO(QnaBoard qnaBoard, Member member) {
 

@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -22,9 +24,13 @@ public class ReservationDTO {
 
     private int numberOfGuests; // 예약 인원 수
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate; // 예약 시작 일자
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate; // 예약 종료 일자
+
+    private LocalDateTime regTime;
 
     private ReservationStatus status; // 예약 상태를 나타내는 열거형
 

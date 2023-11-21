@@ -10,29 +10,23 @@
         .fieldError {
             color: #bd2130;
         }
-    </style>
-    <style>
         table {
             width: 100%;
             border-collapse: collapse;
         }
-
         th, td {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
         }
-
         th {
             background-color: #f2f2f2;
         }
-
         .button-container {
             display: flex;
             justify-content: center;
             margin-top: 20px;
         }
-
         .button-container button {
             margin: 0 10px;
         }
@@ -100,30 +94,29 @@
                                             <input type="text" class="form--control" placeholder="이메일을 입력하세요"
                                                    name="email" th:value="*{email}" readonly>
                                             <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                                               class="fieldError" required>Incorrect data</p>
+                                               class="fieldError" required>이메일이 올바르지 않습니다.</p>
                                         </div>
                                     </div>
                                     <div class="dashboard-flex-input">
                                         <div class="dashboard-input mt-4">
                                             <label class="label-title" th:for="username">이름</label>
-                                            <input type="text" class="form--control" placeholder="이름을 입력 하세요"
+                                            <input type="text" class="form--control" placeholder="이름을 입력하세요"
                                                    name="username" th:value="*{username}">
                                             <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
-                                               class="fieldError" required>Incorrect data</p>
+                                               class="fieldError" required>이름이 올바르지 않습니다.</p>
                                         </div>
                                     </div>
                                     <div class="dashboard-flex-input">
                                         <div class="dashboard-input mt-4">
                                             <label class="label-title" th:for="nickName">닉네임</label>
-                                            <input type="text" class="form--control" placeholder="닉네임을 입력 하세요"
-                                                   name="nickName" th:value="*{nickName}">
-                                            <p th:if="${#fields.hasErrors('nickName')}" th:errors="*{nickName}"
-                                               class="fieldError" required>Incorrect data</p>
+                                            <input type="text" class="form--control" placeholder="닉네임을 입력하세요" name="nickName" th:value="*{nickName}">
+                                            <p th:if="${#fields.hasErrors('nickName')}" th:errors="*{nickName}" class="fieldError" required>닉네임이 올바르지 않습니다.</p>
+
                                         </div>
                                     </div>
                                     <div class="dashboard-flex-input">
                                         <div class="dashboard-input mt-4">
-                                            <label class="label-title" th:for="tel"> 전화번호 </label>
+                                            <label class="label-title" th:for="tel">전화번호</label>
                                             <div style="display: flex;">
                                                 <input type="tel" th:value="*{tel1}" name="tel1" class="form--control"
                                                        maxlength="3" required style="flex: 1;">&nbsp;&nbsp;
@@ -132,6 +125,8 @@
                                                 <input type="tel" th:value="*{tel3}" name="tel3" class="form--control"
                                                        maxlength="4" required style="flex: 1;">
                                             </div>
+                                            <p th:if="${#fields.hasErrors('tel1') || #fields.hasErrors('tel2') || #fields.hasErrors('tel3')}"
+                                               th:errors="*{tel1}" class="fieldError" required>전화번호가 올바르지 않습니다.</p>
                                         </div>
                                     </div>
                                     <div class="btn-wrapper mt-4">
@@ -146,7 +141,6 @@
         </div>
     </div>
     <!-- Dashboard area end -->
-
 </div>
 
 </html>
