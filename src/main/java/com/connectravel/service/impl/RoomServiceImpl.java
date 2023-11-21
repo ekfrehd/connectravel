@@ -40,8 +40,6 @@ public class RoomServiceImpl implements RoomService {
 
         accommodation.addRoom(room);
 
-        accommodationRepository.save(accommodation);
-
         Room savedRoom = roomRepository.save(room);
 
         // 저장된 Room의 ID 반환
