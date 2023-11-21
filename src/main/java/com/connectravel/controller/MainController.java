@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,7 +46,6 @@ public class MainController {
                          @RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model) {
 
         int pageSize = 10;
-
         PageRequestDTO pageRequestDTO = new PageRequestDTO(page, pageSize);
 
         LocalDate startDate = LocalDate.now();
@@ -52,15 +53,19 @@ public class MainController {
 
         Integer min = null, max = null;
 
+        // 옵션 ID 세트를 빈 Set으로 초기화
+        Set<Long> optionIds = new HashSet<>();
+
         PageResultDTO<TourBoardDTO, Object[]> tourBoard = tourBoardService.getPaginatedTourBoardList(pageRequestDTO,
                 pageRequestDTO.getType(), keyword, pageRequestDTO.getCategory(), pageRequestDTO.getRegion(), pageRequestDTO.getAddress());
         PageResultDTO<AccommodationDTO, Object[]> accommodation = searchService.searchAccommodationList(pageRequestDTO,
-                keyword, pageRequestDTO.getCategory(), pageRequestDTO.getRegion(),  startDate, endDate, min, max);
+                keyword, pageRequestDTO.getAccommodationType(), pageRequestDTO.getRegion(), startDate, endDate, min, max, optionIds);
 
         model.addAttribute("tourBoard", tourBoard);
         model.addAttribute("accommodation", accommodation);
 
         return "search";
     }
+
 
 }

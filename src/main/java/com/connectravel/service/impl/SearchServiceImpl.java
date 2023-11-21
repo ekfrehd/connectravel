@@ -7,6 +7,7 @@ import com.connectravel.domain.entity.Room;
 import com.connectravel.repository.AccommodationImgRepository;
 import com.connectravel.repository.AccommodationRepository;
 import com.connectravel.service.SearchService;
+import lombok.extern.log4j.Log4j2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,10 +18,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class SearchServiceImpl implements SearchService {
 
     private final AccommodationRepository accommodationRepository;
@@ -28,14 +32,20 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public PageResultDTO<AccommodationDTO, Object[]> searchAccommodationList(
-            PageRequestDTO pageRequestDTO, String keyword, String category, String region,
-            LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice) {
+            PageRequestDTO pageRequestDTO, String keyword, String accommodationType, String region,
+            LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice, Set<Long> optionIds) {
+
+        log.info("Search Accommodation List: keyword={}, accommodationType={}, region={}, startDate={}, endDate={}, inputedMinPrice={}, inputedMaxPrice={}, optionIds={}",
+                keyword, accommodationType, region, startDate, endDate, inputedMinPrice, inputedMaxPrice, optionIds);
 
         Sort sort = Sort.by(Sort.Direction.DESC, "ano");
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), sort);
 
+        Page<Accommodation> accommodations = accommodationRepository.searchFilteredAccommodations(
+                region, optionIds, startDate, endDate, inputedMinPrice, inputedMaxPrice, pageable);
+
         Page<Object[]> result = accommodationRepository.searchPageAccommodation(
-                pageRequestDTO.getType(), keyword, category, region, startDate, endDate,
+                pageRequestDTO.getType(), keyword, accommodationType, region, startDate, endDate,
                 inputedMinPrice, inputedMaxPrice, pageable);
 
         Function<Object[], AccommodationDTO> fn = (objectArr -> {
@@ -66,6 +76,7 @@ public class SearchServiceImpl implements SearchService {
 
         return imgDTOList;
     }
+
 
     private AccommodationDTO entityToDtoSearch(Accommodation accommodation, Room room, Integer minPrice) {
 

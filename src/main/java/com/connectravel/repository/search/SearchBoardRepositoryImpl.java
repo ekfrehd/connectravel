@@ -216,7 +216,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public Page<Object[]> searchPageAccommodation(String[] type, String keyword, String category, String region,
+    public Page<Object[]> searchPageAccommodation(String[] type, String keyword, String accommodationType, String region,
                                                   LocalDate startDate, LocalDate endDate, Integer inputedMinPrice, Integer inputedMaxPrice,
                                                   Pageable pageable) {
         QAccommodation accommodation = QAccommodation.accommodation;
@@ -250,8 +250,8 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         if (region != null) {
             conditionBuilder.and(accommodation.region.contains(region));
         }
-        if (category != null) {
-            conditionBuilder.and(accommodation.accommodationType.contains(category));
+        if (accommodationType != null) {
+            conditionBuilder.and(accommodation.accommodationType.contains(accommodationType));
         }
         if (keyword != null) {
             conditionBuilder.and(

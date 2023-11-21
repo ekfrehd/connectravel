@@ -86,17 +86,23 @@
     <div class="responsive-overlay"></div>
     <section class="hotel-list-area section-bg-2 pat-50 pab-100">
         <div class="container">
-            <button aria-expanded="false" aria-haspopup="true" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button">지역</button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="#" onclick="navigateToSeoul()">서울</a>
-                <a class="dropdown-item" href="#" onclick="navigateToBusan()">부산</a>
-                <a class="dropdown-item" href="#" onclick="navigateToJeju()">제주</a>
-                <a class="dropdown-item" href="#" onclick="navigateToGangwon()">강원</a>
-                <a class="dropdown-item" href="#" onclick="navigateToGyeonggi()">경기</a>
-                <a class="dropdown-item" href="#" onclick="navigateToIncheon()">인천</a>
-                <a class="dropdown-item" href="#" onclick="navigateToGyeongsang()">경상</a>
-                <a class="dropdown-item" href="#" onclick="navigateToJeolla()">전라</a>
-                <a class="dropdown-item" href="#" onclick="navigateToChungcheong()">충청</a>
+            <button aria-expanded="false" aria-haspopup="true" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button"
+                    style="width: 330px; margin-bottom: -80px;">지역</button>
+            <div class="dropdown-menu" style="position: absolute;
+    will-change: transform;
+    width: 330px;
+    top: 0px;
+    left: 0px;
+    transform: translate3d(160px, 179px, 0px);">
+                <a class="dropdown-item" href="#" onclick="navigateToSeoul()" style="display: inline-block; width: 49%;">서울</a>
+                <a class="dropdown-item" href="#" onclick="navigateToBusan()" style="display: inline-block; width: 49%;">부산</a>
+                <a class="dropdown-item" href="#" onclick="navigateToJeju()" style="display: inline-block; width: 49%;">제주</a>
+                <a class="dropdown-item" href="#" onclick="navigateToGangwon()" style="display: inline-block; width: 49%;">강원</a>
+                <a class="dropdown-item" href="#" onclick="navigateToGyeonggi()" style="display: inline-block; width: 49%;">경기</a>
+                <a class="dropdown-item" href="#" onclick="navigateToIncheon()" style="display: inline-block; width: 49%;">인천</a>
+                <a class="dropdown-item" href="#" onclick="navigateToGyeongsang()" style="display: inline-block; width: 49%;">경상</a>
+                <a class="dropdown-item" href="#" onclick="navigateToJeolla()" style="display: inline-block; width: 49%;">전라</a>
+                <a class="dropdown-item" href="#" onclick="navigateToChungcheong()" style="display: inline-block; width: 49%;">충청</a>
                 <!-- Add more regions as needed -->
             </div>
             <script>
@@ -137,7 +143,7 @@
                     window.location.href = "/product/list?page=1&type=r&keyword=충청";
                 }
             </script>
-            <button class="btn btn-outline-primary" id="mapButton" onclick="openModal()">지도</button>
+            <button class="btn btn-primary" id="mapButton" onclick="openModal()" style="float: right; margin-top: 34px;">지도</button>
             <div class="shop-contents-wrapper mt-5">
                 <div class="shop-sidebar-content">
                     <div class="shop-close-content">
@@ -150,8 +156,8 @@
                                 </div>
                                 <div class="single-shop-left-title open">
                                     <h5 class="title"> 숙박기간 </h5>
-                                    <input th:if="${param.category != null}" type="hidden" name="category"
-                                           th:value="${param.category}">
+                                    <input th:if="${param.accommodationType != null}" type="hidden" name="accommodationType"
+                                           th:value="${param.accommodationType}">
                                     <input th:if="${param.region != null}" type="hidden" name="region"
                                            th:value="${param.region}"/>
                                     <input type="hidden" name="startDate" th:value="${date.startDate}"/>
@@ -297,7 +303,7 @@
                                     <ul class="pagination-list list-style-none">
                                         <!-- 'Previous' 버튼 수정 -->
                                         <li th:class="${pageResult.prev} ? 'pagination-list-item-prev' : 'pagination-list-item-prev disabled'">
-                                            <a th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${pageResult.page - 1},
+                                            <a th:href="@{/product/list(accommodationType=${param.accommodationType}? ${param.accommodationType} : null, page=${pageResult.page - 1},
                                             inputedMinprice=${param.inputedMinprice}? ${param.inputedMinprice} : 0,
                                                 inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000)}"
                                                class="pagination-list-item-button"> 이전 </a>
@@ -311,7 +317,7 @@
                                             <li th:each="page: ${#numbers.sequence(1, pageResult.totalPage)}"
                                                 th:if="${page >= startPage and page <= endPage}"
                                                 th:class="${pageResult.page == page} ? 'pagination-list-item active' : 'pagination-list-item'">
-                                                <a th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${page},
+                                                <a th:href="@{/product/list(accommodationType=${param.accommodationType}? ${param.accommodationType} : null, page=${page},
                                                 inputedMinprice=${param.inputedMinprice}? ${param.inputedMinprice} : 0,
                                                 inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000 )}"
                                                    class="pagination-list-item-link"> [[${page}]] </a>
@@ -321,7 +327,7 @@
 
                                         <!-- 'Next' 버튼 수정 -->
                                         <li th:class="${pageResult.next} ? 'pagination-list-item-next' : 'pagination-list-item-next disabled'">
-                                            <a th:href="@{/product/list(category=${param.category}? ${param.category} : null, page=${pageResult.page + 1},
+                                            <a th:href="@{/product/list(accommodationType=${param.accommodationType}? ${param.accommodationType} : null, page=${pageResult.page + 1},
                                             inputedMinprice=${param.inputedMinprice}? ${param.inputedMinprice} : 0,
                                             inputedMaxprice=${param.inputedMaxprice}? ${param.inputedMaxprice} : 1000000)}"
                                                class="pagination-list-item-button"> 다음 </a>
@@ -347,10 +353,17 @@
                 });
 
                 var dtoAddresses = /*[[${pageResult.dtoList.![address]}]]*/ []; // dto 주소
+                var dtoName = /*[[${pageResult.dtoList.![accommodationName]}]]*/ []; // dto 숙소명
+                var dtoType = /*[[${pageResult.dtoList.![accommodationType]}]]*/ []; // dto 타입
+                var dtoTel = /*[[${pageResult.dtoList.![tel]}]]*/ []; // dto 연락처
+                var links = /*[[${pageResult.dtoList.![ano]}]]*/ []; // dto 게시글 번호
+                var minPrice =   /*[[${pageResult.dtoList.![minPrice]}]]*/ []; // dto 최저가
+                var imgFiles =   /*[[${pageResult.dtoList.![imgFiles]}]]*/ []; // dto 이미지명
+
                 var geocoder = new kakao.maps.services.Geocoder(); // 지오코더 서비스 생성
                 var mapContainer = document.getElementById('map'); // 지도 생성
                 var mapOption = { // 지도 옵션 설정
-                    center: new kakao.maps.LatLng(38, 118.5),
+                    center: new kakao.maps.LatLng(40, 121.5),
                     level: 13
                 };
 
@@ -368,6 +381,36 @@
                                 map: map,
                                 position: coords,
                                 title: "여기에 제목을 입력하세요", // 원하는 제목 입력
+                            });
+
+                            // Check if the array has elements
+                            if (imgFiles.length > 0) {
+                                // Access the value in the 0th index
+                                var firstImgFile = imgFiles[0]
+                                console.log(firstImgFile)
+
+                                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                                var infowindow = new kakao.maps.InfoWindow({
+                                    content: '<div><img src="/imgtest/' + firstImgFile + '" alt="Image" width="100px" height="100px" style="float: left; margin-right: 10px;"></div>' + '<div style="width:300px;text-align:center; margin-bottom: 0; font-size: 12px;"><b>' + dtoName[index] + '</b><br><p style="font-size: 12px; text-align: left">' + "타입 : " + dtoType[index] + '<br>' + '연락처 : ' + dtoTel[index] + '<br>' + '최저가 : ' + minPrice[index] + '원' + '</p></div>' + '<div style="text-align: center"><a href="http://localhost/product/' + links[index] + '" target="_blank">보러가기</a><div>',
+                                });
+                            } else {
+                                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                                var infowindow = new kakao.maps.InfoWindow({
+                                    content: '<div style="width:215px;text-align:center;"><b>' + dtoName[index] + '</b><br>' + "타입 : " + dtoType[index]
+                                        + '<br>' + '연락처 : ' + dtoTel[index] + '<br>' + '최저가 : ' + minPrice[index] + '원' + '<br><a href="http://localhost/product/' + links[index] + '" target="_blank">보러가기</a></div>',
+                                });
+                            }
+
+                            var markerClicked = false; // 마커 클릭 상태를 나타내는 변수
+
+                            // 마커에 클릭 이벤트를 등록합니다
+                            kakao.maps.event.addListener(marker, 'click', function () {
+                                if (markerClicked) {
+                                    infowindow.close(); // 이미 클릭된 상태이면 인포윈도우를 닫습니다
+                                } else {
+                                    infowindow.open(map, marker); // 클릭되지 않은 상태이면 인포윈도우를 엽니다
+                                }
+                                markerClicked = !markerClicked; // 마커 클릭 상태를 토글합니다
                             });
                         }
                     });

@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("product")
@@ -35,12 +32,16 @@ public class ProductController {
     private DateManager dateManager;
 
     @GetMapping("list")
-    public void list(@RequestParam(value = "category", required = false) String category,
+    public void list(@RequestParam(value = "accommodationType", required = false) String accommodationType,
                      @RequestParam(value = "region", required = false) String region,
                      @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                      @RequestParam(value = "inputedMinprice", required = false) Integer inputedMinprice,
                      @RequestParam(value = "inputedMaxprice", required = false) Integer inputedMaxprice,
+                     @RequestParam(value = "optionIds", required = false) Set<Long> optionIds, // 옵션 ID들을 받아오는 부분
                      PageRequestDTO pageRequestDTO, ReservationDTO datedto, Model model) {
+
+        log.info("List Method Called: accommodationType={}, region={}, page={}, inputedMinprice={}, inputedMaxprice={}, optionIds={}",
+                accommodationType, region, page, inputedMinprice, inputedMaxprice, optionIds);
 
         int pageSize = 5;
 
@@ -59,8 +60,9 @@ public class ProductController {
                 .build();
 
         PageResultDTO<AccommodationDTO, Object[]> pageResult = searchService.searchAccommodationList
-                (pageRequestDTO, pageRequestDTO.getKeyword(), category, region,
-                        datedto.getStartDate(), datedto.getEndDate(), inputedMinprice, inputedMaxprice);
+                (pageRequestDTO, pageRequestDTO.getKeyword(), accommodationType, region,
+                        datedto.getStartDate(), datedto.getEndDate(), inputedMinprice, inputedMaxprice, optionIds);
+
         if(pageResult.getTotalPage()==0){ pageResult.setTotalPage(1);}
 
         List<AccommodationDTO> updatedList = new ArrayList<>();

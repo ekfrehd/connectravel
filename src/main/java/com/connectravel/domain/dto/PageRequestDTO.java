@@ -20,7 +20,9 @@ public class PageRequestDTO {
 
     private String keyword; // 검색어
 
-    private String category; // 숙소 종류
+    private String accommodationType; // 숙소 종류
+
+    private String category;
 
     private String region; // 지역
 
