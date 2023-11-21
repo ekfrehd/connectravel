@@ -4,6 +4,7 @@ import com.connectravel.domain.dto.*;
 import com.connectravel.domain.entity.ReviewBoard;
 import com.connectravel.manager.DateManager;
 import com.connectravel.service.AccommodationService;
+import com.connectravel.service.OptionService;
 import com.connectravel.service.ReviewBoardService;
 import com.connectravel.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class ProductController {
     private final AccommodationService accommodationService;
     private final ReviewBoardService reviewBoardService;
     private final RoomService roomService;
+    private final OptionService optionService;
 
     @Autowired
     private DateManager dateManager;
@@ -43,6 +45,10 @@ public class ProductController {
                      PageRequestDTO pageRequestDTO, ReservationDTO datedto, Model model) {
 
         int pageSize = 5;
+
+        // 옵션 목록을 가져와 모델에 추가
+        List<OptionDTO> options = optionService.getAllOptions();
+        model.addAttribute("options", options);
 
         // DateManager를 통한 날짜 체크
         dateManager.checkDate(datedto.getStartDate(), datedto.getEndDate());

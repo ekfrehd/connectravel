@@ -58,11 +58,11 @@
                                 'yyyy/MM/dd HH:mm:ss')}]]<br/>
                                 수정일 : [[${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}]]</p>
                             <a th:href="@{/qna/modify(qbno = ${dto.qbno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
-                                <button type="button" class="btn btn-primary">Modify</button>
+                                <button type="button" class="btn btn-primary">수정</button>
                             </a>
 
                             <a th:href="@{/qna/list(page=${requestDTO.page} , type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
-                                <button type="button" class="btn btn-info">List</button>
+                                <button type="button" class="btn btn-info">목록</button>
                             </a>
                             <div style="width: 100%; border-bottom: #000000 solid 1px; margin-top: 20px;"></div>
                             <div class="mt-4">
@@ -75,8 +75,7 @@
                                     <input class="form-control" type="text" name="replyText"
                                            placeholder="Reply Text...">
                                 </div>
-                                <button type="button" class="btn btn-primary addReply" style="margin-top: 15px;">Add
-                                    Reply
+                                <button type="button" class="btn btn-primary addReply" style="margin-top: 15px;">댓글 등록
                                 </button>
                             </form>
 
@@ -85,10 +84,6 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Modal title</h5>
-
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="form-group">
@@ -102,12 +97,12 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger replyRemove">Remove</button>
-                                            <button type="button" class="btn btn-warning replyModify">Modify</button>
-                                            <button type="button" class="btn btn-primary replySave">Save</button>
+                                            <button type="button" class="btn btn-danger replyRemove">삭제</button>
+                                            <button type="button" class="btn btn-warning replyModify">수정</button>
+                                            <button type="button" class="btn btn-primary replySave">등록</button>
                                             <button type="button" class="btn btn-outline-secondary replyClose"
                                                     data-dismiss="modal">
-                                                Close
+                                                취소
                                             </button>
                                         </div>
                                     </div>
@@ -280,7 +275,9 @@
                     }
                 });
             });
-
+            $(".replyClose").click(function () {
+                modal.modal('hide');
+            })
         });
     </script>
 </div>

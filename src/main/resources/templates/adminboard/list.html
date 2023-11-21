@@ -58,7 +58,7 @@
                             <div class="row justify-content-between">
                                 <div class="col-md-4 col-lg-3">
                                     <a th:href="@{/adminboard/{category}/register(category=${category})}">
-                                        <button type="button" class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">REGISTER</button>
+                                        <button type="button" class="btn btn-primary" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">등록</button>
                                         <!--<button class="btn btn-primary" type="button">REGISTER</button>-->
                                     </a>
                                 </div>
@@ -68,8 +68,8 @@
                                 <table class="table table-hover">
                                     <thead>
                                     <tr class="table-primary">
-                                        <th class="col-md-9" scope="col">Title</th>
-                                        <th class="col-md-3" scope="col">Regdate</th>
+                                        <th class="col-md-9" scope="col">제목</th>
+                                        <th class="col-md-3" scope="col">등록일</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -92,7 +92,7 @@
                                     <li th:class="${result.prev} ? 'page-item' : 'page-item disabled'">
                                         <a class="page-link"
                                            th:href="@{/adminboard/{category}(category=${category}, page=${result.page - 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">
-                                            Previous
+                                            이전
                                         </a>
                                     </li>
 
@@ -115,7 +115,7 @@
                                     <li th:class="${result.next} ? 'page-item' : 'page-item disabled'">
                                         <a class="page-link"
                                            th:href="@{/adminboard/{category}(category=${category}, page=${result.page + 1}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">
-                                            Next
+                                            다음
                                         </a>
                                     </li>
                                 </ul>

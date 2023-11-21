@@ -1,100 +1,113 @@
 /* Custom Form */
 
-.input-form {}
+.input-form {
+}
 
 .single-flex-input {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    @include responsive(xxs) {
-        display: block;
-        flex-wrap: wrap;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  @include responsive(xxs) {
+    display: block;
+    flex-wrap: wrap;
+  }
 }
 
 .custom-form {
-    .single-input,
-    .form-group {
+  .single-input,
+  .form-group {
+    width: 100%;
+
+    .label-title {
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 10px;
+      color: var(--heading-color);
+      @include responsive(xxs) {
+        font-size: 15px;
+      }
+      @include responsive(vxxs) {
+        font-size: 14px;
+      }
+    }
+
+    .input-icon {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+    }
+
+    .iti {
+      width: 100%;
+    }
+
+    .form--control,
+    .form-control {
+      &.input-padding-left {
+        padding-left: 45px;
+      }
+
+      &#phone {
         width: 100%;
-        .label-title {
-            font-size: 16px;
-            line-height: 24px;
-            font-weight: 500;
-            display: block;
-            margin-bottom: 10px;
-            color: var(--heading-color);
-            @include responsive(xxs) {
-                font-size: 15px;
-            }
-            @include responsive(vxxs) {
-                font-size: 14px;
-            }
-        }
-        .input-icon {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-        }
-        .iti {
-            width: 100%;
-        }
-        .form--control,
-        .form-control {
-            &.input-padding-left {
-                padding-left: 45px;
-            }
-            &#phone {
-                width: 100%;
-                padding-left: 50px;
-            }
-            &::-webkit-outer-spin-button,
-            &::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-                -moz-appearance: textfield;
-            }
-            -moz-appearance: textfield;
-            width: 100%;
-            height: 55px;
-            line-height: 55px;
-            padding: 0 15px;
-            border: 1px solid var(--input-color);
-            background-color: unset;
-            outline: none;
-            color: var(--light-color);
-            @include transition(300ms);
-            @include box-shadow(0, 0, 10px, rgba($white, .1));
-            &:focus {
-                border-color: rgba(var(--main-color-one-rgb), .3);
-                @include box-shadow(0, 0, 10px, rgba(var(--main-color-one-rgb), .1));
-            }
-            @include responsive(xxs) {
-                font-size: 15px;
-            }
-            @include responsive(vxxs) {
-                font-size: 14px;
-            }
-        }
-        .form-message {
-            height: 100px;
-            line-height: 28px;
-            padding: 15px;
-        }
+        padding-left: 50px;
+      }
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        -moz-appearance: textfield;
+      }
+
+      -moz-appearance: textfield;
+      width: 100%;
+      height: 55px;
+      line-height: 55px;
+      padding: 0 15px;
+      border: 1px solid var(--input-color);
+      background-color: unset;
+      outline: none;
+      color: var(--light-color);
+      @include transition(300ms);
+      @include box-shadow(0, 0, 10px, rgba($white, .1));
+
+      &:focus {
+        border-color: rgba(var(--main-color-one-rgb), .3);
+        @include box-shadow(0, 0, 10px, rgba(var(--main-color-one-rgb), .1));
+      }
+
+      @include responsive(xxs) {
+        font-size: 15px;
+      }
+      @include responsive(vxxs) {
+        font-size: 14px;
+      }
     }
-    .submit-btn {
-        margin-top: 25px;
+
+    .form-message {
+      height: 100px;
+      line-height: 28px;
+      padding: 15px;
     }
+  }
+
+  .submit-btn {
+    margin-top: 25px;
+  }
 }
 
 .submit-btn {
-    border: 2px solid var(--main-color-one);
-    background-color: var(--main-color-one);
-    color: $white;
-    padding: 12px 20px;
-    @include transition(300ms);
-    &:hover {
-        background-color: unset;
-        color: var(--main-color-one);
-    }
+  border: 2px solid var(--main-color-one);
+  background-color: var(--main-color-one);
+  color: $white;
+  padding: 12px 20px;
+  @include transition(300ms);
+
+  &:hover {
+    background-color: unset;
+    color: var(--main-color-one);
+  }
 }

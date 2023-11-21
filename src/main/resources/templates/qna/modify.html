@@ -54,42 +54,42 @@
 
 
                                 <div class="form-group">
-                                    <label>qbno</label>
-                                    <input class="form-control" name="qbno" readonly th:value="${dto.qbno}" type="text">
+                                    <label hidden="hidden">qbno</label>
+                                    <input class="form-control" name="qbno" readonly th:value="${dto.qbno}" type="text" hidden="hidden">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Title</label>
+                                    <label>제목</label>
                                     <input class="form-control" name="title" th:value="${dto.title}" type="text">
                                 </div>
                                 <div class="form-group">
-                                    <label>Content</label>
+                                    <label>내용</label>
                                     <textarea class="form-control" name="content" rows="5">[[${dto.content}]]</textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>Writer</label>
+                                    <label>작성자</label>
                                     <input class="form-control" name="writer" readonly th:value="${dto.writerEmail}"
                                            type="text">
                                 </div>
                                 <div class="form-group">
-                                    <label>RegDate</label>
+                                    <label hidden="hidden">RegDate</label>
                                     <input class="form-control" readonly
-                                           th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" type="text">
+                                           th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" type="text" hidden="hidden">
                                 </div>
                                 <div class="form-group">
-                                    <label>ModDate</label>
+                                    <label hidden="hidden">ModDate</label>
                                     <input class="form-control" readonly
-                                           th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" type="text">
+                                           th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" type="text" hidden="hidden">
                                 </div>
 
                             </form>
 
                             <div class="mat-25">
-                                <button class="btn btn-primary modifyBtn" type="button">Modify</button>
+                                <button class="btn btn-primary modifyBtn" type="button">수정</button>
 
-                                <button class="btn btn-info listBtn" type="button">List</button>
+                                <button class="btn btn-info listBtn" type="button">목록</button>
 
-                                <button class="btn btn-danger removeBtn" type="button">Remove</button>
+                                <button class="btn btn-danger removeBtn" type="button">삭제</button>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout1}">
+
+<body>
+<div layout:fragment="content" style="display: flex;
+    flex-direction: column;
+    align-items: center;">
+    <img th:src="@{/assets/img/error/500.jpg}" style="margin: 50px 0;">
+    <div class="errorText">
+        <h1>내부 서버 오류가 발생했습니다.</h1>
+        <br>
+        <h3>관리자에게 문의 바랍니다. 031-0000-0000</h3>
+    </div>
+</div>
+</body>
+</html>

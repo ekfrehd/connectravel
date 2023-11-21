@@ -1,39 +1,88 @@
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="admin/common/head :: adminHead"></head>
-<body>
-	<script type="text/javascript">
-		$(document).ready(function(){
-		});
-	</script>
-	<div th:replace="admin/common/top::header"></div>
-	<div id="maininner"><!-- maininner (s)-->
-		<div class="cc-tab-con">
-			<a href="javascript:tabChange('1');" class="cc-tab-item">사용자관리</a>		<!--// on : 현재 위치 //-->
-			<a href="javascript:void(0);" class="cc-tab-item  on">권한관리</a>
-			<a href="javascript:tabChange('3');" class="cc-tab-item">리소스관리</a>
-		</div>
-		<div class="tbl_wrp">
-			<table class="table">
-				<thead>
-				<tr class="table-info">
-					<th style="text-align: center;" scope="col">권한명</th>
-					<th style="text-align: center;" scope="col">권한설명</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr class="link_btn hover" th:each="role : ${roles}">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragmentsAdminConfig/layout}">
 
-					<td style="text-align: center;">
-						<a th:href="@{'/admin/roles/' + ${role.id}}"><span th:text="${role.roleName}">회원</span></a>
-					</td>
-					<td style="text-align: center;" th:text="${role.roleDesc}"></td>
-				</tr>
-				</tbody>
-			</table>
-			<div style="text-align:right;">
-				<p><a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/roles/register}">권한 등록</a></p>
-			</div>
-		</div>
-	</div>
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            margin: 0 10px;
+        }
+    </style>
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            var errorMessage = [[${errorMessage}]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+        });
+    </script>
+
+</th:block>
+<script type="text/javascript">
+    $(document).ready(function () {
+    });
+
+</script>
+
+<body>
+<div layout:fragment="content">
+    <div id="maininner"><!-- maininner (s)-->
+        <div class="tbl_wrp">
+            <table class="table">
+                <thead>
+                <tr class="table-info">
+                    <th style="text-align: center;" scope="col">권한명</th>
+                    <th style="text-align: center;" scope="col">권한설명</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="link_btn hover" th:each="role : ${roles}">
+
+                    <td style="text-align: center;">
+                        <a th:href="@{'/admin/roles/' + ${role.id}}"><span th:text="${role.roleName}">회원</span></a>
+                    </td>
+                    <td style="text-align: center;" th:text="${role.roleDesc}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="text-align:right;">
+                <p><a class="btn btn-dark btn-lg" style="margin:10;" th:href="@{/admin/roles/register}">권한 등록</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

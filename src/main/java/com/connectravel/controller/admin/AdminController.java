@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@RequestMapping("admin")
 @RequiredArgsConstructor
 public class AdminController {
 
-    @GetMapping(value="/admin")
+    @GetMapping(value="/")
     public String home(Model model) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -34,7 +35,7 @@ public class AdminController {
         model.addAttribute("userId", username);
 
 
-        return "admin/home";
+        return "home";
     }
 
     @PreAuthorize("isAuthenticated() and (( #member.username == principal.username ) or hasRole('ROLE_ADMIN'))")

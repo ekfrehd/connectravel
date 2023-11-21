@@ -3,420 +3,473 @@
 --------------------------------------------------------------*/
 
 .footer-area {
-    position: relative;
-    z-index: 1;
-    &-one {
-        padding-top: 150px;
-    }
+  position: relative;
+  z-index: 1;
+
+  &-one {
+    padding-top: 150px;
+  }
 }
 
 .footer-padding {
-    padding: 25px 0;
+  padding: 25px 0;
 }
 
 .footer-border-round {
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    &::before {
-        content: "";
-        position: absolute;
-        top: 200px;
-        height: 100%;
-        width: 130%;
-        background-color: transparent;
-        border-top: 2px solid rgba($steam-color, .1);
-        z-index: -1;
-        border-radius: 50%;
-        left: 50%;
-        transform: translateX(-50%);
-        @include responsive(allPhone) {
-            width: 150%;
-        }
-        @include responsive(xs) {
-            width: 180%;
-        }
-        @include responsive(xxs) {
-            width: 220%;
-        }
-        @include responsive(vxxs) {
-            width: 240%;
-        }
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 200px;
+    height: 100%;
+    width: 130%;
+    background-color: transparent;
+    border-top: 2px solid rgba($steam-color, .1);
+    z-index: -1;
+    border-radius: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    @include responsive(allPhone) {
+      width: 150%;
     }
-    &.white-color {
-        border-color: $steam-color;
+    @include responsive(xs) {
+      width: 180%;
     }
+    @include responsive(xxs) {
+      width: 220%;
+    }
+    @include responsive(vxxs) {
+      width: 240%;
+    }
+  }
+
+  &.white-color {
+    border-color: $steam-color;
+  }
 }
 
 .footer-contents {
-    &-flex {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 20px 10px;
-        @include responsive(sm) {
-            justify-content: center;
-        }
+  &-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px 10px;
+    @include responsive(sm) {
+      justify-content: center;
     }
-    &-logo {
-        max-width: 600px;
-        margin: auto;
-        &-img {
-            max-width: 200px;
-            display: inline-block;
-            img {}
-        }
-        &-title {
-            font-size: 24px;
-            font-weight: 700;
-            line-height: 28px;
-            margin: 7px 0 0;
-        }
+  }
+
+  &-logo {
+    max-width: 600px;
+    margin: auto;
+
+    &-img {
+      max-width: 200px;
+      display: inline-block;
+
+      img {
+      }
     }
+
+    &-title {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 28px;
+      margin: 7px 0 0;
+    }
+  }
 }
 
 .footer-widget {
-    &-title {
-        font-size: 28px;
-        line-height: 32px;
-        @include responsive(sm) {
-            font-size: 24px;
-            line-height: 28px;
-        }
+  &-title {
+    font-size: 28px;
+    line-height: 32px;
+    @include responsive(sm) {
+      font-size: 24px;
+      line-height: 28px;
     }
-    &-nav {
-        &-list {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px 30px;
-            @include responsive(xl) {
-                gap: 12px 20px;
-            }
-            @include responsive(lg) {
-                gap: 12px 20px;
-            }
-            @include responsive(sm) {
-                justify-content: center;
-                gap: 7px 20px;
-            }
-            @include responsive(xs) {
-                justify-content: center;
-                gap: 7px 15px;
-            }
-            &-item {}
-            &-link {
-                font-size: 16px;
-                display: inline-block;
-                font-weight: 500;
-                color: var(--light-color);
-                @include transition(.3s);
-                &:hover {
-                    color: var(--main-color-one);
-                    text-decoration: underline;
-                }
-            }
+  }
+
+  &-nav {
+    &-list {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px 30px;
+      @include responsive(xl) {
+        gap: 12px 20px;
+      }
+      @include responsive(lg) {
+        gap: 12px 20px;
+      }
+      @include responsive(sm) {
+        justify-content: center;
+        gap: 7px 20px;
+      }
+      @include responsive(xs) {
+        justify-content: center;
+        gap: 7px 15px;
+      }
+
+      &-item {
+      }
+
+      &-link {
+        font-size: 16px;
+        display: inline-block;
+        font-weight: 500;
+        color: var(--light-color);
+        @include transition(.3s);
+
+        &:hover {
+          color: var(--main-color-one);
+          text-decoration: underline;
         }
+      }
     }
-    &-social {
-        &-list {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px 20px;
-            @include responsive(xl) {
-                gap: 12px 15px;
-            }
-            @include responsive(lg) {
-                gap: 10px;
-            }
-            &-item {}
-            &-link {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 35px;
-                width: 35px;
-                font-size: 18px;
-                border-radius: 5px;
-                background: $white;
-                color: var(--heading-color);
-                @include transition(300ms);
-                @include responsive(xs) {
-                    font-size: 16px;
-                    height: 35px;
-                    width: 35px;
-                }
-                @include responsive(vxxs) {
-                    height: 30px;
-                    width: 30px;
-                }
-                &:hover {
-                    color: $white;
-                    background: var(--main-color-one);
-                }
-            }
+  }
+
+  &-social {
+    &-list {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      @include responsive(xl) {
+        gap: 12px 15px;
+      }
+      @include responsive(lg) {
+        gap: 10px;
+      }
+
+      &-item {
+      }
+
+      &-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 35px;
+        width: 35px;
+        font-size: 18px;
+        border-radius: 5px;
+        background: $white;
+        color: var(--heading-color);
+        @include transition(300ms);
+        @include responsive(xs) {
+          font-size: 16px;
+          height: 35px;
+          width: 35px;
         }
+        @include responsive(vxxs) {
+          height: 30px;
+          width: 30px;
+        }
+
+        &:hover {
+          color: $white;
+          background: var(--main-color-one);
+        }
+      }
     }
-    &-form {
-        &-single {
-            position: relative;
-            z-index: 2;
-        }
-        &-control {
-            height: 55px;
-            width: 100%;
-            background-color: var(--copyright-bg-1);
-            border: 1px solid var(--copyright-bg-1);
-            border-radius: 30px;
-            padding: 0 20px;
-            color: var(--light-color);
-            @include box-shadow(0, 0, 10px, rgba($white, .001));
-            @include transition(.3s);
-            &:focus {
-                border: 1px solid rgba(var(--main-color-one-rgb), .4);
-            }
-        }
-        button {
-            position: absolute;
-            right: 5px;
-            top: 5px;
-            bottom: 0;
-            background-color: var(--main-color-one);
-            color: $white;
-            padding: 0px 30px;
-            border: 0;
-            outline: none;
-            border-radius: 30px;
-            height: calc(100% - 10px);
-            @include transition(.3s);
-            &:hover {
-                background-color: var(--secondary-color);
-                color: $white;
-            }
-        }
+  }
+
+  &-form {
+    &-single {
+      position: relative;
+      z-index: 2;
     }
+
+    &-control {
+      height: 55px;
+      width: 100%;
+      background-color: var(--copyright-bg-1);
+      border: 1px solid var(--copyright-bg-1);
+      border-radius: 30px;
+      padding: 0 20px;
+      color: var(--light-color);
+      @include box-shadow(0, 0, 10px, rgba($white, .001));
+      @include transition(.3s);
+
+      &:focus {
+        border: 1px solid rgba(var(--main-color-one-rgb), .4);
+      }
+    }
+
+    button {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      bottom: 0;
+      background-color: var(--main-color-one);
+      color: $white;
+      padding: 0px 30px;
+      border: 0;
+      outline: none;
+      border-radius: 30px;
+      height: calc(100% - 10px);
+      @include transition(.3s);
+
+      &:hover {
+        background-color: var(--secondary-color);
+        color: $white;
+      }
+    }
+  }
 }
 
 .footer-navbar {
-    padding: 40px 0;
-    border-top: 1px solid rgba($white, .1);
-    border-bottom: 1px solid rgba($white, .1);
+  padding: 40px 0;
+  border-top: 1px solid rgba($white, .1);
+  border-bottom: 1px solid rgba($white, .1);
 }
 
 .footer-wrapper {
-    &-flex {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 48px 0px;
-        align-items: stretch;
-        padding: 100px 0;
-        @include responsive(sm) {
-            flex-wrap: wrap;
-        }
-        @include responsive(sm) {
-            padding: 70px 0;
-        }
+  &-flex {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 48px 0px;
+    align-items: stretch;
+    padding: 100px 0;
+    @include responsive(sm) {
+      flex-wrap: wrap;
     }
-    &-single {
-        &:not(:last-child) {
-            padding-right: 100px;
-            @include responsive(lg) {
-                padding-right: 50px;
-            }
-            @include responsive(allPhone) {
-                padding-right: 20px;
-            }
-            @include responsive(sm) {
-                padding-right: 0px;
-            }
-        }
-        &:not(:first-child) {
-            padding-left: 100px;
-            border-left: 1px solid rgba($white, .1);
-            @include responsive(lg) {
-                padding-left: 50px;
-            }
-            @include responsive(allPhone) {
-                padding-left: 20px;
-            }
-            @include responsive(sm) {
-                border-left: unset;
-                padding-left: 0;
-            }
-        }
+    @include responsive(sm) {
+      padding: 70px 0;
     }
+  }
+
+  &-single {
+    &:not(:last-child) {
+      padding-right: 100px;
+      @include responsive(lg) {
+        padding-right: 50px;
+      }
+      @include responsive(allPhone) {
+        padding-right: 20px;
+      }
+      @include responsive(sm) {
+        padding-right: 0px;
+      }
+    }
+
+    &:not(:first-child) {
+      padding-left: 100px;
+      border-left: 1px solid rgba($white, .1);
+      @include responsive(lg) {
+        padding-left: 50px;
+      }
+      @include responsive(allPhone) {
+        padding-left: 20px;
+      }
+      @include responsive(sm) {
+        border-left: unset;
+        padding-left: 0;
+      }
+    }
+  }
 }
 
 .copyright-area {
-    &.copyright-border {
-        border-top: 1px solid rgba($steam-color, .2);
-        &.white-color {
-            border-color: rgba($steam-color, .7);
-        }
+  &.copyright-border {
+    border-top: 1px solid rgba($steam-color, .2);
+
+    &.white-color {
+      border-color: rgba($steam-color, .7);
     }
+  }
 }
 
 .copyright-contents {
-    &-flex {
-        @include flexBetween;
-        flex-wrap: wrap;
-        gap: 10px;
-        @include responsive(sm) {
-            justify-content: center;
-        }
+  &-flex {
+    @include flexBetween;
+    flex-wrap: wrap;
+    gap: 10px;
+    @include responsive(sm) {
+      justify-content: center;
     }
-    &-items {
-        @include flexStart;
-        gap: 15px 50px;
-        flex-wrap: wrap;
-    }
-    &-single {
-        &:hover {
-            .copyright-contents {
-                &-single {
-                    &-icon {
-                        color: var(--main-color-one);
-                    }
-                }
-            }
-        }
-        &-flex {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        &-icon {
-            font-size: 40px;
-            color: var(--light-color);
-            @include transition(.3s);
-        }
-        &-details {
-            &-title {
-                font-size: 16px;
-                font-weight: 400;
-                line-height: 22px;
-                display: block;
-                color: var(--light-color);
-            }
-            &-link {
-                color: $white;
-                font-size: 16px;
-                font-weight: 600;
-                display: inline-block;
-                margin-top: 5px;
-                @include transition(.3s);
-                &:hover {
-                    color: var(--main-color-one);
-                }
-            }
-        }
-    }
-    &-main {
-        font-size: 16px;
-        color: var(--light-color);
-        text-align: center;
-        @include responsive(sm) {
-            text-align: center;
-            margin-top: 10px;
-        }
-        a {
+  }
+
+  &-items {
+    @include flexStart;
+    gap: 15px 50px;
+    flex-wrap: wrap;
+  }
+
+  &-single {
+    &:hover {
+      .copyright-contents {
+        &-single {
+          &-icon {
             color: var(--main-color-one);
-            font-weight: 500;
+          }
         }
+      }
     }
+
+    &-flex {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    &-icon {
+      font-size: 40px;
+      color: var(--light-color);
+      @include transition(.3s);
+    }
+
+    &-details {
+      &-title {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 22px;
+        display: block;
+        color: var(--light-color);
+      }
+
+      &-link {
+        color: $white;
+        font-size: 16px;
+        font-weight: 600;
+        display: inline-block;
+        margin-top: 5px;
+        @include transition(.3s);
+
+        &:hover {
+          color: var(--main-color-one);
+        }
+      }
+    }
+  }
+
+  &-main {
+    font-size: 16px;
+    color: var(--light-color);
+    text-align: center;
+    @include responsive(sm) {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    a {
+      color: var(--main-color-one);
+      font-weight: 500;
+    }
+  }
 }
 
 .footer-area-two {
-    .footer-widget {
-        &-contents {
-            &-para {
-                color: rgba($white, .8);
-            }
-        }
-        &-form {
-            &-control {
-                background-color: $white;
-                border: 1px solid $white;
-                @include box-shadow(0, 0, 10px, rgba($black, .001));
-                padding-right: 130px;
-                &:focus {
-                    border: 1px solid rgba(var(--secondary-color-rgb), .8);
-                }
-            }
-            button {
-                background-color: var(--secondary-color);
-                &:hover {
-                    background-color: rgba(var(--secondary-color-rgb), .7);
-                    color: $white;
-                }
-            }
-        }
-        &-para {
-            color: rgba($white, .8);
-        }
+  .footer-widget {
+    &-contents {
+      &-para {
+        color: rgba($white, .8);
+      }
     }
-    .footer-widget-nav {
-        &-list {
-            &-item {}
-            &-link {
-                color: rgba($white, .8);
-                &:hover {
-                    color: var(--secondary-color);
-                }
-            }
+
+    &-form {
+      &-control {
+        background-color: $white;
+        border: 1px solid $white;
+        @include box-shadow(0, 0, 10px, rgba($black, .001));
+        padding-right: 130px;
+
+        &:focus {
+          border: 1px solid rgba(var(--secondary-color-rgb), .8);
         }
-    }
-    .footer-widget-social {
-        &-list {
-            &-item {}
-            &-link {
-                &:hover {
-                    background-color: var(--secondary-color);
-                }
-            }
+      }
+
+      button {
+        background-color: var(--secondary-color);
+
+        &:hover {
+          background-color: rgba(var(--secondary-color-rgb), .7);
+          color: $white;
         }
+      }
     }
-    .copyright-contents {
-        &-single {
-            &:hover {
-                .copyright-contents {
-                    &-single {
-                        &-icon {
-                            color: $white;
-                            background-color: var(--secondary-color)
-                        }
-                    }
-                }
-            }
+
+    &-para {
+      color: rgba($white, .8);
+    }
+  }
+
+  .footer-widget-nav {
+    &-list {
+      &-item {
+      }
+
+      &-link {
+        color: rgba($white, .8);
+
+        &:hover {
+          color: var(--secondary-color);
+        }
+      }
+    }
+  }
+
+  .footer-widget-social {
+    &-list {
+      &-item {
+      }
+
+      &-link {
+        &:hover {
+          background-color: var(--secondary-color);
+        }
+      }
+    }
+  }
+
+  .copyright-contents {
+    &-single {
+      &:hover {
+        .copyright-contents {
+          &-single {
             &-icon {
-                @include flexCenter;
-                height: 50px;
-                width: 50px;
-                font-size: 30px;
-                background-color: $white;
-                color: var(--secondary-color);
-                border-radius: 50%;
+              color: $white;
+              background-color: var(--secondary-color)
             }
-            &-details {
-                &-title {
-                    color: rgba($white, .8);
-                }
-                &-link {
-                    &:hover {
-                        color: var(--secondary-color);
-                    }
-                }
-            }
+          }
         }
-        &-main {
-            color: rgba($white, .8);
-            a {
-                color: var(--secondary-color);
-            }
+      }
+
+      &-icon {
+        @include flexCenter;
+        height: 50px;
+        width: 50px;
+        font-size: 30px;
+        background-color: $white;
+        color: var(--secondary-color);
+        border-radius: 50%;
+      }
+
+      &-details {
+        &-title {
+          color: rgba($white, .8);
         }
+
+        &-link {
+          &:hover {
+            color: var(--secondary-color);
+          }
+        }
+      }
     }
+
+    &-main {
+      color: rgba($white, .8);
+
+      a {
+        color: var(--secondary-color);
+      }
+    }
+  }
 }

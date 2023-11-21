@@ -5,11 +5,11 @@
 
 <div layout:fragment="content">
 
-    <div class="container" style="margin: 30px auto">
+    <div class="container" style="margin: 50px auto">
         <div class="section-title center-text" style="max-width: 800px">
-            <a href="http://naver.me/GZjS4xew" target="_blank"><img th:src="@{/maintitle.jpg}"></a>
+            <a href="https://drive.google.com/drive/folders/1cjB01NFT33dvsMiUhAk-Y4xqfVGBiV5f" target="_blank"><img th:src="@{/assets/img/메인배너.jpg}"></a>
         </div>
-        <div class="row center-text" style="max-width: 800px; margin:10px auto">
+        <div class="row center-text" style="max-width: 800px; margin:50px auto">
             <div class="col">
                 <a href="/product/list?category=motel"> <img th:src="@{/icon/ico_category_01.png}" alt="img">
                     <p>모텔</p></a>
@@ -31,9 +31,9 @@
                     <p>캠핑&글램핑</p></a>
             </div>
         </div>
-        <div class="row center-text" style="max-width: 800px; margin:40px auto">
+        <div class="row center-text" style="max-width: 800px; margin:100px auto" 50px>
             <div class="section-title text-left append-flex">
-                <h4 class="h4"><font color="#5f9ea0">당신</font>에게 추천하는 가이드</h4>
+                <h4 class="h4"><B><font color="#5f9ea0">당신</font>에게 추천하는 가이드</B></h4>
                 <div class="append-attraction"></div>
             </div>
             <div class="row mt-5">
@@ -49,13 +49,13 @@
                             <div class="single-attraction radius-20">
                                 <div class="single-attraction-thumb" th:if="${not #lists.isEmpty(dto.imgFiles)}">
                                     <a th:href="@{/tour/read(tbno=${dto.tbno})}">
-                                        <img th:src="'/imgtest/' + ${dto.imgFiles[0].imgFile}"
+                                        <img class="mainTourList" th:src="'/imgtest/' + ${dto.imgFiles[0].imgFile}"
                                              th:alt="${dto.title}">
                                     </a>
                                 </div>
                                 <div th:unless="${not #lists.isEmpty(dto.imgFiles)}" class="alternative-content">
                                     <a th:href="@{/tour/read(tbno=${dto.tbno})}">
-                                        <div style="width: 170px; height: 170px;"></div>
+                                        <div class="mainTourList"></div>
                                     </a>
                                 </div>
                                 <div class="single-attraction-contents">

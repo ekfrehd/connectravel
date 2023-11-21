@@ -1,59 +1,68 @@
 /* History Css */
 
 .history-wrapper {
-    &-flex {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        flex-wrap: wrap;
-    }
-    &-item {}
+  &-flex {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  &-item {
+  }
 }
 
 .single-history {
-    &-year {
-        position: relative;
-        z-index: 2;
-        &::before {
-            content: "";
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            left: 0;
-            top: 15px;
-            border-top: 2px dotted var(--light-color);
-            z-index: -1;
-        }
-        &-title {
-            font-size: 28px;
-            font-weight: 500;
-            line-height: 32px;
-            margin: -4px 0 20px;
-            background-color: $white;
-            padding: 0 10px;
-        }
+  &-year {
+    position: relative;
+    z-index: 2;
+
+    &::before {
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      left: 0;
+      top: 15px;
+      border-top: 2px dotted var(--light-color);
+      z-index: -1;
     }
-    &-thumb {
-        img {
-            margin: auto;
-        }
+
+    &-title {
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 32px;
+      margin: -4px 0 20px;
+      background-color: $white;
+      padding: 0 10px;
     }
-    &-contents {
-        margin-top: 15px;
-        &-title {
-            font-size: 20px;
-            line-height: 28px;
-            font-weight: 600;
-            @include transition(.3s);
-            &:hover {
-                color: var(--main-color-one);
-            }
-        }
-        &-para {
-            font-size: 14px;
-            line-height: 24px;
-            color: var(--paragraph-color);
-            margin-top: 5px;
-        }
+  }
+
+  &-thumb {
+    img {
+      margin: auto;
     }
+  }
+
+  &-contents {
+    margin-top: 15px;
+
+    &-title {
+      font-size: 20px;
+      line-height: 28px;
+      font-weight: 600;
+      @include transition(.3s);
+
+      &:hover {
+        color: var(--main-color-one);
+      }
+    }
+
+    &-para {
+      font-size: 14px;
+      line-height: 24px;
+      color: var(--paragraph-color);
+      margin-top: 5px;
+    }
+  }
 }
