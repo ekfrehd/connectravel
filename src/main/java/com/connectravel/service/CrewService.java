@@ -21,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -76,7 +78,7 @@ public class CrewService {
         Crew crew = findByCrewId(crewId);
         findByUserAndCrewContaining(user, crew);
 
-//        crew.deleteSoftly(LocalDateTime.now());
+        crew.deleteSoftly(LocalDateTime.now());
         crewRepository.delete(crew);
 
         return new CrewResponse("Crew 삭제 완료", crewId);
@@ -300,72 +302,72 @@ public class CrewService {
     }
 //
 //    // 강퇴하면 Participation을 지우는 방법 이용
-//    @Transactional
-//    public void deleteUserAtCrew(Long userId, Long crewId, String authenticationName) {
-//
-//        Optional<Member> actingUserOptional = userRepository.findByUserName(authenticationName);
-//
-//        Optional<Crew> crewOptional = crewRepository.findById(crewId);
-//
-//        Optional<Member> userOptional = userRepository.findById(userId);
-//
-//        if (actingUserOptional.isEmpty()) {
-//            throw new AppException(ErrorCode.FORBIDDEN_REQUEST, ErrorCode.FORBIDDEN_REQUEST.getMessage());
+    @Transactional
+    public void deleteUserAtCrew(Long userId, Long crewId, String authenticationName) {
+
+        Optional<Member> actingUserOptional = userRepository.findByUsername(authenticationName);
+
+        Optional<Crew> crewOptional = crewRepository.findById(crewId);
+
+        Optional<Member> userOptional = userRepository.findById(userId);
+
+        if (actingUserOptional.isEmpty()) {
+            throw new AppException(ErrorCode.FORBIDDEN_REQUEST, ErrorCode.FORBIDDEN_REQUEST.getMessage());
+        }
+
+        if (crewOptional.isEmpty()) {
+            throw new AppException(ErrorCode.CREW_NOT_FOUND, ErrorCode.CREW_NOT_FOUND.getMessage());
+        }
+
+        if (userOptional.isEmpty()) {
+            throw new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage());
+        }
+
+        Member user = userOptional.get();
+
+        Member actingUser = actingUserOptional.get();
+
+        Crew crew = crewOptional.get();
+
+        Optional<Participation> participationOptional = participationRepository.findByCrewAndUser(crew, user);
+
+        if (participationOptional.isEmpty()) {
+            throw new AppException(ErrorCode.NOT_FOUND_PARTICIPATION, ErrorCode.NOT_FOUND_PARTICIPATION.getMessage());
+        }
+
+        Participation befParticipation = participationOptional.get();
+
+//        // 방장 강퇴 못하도록 막음
+//        if (befParticipation.getUser().getId().equals(actingUser.getId())) {
+//            throw new AppException(ErrorCode.NOT_AUTHORIZED, "방장은 강퇴할 수 없습니다.");
+//        } else {
+//            participationRepository.delete(befParticipation);
 //        }
+
+        participationRepository.delete(befParticipation);
+
 //
-//        if (crewOptional.isEmpty()) {
-//            throw new AppException(ErrorCode.CREW_NOT_FOUND, ErrorCode.CREW_NOT_FOUND.getMessage());
-//        }
+//         방장이거나 운영자인 경우만 삭제할 수 있는 기능 주석처리
+//        if((actingUser.getRole() == UserRole.ROLE_ADMIN) || (crew.getUser().getId().equals(actingUser.getId()))){
+//            Optional<Participation> participationOptional = participationRepository.findByCrewAndUser(crew, user);
 //
-//        if (userOptional.isEmpty()) {
-//            throw new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage());
-//        }
+//            if(participationOptional.isEmpty()){
+//                throw new AppException(ErrorCode.NOT_FOUND_PARTICIPATION, ErrorCode.NOT_FOUND_PARTICIPATION.getMessage());
+//            }
 //
-//        Member user = userOptional.get();
+//            Participation befParticipation = participationOptional.get();
 //
-//        Member actingUser = actingUserOptional.get();
+//            if(befParticipation.getUser().getId().equals(actingUser.getId())){
+//                throw new AppException(ErrorCode.NOT_AUTHORIZED, "방장은 강퇴할 수 없습니다.");
+//            } else{
 //
-//        Crew crew = crewOptional.get();
+//            }
 //
-//        Optional<Participation> participationOptional = participationRepository.findByCrewAndUser(crew, user);
 //
-//        if (participationOptional.isEmpty()) {
-//            throw new AppException(ErrorCode.NOT_FOUND_PARTICIPATION, ErrorCode.NOT_FOUND_PARTICIPATION.getMessage());
-//        }
-//
-//        Participation befParticipation = participationOptional.get();
-//
-////        // 방장 강퇴 못하도록 막음
-////        if (befParticipation.getUser().getId().equals(actingUser.getId())) {
-////            throw new AppException(ErrorCode.NOT_AUTHORIZED, "방장은 강퇴할 수 없습니다.");
-////        } else {
-////            participationRepository.delete(befParticipation);
-////        }
-//
-//        participationRepository.delete(befParticipation);
-//
-////
-////         방장이거나 운영자인 경우만 삭제할 수 있는 기능 주석처리
-////        if((actingUser.getRole() == UserRole.ROLE_ADMIN) || (crew.getUser().getId().equals(actingUser.getId()))){
-////            Optional<Participation> participationOptional = participationRepository.findByCrewAndUser(crew, user);
-////
-////            if(participationOptional.isEmpty()){
-////                throw new AppException(ErrorCode.NOT_FOUND_PARTICIPATION, ErrorCode.NOT_FOUND_PARTICIPATION.getMessage());
-////            }
-////
-////            Participation befParticipation = participationOptional.get();
-////
-////            if(befParticipation.getUser().getId().equals(actingUser.getId())){
-////                throw new AppException(ErrorCode.NOT_AUTHORIZED, "방장은 강퇴할 수 없습니다.");
-////            } else{
-////
-////            }
-////
-////
-////        }else{
-////            throw new AppException(ErrorCode.NOT_AUTHORIZED, ErrorCode.NOT_AUTHORIZED.getMessage());
-////        }
-//
+//        }else{
+//            throw new AppException(ErrorCode.NOT_AUTHORIZED, ErrorCode.NOT_AUTHORIZED.getMessage());
+        }
+
     }
 //
 //

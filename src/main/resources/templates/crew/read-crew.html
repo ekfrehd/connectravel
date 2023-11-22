@@ -88,22 +88,22 @@
                             </div>
                             <div>
                                 <small class="text-muted">Like : </small>
-                                <th:block th:if="${member.getSports().size() > 0}" th:each="index : ${#numbers.sequence(0, member.getSports().size()-1)}">
-                                    <small class="text-muted" th:text="${member.getSports().get(index).value}">축구</small>
-                                    <small class="text-muted" th:if="${index < member.getSports().size()-1}" text="dd">, </small>
-                                </th:block>
+<!--                                <th:block th:if="${member.getSports().size() > 0}" th:each="index : ${#numbers.sequence(0, member.getSports().size()-1)}">-->
+<!--                                    <small class="text-muted" th:text="${member.getSports().get(index).value}">축구</small>-->
+<!--                                    <small class="text-muted" th:if="${index < member.getSports().size()-1}" text="dd">, </small>-->
+<!--                                </th:block>-->
                             </div>
                         </div>
                     </a>
                     <!-- 생성자인 경우 다른 참여자 강퇴 기능 -->
-                    <div th:if="${details.getUserName == #authentication.principal.username()}">
+                    <div th:if="${details.getUserName == #authentication.principal.username}">
                        <button th:if="${member.getUserName != details.getUserName}" type="button" class="btn btn-outline-secondary btn-sm" th:crewId="${crewId}" th:userId="${member.joinUserId}"
                                th:onclick="deleteUserFromCrew(this.getAttribute('crewId'),this.getAttribute('userId'))">
                            강퇴하기
                        </button>
                     </div>
-                    <!-- 일반 참여자인 경우 자기 자신만 나가기 기능-->
-                    <div th:if="${member.getUserName() == #authentication.principal.username() and details.getUserName != #authentication.principal.username()}">
+                    <!--일반 참여자인 경우 자기 자신만 나가기 기능-->
+                    <div th:if="${member.getUserName() == #authentication.principal.username and details.getUserName != #authentication.principal.username}">
                         <button type="button" class="btn btn-outline-danger btn-sm" th:crewId="${crewId}" th:userId="${member.joinUserId}"
                                 th:onclick="deleteUserFromCrew(this.getAttribute('crewId'),this.getAttribute('userId'))">
                             나가기

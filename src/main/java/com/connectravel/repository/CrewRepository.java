@@ -49,6 +49,7 @@ public interface CrewRepository extends JpaRepository<Crew, Long> {
     Optional<Crew> findByChatRoom(ChatRoom room);
 
     Crew findByUser(Member user);
+    List<Crew> findCrewsByUserUsername(String username);
 
-//    Page<Crew> findByDeletedAtNull(Pageable pageable);
+    Page<Crew> findByDeletedAtNull(Pageable pageable);
 }

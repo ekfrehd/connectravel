@@ -162,26 +162,29 @@ public class ParticipationService {
 
 
     //미승인된 멤버 조회
-//    @Transactional
-//    public List<PartJoinResponse> notAllowedMember(String userName) {
-//        User user = userRepository.findByUsername(userName).orElseThrow(() -> new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage()));
-//        List<PartJoinResponse> participations = new ArrayList<>();
-//        for (Crew crew : user.getCrews()) {
-//            for (Participation participation : crew.getParticipations()) {
-//                if (participation.getStatus() == 1 && participation.getDeletedAt() == null) {
-//                    participations.add(PartJoinResponse.builder()
-//                            .crewId(participation.getCrew().getId())
-//                            .body(participation.getBody())
-//                            .title(participation.getTitle())
-//                            .joinUserName(participation.getUser().getUsername())
-//                            .writerUserName(participation.getCrew().getUser().getUsername())
-//                            .crewTitle(participation.getCrew().getTitle())
-//                            .status(participation.getStatus()).build());
-//                }
-//            }
-//        }
-//        return participations;
-//    }
+    @Transactional
+    public List<PartJoinResponse> notAllowedMember(String userName) {
+        Member user = userRepository.findByUsername(userName).orElseThrow(() -> new AppException(ErrorCode.USERID_NOT_FOUND, ErrorCode.USERID_NOT_FOUND.getMessage()));
+        List<PartJoinResponse> participations = new ArrayList<>();
+        // 사용자가 생성한 Crew 목록을 가져옵니다.
+        List<Crew> userCrews = crewRepository.findCrewsByUserUsername(userName);
+
+        for (Crew crew : userCrews) {
+            for (Participation participation : crew.getParticipations()) {
+                if (participation.getStatus() == 1 && participation.getDeletedAt() == null) {
+                    participations.add(PartJoinResponse.builder()
+                            .crewId(participation.getCrew().getId())
+                            .body(participation.getBody())
+                            .title(participation.getTitle())
+                            .joinUserName(participation.getUser().getUsername())
+                            .writerUserName(participation.getCrew().getUser().getUsername())
+                            .crewTitle(participation.getCrew().getTitle())
+                            .status(participation.getStatus()).build());
+                }
+            }
+        }
+        return participations;
+    }
 
     //승인된 멤버 조회
     @Transactional

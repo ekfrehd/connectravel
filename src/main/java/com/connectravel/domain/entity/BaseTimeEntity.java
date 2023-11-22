@@ -23,4 +23,11 @@ public abstract class BaseTimeEntity {
     @LastModifiedDate
     private LocalDateTime modTime;
 
+    private LocalDateTime deletedAt;
+
+    // 삭제
+    public void deleteSoftly(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
 }

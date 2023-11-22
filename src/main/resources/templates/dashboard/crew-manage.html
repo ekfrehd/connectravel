@@ -1,0 +1,166 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/fragment :: head"></head>
+
+<body>
+<!-- 네비바-->
+<header th:replace="fragments/fragment :: nav"></header>
+
+
+<main sec:authorize ="hasRole('ROLE_ADMIN')">
+
+    <div style="height: 20px;">
+
+    </div>
+
+    <div class="d-flex flex-nowrap">
+
+        <div class="d-flex flex-column flex-shrink-0 p-3" id="sidebar">
+
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/view/v1/crews" class="nav-link text-black" aria-current="page">
+                        홈화면
+                    </a>
+                </li>
+                <li>
+                    <a href="/view/v1/manage/crews" class="nav-link text-black">
+                        모임 관리
+                    </a>
+                </li>
+                <li>
+                    <a href="/view/v1/manage/users" class="nav-link text-black">
+                        사용자 관리
+                    </a>
+                </li>
+            </ul>
+            <hr>
+        </div>
+
+        <div class="d-flex flex-column flex-shrink-0" style="width: 100px;">
+
+        </div>
+
+
+        <div class="mt-5 pt-5" id="user-table" style="text-align: center;">
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>모임 번호</th>
+                    <th>모임 이름</th>
+                    <th>작성자</th>
+                    <th>참여자 수</th>
+                    <th>최대 인원</th>
+                    <th>모임 상태</th>
+                    <th>모임삭제하기</th>
+                </tr>
+                </thead>
+
+                <tbody id="crewList">
+                <tr th:each="crew: ${crewManageResponsePage}">
+                    <td th:text="${crew.id}" id="crewId"></td>
+                    <td><a th:href="@{/view/v1/crews/{crewId}(crewId = ${crew.id})}" th:text="${crew.title}"></a></td>
+                    <td th:text="${crew.crewCaptain}"></td>
+                    <td th:text="${crew.currentParticipants}"></td>
+                    <td th:text="${crew.crewLimit}"></td>
+                    <th th:text="${crew.status}"></th>
+                    <td><button type="button"class="btn btn-danger" id="" onclick="deleteCrewManager()" >삭제</button></td>
+
+                </tr>
+
+                </tbody>
+
+                <div class="py-3 my-4">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${1 == nowPage} ? 'disabled'">
+                                <a class="page-link" th:href="@{/view/v1/manage/crews(page = ${nowPage - 2})}">Previous</a>
+                            </li>
+                            <th:block th:each="page : ${#numbers.sequence(startNumPage, endNumPage)}">
+                                <li class="page-item" th:if="${page != nowPage && page != 0}">
+                                    <a class="page-link" th:href="@{/view/v1/manage/crews(page = ${page - 1})}" th:text="${page}">1</a>
+                                </li>
+                                <li class="page-item" th:if="${page == nowPage}"><strong class="page-link" th:text="${page}"
+                                                                                         style="color: red"></strong></li>
+                            </th:block>
+                            <li class="page-item" th:classappend="${lastPage == nowPage || lastPage == 0} ? 'disabled'">
+                                <a class="page-link" th:href="@{/view/v1/manage/crews(page = ${nowPage})}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+            </table>
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+
+</main>
+
+
+
+<main class="mt-5 pt-5">
+
+
+
+
+</main>
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+
+
+    async function deleteCrewManager() {
+
+        let userList = document.getElementById('crewList');
+
+        for (let i = 0; i < userList.rows.length; i++) {
+            userList.rows[i].cells[6].onclick = async function () {
+                let crewId = userList.rows[i].cells[0].innerText;
+
+
+                let response = await fetch("/api/v1/crews/" + crewId, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+
+                })
+                if (response.ok) {
+                    let json = await response.json();
+                    alert(crewId + "번 모임을 삭제했습니다.");
+                    setTimeout(function() {
+                        window.location.href = '/view/v1/manage/crews';
+                    }, 2000);
+
+
+                } else {
+                    let json = await response.text();
+                    alert(json);
+                }
+
+
+            }
+        }
+
+
+
+    }
+
+
+</script>
+
+</body>
+
+</html>

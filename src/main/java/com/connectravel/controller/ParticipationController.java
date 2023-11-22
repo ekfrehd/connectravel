@@ -37,11 +37,11 @@ public class ParticipationController {
         return participationService.reject(partDto);
     }
 
-//    //승인되지 않은 멤버 출력
-//    @GetMapping("/sign")
-//    public Response notAllowedPart(@AuthenticationPrincipal Member user){
-//        return Response.success(participationService.notAllowedMember(authentication.getName()));
-//    }
+    //승인되지 않은 멤버 출력
+    @GetMapping("/sign")
+    public Response notAllowedPart(@AuthenticationPrincipal Member user){
+        return Response.success(participationService.notAllowedMember(user.getUsername()));
+    }
 
     //참여유무 확인
     @GetMapping("/{crewId}")
