@@ -34,9 +34,9 @@ public class UserManagerController {
 	}
 
 	@PostMapping(value="/admin/accounts")
-	public String modifyMember(MemberDTO memberDTO) throws Exception {
+	public String updateMember(MemberDTO memberDTO) throws Exception {
 
-		memberService.modifyMember(memberDTO);
+		memberService.updateMember(memberDTO);
 
 		return "redirect:/admin/accounts";
 	}

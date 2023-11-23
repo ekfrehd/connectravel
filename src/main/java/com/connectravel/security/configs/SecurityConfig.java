@@ -75,11 +75,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAt(permitAllFilter, FilterSecurityInterceptor.class);
 
-        http
-                .sessionManagement()
-                .sessionFixation().none()
-                .maximumSessions(1).maxSessionsPreventsLogin(true);
-
         http.csrf().disable();
 
         customConfigurer(http);

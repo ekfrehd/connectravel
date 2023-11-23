@@ -8,11 +8,9 @@ import java.util.List;
 
 public interface MemberService {
 
-  MemberDTO entityToDTO(Member member);
-
   void createMember(Member member);
 
-  void modifyMember(MemberDTO memberDTO);
+  void updateMember(MemberDTO memberDTO);
 
   List<Member> getMembers();
 
@@ -23,5 +21,9 @@ public interface MemberService {
   void deleteMember(Long idx);
 
   Member updateSeller(MemberDTO memberDTO);
+
+  MemberDTO entityToDTO(Member member);
+
+  Member dtoToEntity(MemberDTO memberDTO);
 
 }

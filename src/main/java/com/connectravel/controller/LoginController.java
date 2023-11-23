@@ -24,10 +24,9 @@ public class LoginController {
 
     private AjaxAuthenticationToken ajaxAuthenticationToken;
 
-
     @RequestMapping(value="/member/login")
     public String login(@RequestParam(value = "error", required = false) String error,
-                        @RequestParam(value = "exception", required = false) String exception, Model model){
+                        @RequestParam(value = "exception", required = false) String exception, Model model) {
 
         model.addAttribute("error",error);
         model.addAttribute("exception",exception);
@@ -55,7 +54,7 @@ public class LoginController {
         if (principal instanceof UsernamePasswordAuthenticationToken) {
             member = (Member) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 
-        }else if(principal instanceof AjaxAuthenticationToken){
+        } else if(principal instanceof AjaxAuthenticationToken) {
             member = (Member) ((AjaxAuthenticationToken) principal).getPrincipal();
         }
 
