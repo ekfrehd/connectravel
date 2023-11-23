@@ -22,4 +22,6 @@ public interface ReviewBoardService {
 
     List<ImgDTO> listReviewImages(Long rbno);
 
+    List<ImgDTO> getImgList(Long rbno);
+
 }

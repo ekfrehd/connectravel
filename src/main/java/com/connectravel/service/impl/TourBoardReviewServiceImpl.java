@@ -40,13 +40,10 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
 
     @Transactional
     @Override
-    public Long createTourBoardReview(TourBoardReviewDTO dto, String email) { // email 매개변수 추가
-
-        Member member = memberRepository.findByEmail(email);
-
-        if (member == null) {
-            throw new EntityNotFoundException("Member not found");
-        }
+    public Long createTourBoardReview(TourBoardReviewDTO dto, String email) {
+        // Optional에서 실제 Member 객체를 가져옴
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
 
         TourBoard tourBoard = tourBoardRepository.findById(dto.getTbno())
                 .orElseThrow(() -> new EntityNotFoundException("TourBoard not found"));
@@ -55,16 +52,17 @@ public class TourBoardReviewServiceImpl implements TourBoardReviewService {
         double newGrade = dto.getGrade(); // 새 평점
         int currentCount = tourBoard.getReviewCount(); // 현재 리뷰
 
-        double avarageGrade = ((currentGrade * currentCount) + newGrade) / (currentCount + 1); // 평균 평점 = 현재 평점 * 현재 리뷰 수 / 현재 리뷰 수 + 1
+        double averageGrade = ((currentGrade * currentCount) + newGrade) / (currentCount + 1); // 평균 평점 = 현재 평점 * 현재 리뷰 수 / 현재 리뷰 수 + 1
 
-        tourBoard.setReviewCount(currentCount + 1); //게시글의 리뷰 수를 올린다.
-        tourBoard.setGrade(avarageGrade); // 게시글의 평균 평점 입력
+        tourBoard.setReviewCount(currentCount + 1); // 게시글의 리뷰 수를 올린다.
+        tourBoard.setGrade(averageGrade); // 게시글의 평균 평점 입력
         tourBoardRepository.saveAndFlush(tourBoard); // DB 반영
 
         TourBoardReview tourBoardReview = dtoToEntity(dto, tourBoard, member);
         tourBoardReviewRepository.save(tourBoardReview);
         return tourBoardReview.getTbrno();
     }
+
 
     @Override
     @Transactional

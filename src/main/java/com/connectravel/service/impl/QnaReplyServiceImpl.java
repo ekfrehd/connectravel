@@ -27,6 +27,7 @@ public class QnaReplyServiceImpl implements QnaReplyService {
     @Override
     public Long createQnaReply(QnaReplyDTO qnaReplyDTO) {
 
+
         QnaReply qnaReply = dtoToEntity(qnaReplyDTO, memberRepository);
 
         qnaReplyRepository.save(qnaReply);
@@ -68,11 +69,10 @@ public class QnaReplyServiceImpl implements QnaReplyService {
 
         QnaBoard qnaBoard = QnaBoard.builder().qbno(qnaReplyDTO.getQbno()).build();
 
-        Member member = memberRepository.findByEmail(qnaReplyDTO.getReplyer());
+        Optional<Member> memberOptional = memberRepository.findByEmail(qnaReplyDTO.getReplyer());
 
-        if (member == null) {
-            throw new EntityNotFoundException("Member with email " + qnaReplyDTO.getReplyer() + " not found");
-        }
+        Member member = memberOptional.orElseThrow(() ->
+                new EntityNotFoundException("Member with email " + qnaReplyDTO.getReplyer() + " not found"));
 
         return QnaReply.builder()
                 .qrno(qnaReplyDTO.getQrno())

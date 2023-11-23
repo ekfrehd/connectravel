@@ -16,7 +16,7 @@ public interface TourBoardService {
 
     void updateTourBoard(TourBoardDTO dto);
 
-    PageResultDTO<TourBoardDTO, Object[]> getPaginatedTourBoardList(PageRequestDTO pageRequestDTO, String[] type, String keyword, String category, String region);
+    PageResultDTO<TourBoardDTO, Object[]> getPaginatedTourBoardList(PageRequestDTO pageRequestDTO, String[] type, String keyword, String category, String region, String address);
 
     List<ImgDTO> listTourBoardImages(Long tbno);
 

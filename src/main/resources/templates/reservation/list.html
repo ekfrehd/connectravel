@@ -63,6 +63,8 @@
                         <i class="las la-bars"></i>
                     </div>
                 </div>
+
+                <!-- 대시보드 왼쪽 메뉴 -->
                 <div class="dashboard-left-content">
                     <div class="dashboard-close-main">
                         <div class="close-bars"><i class="las la-times"></i></div>
@@ -77,9 +79,9 @@
                                 <li class="list has-children">
                                     <a href="javascript:void(0)"> <i class="las la-user-circle"></i> 프로필 </a>
                                     <ul class="submenu list-style-none">
-                                        <li class="list"><a href="/member/memberinfo"> 프로필 </a></li>
+                                        <li class="list"><a href="/member/myPage"> 프로필 </a></li>
                                         <li class="list"><a href="/member/update"> 프로필 수정 </a></li>
-                                        <li class="list"><a href="/member/changepw"> 비밀번호 변경 </a></li>
+                                        <li class="list"><a href="/member/updatePassword"> 비밀번호 변경 </a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -87,6 +89,7 @@
                     </div>
                 </div>
 
+                <!-- 대시보드 오른쪽 메뉴 -->
                 <div class="dashboard-right-contents mt-4 mt-lg-0">
                     <div class="dashboard-reservation">
                         <div class="single-reservation bg-white base-padding show open">
@@ -97,296 +100,264 @@
                             </ul>
                         </div>
 
+                        <!-- 이용전 탭 -->
                         <div id="prev" class="tab-content-item active">
-                            <th:block th:each="rv : ${list}">
-                                <th:block th:with="acc=${accommodation[__${list.indexOf(rv)}__]}">
-                                    <th:block th:if="${rv.StartDate} > ${Today} and ${rv.state} == true">
-                                        <div class="single-reservation bg-white base-padding show open mat-25">
-                                            <div class="row" th:if="${rv.StartDate} > ${Today} and ${rv.state} == true">
-                                                <div class="single-reservation-expandIcon"><i
-                                                        class="las la-angle-down"></i>
+                            <th:block th:each="rv, iterStat : ${reservations}">
+                                <th:block th:with="acc=${accommodationList[iterStat.index]}">
+                                <th:block th:if="${rv.status == T(com.connectravel.constant.ReservationStatus).ACTIVE}">
+                                    <div class="single-reservation bg-white base-padding show open mat-25">
+                                        <div class="row" th:if="${rv.startDate} > ${today}">
+                                            <div class="single-reservation-expandIcon"><i
+                                                    class="las la-angle-down"></i>
+                                            </div>
+                                            <div class="single-reservation-head">
+                                                <div class="single-reservation-flex">
+                                                    <div class="single-reservation-content">
+                                                        <h5 class="single-reservation-content-title"> 예약번호 </h5>
+                                                        <span class="single-reservation-content-id"> #[[${rv.rvno}]] </span>
+                                                    </div>
                                                 </div>
-                                                <div class="single-reservation-head">
+                                            </div>
+                                            <div class="single-reservation-inner">
+                                                <div class="single-reservation-item">
+                                                    <div class="single-reservation-name">
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <div class="single-reservation-name">
+                                                                    <h5 class="single-reservation-name-title">
+                                                                        [[${acc.accommodationName}]] </h5>
+                                                                    <p class="single-reservation-name-para">
+                                                                        ([[${acc.postal}]]) [[${acc.address}]] </p>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="single-reservation-item">
+                                                    <div class="single-reservation-details">
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 체크인 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.startDate}]] </h5>
+                                                        </div>
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 체크아웃 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.endDate}]]</h5>
+                                                        </div>
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 방이름 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.roomDTO.roomName}]] </h5>
+                                                        </div>
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 예약날짜 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${#temporals.format(rv.regTime, 'yyyy-MM-dd')}]] </h5>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="single-reservation-item">
                                                     <div class="single-reservation-flex">
                                                         <div class="single-reservation-content">
-                                                            <h5 class="single-reservation-content-title"> 예약번호 </h5>
-                                                            <span class="single-reservation-content-id"> #[[${rv.rvno}]] </span>
+                                                            <h5 class="single-reservation-content-title"> 요청사항 </h5>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.message}]] </h5>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="single-reservation-inner">
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-name">
-                                                            <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
-                                                                    <div th:each="img : ${accommodationImgDTOS}">
-                                                            <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
-                                                                     th:alt="${acc.name}"
-                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
-                                                             </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    <div class="single-reservation-name">
-                                                                        <h5 class="single-reservation-name-title">
-                                                                            [[${acc.name}]] </h5>
-                                                                        <p class="single-reservation-name-para">
-                                                                            ([[${acc.postal}]]) [[${acc.address}]] </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                <div class="single-reservation-item">
+                                                    <div class="single-reservation-flex">
+                                                        <div class="single-reservation-content">
+                                                            <h5 class="single-reservation-content-title"> 총 비용 </h5>
+                                                            <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
                                                         </div>
-                                                    </div>
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-details">
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 체크인 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.StartDate}]] </h5>
-                                                            </div>
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 체크아웃 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.EndDate}]]</h5>
-                                                            </div>
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 방이름 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.room_id.room_name}]] </h5>
-                                                            </div>
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 예약날짜 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${#temporals.format(rv.regTime,
-                                                                    'yyyy-MM-dd')}]] </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-flex">
-                                                            <div class="single-reservation-content">
-                                                                <h5 class="single-reservation-content-title"> 요청사항 </h5>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.message}]] </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-flex">
-                                                            <div class="single-reservation-content">
-                                                                <h5 class="single-reservation-content-title"> 총 비용 </h5>
-                                                                <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
-                                                            </div>
-                                                            <div class="single-reservation-btn">
-                                                                <form style="display: inline"
-                                                                      th:action="@{/reservation/cancel}"
-                                                                      method="get" onsubmit="return showConfirmation()">
-                                                                    <input type="hidden" name="rvno"
-                                                                           th:value="${rv.rvno}">
-                                                                    <button type="submit" class="btn btn-danger">
-                                                                        <i class="las la-exclamation-circle"></i>취소하기
-                                                                    </button>
-                                                                </form>
-                                                                <script>
-                                                                    function showConfirmation() {
-                                                                        if (confirm("취소하시겠습니까?")) {
-                                                                            return true;
-                                                                        } else {
-                                                                            return false;
-                                                                        }
+                                                        <div class="single-reservation-btn">
+                                                            <form style="display: inline"
+                                                                  th:action="@{/reservation/cancel}"
+                                                                  method="get" onsubmit="return showConfirmation()">
+                                                                <input type="hidden" name="rvno"
+                                                                       th:value="${rv.rvno}">
+                                                                <button type="submit" class="btn btn-danger">
+                                                                    <i class="las la-exclamation-circle"></i>취소하기
+                                                                </button>
+                                                            </form>
+                                                            <script>
+                                                                function showConfirmation() {
+                                                                    if (confirm("취소하시겠습니까?")) {
+                                                                        return true;
+                                                                    } else {
+                                                                        return false;
                                                                     }
-                                                                </script>
-                                                            </div>
+                                                                }
+                                                            </script>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </th:block>
+                                    </div>
+                                </th:block>
                                 </th:block>
                             </th:block>
                         </div>
 
+                        <!-- 이용완료 탭 -->
                         <div id="end" class="tab-content-item">
-                            <th:block th:each="rv : ${list}">
-                                <th:block th:with="acc=${accommodation[__${list.indexOf(rv)}__]}">
-                                    <th:block th:if="${rv.StartDate} <= ${Today} and ${rv.state} == true">
-                                        <div class="single-reservation bg-white base-padding show open mat-25">
-                                            <div class="row">
-                                                <div class="single-reservation-expandIcon"><i
-                                                        class="las la-angle-down"></i>
+                            <th:block th:each="rv, iterStat : ${reservations}">
+                                <th:block th:with="acc=${accommodationList[iterStat.index]}">
+                                <th:block th:if="${rv.status == T(com.connectravel.constant.ReservationStatus).COMPLETED}">
+                                    <div class="single-reservation bg-white base-padding show open mat-25">
+                                        <div class="row">
+                                            <div class="single-reservation-expandIcon"><i
+                                                    class="las la-angle-down"></i>
+                                            </div>
+                                            <div class="single-reservation-head">
+                                                <div class="single-reservation-flex">
+                                                    <div class="single-reservation-content">
+                                                        <h5 class="single-reservation-content-title"> 예약번호 </h5>
+                                                        <span class="single-reservation-content-id"> #[[${rv.rvno}]] </span>
+                                                    </div>
                                                 </div>
-                                                <div class="single-reservation-head">
+                                            </div>
+                                            <div class="single-reservation-inner">
+                                                <div class="single-reservation-item">
+                                                    <div class="single-reservation-name">
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <div class="single-reservation-name">
+                                                                    <h5 class="single-reservation-name-title">
+                                                                        [[${acc.accommodationName}]] </h5>
+                                                                    <p class="single-reservation-name-para">
+                                                                        ([[${acc.postal}]]) [[${acc.address}]] </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="single-reservation-item">
+                                                    <div class="single-reservation-details">
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 체크인 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.startDate}]] </h5>
+                                                        </div>
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 체크아웃 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.endDate}]]</h5>
+                                                        </div>
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 방이름 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.roomDTO.roomName}]] </h5>
+                                                        </div>
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 예약날짜 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${#temporals.format(rv.regTime, 'yyyy-MM-dd')}]] </h5>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="single-reservation-item">
                                                     <div class="single-reservation-flex">
                                                         <div class="single-reservation-content">
-                                                            <h5 class="single-reservation-content-title"> 예약번호 </h5>
-                                                            <span class="single-reservation-content-id"> #[[${rv.rvno}]] </span>
+                                                            <h5 class="single-reservation-content-title"> 요청사항 </h5>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.message}]] </h5>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="single-reservation-inner">
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-name">
-                                                            <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
-                                                                    <div th:each="img : ${accommodationImgDTOS}">
-                                                            <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
-                                                                     th:alt="${acc.name}"
-                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
-                                                             </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    <div class="single-reservation-name">
-                                                                        <h5 class="single-reservation-name-title">
-                                                                            [[${acc.name}]] </h5>
-                                                                        <p class="single-reservation-name-para">
-                                                                            ([[${acc.postal}]]) [[${acc.address}]] </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-details">
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 체크인 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.StartDate}]] </h5>
-                                                            </div>
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 체크아웃 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.EndDate}]]</h5>
-                                                            </div>
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 방이름 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.room_id.room_name}]] </h5>
-                                                            </div>
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 예약날짜 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${#temporals.format(rv.regTime,
-                                                                    'yyyy-MM-dd')}]] </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-flex">
-                                                            <div class="single-reservation-content">
-                                                                <h5 class="single-reservation-content-title"> 요청사항 </h5>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.message}]] </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-flex">
-                                                            <div class="single-reservation-content">
-                                                                <h5 class="single-reservation-content-title"> 총 비용 </h5>
-                                                                <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
-                                                            </div>
-                                                            <div class="single-reservation-btn" th:if="${rv.existReview}==false">
-                                                                <form style="display: inline"
-                                                                      th:action="@{/review/register/{rvno}(rvno=${rv.rvno})}"
-                                                                      method="get">
-                                                                    <button type="submit" class="btn btn-outline-primary">리뷰쓰기</button>
-                                                                </form>
-                                                            </div>
+                                                <div class="single-reservation-item">
+                                                    <div class="single-reservation-flex">
+                                                        <div class="single-reservation-content">
+                                                            <h5 class="single-reservation-content-title"> 총 비용 </h5>
+                                                            <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </th:block>
+                                    </div>
+                                </th:block>
                                 </th:block>
                             </th:block>
                         </div>
 
+                        <!-- 취소됨 탭 -->
                         <div id="cancel" class="tab-content-item">
-                            <th:block th:each="rv : ${list}">
-                                <th:block th:with="acc=${accommodation[__${list.indexOf(rv)}__]}">
-                                    <th:block th:if="${rv.state} == false">
-                                        <div class="single-reservation bg-white base-padding show open mat-25">
-                                            <div class="row">
-                                                <div class="single-reservation-expandIcon"><i
-                                                        class="las la-angle-down"></i>
+                            <th:block th:each="rv, iterStat : ${reservations}">
+                                <th:block th:with="acc=${accommodationList[iterStat.index]}">
+                                <th:block th:if="${rv.status == T(com.connectravel.constant.ReservationStatus).CANCELLED}">
+                                    <div class="single-reservation bg-white base-padding show open mat-25">
+                                        <div class="row">
+                                            <div class="single-reservation-expandIcon"><i
+                                                    class="las la-angle-down"></i>
+                                            </div>
+                                            <div class="single-reservation-head">
+                                                <div class="single-reservation-flex">
+                                                    <div class="single-reservation-content">
+                                                        <h5 class="single-reservation-content-title"> 예약번호 </h5>
+                                                        <span class="single-reservation-content-id"> #[[${rv.rvno}]] </span>
+                                                    </div>
                                                 </div>
-                                                <div class="single-reservation-head">
+                                            </div>
+                                            <div class="single-reservation-inner">
+                                                <div class="single-reservation-item">
+                                                    <div class="single-reservation-name">
+                                                        <div class="row">
+                                                            <div class="col-md-8">
+                                                                <div class="single-reservation-name">
+                                                                    <h5 class="single-reservation-name-title">
+                                                                        [[${acc.accommodationName}]] </h5>
+                                                                    <p class="single-reservation-name-para">
+                                                                        ([[${acc.postal}]])
+                                                                        [[${acc.address}]] </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="single-reservation-item">
+                                                    <div class="single-reservation-details">
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 체크인 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.startDate}]] </h5>
+                                                        </div>
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 체크아웃 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.endDate}]]</h5>
+                                                        </div>
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 방이름 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${rv.roomDTO.roomName}]] </h5>
+                                                        </div>
+                                                        <div class="single-reservation-details-item">
+                                                            <span class="single-reservation-details-subtitle"> 예약날짜 </span>
+                                                            <h5 class="single-reservation-details-title">
+                                                                [[${#temporals.format(rv.regTime, 'yyyy-MM-dd')}]] </h5>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="single-reservation-item">
                                                     <div class="single-reservation-flex">
                                                         <div class="single-reservation-content">
-                                                            <h5 class="single-reservation-content-title"> 예약번호 </h5>
-                                                            <span class="single-reservation-content-id"> #[[${rv.rvno}]] </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="single-reservation-inner">
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-name">
-                                                            <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <!-- rv와 같은 예약 정보를 가진 숙소 정보(acc)를 가져옴 -->
-                                                                    <div th:each="img : ${accommodationImgDTOS}">
-                                                            <span th:if="${img.accommodationDTO.ano == acc.ano}">
-                                                                <img th:src="'/imgtest/' + ${img.img.imgfile}"
-                                                                     th:alt="${acc.name}"
-                                                                     style="width: 200px; height: auto; margin-bottom: 10px;"/>
-                                                             </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    <div class="single-reservation-name">
-                                                                        <h5 class="single-reservation-name-title">
-                                                                            [[${acc.name}]] </h5>
-                                                                        <p class="single-reservation-name-para">
-                                                                            ([[${acc.postal}]]) [[${acc.address}]] </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-details">
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 체크인 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.StartDate}]] </h5>
-                                                            </div>
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 체크아웃 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.EndDate}]]</h5>
-                                                            </div>
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 방이름 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${rv.room_id.room_name}]] </h5>
-                                                            </div>
-                                                            <div class="single-reservation-details-item">
-                                                                <span class="single-reservation-details-subtitle"> 예약날짜 </span>
-                                                                <h5 class="single-reservation-details-title">
-                                                                    [[${#temporals.format(rv.regTime,
-                                                                    'yyyy-MM-dd')}]] </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="single-reservation-item">
-                                                        <div class="single-reservation-flex">
-                                                            <div class="single-reservation-content">
-                                                                <h5 class="single-reservation-content-title"> 총 비용 </h5>
-                                                                <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
-                                                            </div>
+                                                            <h5 class="single-reservation-content-title"> 총 비용 </h5>
+                                                            <span class="single-reservation-content-price"> [[${rv.money}]]원 </span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </th:block>
+                                    </div>
+                                </th:block>
                                 </th:block>
                             </th:block>
                         </div>
@@ -396,7 +367,5 @@
         </div>
     </div>
     <!-- Dashboard area end -->
-
-
 </div>
 </html>

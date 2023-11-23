@@ -18,7 +18,6 @@ public class SecurityInitializer implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-
         securityResourceService.setRoleHierarchy();
     }
 

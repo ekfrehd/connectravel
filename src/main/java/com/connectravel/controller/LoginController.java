@@ -2,6 +2,7 @@ package com.connectravel.controller;
 
 import com.connectravel.domain.entity.Member;
 import com.connectravel.security.token.AjaxAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,9 +20,13 @@ import java.security.Principal;
 @Controller
 public class LoginController {
 
+    private AuthenticationManager authenticationManager;
+
+    private AjaxAuthenticationToken ajaxAuthenticationToken;
+
     @RequestMapping(value="/member/login")
     public String login(@RequestParam(value = "error", required = false) String error,
-                        @RequestParam(value = "exception", required = false) String exception, Model model){
+                        @RequestParam(value = "exception", required = false) String exception, Model model) {
 
         model.addAttribute("error",error);
         model.addAttribute("exception",exception);
@@ -49,7 +54,7 @@ public class LoginController {
         if (principal instanceof UsernamePasswordAuthenticationToken) {
             member = (Member) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 
-        }else if(principal instanceof AjaxAuthenticationToken){
+        } else if(principal instanceof AjaxAuthenticationToken) {
             member = (Member) ((AjaxAuthenticationToken) principal).getPrincipal();
         }
 

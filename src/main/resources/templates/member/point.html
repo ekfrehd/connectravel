@@ -77,9 +77,9 @@
                 <li class="list has-children">
                   <a href="javascript:void(0)"> <i class="las la-user-circle"></i> 프로필 </a>
                   <ul class="submenu list-style-none">
-                    <li class="list"> <a href="/member/mypage"> 프로필 </a> </li>
+                    <li class="list"> <a href="/member/myPage"> 프로필 </a> </li>
                     <li class="list"> <a href="/member/update"> 프로필 수정  </a> </li>
-                    <li class="list"> <a href="/member/changepw"> 비밀번호 변경  </a> </li>
+                    <li class="list"> <a href="/member/updatePassword"> 비밀번호 변경  </a> </li>
                   </ul>
                 </li>
               </ul>
@@ -93,7 +93,7 @@
                 <div class="single-reservation-author">
                   <div class="single-reservation-author-flex">
                     <div class="single-reservation-author-contents">
-                      <h5 class="single-reservation-author-contents-title"> [[${mypage.username}]]님의 현재포인트 </h5>
+                      <h5 class="single-reservation-author-contents-title"> [[${member.username}]]님의 현재포인트 </h5>
                     </div>
                   </div>
                 </div>
@@ -101,7 +101,7 @@
               <div class="single-reservation-item">
                 <div class="single-reservation-contact">
                   <div class="single-reservation-contact-item">
-                    <span class="single-reservation-contact-list"> <span> <i class="las la-icons"></i> </span> [[${mypage.point}]]점 </span>
+                    <span class="single-reservation-contact-list"> <span> <i class="las la-icons"></i> </span> [[${member.point}]]점 </span>
                   </div>
                 </div>
               </div>

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,21 +32,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Member member = memberRepository.findByEmail(email);
+        Optional<Member> memberOptional = memberRepository.findByEmail(email);
 
-        if (member == null) {
+        Member member = memberOptional.orElseThrow(() -> {
             if (memberRepository.countByUsername(email) == 0) {
-                throw new UsernameNotFoundException("No user found with username: " + email);
+                return new UsernameNotFoundException("No user found with username: " + email);
             }
-        }
+            return new UsernameNotFoundException("User found by username, but member is null");
+        });
+
         Set<String> userRoles = member.getMemberRoles()
                 .stream()
                 .map(userRole -> userRole.getRoleName())
                 .collect(Collectors.toSet());
 
-        List<GrantedAuthority> collect = userRoles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        List<GrantedAuthority> collect = userRoles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
         return new MemberContext(member, collect);
     }
+
 
 }

@@ -57,23 +57,23 @@ public class TourBoardReviewReplyServiceImpl implements TourBoardReviewReplyServ
         tourBoardReviewReplyRepository.deleteById(tbrrno);
     }
 
-    private TourBoardReviewReply dtoToEntity(TourBoardReviewReplyDTO TourBoardReviewReplyDTO, MemberRepository memberRepository){
+    private TourBoardReviewReply dtoToEntity(TourBoardReviewReplyDTO tourBoardReviewReplyDTO, MemberRepository memberRepository) {
 
-        TourBoardReview tourBoardReview = TourBoardReview.builder().tbrno(TourBoardReviewReplyDTO.getTbrno()).build();
+        TourBoardReview tourBoardReview = TourBoardReview.builder()
+                .tbrno(tourBoardReviewReplyDTO.getTbrno())
+                .build();
 
-        Member member = memberRepository.findByEmail(TourBoardReviewReplyDTO.getReplyer());
+        Optional<Member> memberOptional = memberRepository.findByEmail(tourBoardReviewReplyDTO.getReplyer());
 
-        if (member == null) {
-            throw new EntityNotFoundException("Member with email " + TourBoardReviewReplyDTO.getReplyer() + " not found");
-        }
+        Member member = memberOptional.orElseThrow(() ->
+                new EntityNotFoundException("Member with email " + tourBoardReviewReplyDTO.getReplyer() + " not found"));
 
         return TourBoardReviewReply.builder()
-                .tbrrno(TourBoardReviewReplyDTO.getTbrrno())
-                .content(TourBoardReviewReplyDTO.getContent())
+                .tbrrno(tourBoardReviewReplyDTO.getTbrrno())
+                .content(tourBoardReviewReplyDTO.getContent())
                 .member(member)
                 .tourBoardReview(tourBoardReview)
                 .build();
-
     }
 
     private TourBoardReviewReplyDTO entityToDTO(TourBoardReviewReply tourBoardReviewReply) {

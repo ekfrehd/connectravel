@@ -2,20 +2,25 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>숙소 관리 대시보드</title>
 </head>
 <body>
-    <th:block>
-        <h2  th:text="${entity.adminname + '사장님! 어서오세요.'}"></h2>
-        <h3 th:text="${'업소명 : ' + entity.name}"></h3>
-        <h3 th:text="${'평점 : ' + entity.grade}"></h3>
-        <h3 th:text="${'카테고리 : ' + entity.category}"></h3>
-        <h3 th:text="${'주소 : ' + entity.address}"></h3>
-        <h3 th:text="${'우편번호 : ' + entity.postal}"></h3>
-        <h3 th:text="${'관리인 : ' + entity.adminname}"></h3>
-        <h3 th:text="${'이메일 : ' + entity.email}"></h3>
-        <h3 th:text="${'전화번호 : ' + entity.tel}"></h3>
+<div>
+    <!-- 숙소 정보 표시 -->
+    <h2 th:text="${accommodation.sellerName + ' 사장님, 어서오세요.'}"></h2>
+    <h3 th:text="${'업소명 : ' + accommodation.accommodationName}"></h3>
+    <h3 th:text="${'평점 : ' + accommodation.grade}"></h3>
+    <h3 th:text="${'주소 : ' + accommodation.address}"></h3>
+    <h3 th:text="${'우편번호 : ' + accommodation.postal}"></h3>
+    <h3 th:text="${'전화번호 : ' + accommodation.tel}"></h3>
 
-    </th:block>
+    <!-- 옵션 목록 표시 -->
+    <div>
+        <h4>옵션 목록:</h4>
+        <ul>
+            <li th:each="option : ${options}" th:text="${option.optionName}"></li>
+        </ul>
+    </div>
+</div>
 </body>
 </html>

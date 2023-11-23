@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragments/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            margin: 0 10px;
+        }
+    </style>
+</th:block>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            var errorMessage = [[${errorMessage}]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+        });
+    </script>
+
+</th:block>
+
+<div layout:fragment="content">
+    <div class="dashboard-area section-bg-2 pat-100 pab-100">
+        <div class="container">
+            <div class="dashboard-contents-wrapper">
+                <div class="dashboard-icon">
+                    <div class="sidebar-icon">
+                        <i class="las la-bars"></i>
+                    </div>
+                </div>
+                <div class="dashboard-left-content">
+                    <div class="dashboard-close-main">
+                        <div class="close-bars"> <i class="las la-times"></i> </div>
+                        <div class="dashboard-bottom">
+                            <ul class="dashboard-list list-style-none">
+                                <li class="list">
+                                    <a href="/member/point"> <i class="las la-briefcase"></i> 포인트 </a>
+                                </li>
+                                <li class="list">
+                                    <a href="/reservation/list"> <i class="las la-briefcase"></i> 예약현황 </a>
+                                </li>
+                                <li class="list has-children active open show">
+                                    <a href="javascript:void(0)"> <i class="las la-user-circle"></i> 프로필 </a>
+                                    <ul class="submenu list-style-none">
+                                        <li class="list selected"> <a href="/member/myPage"> 프로필 </a> </li>
+                                        <li class="list"> <a href="/member/update"> 프로필 수정  </a> </li>
+                                        <li class="list"> <a href="/member/updatePassword"> 비밀번호 변경  </a> </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-right-contents mt-4 mt-lg-0">
+                    <div class="dashboard-reservation">
+                        <div class="single-reservation bg-white base-padding">
+                            <div class="single-reservation-flex mb-4">
+                                <div class="single-reservation-author">
+                                    <div class="single-reservation-author-flex">
+                                        <div class="single-reservation-author-contents">
+                                            <h5 class="single-reservation-author-contents-title"> [[${#authentication.principal.username}]] 님 </h5>
+                                            <p class="single-reservation-author-contents-para"> 닉네임 : [[${#authentication.principal.nickName}]] </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-wrapper">
+                                    <a href="/member/update" class="cmn-btn btn-border"> 프로필 수정 </a>
+                                </div>
+                            </div>
+                            <div class="single-reservation-item">
+                                <div class="single-reservation-contact">
+                                    <div class="single-reservation-contact-item">
+                                        <span class="single-reservation-contact-list"> <span> <i class="las la-phone-alt"></i> </span> [[${#authentication.principal.tel}]] </span>
+                                    </div>
+                                    <div class="single-reservation-contact-item">
+                                        <a th:href="'mailto:' + ${#authentication.principal.email}" class="single-reservation-contact-list"><span> <i class="las la-envelope"></i> </span> [[${#authentication.principal.email}]] </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="single-reservation bg-white base-padding">
+                            <div class="single-reservation-flex">
+                                <div class="single-reservation-author">
+                                    <div class="single-reservation-author-flex">
+                                        <div class="single-reservation-author-contents">
+                                            <h5 class="single-reservation-author-contents-title"> 비밀번호 </h5>
+                                            <p class="single-reservation-author-contents-para"> Last change 4 month ago </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-wrapper">
+                                    <a href="/member/updatePassword" class="cmn-btn btn-border"> 비밀번호 변경 </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="single-reservation bg-white base-padding" sec:authorize="hasAnyAuthority('ROLE_USER')">
+                            <div class="single-reservation-flex">
+                                <div class="single-reservation-author">
+                                    <div class="single-reservation-author-flex">
+                                        <div class="single-reservation-author-contents">
+                                            <h5 class="single-reservation-author-contents-title"> 판매자 등록 </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-wrapper">
+                                    <a href="/member/seller" class="cmn-btn btn-border"> 판매자 등록 </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Dashboard area end -->
+</div>
+
+</html>

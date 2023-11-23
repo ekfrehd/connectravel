@@ -13,10 +13,10 @@
         <div class="login-form d-flex justify-content-center">
             <div class="col-sm-5" style="margin-top: 30px;">
                 <div class="panel">
-                    <p>아이디와 비밀번호를 입력해주세요</p>
+                    <p>이메일 비밀번호를 입력해주세요</p>
                 </div>
                 <div th:if="${param.error}" class="form-group">
-                    <span th:text="${exception}" class="alert alert-danger">잘못된 아이디나 암호입니다</span>
+                    <span th:text="${exception}" class="alert alert-danger">잘못된 이메일 암호입니다</span>
                 </div>
                 <form th:action="@{/login_proc}" class="form-signin" method="post">
                     <input type="hidden" th:value="secret" name="secret_key" />
