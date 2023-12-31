@@ -23,6 +23,7 @@ import org.ezone.room.repository.MemberRepository;
 import org.ezone.room.repository.ReservationRepository;
 import org.ezone.room.repository.ReviewBoardImgRepository;
 import org.ezone.room.repository.ReviewBoardRepository;
+import org.ezone.room.repository.ReviewReplyRepository;
 import org.ezone.room.repository.RoomRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     @Autowired
     private ReviewBoardRepository reviewBoardRepository;
 
+
+    @Autowired
+    private ReviewReplyRepository reviewReplyRepository;
     @Autowired
     private ReviewReplyService reviewReplyService;
 
@@ -128,8 +132,9 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     }
 
     @Override
-    public ReviewBoardDTO get(Long bno) {
-        return null;
+    public ReviewBoardDTO get(Long bno){
+
+       return null;
     }
 
     @Transactional
@@ -143,9 +148,18 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
 
     @Transactional
     @Override
-    public void removeWithReplies(Long bno) {
-        reviewBoardRepository.deleteById(bno);
+    public void remove(Long rbno) {
+        if (reviewReplyRepository != null) {
+            reviewReplyRepository.deleteByRbno(rbno);
+        }
+        if (reviewBoardImgRepository != null) {
+            reviewBoardImgRepository.deleteByRbno(rbno);
+        }
+        if (reviewBoardRepository != null) {
+            reviewBoardRepository.deleteById(rbno);
+        }
     }
+
 
     @Override
     public List<ImgDTO> getImgList(Long rbno) {

@@ -13,6 +13,8 @@ public interface ReviewBoardRepository extends JpaRepository<ReviewBoard, Long> 
     @Query("SELECT rb FROM ReviewBoard rb JOIN rb.reservation r WHERE r.room.accommodation.ano = :ano")
     Page<ReviewBoard> findByAccommodationAno(@Param("ano") Long ano, Pageable pageable);
 
+    @Query("SELECT rb, m, rv FROM ReviewBoard rb LEFT JOIN rb.member m LEFT JOIN rb.reservation rv where rb.rbno =:rbno ")
+    Object getReviewBoardByRbno(@Param("rbno") Long rbno);
 //
 //    List<ReviewBoard> findByRoom_Rno(Long rno);
 //

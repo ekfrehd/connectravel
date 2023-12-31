@@ -3,6 +3,7 @@ package org.ezone.room.service;
 import javassist.NotFoundException;
 import org.ezone.room.dto.PageRequestDTO;
 import org.ezone.room.dto.ReviewBoardDTO;
+import org.ezone.room.repository.ReviewBoardRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,9 +50,9 @@ public class ReviewBoardServiceTests {
 //    @Test
 //    public void testGet() {
 //
-//        Long bno = 100L;
+//        Long bno = 101L;
 //
-//        BoardDTO boardDTO = boardService.get(bno);
+//        ReviewBoardDTO reviewBoardDTO = ReviewBoardService.
 //
 //        System.out.println(boardDTO);
 //    }

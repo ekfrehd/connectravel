@@ -21,7 +21,7 @@ public interface ReviewBoardService {
 
     void modify(ReviewBoardDTO reviewBoardDTO); //수정
 
-    void removeWithReplies(Long bno); //삭제
+    void remove(Long bno); //삭제
 
     PageResultDTO<ReviewBoardDTO, ReviewBoard> getReviewBoardsAndPageInfoByAccommodationId(Long ano, PageRequestDTO pageRequestDTO); // 리스트 출력
 
