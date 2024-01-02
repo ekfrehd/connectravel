@@ -8,6 +8,7 @@ import org.ezone.room.dto.ReviewReplyDTO;
 import org.ezone.room.entity.ReviewBoard;
 import org.ezone.room.entity.ReviewReply;
 import org.ezone.room.repository.MemberRepository;
+import org.ezone.room.repository.ReviewBoardRepository;
 import org.ezone.room.repository.ReviewReplyRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,14 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
 
     private final MemberRepository memberRepository;
 
+    private final ReviewBoardRepository reviewBoardRepository;
+
     @Override
     public Long register(ReviewReplyDTO reviewReplyDTO) {
+
+//        ReviewBoard reviewBoard = reviewBoardRepository.findById(reviewReplyDTO.getRbno())
+//                .orElseThrow(() -> new IllegalArgumentException("No item found with ID: " + reviewReplyDTO.getRbno()));
+
         ReviewReply reviewReply = dtoToEntity(reviewReplyDTO, memberRepository);
 
         reviewReplyRepository.save(reviewReply);
@@ -36,6 +43,8 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
                 .flatMap(this::entityToDTO)
                 .collect(Collectors.toList());
     }
+
+
 
     @Override
     public void modify(ReviewReplyDTO reviewReplyDTO) {

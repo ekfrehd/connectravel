@@ -21,7 +21,7 @@ public interface ReviewReplyService {
         ReviewBoard reviewBoard = ReviewBoard.builder().rbno(reviewReplyDTO.getRbno()).build();
 
         Member member = memberRepository.findByEmail(reviewReplyDTO.getReplyer());
-
+//        member = Member.builder().email(reviewReplyDTO.getReplyer()).build();
         ReviewReply reviewReply = ReviewReply.builder()
                 .rrno(reviewReplyDTO.getRrno())
                 .text(reviewReplyDTO.getText())
@@ -34,12 +34,12 @@ public interface ReviewReplyService {
 
     default Stream<ReviewReplyDTO> entityToDTO(ReviewReply reviewReply) {
 
-        String replyer = reviewReply.getMember() != null ? reviewReply.getMember().getEmail() : null;
+//        String replyer = reviewReply.getMember() != null ? reviewReply.getMember().getEmail() : null;
 
         ReviewReplyDTO dto = ReviewReplyDTO.builder()
                 .rrno(reviewReply.getRrno())
                 .text(reviewReply.getText())
-                .replyer(replyer)
+                .replyer(reviewReply.getMember().getEmail())
                 .regDate(reviewReply.getRegTime())
                 .modDate(reviewReply.getModTime())
                 .build();
