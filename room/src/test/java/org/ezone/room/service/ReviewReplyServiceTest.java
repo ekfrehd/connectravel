@@ -20,7 +20,7 @@ public class ReviewReplyServiceTest {
     public void testRegister(){
 
         ReviewReplyDTO dto = ReviewReplyDTO.builder()
-                        .rbno(5L).text("댓글 테스트").replyer("asd@asd")
+                        .rbno(106L).text("댓글 테스트2").replyer("asd@asd")
                         .regDate(LocalDateTime.now())
                                 .modDate(LocalDateTime.now())
 
@@ -32,7 +32,7 @@ public class ReviewReplyServiceTest {
     @Test
     public void testList(){
 
-        List<ReviewReplyDTO> result = replyService.getList(5L);
+        List<ReviewReplyDTO> result = replyService.getList(106L);
 
         for(ReviewReplyDTO reviewReplyDTO : result.stream().toList()){
             System.out.println(reviewReplyDTO);

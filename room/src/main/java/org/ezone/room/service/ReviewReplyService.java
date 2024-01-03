@@ -38,6 +38,7 @@ public interface ReviewReplyService {
 
         ReviewReplyDTO dto = ReviewReplyDTO.builder()
                 .rrno(reviewReply.getRrno())
+                .rbno(reviewReply.getReviewBoard().getRbno())
                 .text(reviewReply.getText())
                 .replyer(reviewReply.getMember().getEmail())
                 .regDate(reviewReply.getRegTime())

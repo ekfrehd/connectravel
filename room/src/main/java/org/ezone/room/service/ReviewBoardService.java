@@ -48,12 +48,16 @@ public interface ReviewBoardService {
 
         return ReviewBoardDTO.builder()
                 .rbno(reviewBoard.getRbno())
+                .rno(reviewBoard.getReservation().getRoom().getRno())
+                .rvno(reviewBoard.getReservation().getRvno())
                 .content(reviewBoard.getContent())
                 .grade(reviewBoard.getGrade())
+                .ano(reviewBoard.getReservation().getRoom().getAccommodation().getAno())
                 .writerEmail(member.getEmail())
                 .writerName(member.getName())
                 .roomName(reviewBoard.getReservation().getRoom().getRoomName())
                 .replies(replyDTOs)
+                .replyCount(replyDTOs.size())
                 .regDate(reviewBoard.getRegTime())
                 .modDate(reviewBoard.getModTime())
                 .build();
