@@ -3,7 +3,7 @@ package org.ezone.room.entity;
 import lombok.*;
 import org.ezone.room.constant.Role;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 

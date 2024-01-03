@@ -2,7 +2,7 @@ package org.ezone.room.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import groovy.util.logging.Slf4j;
+//import groovy.util.logging.Slf4j;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import org.ezone.room.entity.Member;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
+//@Slf4j
 @SpringBootTest
 class ReviewBoardRepositoryTest {
 

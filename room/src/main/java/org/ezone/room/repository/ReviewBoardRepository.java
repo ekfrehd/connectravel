@@ -18,8 +18,8 @@ public interface ReviewBoardRepository extends JpaRepository<ReviewBoard, Long> 
 //
 //    List<ReviewBoard> findByRoom_Rno(Long rno);
 //
-//    @Query("SELECT COUNT(rb) > 0 FROM ReviewBoard rb WHERE rb.reservation.rvno = :rvno")
-//    boolean existsByReviewBoard(@Param("rvno") Long rvno);
+    @Query("SELECT COUNT(rb) > 0 FROM ReviewBoard rb WHERE rb.reservation.rvno = :rvno")
+    boolean existsByReviewBoard(@Param("rvno") Long rvno);
 //
 //    void deleteByRoom_Rno(Long rno);
 }

@@ -62,7 +62,8 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
     @Autowired
     private ReviewBoardImgRepository reviewBoardImgRepository;
 
-    ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     public Accommodation findAccommodationByRoomId(Long rno) {
