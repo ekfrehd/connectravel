@@ -84,6 +84,7 @@
                                                     </div>
                                                 </div>
                                                 <p class="about-review-para mt-3" th:utext="${dto.content}"/></br>
+                                                <p class="about-review-para mt-3" th:utext="${dto.replies}"/></br>
                                             </div>
                                             <div class="review-tab-contents-single"
                                                  th:each="dto : ${pageResultDTO.dtoList}"
@@ -110,11 +111,11 @@
                                                             </th:block>
 
                                                             <!-- 'Next' 버튼 수정 -->
-                                                            <li th:class="${pageResultDTO.next} ? 'pagination-list-item-next' : 'pagination-list-item-next disabled'">
-                                                                <a th:href="@{/product/{ano}(ano=${accommodation.ano}, page=${pageResultDTO.page + 1})}"
-                                                                   class="pagination-list-item-button disabled">
-                                                                    Next </a>
-                                                            </li>
+<!--                                                            <li th:class="${pageResultDTO.next} ? 'pagination-list-item-next' : 'pagination-list-item-next disabled'">-->
+<!--                                                                <a th:href="@{/product/{ano}(ano=${accommodation.ano}, page=${pageResultDTO.page + 1})}"-->
+<!--                                                                   class="pagination-list-item-button disabled">-->
+<!--                                                                    Next </a>-->
+<!--                                                            </li>-->
                                                         </ul>
                                                     </div>
                                                 </div>
